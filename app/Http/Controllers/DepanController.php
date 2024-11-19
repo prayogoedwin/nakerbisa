@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Depan; // Import model Depan
 use App\Models\User;
+use App\Models\UserBkk;
 use App\Models\UserPencari;
 use App\Models\UserPenyedia;
 use Illuminate\Http\Request;
@@ -86,9 +87,10 @@ class DepanController extends Controller
     {
         // Tangkap parameter rl dari URL
         $rl = $request->input('rl'); // atau bisa juga menggunakan $request->query('rl')
-        // echo 'Parameter rl: ' . $rl;
         $decode_rl = decode_url($rl);
-        if ($decode_rl != 'pencari-kerja' && $decode_rl != 'penyedia-kerja') {
+
+        // Validasi parameter rl
+        if (!in_array($decode_rl, ['pencari-kerja', 'penyedia-kerja', 'admin-bkk'])) {
             return abort(404);
         }
 
@@ -97,7 +99,10 @@ class DepanController extends Controller
             $nm_role = 'Pencari Kerja';
         } else if ($decode_rl == 'penyedia-kerja') {
             $nm_role = 'Penyedia Kerja';
+        } else if ($decode_rl == 'admin-bkk') {
+            $nm_role = 'BKK';
         }
+
 
         $depanModel = new Depan();
         $data['agama'] = $depanModel->getAllAgama(); // Mendapatkan semua data agama
@@ -291,6 +296,59 @@ class DepanController extends Controller
             DB::commit();
 
             return redirect()->to('login')->with('success', 'Berhasil membuat akun perusahaan silahkan login');
+        } catch (\Throwable $th) {
+            // DB::rollBack();
+            // return back()->with('error', $th->getMessage());
+            DB::rollBack();
+            Log::error($th);
+            // return back()->with('error', $th->getMessage());
+            return response()->json([
+                'status' => 0,
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function akhir_daftar_akun_bkk(Request $request)
+    {
+        $imel = session('email_registered');
+        $user = User::where('email', $imel)->first();
+
+        // dd($user->id);
+
+        DB::beginTransaction();
+        try {
+            // create affiliator
+            UserBkk::create([
+                'user_id' => $user->id,
+                'name' => $request->nama_bkk,
+                'luar_negri' => $request->luar_negri,
+                'deskripsi' => $request->deskripsi,
+                'jenis_bkk' => $request->jenis_bkk,
+                'nomor_sip3mi' => null,
+                'nib' => $request->nib,
+                'id_sektor' => $request->sektor_id,
+                'id_provinsi' => $request->provinsi_id,
+                'id_kota' => $request->kabkota_id,
+                'id_kecamatan' => $request->kecamatan_id,
+                'id_desa' => $request->desa_id,
+                'alamat' => $request->alamat,
+                'kodepos' => $request->kodepos,
+                'telpon' => $request->telpon,
+                'jabatan' => $request->jabatan,
+                'website' => $request->website,
+                'status_id' => 1,
+                'foto' => null,
+                'shared_by_id' => null,
+                'posted_by' => $user->id,
+                'created_at' => date('Y-m-d H:i:s'),
+                // 'updated_at',
+                // 'deleted_at',
+            ]);
+
+            DB::commit();
+
+            return redirect()->to('login')->with('success', 'Berhasil membuat akun bkk silahkan login');
         } catch (\Throwable $th) {
             // DB::rollBack();
             // return back()->with('error', $th->getMessage());
