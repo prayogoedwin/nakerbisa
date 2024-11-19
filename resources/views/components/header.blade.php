@@ -102,7 +102,7 @@
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
                         <i class="fa fa-bars"></i>
                     </button>
-                    <a class="navbar-brand" href="index.html">
+                    <a class="navbar-brand" href="{{ url('/') }}">
                         <!-- Logo khusus hanya untuk halaman index -->
                         {{-- <img src="{{ asset('assets/nakerbisa_be/img/nakerbisa-white.png') }}"class="logo logo-display"
                         alt="Logo"> --}}
@@ -126,7 +126,7 @@
 
                     <ul class="nav navbar-nav navbar-center" data-in="fadeInDown" data-out="fadeOutUp">
 
-                        <li><a href="nakerbisa.html">Beranda</a></li>
+                        <li><a href="{{ url('/') }}">Beranda</a></li>
 
 
                         <!-- <li class="dropdown">
@@ -144,9 +144,9 @@
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Lowongan</a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="lowongan-kerja.html">Lowongan Kerja</a></li>
-                                    <li><a href="lowongan-kerja-ema.html">Lowongan Emakaryo</a></li>
-                                    <li><a href="lowongan-kerja-krr.html">Lowongan Karirhub</a></li>
+                                    <li><a href="{{ url('/depan/lowongan-kerja') }}">Lowongan Kerja</a></li>
+                                    <li><a href="{{ url('/depan/lowongan-kerja-ema') }}">Lowongan Emakaryo</a></li>
+                                    <li><a href="{{ url('/depan/lowongan-kerja-krr') }}">Lowongan Karirhub</a></li>
                                 </ul>
                             </li>
                         @endif
@@ -155,8 +155,8 @@
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Lowongan</a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="lowongan-kerja.html">Lowongan Kerja</a></li>
-                                    <li><a href="lowongan-kerja-disabilitas.html">Lowongan Disabilitas</a></li>
+                                    <li><a href="{{ url('/depan/lowongan-kerja') }}">Lowongan Kerja</a></li>
+                                    <li><a href="{{ url('/depan/lowongan-kerja-disabilitas') }}">Lowongan Disabilitas</a></li>
                                 </ul>
                             </li>
                         @endif
@@ -164,21 +164,21 @@
 
                         <!-- <li><a href="bkk.html">BKK</a></li> -->
                         @if (!Route::is('galeri') && !Route::is('berita'))
-                            <li><a href="bkk.html">BKK</a></li>
+                            <li><a href="{{ url('/depan/bkk') }}">BKK</a></li>
                         @endif
 
 
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Informasi</a>
                             <ul class="dropdown-menu">
-                                <li><a href="infografis.html">Infografis</a></li>
-                                <li><a href="galeri.html">Galeri</a></li>
-                                <li><a href="berita.html">Pengumuman</a></li>
+                                <li><a href="{{ url('/depan/infografis') }}">Infografis</a></li>
+                                <li><a href="{{ url('/depan/galeri') }}">Galeri</a></li>
+                                <li><a href="{{ url('/depan/berita') }}">Pengumuman</a></li>
                                 <!-- <li><a href="kontak.html">Kontak</a></li> -->
                             </ul>
                         </li>
 
-                        <li><a href="login.html">Login</a></li>
+                        <li><a href="{{ url('/login') }}">Login</a></li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
 
@@ -187,7 +187,7 @@
                     <div class="attr-nav">
                         <ul>
                             <li class="button light">
-                                <a href="daftar.html">Daftar Sekarang</a>
+                                <a href="#" onclick="askRoleRegister()">Daftar Sekarang</a>
                             </li>
                         </ul>
                     </div>

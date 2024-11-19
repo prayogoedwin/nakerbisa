@@ -12,7 +12,8 @@
             <div class="row">
                 <div class="col-lg-4 col-md-6 footer-item pr-50 pr-xs-15">
                     <div class="f-item about">
-                        <img class="logo" src="{{ asset('assets/nakerbisa_be/img/nakerbisa-white.png') }}" alt="Logo">
+                        <img class="logo" src="{{ asset('assets/nakerbisa_be/img/nakerbisa-white.png') }}"
+                            alt="Logo">
                         <p>
                             NAKERBISA adalah Sistem Informasi Penempatan Tenaga Kerja yang di kelola oleh Dinas
                             Perindustrian dan Tenaga Kerja Kabupaten Rembang. <br />
@@ -177,6 +178,36 @@
 
 </footer>
 
+<!-- Button trigger modal -->
+<div class="modal fade" id="modalPilihPeran" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">NAKER BISA REGISTER</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="#" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Daftar Sebagai</label>
+                        <select name="role_dipilih" id="role_dipilih" required>
+                            <option value="">Pilih</option>
+                            <option value="pencari-kerja">Pencari Kerja</option>
+                            <option value="penyedia-kerja">Penyedia Kerja</option>
+                            <option value="bkk">BKK</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Lanjut</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- jQuery Frameworks
     ============================================= -->
 <script src="{{ asset('assets/nakerbisa_fe/js/jquery-3.6.0.min.js') }}"></script>
@@ -201,6 +232,12 @@
 <script src="{{ asset('assets/nakerbisa_fe/js/validnavs.js') }}"></script>
 <script src="{{ asset('assets/nakerbisa_fe/js/main.js') }}"></script>
 
+<script>
+    function askRoleRegister() {
+        // alert('tanya role')
+        $('#modalPilihPeran').modal('show');
+    }
+</script>
 </body>
 
 </html>
