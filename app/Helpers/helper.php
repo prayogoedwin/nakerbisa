@@ -18,38 +18,38 @@ function getKabkota()
     // ->where('id', '=', 18)       // LAMPUNG
     // ->get();
 
-    return DB::table('etam_kabkota')
+    return DB::table('naker_kabkota')
         ->whereIn('province_id', [64])  // Daftar id
         ->get();
 }
 
 function getAgama(){
-    return DB::table('etam_agama')
+    return DB::table('naker_agama')
         ->get();
 }
 
 function getPendidikan(){
-    return DB::table('etam_pendidikan')
+    return DB::table('naker_pendidikan')
     ->get();
 }
 
 function getMarital(){
-    return DB::table('etam_marital')
+    return DB::table('naker_marital')
     ->get();
 }
 
 function getSektor(){
-    return DB::table('etam_sektor')
+    return DB::table('naker_sektor')
     ->get();
 }
 
 function getJabatan(){
-    return DB::table('etam_jabatan')
+    return DB::table('naker_jabatan')
     ->get();
 }
 
 function getProvinsi(){
-    return DB::table('etam_provinsi')
+    return DB::table('naker_provinsi')
     ->get();
 }
 

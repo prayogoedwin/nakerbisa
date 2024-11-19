@@ -2,7 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Depan; // Import model Depan
+use App\Models\User;
+use App\Models\UserPencari;
+use App\Models\UserPenyedia;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DepanController extends Controller
 {
@@ -13,47 +20,316 @@ class DepanController extends Controller
         return view('depan.depan_index');
     }
 
-    public function bkk(){
+    public function bkk()
+    {
         return view('depan.depan_bkk');
     }
 
-    public function login(){
+    public function login()
+    {
         return view('depan.depan_login');
     }
 
-    public function register(){
+    public function register()
+    {
         return view('depan.depan_register');
     }
 
-    public function lowongan_kerja(){
+    public function lowongan_kerja()
+    {
         return view('depan.depan_lowongan_kerja');
     }
-    
-    public function lowongan_kerja_disabilitas(){
+
+    public function lowongan_kerja_disabilitas()
+    {
         return view('depan.depan_lowongan_kerja_disabilitas');
     }
 
-    public function lowongan_kerja_ema(){
+    public function lowongan_kerja_ema()
+    {
         return view('depan.depan_lowongan_kerja_ema');
     }
 
-    public function lowongan_kerja_krr(){
+    public function lowongan_kerja_krr()
+    {
         return view('depan.depan_lowongan_kerja_krr');
     }
-    public function infografis(){
+    public function infografis()
+    {
         return view('depan.depan_infografis');
     }
 
-    public function galeri(){
+    public function galeri()
+    {
         return view('depan.depan_galeri');
     }
 
-    public function berita(){
+    public function berita()
+    {
         return view('depan.depan_berita');
     }
 
+    public function daftar_akun(Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            'role_dipilih' => 'required',
+        ]);
 
-    public function daftar(Request $request){
-        return view('depan.depan_registerbaru');
+        $url_role = encode_url($request->role_dipilih);
+        // dd($url_role);
+
+        return redirect()->to('depan/daftar?rl=' . $url_role);
+    }
+
+    public function daftar(Request $request)
+    {
+        // Tangkap parameter rl dari URL
+        $rl = $request->input('rl'); // atau bisa juga menggunakan $request->query('rl')
+        // echo 'Parameter rl: ' . $rl;
+        $decode_rl = decode_url($rl);
+        if ($decode_rl != 'pencari-kerja' && $decode_rl != 'penyedia-kerja') {
+            return abort(404);
+        }
+
+        $nm_role = '';
+        if ($decode_rl == 'pencari-kerja') {
+            $nm_role = 'Pencari Kerja';
+        } else if ($decode_rl == 'penyedia-kerja') {
+            $nm_role = 'Penyedia Kerja';
+        }
+
+        $depanModel = new Depan();
+        $data['agama'] = $depanModel->getAllAgama(); // Mendapatkan semua data agama
+        $data['kabkota'] = $depanModel->getKabkotaByProvince();
+
+        $data['dt'] = array(
+            'role' => $decode_rl,
+            'role_name' => $nm_role
+        );
+
+        session()->forget('email_registered');
+        // dd(session('email_registered'));
+
+        // dd($data);
+        return view('depan.depan_registerbaru', $data);
+        // echo json_encode($data);
+    }
+
+    public function cek_awal_akun(Request $request)
+    {
+        // return response()->json([
+        //     'email' => $request->email,
+        //     'wa' => $request->wa,
+        // ]);
+
+        $userEmail = User::where('email', $request->email)->first();
+        if ($userEmail) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Email sudah pernah terdaftar'
+            ]);
+        }
+
+        $userWa = User::where('whatsapp', $request->wa)->first();
+        if ($userWa) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Nomor whatsapp sudah pernah terdaftar'
+            ]);
+        }
+
+        $role = Role::where('name', $request->role)->first();
+
+        //create users
+        $user = User::create([
+            'name' => $request->email,
+            'email' => $request->email,
+            'whatsapp' => $request->wa,
+            'password' => $request->password
+        ]);
+        $user->syncRoles($role->name);
+
+        $otp = generateOtp();
+        $user->update([
+            'otp' => $otp,
+            // 'otp_created_at' => now()
+        ]);
+        // dd($userWa);
+        sendWa($user->whatsapp, 'Lanjutkan pendaftaran dengan memasukkan Kode OTP berikut : *' . $otp . '*');
+
+        session(['email_registered' => $request->email]);
+        // dd(session('email_registered'));
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Email dan nomor Whatsapp dapat digunakan',
+            'data' => $user
+        ]);
+    }
+
+    public function cek_awal_otp(Request $request)
+    {
+
+        $cek = User::where([
+            ['email', '=', $request->email_registered],
+            ['otp', '=', $request->otp]
+        ])->first();
+
+        if (!$cek) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Kode OTP salah'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Verifikasi kode OTP berhasil',
+            'session_email' => session('email_registered')
+        ]);
+    }
+
+    public function akhir_daftar_akun(Request $request)
+    {
+
+        $imel = session('email_registered');
+        $user = User::where('email', $imel)->first();
+
+        // dd($user->id);
+
+        DB::beginTransaction();
+        try {
+            // create affiliator
+            UserPencari::create([
+                'user_id' => $user->id,
+                'ktp' => $request->nik,
+                'name' => $request->nama_lengkap,
+                'tempat_lahir' => $request->tempat_lahir,
+                'tanggal_lahir' => $request->tanggal_lahir,
+                'gender' => $request->gender_id,
+                'id_provinsi' => '64',
+                'id_kota' => $request->kabkota_id,
+                'id_kecamatan' => $request->kecamatan_id,
+                'id_desa' => $request->desa_id,
+                'alamat' => $request->alamat,
+                'kodepos' => $request->kodepos,
+                'id_pendidikan' => $request->pendidikan_id,
+                'id_jurusan' => $request->jurusan_id,
+                'tahun_lulus' => $request->tahun_lulus,
+                'id_status_perkawinan' => $request->status_perkawinan_id,
+                'id_agama' => $request->agama_id,
+                'foto' => null,
+                'status_id' => 1,
+                'is_alumni_bkk' => 0,
+                'bkk_id' => null,
+                'toket' => null,
+                'disabilitas' => null,
+                'jenis_disabilitas' => null,
+                'keterangan_disabilitas' => null,
+                'posted_by' => $user->id,
+                'created_at' => date('Y-m-d H:i:s'),
+                // 'updated_at',
+                // 'deleted_at',
+                'is_diterima' => 0,
+                'medsos' => $request->medsos
+            ]);
+
+            DB::commit();
+
+            return redirect()->to('login')->with('success', 'Berhasil membuat akun silahkan login');
+        } catch (\Throwable $th) {
+            // DB::rollBack();
+            // return back()->with('error', $th->getMessage());
+            DB::rollBack();
+            Log::error($th);
+            // return back()->with('error', $th->getMessage());
+            return response()->json([
+                'status' => 0,
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function akhir_daftar_akun_perush(Request $request)
+    {
+        $imel = session('email_registered');
+        $user = User::where('email', $imel)->first();
+
+        // dd($user->id);
+
+        DB::beginTransaction();
+        try {
+            // create affiliator
+            UserPenyedia::create([
+                'user_id' => $user->id,
+                'name' => $request->nama_perusahaan,
+                'luar_negri' => $request->luar_negri,
+                'deskripsi' => $request->deskripsi,
+                'jenis_perusahaan' => $request->jenis_perusahaan,
+                'nomor_sip3mi' => null,
+                'nib' => $request->nib,
+                'id_sektor' => $request->sektor_id,
+                'id_provinsi' => $request->provinsi_id,
+                'id_kota' => $request->kabkota_id,
+                'id_kecamatan' => $request->kecamatan_id,
+                'id_desa' => $request->desa_id,
+                'alamat' => $request->alamat,
+                'kodepos' => $request->kodepos,
+                'telpon' => $request->telpon,
+                'jabatan' => $request->jabatan,
+                'website' => $request->website,
+                'status_id' => 1,
+                'foto' => null,
+                'shared_by_id' => null,
+                'posted_by' => $user->id,
+                'created_at' => date('Y-m-d H:i:s'),
+                // 'updated_at',
+                // 'deleted_at',
+            ]);
+
+            DB::commit();
+
+            return redirect()->to('login')->with('success', 'Berhasil membuat akun perusahaan silahkan login');
+        } catch (\Throwable $th) {
+            // DB::rollBack();
+            // return back()->with('error', $th->getMessage());
+            DB::rollBack();
+            Log::error($th);
+            // return back()->with('error', $th->getMessage());
+            return response()->json([
+                'status' => 0,
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function getKabkotaByProv($prov_id)
+    {
+        $kabkota = DB::table('naker_kabkota')->where('province_id', $prov_id)->get();
+
+        return response()->json($kabkota);
+    }
+
+    public function getKecamatanByKabkota($kabkota_id)
+    {
+        // Misal mengambil data dari tabel 'naker_kecamatan' berdasarkan kabkota_id
+        $kecamatan = DB::table('naker_kecamatan')->where('regency_id', $kabkota_id)->get();
+
+        return response()->json($kecamatan);
+    }
+
+    public function getDesaByKec($kec_id)
+    {
+        $desa = DB::table('naker_desa')->where('district_id', $kec_id)->get();
+
+        return response()->json($desa);
+    }
+
+    public function getJurusanByPendidikan($pendidikan_id)
+    {
+        $pendidikan = DB::table('naker_jurusan')->where('id_pendidikans', $pendidikan_id)->get();
+
+        return response()->json($pendidikan);
     }
 }
