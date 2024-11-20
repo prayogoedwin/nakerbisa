@@ -1,54 +1,12 @@
 <div class="step d-none" id="step3">
     <?php
-    $sektors = getSektor();
     $provinsis = getProvinsi();
     ?>
-    <form action="{{ route('akhir-daftar-akun-bkk') }}" method="post">
+    <form action="{{ route('akhir-daftar-akun-blk') }}" method="post">
         @csrf
         <div class="mb-3">
-            <label for="bkkName" class="form-label">Nama Bkk</label>
-            <input type="text" class="form-control" id="nama_bkk" name="nama_bkk" required>
-        </div>
-        <div class="mb-3">
-            <label for="" class="form-label">Penyedia lowongan kerja luar negeri</label>
-            <select class="form-select" id="luar_negri" name="luar_negri" required>
-                <option selected disabled>Pilih</option>
-                <option value="0">Tidak</option>
-                <option value="1">Ya</option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="deskripsi" class="form-label">Deskripsi</label>
-            <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3" required></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="" class="form-label">Jenis Bkk</label>
-            <select class="form-select" id="jenis_bkk" name="jenis_bkk" required>
-                <option selected disabled>Pilih Jenis</option>
-                <option value="bumd">Badan Usaha Milik Daerah</option>
-                <option value="bumn">Badan Usaha Milik Negara</option>
-                <option value="cv">Comanditer Venotschaap</option>
-                <option value="firma">Firma</option>
-                <option value="instansi">Instansi</option>
-                <option value="kp">Koperasi</option>
-                <option value="pt">Perseroan Terbatas</option>
-                <option value="pp">Perusahaan Perorangan</option>
-                <option value="po">PO*</option>
-                <option value="yayasan">Yayasan</option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="nik" class="form-label">Nomor Induk Berusaha (NIB)</label>
-            <input type="text" class="form-control" id="nib" name="nib" required>
-        </div>
-        <div class="mb-3">
-            <label for="stsperkawinan" class="form-label">Sektor</label>
-            <select class="form-select" id="sektor_id" name="sektor_id" required>
-                <option selected disabled>Pilih Sektor</option>
-                @foreach ($sektors as $sekt)
-                    <option value="{{ $sekt->id }}">{{ $sekt->name }}</option>
-                @endforeach
-            </select>
+            <label for="blkName" class="form-label">Nama Blk</label>
+            <input type="text" class="form-control" id="nama_blk" name="nama_blk" required>
         </div>
         <div class="mb-3">
             <label for="kabkota" class="form-label">Provinsi</label>
@@ -88,6 +46,10 @@
         <div class="mb-3">
             <label for="telpon" class="form-label">Telpon</label>
             <input type="number" class="form-control" id="telpon" name="telpon" required>
+        </div>
+        <div class="mb-3">
+            <label for="picName" class="form-label">PIC</label>
+            <input type="text" class="form-control" id="pic" name="pic" required>
         </div>
         <div class="mb-3">
             <label for="jabatan" class="form-label">Jabatan</label>

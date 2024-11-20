@@ -116,6 +116,10 @@
             @if ($dt['role'] == 'admin-bkk')
                 @include('depan.step3_bkk')
             @endif
+
+            @if ($dt['role'] == 'admin-blk')
+                @include('depan.step3_blk')
+            @endif
         </div>
         {{-- </form> --}}
     </div>

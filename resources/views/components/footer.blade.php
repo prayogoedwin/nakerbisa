@@ -197,6 +197,7 @@
                             <option value="pencari-kerja">Pencari Kerja</option>
                             <option value="penyedia-kerja">Penyedia Kerja</option>
                             <option value="admin-bkk">BKK</option>
+                            <option value="admin-blk">BLK</option>
                         </select>
                     </div>
                 </div>
