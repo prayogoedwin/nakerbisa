@@ -59,11 +59,11 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Tambah</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="registerForm" enctype="multipart/form-data">
+                        @csrf
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
@@ -71,18 +71,16 @@
                                     <textarea class="form-control" id="name" name="name" rows="2"></textarea>
                                 </div>
                             </div>
-
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="cover">Cover</label>
                                     <input type="file" class="form-control" id="cover" name="cover">
                                 </div>
                             </div>
-
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="description">Description</label>
-                                    <textarea class="form-control" id="description" name="description" rows="2"></textarea>
+                                    <textarea class="form-control" id="description" name="description"></textarea>
                                 </div>
                             </div>
                             <div class="col-sm-12">
@@ -94,7 +92,7 @@
                                     </select>
                                 </div>
                                 <button class="btn btn-primary mt-3">Submit</button>
-                                <button class="btn btn-danger mt-3">Clear</button>
+                                <button type="reset" class="btn btn-danger mt-3">Clear</button>
                             </div>
                         </div>
                     </form>
@@ -109,45 +107,19 @@
     <script>
         // ADD
         $(document).ready(function() {
-            // Inisialisasi Summernote
             $('#description').summernote({
                 height: 300, // Tinggi editor
                 callbacks: {
                     onImageUpload: function(files) {
-                        var editor = $(this);
-                        sendFile(files[0], editor);
+                        let reader = new FileReader();
+                        reader.onload = function(e) {
+                            $('#description').summernote('insertImage', e.target.result);
+                        };
+                        reader.readAsDataURL(files[0]);
                     }
                 }
             });
 
-            // Fungsi untuk mengunggah gambar ke server
-            function sendFile(file, editor) {
-                var data = new FormData();
-                data.append("file", file);
-                data.append("_token", "{{ csrf_token() }}"); // Tambahkan CSRF Token
-
-                $.ajax({
-                    url: '{{ route('berita.uploadImage') }}', // URL untuk upload gambar
-                    method: 'POST',
-                    data: data,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.success) {
-                            var imageUrl = response.image_url;
-                            // Tambahkan gambar ke dalam Summernote
-                            editor.summernote('insertImage', imageUrl);
-                        } else {
-                            alert('Gagal mengunggah gambar');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        alert('Terjadi kesalahan saat mengunggah gambar');
-                    }
-                });
-            }
-
-            // Submit form
             $('#registerForm').submit(function(e) {
                 e.preventDefault();
 
@@ -156,7 +128,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: '{{ route('berita.add') }}', // URL untuk menyimpan data
+                    url: '{{ route('berita.add') }}', // Sesuaikan dengan rute
                     data: formData,
                     contentType: false,
                     processData: false,

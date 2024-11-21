@@ -40,7 +40,6 @@ class NakerBeritaController extends Controller
 
     public function store(Request $request)
     {
-        // Ambil ID user yang sedang login
         $userId = auth()->user()->id;
 
         // Validasi input
@@ -60,7 +59,7 @@ class NakerBeritaController extends Controller
         $filePath = null;
         if ($request->hasFile('cover')) {
             $file = $request->file('cover');
-            $filePath = $file->store('berita', 'public'); // Menyimpan file di folder storage/app/public/berita
+            $filePath = $file->store('berita', 'public');
         }
 
         // Mengelola deskripsi untuk mengganti base64 image dengan path file
@@ -103,7 +102,7 @@ class NakerBeritaController extends Controller
         NakerBerita::create([
             'name' => $request->name,
             'description' => $description,
-            'cover' => $filePath,  // Menyimpan path file cover yang di-upload
+            'cover' => $filePath,
             'status' => $request->status,
             'created_by' => $userId,
             'updated_by' => $userId,
@@ -112,20 +111,6 @@ class NakerBeritaController extends Controller
         return response()->json(['success' => true]);
     }
 
-
-    public function uploadImage(Request $request)
-    {
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $filePath = $file->store('berita', 'public'); // Simpan di storage
-            return response()->json([
-                'success' => true,
-                'image_url' => '/storage/' . $filePath,
-            ]);
-        }
-
-        return response()->json(['success' => false]);
-    }
 
     public function destroy($id)
     {
