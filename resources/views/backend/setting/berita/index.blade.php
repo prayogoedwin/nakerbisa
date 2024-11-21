@@ -30,7 +30,6 @@
                                                         <th>No</th>
                                                         <th>Judul</th>
                                                         <th>File</th>
-                                                        <th>Description</th>
                                                         <th>Status</th>
                                                         <th>Options</th>
                                                     </tr>
@@ -223,9 +222,6 @@
                         }
                     },
                     {
-                        data: 'description'
-                    },
-                    {
                         data: 'status',
                         render: function(data) {
                             return data == 1 ? 'Aktif' : 'Nonaktif';
@@ -292,7 +288,54 @@
                 }
             });
         }
+        // Menginisialisasi Summernote pada modal edit
+        $('#editModal').on('shown.bs.modal', function() {
+            $('#editDescription').summernote({
+                height: 300, // set the height of the editor
+                callbacks: {
+                    onImageUpload: function(files) {
+                        var editor = $(this);
+                        sendFile(files[0], editor);
+                    }
+                }
+            });
+        });
     </script>
+
+    <script>
+        // Menangani submit form edit
+        $('#editForm').submit(function(e) {
+            e.preventDefault();
+
+            var id = $('#editId').val();
+            var updateUrl = "{{ route('berita.update', ':id') }}".replace(':id', id);
+
+            var formData = new FormData(this);
+            formData.append('_token', '{{ csrf_token() }}');
+            formData.append('_method', 'PUT'); // Gunakan PUT method untuk update
+
+            $.ajax({
+                type: 'POST',
+                url: updateUrl,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $('#editModal').modal('hide');
+                        location.reload(); // Reload halaman setelah berhasil update
+                    } else {
+                        alert('Error: ' + JSON.stringify(response.errors));
+                    }
+                },
+                error: function(xhr) {
+                    alert('Error: ' + xhr.responseText);
+                }
+            });
+        });
+    </script>
+
 
     <script>
         function confirmDelete(id) {

@@ -14,7 +14,7 @@ class NakerBeritaController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $datas = NakerBerita::select('id', 'name', 'cover', 'description', 'status');
+            $datas = NakerBerita::select('id', 'name', 'cover', 'status');
 
             return DataTables::of($datas)
                 ->addIndexColumn()
@@ -101,6 +101,50 @@ class NakerBeritaController extends Controller
 
         return response()->json(['success' => true, 'data' => $data]);
     }
+
+    public function update(Request $request, $id)
+    {
+        $data = NakerBerita::find($id);
+
+        if (!$data) {
+            return response()->json(['success' => false, 'message' => 'Data not found']);
+        }
+
+        // Validasi input
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'description' => 'required|string', // Membatasi panjang karakter           
+            'cover' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'status' => 'required|boolean',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()]);
+        }
+
+        // Update file jika ada file baru
+        if ($request->hasFile('cover')) {
+            // Hapus file lama
+            if (Storage::exists('public/' . $data->cover)) {
+                Storage::delete('public/' . $data->cover);
+            }
+
+            // Simpan file baru
+            $file = $request->file('cover');
+            $filePath = $file->store('berita', 'public');
+            $data->cover = $filePath;
+        }
+
+        // Update data lainnya
+        $data->name = $request->name;
+        $data->description = $request->description;
+        $data->status = $request->status;
+        $data->updated_by = auth()->user()->id;
+        $data->save();
+
+        return response()->json(['success' => true, 'message' => 'Data updated successfully']);
+    }
+
 
     public function destroy($id)
     {
