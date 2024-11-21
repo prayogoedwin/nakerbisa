@@ -7,6 +7,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DepanController;
 use App\Http\Controllers\NakerFaqController;
+use App\Http\Controllers\NakerGaleriController;
 use App\Http\Controllers\NakerInfografisController;
 
 Route::get('/', function () {
@@ -78,6 +79,12 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('/infografis/{id}', [NakerInfografisController::class, 'edit'])->name('infografis.edit');
         Route::put('/infografis/update/{id}', [NakerInfografisController::class, 'update'])->name('infografis.update');
         Route::delete('/infografis/delete/{id}', [NakerInfografisController::class, 'destroy'])->name('infografis.destroy');
+
+        Route::get('/galeri', [NakerGaleriController::class, 'index'])->name('galeri.index');
+        Route::post('/galeri/add', [NakerGaleriController::class, 'store'])->name('galeri.add');
+        Route::get('/galeri/{id}', [NakerGaleriController::class, 'edit'])->name('galeri.edit');
+        Route::put('/galeri/update/{id}', [NakerGaleriController::class, 'update'])->name('galeri.update');
+        Route::delete('/galeri/delete/{id}', [NakerGaleriController::class, 'destroy'])->name('galeri.destroy');
     });
 
     Route::prefix('users')->group(function () {
