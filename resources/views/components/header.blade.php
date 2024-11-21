@@ -156,18 +156,22 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Lowongan</a>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ url('/depan/lowongan-kerja') }}">Lowongan Kerja</a></li>
-                                    <li><a href="{{ url('/depan/lowongan-kerja-disabilitas') }}">Lowongan Disabilitas</a></li>
+                                    <li><a href="{{ url('/depan/lowongan-kerja-disabilitas') }}">Lowongan
+                                            Disabilitas</a></li>
                                 </ul>
                             </li>
                         @endif
 
-
                         <!-- <li><a href="bkk.html">BKK</a></li> -->
                         @if (!Route::is('galeri') && !Route::is('berita'))
-                            <li><a href="{{ url('/depan/bkk') }}">BKK</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Data</a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ url('/depan/bkk') }}">BKK</a></li>
+                                    <li><a href="{{ url('/depan/blk') }}">BLK</a></li>
+                                </ul>
+                            </li>
                         @endif
-
-
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Informasi</a>
                             <ul class="dropdown-menu">
