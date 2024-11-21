@@ -24,7 +24,7 @@
         </li>
 
         <!-- Layouts -->
-        <li class="menu-item {{ request()->routeIs('roles.*') || request()->routeIs('faq.*') || request()->routeIs('infografis.*') || request()->routeIs('galeri.*') ? 'active open' : '' }}">
+        <li class="menu-item {{ request()->routeIs('roles.*') || request()->routeIs('faq.*') || request()->routeIs('infografis.*') || request()->routeIs('galeri.*') || request()->routeIs('berita.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">Setting</div>
@@ -51,9 +51,9 @@
                         <div data-i18n="galeri">Galeri</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
-                        <div data-i18n="Fluid">Berita</div>
+                <li class="menu-item {{ request()->routeIs('berita.index') ? 'active' : '' }}">
+                    <a href="{{ route('berita.index') }}" class="menu-link">
+                        <div data-i18n="berita">Berita</div>
                     </a>
                 </li>
                 <li class="menu-item {{ request()->routeIs('faq.index') ? 'active' : '' }}">

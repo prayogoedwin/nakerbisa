@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DepanController;
+use App\Http\Controllers\NakerBeritaController;
 use App\Http\Controllers\NakerFaqController;
 use App\Http\Controllers\NakerGaleriController;
 use App\Http\Controllers\NakerInfografisController;
@@ -85,6 +86,12 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('/galeri/{id}', [NakerGaleriController::class, 'edit'])->name('galeri.edit');
         Route::put('/galeri/update/{id}', [NakerGaleriController::class, 'update'])->name('galeri.update');
         Route::delete('/galeri/delete/{id}', [NakerGaleriController::class, 'destroy'])->name('galeri.destroy');
+
+        Route::get('/berita', [NakerBeritaController::class, 'index'])->name('berita.index');
+        Route::post('/berita/add', [NakerBeritaController::class, 'store'])->name('berita.add');
+        Route::get('/berita/{id}', [NakerBeritaController::class, 'edit'])->name('berita.edit');
+        Route::put('/berita/update/{id}', [NakerBeritaController::class, 'update'])->name('berita.update');
+        Route::delete('/berita/delete/{id}', [NakerBeritaController::class, 'destroy'])->name('berita.destroy');
     });
 
     Route::prefix('users')->group(function () {

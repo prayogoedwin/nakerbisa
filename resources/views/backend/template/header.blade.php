@@ -24,6 +24,9 @@
     <!-- Icons. Uncomment required icon fonts -->
     <link rel="stylesheet" href="{{ asset('assets/nakerbisa_be/vendor/fonts/boxicons.css') }}" />
 
+    <!-- Summernote CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote.min.css" rel="stylesheet">
+
     <!-- Core CSS -->
     <link rel="stylesheet" href="{{ asset('assets/nakerbisa_be/vendor/css/core.css') }}"
         class="template-customizer-core-css" />
