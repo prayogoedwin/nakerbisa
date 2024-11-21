@@ -24,7 +24,7 @@
         </li>
 
         <!-- Layouts -->
-        <li class="menu-item {{ request()->routeIs('roles.*') ? 'active open' : '' }}">
+        <li class="menu-item {{ request()->routeIs('roles.*') || request()->routeIs('faq.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">Setting</div>
@@ -56,9 +56,9 @@
                         <div data-i18n="Fluid">Berita</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
-                        <div data-i18n="Blank">FAQ</div>
+                <li class="menu-item {{ request()->routeIs('faq.index') ? 'active' : '' }}">
+                    <a href="{{ route('faq.index') }}" class="menu-link">
+                        <div data-i18n="FAQ">FAQ</div>
                     </a>
                 </li>
             </ul>

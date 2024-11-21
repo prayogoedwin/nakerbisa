@@ -78,8 +78,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-12">
-
+                            <div class="col-sm-12 mt-3">
                                 <button class="btn btn-primary">Submit</button>
                                 <button class="btn btn-danger">Clear</button>
                             </div>

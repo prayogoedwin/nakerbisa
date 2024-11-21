@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DepanController;
+use App\Http\Controllers\NakerFaqController;
 
 Route::get('/', function () {
     return view('depan.depan_index');
@@ -63,6 +64,12 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
 
     Route::prefix('setting')->group(function () {
         Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+
+        Route::get('/faqs', [NakerFaqController::class, 'index'])->name('faq.index');
+        Route::post('/faq/add', [NakerFaqController::class, 'store'])->name('faq.add');
+        Route::get('/faq/get/{id}', [NakerFaqController::class, 'getData'])->name('faq.detail');
+        Route::delete('/faq/delete/{id}', [NakerFaqController::class, 'softdelete'])->name('faq.softdelete');
+        Route::put('/faq/update/{id}', [NakerFaqController::class, 'update'])->name('faq.update');
     });
 
     Route::prefix('users')->group(function () {
