@@ -7,6 +7,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DepanController;
 use App\Http\Controllers\NakerFaqController;
+use App\Http\Controllers\NakerInfografisController;
 
 Route::get('/', function () {
     return view('depan.depan_index');
@@ -71,6 +72,12 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('/faq/get/{id}', [NakerFaqController::class, 'getData'])->name('faq.detail');
         Route::delete('/faq/delete/{id}', [NakerFaqController::class, 'softdelete'])->name('faq.softdelete');
         Route::put('/faq/update/{id}', [NakerFaqController::class, 'update'])->name('faq.update');
+
+        Route::get('/infografis', [NakerInfografisController::class, 'index'])->name('infografis.index');
+        Route::post('/infografis/add', [NakerInfografisController::class, 'store'])->name('infografis.add');
+        Route::get('/infografis/{id}', [NakerInfografisController::class, 'edit'])->name('infografis.edit');
+        Route::put('/infografis/update/{id}', [NakerInfografisController::class, 'update'])->name('infografis.update');
+        Route::delete('/infografis/delete/{id}', [NakerInfografisController::class, 'destroy'])->name('infografis.destroy');
     });
 
     Route::prefix('users')->group(function () {
