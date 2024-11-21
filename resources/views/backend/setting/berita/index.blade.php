@@ -86,7 +86,6 @@
                                     <textarea class="form-control" id="description" name="description" rows="2"></textarea>
                                 </div>
                             </div>
-
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="status">Status</label>
@@ -112,8 +111,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Data</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="editForm" enctype="multipart/form-data">
@@ -135,7 +133,7 @@
 
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="editDescription">Decription</label>
+                                    <label for="editDescription">Description</label>
                                     <textarea class="form-control" id="editDescription" name="description" rows="2"></textarea>
                                 </div>
                             </div>
@@ -160,6 +158,47 @@
 
 
 @push('js')
+    <script>
+        $(document).ready(function() {
+            $('#description').summernote({
+                height: 300, // set the height of the editor
+                callbacks: {
+                    onImageUpload: function(files) {
+                        var editor = $(this);
+                        sendFile(files[0], editor);
+                    }
+                }
+            });
+
+            // Function to send the image to the server
+            function sendFile(file, editor) {
+                var data = new FormData();
+                data.append("file", file);
+                data.append("_token", "{{ csrf_token() }}"); // Menambahkan CSRF Token
+
+                $.ajax({
+                    url: '{{ route('berita.uploadImage') }}', // URL untuk menangani upload gambar
+                    method: 'POST',
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.success) {
+                            var imageUrl = response.image_url;
+                            // Menambahkan gambar ke dalam Summernote
+                            editor.summernote('insertImage', imageUrl);
+                        } else {
+                            alert('Gagal mengupload gambar');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Terjadi kesalahan saat mengupload gambar');
+                    }
+                });
+            }
+        });
+    </script>
+
     <script>
         $(document).ready(function() {
             $('#simpletable').DataTable({
@@ -241,7 +280,8 @@
                         $('#editId').val(data.id);
                         $('#editName').val(data.name);
                         $('#editStatus').val(data.status);
-                        $('#editDescription').val(data.description);
+                        $('#editDescription').summernote('code', data
+                            .description); // Menetapkan deskripsi ke editor Summernote
                         $('#editModal').modal('show');
                     } else {
                         alert('Error: ' + response.message);
@@ -252,39 +292,6 @@
                 }
             });
         }
-    </script>
-
-    <script>
-        $('#editForm').submit(function(e) {
-            e.preventDefault();
-
-            var id = $('#editId').val();
-            var updateUrl = "{{ route('berita.update', ':id') }}".replace(':id', id);
-
-            var formData = new FormData(this);
-            formData.append('_token', '{{ csrf_token() }}');
-            formData.append('_method', 'PUT');
-
-            $.ajax({
-                type: 'POST',
-                url: updateUrl,
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    if (response.success) {
-                        alert(response.message);
-                        $('#editModal').modal('hide');
-                        location.reload();
-                    } else {
-                        alert('Error: ' + JSON.stringify(response.errors));
-                    }
-                },
-                error: function(xhr) {
-                    alert('Error: ' + xhr.responseText);
-                }
-            });
-        });
     </script>
 
     <script>

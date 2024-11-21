@@ -69,6 +69,28 @@ class NakerBeritaController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function uploadImage(Request $request)
+    {
+        // Validasi file gambar
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'message' => 'File tidak valid']);
+        }
+
+        // Simpan file gambar ke dalam folder 'public/berita'
+        $file = $request->file('file');
+        $filePath = $file->store('berita', 'public');
+
+        // Mengembalikan URL gambar
+        $imageUrl = asset('storage/' . $filePath);
+
+        return response()->json(['success' => true, 'image_url' => $imageUrl]);
+    }
+
+
     public function edit($id)
     {
         $data = NakerBerita::find($id);
@@ -79,50 +101,6 @@ class NakerBeritaController extends Controller
 
         return response()->json(['success' => true, 'data' => $data]);
     }
-
-    public function update(Request $request, $id)
-    {
-        $data = NakerBerita::find($id);
-
-        if (!$data) {
-            return response()->json(['success' => false, 'message' => 'Data not found']);
-        }
-
-        // Validasi input
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'description' => 'required|string',
-            'cover' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'status' => 'required|boolean',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['success' => false, 'errors' => $validator->errors()]);
-        }
-
-        // Update file jika ada file baru
-        if ($request->hasFile('cover')) {
-            // Hapus file lama
-            if (Storage::exists('public/' . $data->cover)) {
-                Storage::delete('public/' . $data->cover);
-            }
-
-            // Simpan file baru
-            $file = $request->file('cover');
-            $filePath = $file->store('berita', 'public');
-            $data->cover = $filePath;
-        }
-
-        // Update data lainnya
-        $data->name = $request->name;
-        $data->description = $request->description;
-        $data->status = $request->status;
-        $data->updated_by = auth()->user()->id;
-        $data->save();
-
-        return response()->json(['success' => true, 'message' => 'Data updated successfully']);
-    }
-
 
     public function destroy($id)
     {

@@ -92,6 +92,7 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('/berita/{id}', [NakerBeritaController::class, 'edit'])->name('berita.edit');
         Route::put('/berita/update/{id}', [NakerBeritaController::class, 'update'])->name('berita.update');
         Route::delete('/berita/delete/{id}', [NakerBeritaController::class, 'destroy'])->name('berita.destroy');
+        Route::post('/berita/upload-image', [NakerBeritaController::class, 'uploadImage'])->name('berita.uploadImage');
     });
 
     Route::prefix('users')->group(function () {
