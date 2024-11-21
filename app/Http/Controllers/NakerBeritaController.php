@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;  // Mengimpor DataTables
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use DOMDocument;
+use Illuminate\Support\Facades\File;
+
+
 
 class NakerBeritaController extends Controller
 {
@@ -36,6 +40,7 @@ class NakerBeritaController extends Controller
 
     public function store(Request $request)
     {
+        // Ambil ID user yang sedang login
         $userId = auth()->user()->id;
 
         // Validasi input
@@ -46,21 +51,59 @@ class NakerBeritaController extends Controller
             'status' => 'required|boolean',
         ]);
 
+        // Jika validasi gagal
         if ($validator->fails()) {
             return response()->json(['success' => false, 'errors' => $validator->errors()]);
         }
 
-        // Upload file
+        // Mengelola file cover (file yang di-upload)
+        $filePath = null;
         if ($request->hasFile('cover')) {
             $file = $request->file('cover');
             $filePath = $file->store('berita', 'public'); // Menyimpan file di folder storage/app/public/berita
         }
 
-        // Simpan data ke tabel
+        // Mengelola deskripsi untuk mengganti base64 image dengan path file
+        $description = $request->description;
+        $dom = new DOMDocument();
+        @$dom->loadHTML($description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+        $images = $dom->getElementsByTagName('img');
+
+        foreach ($images as $key => $img) {
+            $src = $img->getAttribute('src');
+
+            // Jika gambar adalah base64
+            if (strpos($src, 'data:image/') === 0) {
+                // Decode base64 image
+                $data = base64_decode(explode(',', explode(';', $src)[1])[1]);
+
+                // Pastikan direktori upload ada
+                $uploadPath = public_path('upload');
+                if (!File::exists($uploadPath)) {
+                    File::makeDirectory($uploadPath, 0755, true);
+                }
+
+                // Generate nama file unik untuk gambar
+                $image_name = '/upload/' . time() . $key . '.png';
+
+                // Simpan gambar sebagai file
+                file_put_contents(public_path($image_name), $data);
+
+                // Ganti atribut src gambar dengan path file yang baru
+                $img->removeAttribute('src');
+                $img->setAttribute('src', $image_name);
+            }
+        }
+
+        // Simpan perubahan deskripsi setelah mengganti src gambar
+        $description = $dom->saveHTML();
+
+        // Simpan data ke dalam database
         NakerBerita::create([
             'name' => $request->name,
-            'description' => $request->description,
-            'cover' => $filePath,
+            'description' => $description,
+            'cover' => $filePath,  // Menyimpan path file cover yang di-upload
             'status' => $request->status,
             'created_by' => $userId,
             'updated_by' => $userId,
@@ -69,82 +112,20 @@ class NakerBeritaController extends Controller
         return response()->json(['success' => true]);
     }
 
+
     public function uploadImage(Request $request)
     {
-        // Validasi file gambar
-        $validator = Validator::make($request->all(), [
-            'file' => 'required|file|mimes:jpg,jpeg,png|max:2048',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => 'File tidak valid']);
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filePath = $file->store('berita', 'public'); // Simpan di storage
+            return response()->json([
+                'success' => true,
+                'image_url' => '/storage/' . $filePath,
+            ]);
         }
 
-        // Simpan file gambar ke dalam folder 'public/berita'
-        $file = $request->file('file');
-        $filePath = $file->store('berita', 'public');
-
-        // Mengembalikan URL gambar
-        $imageUrl = asset('storage/' . $filePath);
-
-        return response()->json(['success' => true, 'image_url' => $imageUrl]);
+        return response()->json(['success' => false]);
     }
-
-
-    public function edit($id)
-    {
-        $data = NakerBerita::find($id);
-
-        if (!$data) {
-            return response()->json(['success' => false, 'message' => 'Data not found']);
-        }
-
-        return response()->json(['success' => true, 'data' => $data]);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $data = NakerBerita::find($id);
-
-        if (!$data) {
-            return response()->json(['success' => false, 'message' => 'Data not found']);
-        }
-
-        // Validasi input
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'description' => 'required|string', // Membatasi panjang karakter           
-            'cover' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'status' => 'required|boolean',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['success' => false, 'errors' => $validator->errors()]);
-        }
-
-        // Update file jika ada file baru
-        if ($request->hasFile('cover')) {
-            // Hapus file lama
-            if (Storage::exists('public/' . $data->cover)) {
-                Storage::delete('public/' . $data->cover);
-            }
-
-            // Simpan file baru
-            $file = $request->file('cover');
-            $filePath = $file->store('berita', 'public');
-            $data->cover = $filePath;
-        }
-
-        // Update data lainnya
-        $data->name = $request->name;
-        $data->description = $request->description;
-        $data->status = $request->status;
-        $data->updated_by = auth()->user()->id;
-        $data->save();
-
-        return response()->json(['success' => true, 'message' => 'Data updated successfully']);
-    }
-
 
     public function destroy($id)
     {
