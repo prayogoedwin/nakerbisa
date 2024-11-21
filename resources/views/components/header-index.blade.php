@@ -92,44 +92,45 @@
     ============================================= -->
     <header>
         <!-- Start Navigation -->
-        <nav class="navbar secondary mobile-sidenav navbar-sticky navbar-default validnavs navbar-fixed white no-background">
+        <nav
+            class="navbar secondary mobile-sidenav navbar-sticky navbar-default validnavs navbar-fixed white no-background">
 
-        <div class="container d-flex justify-content-between align-items-center">
+            <div class="container d-flex justify-content-between align-items-center">
 
 
-            <!-- Start Header Navigation -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
-                    <i class="fa fa-bars"></i>
-                </button>
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    <!-- Logo khusus hanya untuk halaman index -->
-                    <img src="{{ asset('assets/nakerbisa_be/img/nakerbisa-white.png') }}"class="logo logo-display"
-                        alt="Logo">
-                    <img src="{{ asset('assets/nakerbisa_be/img/nakerbisa-rembang.png') }}" class="logo logo-scrolled"
-                        alt="Logo">
-
-                </a>
-
-            </div>
-            <!-- End Header Navigation -->
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="navbar-menu">
-
-                <div class="collapse-header">
-                    <img src="{{ asset('assets/nakerbisa_fe/img/logo.png') }}" alt="Logo">
+                <!-- Start Header Navigation -->
+                <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
-                        <i class="fa fa-times"></i>
+                        <i class="fa fa-bars"></i>
                     </button>
+                    <a class="navbar-brand" href="{{ url('/') }}">
+                        <!-- Logo khusus hanya untuk halaman index -->
+                        <img src="{{ asset('assets/nakerbisa_be/img/nakerbisa-white.png') }}"class="logo logo-display"
+                            alt="Logo">
+                        <img src="{{ asset('assets/nakerbisa_be/img/nakerbisa-rembang.png') }}"
+                            class="logo logo-scrolled" alt="Logo">
+
+                    </a>
+
                 </div>
+                <!-- End Header Navigation -->
 
-                <ul class="nav navbar-nav navbar-center" data-in="fadeInDown" data-out="fadeOutUp">
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar-menu">
 
-                    <li><a href="{{ url('/') }}">Beranda</a></li>
+                    <div class="collapse-header">
+                        <img src="{{ asset('assets/nakerbisa_fe/img/logo.png') }}" alt="Logo">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+
+                    <ul class="nav navbar-nav navbar-center" data-in="fadeInDown" data-out="fadeOutUp">
+
+                        <li><a href="{{ url('/') }}">Beranda</a></li>
 
 
-                    <!-- <li class="dropdown">
+                        <!-- <li class="dropdown">
                             <a href="#" class="dropdown-toggle active" data-toggle="dropdown" >Home</a>
                             <ul class="dropdown-menu">
                                 <li><a href="index.html">Consulting Business</a></li>
@@ -140,47 +141,54 @@
                                 <li><li><a href="software-landing.html">Software Landing</a></li>
                             </ul>
                         </li> -->
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Lowongan</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{{ url('/depan/lowongan-kerja') }}">Lowongan Kerja</a></li>
-                            <li><a href="{{ url('/depan/lowongan-kerja-ema') }}">Lowongan Emakaryo</a></li>
-                            <li><a href="{{ url('/depan/lowongan-kerja-krr') }}">Lowongan Karirhub</a></li>
-                        </ul>
-                    </li>
-
-                    <!-- <li><a href="bkk.html">BKK</a></li> -->
-
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Informasi</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{{ url('/depan/infografis') }}">Infografis</a></li>
-                            <li><a href="{{ url('/depan/galeri') }}">Galeri</a></li>
-                            <li><a href="{{ url('/depan/berita') }}">Pengumuman</a></li>
-                            <!-- <li><a href="kontak.html">Kontak</a></li> -->
-                        </ul>
-                    </li>
-
-                    <li><a href="{{ url('/login') }}">Login</a></li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-
-            <div class="attr-right">
-                <!-- Start Atribute Navigation -->
-                <div class="attr-nav">
-                    <ul>
-                        <li class="button light">
-                            <a href="#" onclick="askRoleRegister()">Daftar Sekarang</a>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Lowongan</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url('/depan/lowongan-kerja') }}">Lowongan Kerja</a></li>
+                                <li><a href="{{ url('/depan/lowongan-kerja-ema') }}">Lowongan Emakaryo</a></li>
+                                <li><a href="{{ url('/depan/lowongan-kerja-krr') }}">Lowongan Karirhub</a></li>
+                            </ul>
                         </li>
-                    </ul>
-                </div>
-                <!-- End Atribute Navigation -->
-            </div>
 
-        </div>
-        <!-- Overlay screen for menu -->
-        <div class="overlay-screen"></div>
-        <!-- End Overlay screen for menu -->
+                        <!-- <li><a href="bkk.html">BKK</a></li> -->
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Data</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url('/depan/bkk') }}">BKK</a></li>
+                                <li><a href="{{ url('/depan/blk') }}">BLK</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Informasi</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url('/depan/infografis') }}">Infografis</a></li>
+                                <li><a href="{{ url('/depan/galeri') }}">Galeri</a></li>
+                                <li><a href="{{ url('/depan/berita') }}">Pengumuman</a></li>
+                                <!-- <li><a href="kontak.html">Kontak</a></li> -->
+                            </ul>
+                        </li>
+
+                        <li><a href="{{ url('/login') }}">Login</a></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+
+                <div class="attr-right">
+                    <!-- Start Atribute Navigation -->
+                    <div class="attr-nav">
+                        <ul>
+                            <li class="button light">
+                                <a href="#" onclick="askRoleRegister()">Daftar Sekarang</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- End Atribute Navigation -->
+                </div>
+
+            </div>
+            <!-- Overlay screen for menu -->
+            <div class="overlay-screen"></div>
+            <!-- End Overlay screen for menu -->
         </nav>
         <!-- End Navigation -->
     </header>

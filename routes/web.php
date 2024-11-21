@@ -15,6 +15,7 @@ Route::get('/', function () {
 
 
 Route::get('/depan/bkk', [DepanController::class, 'bkk']);
+Route::get('/depan/blk', [DepanController::class, 'blk']);
 Route::get('/depan/login', [DepanController::class, 'login']);
 Route::get('/depan/register', [DepanController::class, 'register']);
 Route::get('/depan/galeri', [DepanController::class, 'galeri'])->name('galeri');

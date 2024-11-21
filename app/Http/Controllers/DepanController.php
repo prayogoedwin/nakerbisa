@@ -27,6 +27,11 @@ class DepanController extends Controller
         return view('depan.depan_bkk');
     }
 
+    public function blk()
+    {
+        return view('depan.depan_blk');
+    }
+
     public function login()
     {
         return view('depan.depan_login');
