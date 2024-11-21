@@ -29,7 +29,7 @@
                                                     <tr>
                                                         <th>No</th>
                                                         <th>Judul</th>
-                                                        <th>File</th>
+                                                        <th>Cover</th>
                                                         <th>Status</th>
                                                         <th>Options</th>
                                                     </tr>
@@ -74,7 +74,7 @@
 
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="cover">Upload File</label>
+                                    <label for="cover">Cover</label>
                                     <input type="file" class="form-control" id="cover" name="cover">
                                 </div>
                             </div>
@@ -125,7 +125,7 @@
 
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="editPathFile">Upload File</label>
+                                    <label for="editPathFile">Cover</label>
                                     <input type="file" class="form-control" id="editPathFile" name="cover">
                                 </div>
                             </div>
