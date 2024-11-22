@@ -77,15 +77,17 @@ class DepanController extends Controller
         return view('depan.depan_galeri');
     }
 
-    // Fungsi untuk menampilkan berita
     public function berita()
     {
-        // Mengambil semua data berita yang sudah terverifikasi atau memiliki status aktif
-        $berita = NakerBerita::where('status', true)->orderBy('created_at', 'desc')->get();
+        // Mengambil berita terbaru yang terverifikasi, dengan pagination
+        $berita = NakerBerita::where('status', true)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);  // Mengambil 10 berita per halaman
 
-        // Mengirim data berita ke view
+        // Mengirim data berita ke tampilan
         return view('depan.depan_berita', compact('berita'));
     }
+
 
     public function daftar_akun(Request $request)
     {

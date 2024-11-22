@@ -52,6 +52,10 @@
                 </div>
             @endforeach
         </div>
+        <!-- Menampilkan pagination -->
+        <div class="pagination justify-content-center">
+            {{ $berita->links('pagination::bootstrap-4') }}
+        </div>        
     </div>
 </div>
 <!-- End Blog  -->
