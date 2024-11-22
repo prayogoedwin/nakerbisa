@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Depan; // Import model Depan
 use App\Models\NakerBerita;
 use App\Models\NakerFaq;
+use App\Models\NakerInfografis;
 use App\Models\User;
 use App\Models\UserBkk;
 use App\Models\UserBlk;
@@ -69,7 +70,11 @@ class DepanController extends Controller
     }
     public function infografis()
     {
-        return view('depan.depan_infografis');
+        $infografis = NakerInfografis::where('status', true)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);  
+
+        return view('depan.depan_infografis', compact('infografis'));
     }
 
     public function galeri()
@@ -79,45 +84,37 @@ class DepanController extends Controller
 
     public function berita()
     {
-        // Mengambil berita terbaru yang terverifikasi, dengan pagination
         $berita = NakerBerita::where('status', true)
             ->orderBy('created_at', 'desc')
-            ->paginate(10);  // Mengambil 10 berita per halaman
+            ->paginate(10);  
 
-        // Mengirim data berita ke tampilan
         return view('depan.depan_berita', compact('berita'));
     }
 
     public function show($id)
     {
-        // Mengambil berita berdasarkan ID
         $berita = NakerBerita::findOrFail($id);
 
-        // Mengirim data berita ke tampilan
         return view('depan.depan_berita_detail', compact('berita'));
     }
 
 
     public function daftar_akun(Request $request)
     {
-        // dd($request->all());
         $request->validate([
             'role_dipilih' => 'required',
         ]);
 
         $url_role = encode_url($request->role_dipilih);
-        // dd($url_role);
 
         return redirect()->to('depan/daftar?rl=' . $url_role);
     }
 
     public function daftar(Request $request)
     {
-        // Tangkap parameter rl dari URL
         $rl = $request->input('rl'); // atau bisa juga menggunakan $request->query('rl')
         $decode_rl = decode_url($rl);
 
-        // Validasi parameter rl
         if (!in_array($decode_rl, ['pencari-kerja', 'penyedia-kerja', 'admin-bkk', 'admin-blk'])) {
             return abort(404);
         }

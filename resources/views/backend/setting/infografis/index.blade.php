@@ -29,7 +29,7 @@
                                                     <tr>
                                                         <th>No</th>
                                                         <th>Judul</th>
-                                                        <th>File</th>
+                                                        <th>Gambar</th>
                                                         <th>Status</th>
                                                         <th>Options</th>
                                                     </tr>
@@ -74,7 +74,7 @@
 
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="path_file">Upload File</label>
+                                    <label for="path_file">Upload Gambar</label>
                                     <input type="file" class="form-control" id="path_file" name="path_file">
                                 </div>
                             </div>
@@ -120,7 +120,7 @@
 
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="editPathFile">Upload File</label>
+                                    <label for="editPathFile">Upload Gambar</label>
                                     <input type="file" class="form-control" id="editPathFile" name="path_file">
                                 </div>
                             </div>
@@ -164,8 +164,8 @@
                         data: 'path_file',
                         render: function(data) {
                             return data ?
-                                `<a href="/storage/${data}" target="_blank">View File</a>` :
-                                'No File';
+                                `<a href="/storage/${data}" target="_blank">View Gambar</a>` :
+                                'No Gambar';
                         }
                     },
                     {
