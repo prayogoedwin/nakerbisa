@@ -400,8 +400,8 @@
                     <h4 class="sub-heading">FAQ</h4>
                     <h2 class="title mb-30">Jenis Pertanyaan Umum <br></h2>
                     <div class="accordion" id="faqAccordion">
-                        @if ($data->count())
-                            @foreach ($data as $index => $faq)
+                        @if ($faq->count())
+                            @foreach ($faq as $index => $faq)
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="heading-{{ $index }}">
                                         <button class="accordion-button {{ $index == 0 ? '' : 'collapsed' }}"

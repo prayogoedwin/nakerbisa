@@ -21,10 +21,10 @@ class DepanController extends Controller
     public function index()
     {
         // Mengambil semua data FAQ
-        $data = NakerFaq::all();
+        $faq = NakerFaq::all();
 
-        // Mengirim data ke view depan_index
-        return view('depan.depan_index', compact('data'));
+        // Mengirim faq ke view depan_index
+        return view('depan.depan_index', compact('faq'));
     }
 
     public function bkk()
