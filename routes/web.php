@@ -7,6 +7,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DepanController;
 use App\Http\Controllers\NakerBeritaController;
+use App\Http\Controllers\NakerBeritaNewController;
 use App\Http\Controllers\NakerFaqController;
 use App\Http\Controllers\NakerGaleriController;
 use App\Http\Controllers\NakerInfografisController;
@@ -89,10 +90,9 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
 
         Route::get('/berita', [NakerBeritaController::class, 'index'])->name('berita.index');
         Route::post('/berita/add', [NakerBeritaController::class, 'store'])->name('berita.add');
-        Route::get('berita/edit/{id}', [NakerBeritaController::class, 'edit'])->name('berita.edit');
-        Route::post('berita/update/{id}', [NakerBeritaController::class, 'update'])->name('berita.update');
+        Route::get('/berita/{id}/edit', [NakerBeritaController::class, 'edit'])->name('berita.edit');
+        Route::put('/berita/{id}', [NakerBeritaController::class, 'update'])->name('berita.update');
         Route::delete('/berita/delete/{id}', [NakerBeritaController::class, 'destroy'])->name('berita.destroy');
-        Route::post('/berita/upload-image', [NakerBeritaController::class, 'uploadImage'])->name('berita.uploadImage');
     });
 
     Route::prefix('users')->group(function () {
