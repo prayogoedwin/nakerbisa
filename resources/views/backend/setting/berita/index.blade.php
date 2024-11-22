@@ -100,6 +100,64 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Edit -->
+    <div class="modal fade" id="modal-edit" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Berita</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" id="edit-id">
+                        <div class="row">
+                            <!-- Judul -->
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="edit-name">Judul</label>
+                                    <textarea class="form-control" id="edit-name" name="name" rows="2"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Cover -->
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="edit-cover">Cover</label>
+                                    <input type="file" class="form-control" id="edit-cover" name="cover">
+                                </div>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="edit-description">Description</label>
+                                    <textarea class="form-control" id="edit-description" name="description"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="edit-status">Status</label>
+                                    <select class="form-control" id="edit-status" name="status">
+                                        <option value="1">Aktif</option>
+                                        <option value="0">Nonaktif</option>
+                                    </select>
+                                </div>
+                                <!-- Buttons -->
+                                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                                <button type="reset" class="btn btn-danger mt-3">Clear</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 
@@ -148,6 +206,66 @@
             });
         });
     </script>
+
+    <script>
+        $(document).ready(function() {
+            // Initialize Summernote
+            $('#edit-description').summernote({
+                height: 300,
+                callbacks: {
+                    onImageUpload: function(files) {
+                        let reader = new FileReader();
+                        reader.onload = function(e) {
+                            $('#edit-description').summernote('insertImage', e.target.result);
+                        };
+                        reader.readAsDataURL(files[0]);
+                    }
+                }
+            });
+
+            // Show Edit Modal and populate fields
+            window.showEditModal = function(id) {
+                const url = '{{ route('berita.edit', ':id') }}'.replace(':id', id);
+                $.get(url, function(response) {
+                    $('#edit-id').val(response.data.id);
+                    $('#edit-name').val(response.data.name);
+                    $('#edit-description').summernote('code', response.data.description);
+                    $('#edit-status').val(response.data.status);
+                    $('#modal-edit').modal('show');
+                });
+            };
+
+            // Handle form submission for editing
+            $('#editForm').submit(function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+                const id = $('#edit-id').val();
+                const url = '{{ route('berita.update', ':id') }}'.replace(':id', id);
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Data berhasil diperbarui');
+                            $('#modal-edit').modal('hide');
+                            location.reload();
+                        } else {
+                            alert('Error: ' + JSON.stringify(response.errors));
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Error: ' + xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+
 
     <script>
         $(document).ready(function() {

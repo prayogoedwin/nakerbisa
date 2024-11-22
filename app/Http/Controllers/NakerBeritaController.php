@@ -111,6 +111,71 @@ class NakerBeritaController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function edit($id)
+    { // Find the data by ID 
+        $data = NakerBerita::findOrFail($id);
+        // Return the data as JSON response
+        return response()->json(['data' => $data]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Validate input 
+        $validator = Validator::make(
+            $request->all(),
+            ['name' => 'required|string', 'description' => 'required|string', 'cover' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048', 'status' => 'required|boolean',]
+        );
+        // If validation fails 
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()]);
+        }
+        // Find the existing data to update 
+        $data = NakerBerita::findOrFail($id);
+        // Handle file upload (if a new file is uploaded) 
+        if ($request->hasFile('cover')) {
+            // Delete the old file if it exists 
+            if ($data->cover) {
+                Storage::disk('public')->delete($data->cover);
+            }
+            // Store the new file 
+            $file = $request->file('cover');
+            $filePath = $file->store('berita', 'public');
+        } else {
+            // Keep the old file if no new cover is uploaded 
+            $filePath = $data->cover;
+        }
+        // Handle description (base64 images handling, if any) 
+        $description = $request->description;
+        $dom = new DOMDocument();
+        @$dom->loadHTML($description, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+        $images = $dom->getElementsByTagName('img');
+        foreach ($images as $key => $img) {
+            $src = $img->getAttribute('src');
+            // If image is base64 
+            if (strpos($src, 'data:image/') === 0) {
+                // Decode base64 image 
+                $data = base64_decode(explode(',', explode(';', $src)[1])[1]);
+                // Save the image to the upload directory 
+                $uploadPath = public_path('upload');
+                if (!File::exists($uploadPath)) {
+                    File::makeDirectory($uploadPath, 0755, true);
+                }
+                // Generate a unique filename for the image 
+                $image_name = '/upload/' . time() . $key . '.png';
+                file_put_contents(public_path($image_name), $data);
+                // Update the image src attribute with the new path
+                $img->removeAttribute('src');
+                $img->setAttribute('src', $image_name);
+            }
+        }
+        // Save the updated description
+        $description = $dom->saveHTML();
+        // Update the data in the database 
+        $data->update(['name' => $request->name, 'description' => $description, 'cover' => $filePath, 'status' => $request->status, 'updated_by' => auth()->user()->id,]);
+        return response()->json(['success' => true]);
+    }
+
 
     public function destroy($id)
     {
