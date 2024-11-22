@@ -1,7 +1,8 @@
 @include('components.header-index')
 <!-- Start Banner Area
     ============================================= -->
-<div class="banner-style-four-area text-light bg-cover" style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/banner-2-5.png') }});">
+<div class="banner-style-four-area text-light bg-cover"
+    style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/banner-2-5.png') }});">
     <!-- Single Item -->
     <div class="banner-style-four">
         <div class="container">
@@ -63,7 +64,8 @@
 
             <!-- Single Itme -->
             <div class="col-xl-3 col-md-6 mb-30">
-                <div class="pricing-style-one" style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
+                <div class="pricing-style-one"
+                    style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
                     <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px">
                     <br />
                     <br />
@@ -87,7 +89,8 @@
 
             <!-- Single Itme -->
             <div class="col-xl-3 col-md-6 mb-30">
-                <div class="pricing-style-one" style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
+                <div class="pricing-style-one"
+                    style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
                     <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px">
                     <br />
                     <br />
@@ -111,7 +114,8 @@
 
             <!-- Single Itme -->
             <div class="col-xl-3 col-md-6 mb-30">
-                <div class="pricing-style-one" style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
+                <div class="pricing-style-one"
+                    style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
                     <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px">
                     <br />
                     <br />
@@ -135,7 +139,8 @@
 
             <!-- Single Itme -->
             <div class="col-xl-3 col-md-6 mb-30">
-                <div class="pricing-style-one" style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
+                <div class="pricing-style-one"
+                    style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
                     <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px">
                     <br />
                     <br />
@@ -160,7 +165,8 @@
 
             <!-- Single Itme -->
             <div class="col-xl-3 col-md-6 mb-30">
-                <div class="pricing-style-one" style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
+                <div class="pricing-style-one"
+                    style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
                     <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px">
                     <br />
                     <br />
@@ -184,7 +190,8 @@
 
             <!-- Single Itme -->
             <div class="col-xl-3 col-md-6 mb-30">
-                <div class="pricing-style-one" style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
+                <div class="pricing-style-one"
+                    style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
                     <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px">
                     <br />
                     <br />
@@ -208,7 +215,8 @@
 
             <!-- Single Itme -->
             <div class="col-xl-3 col-md-6 mb-30">
-                <div class="pricing-style-one" style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
+                <div class="pricing-style-one"
+                    style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
                     <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px">
                     <br />
                     <br />
@@ -232,7 +240,8 @@
 
             <!-- Single Itme -->
             <div class="col-xl-3 col-md-6 mb-30">
-                <div class="pricing-style-one" style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
+                <div class="pricing-style-one"
+                    style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
                     <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px">
                     <br />
                     <br />
@@ -391,61 +400,32 @@
                     <h4 class="sub-heading">FAQ</h4>
                     <h2 class="title mb-30">Jenis Pertanyaan Umum <br></h2>
                     <div class="accordion" id="faqAccordion">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingOne">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    Apakah Lowongan Yang Tersedia Valid dan Sudah Melalui Proses Verifikasi Oleh
-                                    Pemerintah ?
-                                </button>
-                            </h2>
-                            <div id="collapseOne" class="accordion-collapse collapse show"
-                                aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    <p>
-                                        Ya, semua lowongan yang tampil sudah di kurasi oleh admin kabupaten rembang
-                                        berdasarkan jenis lowongan, konten lowongan dan perusahaan yang memberikan sudah
-                                        di verifikasi oleh admin. Proses verifikasi oleh pemerintah lowongan inilah yang
-                                        membedakan NAKERBISA dengan platform lowongan kerja swasta.
-                                    </p>
+                        @if ($data->count())
+                            @foreach ($data as $index => $faq)
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="heading-{{ $index }}">
+                                        <button class="accordion-button {{ $index == 0 ? '' : 'collapsed' }}"
+                                            type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapse-{{ $index }}"
+                                            aria-expanded="{{ $index == 0 ? 'true' : 'false' }}"
+                                            aria-controls="collapse-{{ $index }}">
+                                            {{ $faq->name }}
+                                        </button>
+                                    </h2>
+                                    <div id="collapse-{{ $index }}"
+                                        class="accordion-collapse collapse {{ $index == 0 ? 'show' : '' }}"
+                                        aria-labelledby="heading-{{ $index }}" data-bs-parent="#faqAccordion">
+                                        <div class="accordion-body">
+                                            <p>
+                                                {!! $faq->description !!}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingTwo">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    Apakah perusahaan dapat memasukkan lowongan secara gratis ?
-                                </button>
-                            </h2>
-                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                                data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    <p>
-                                        Ya, perusahaan diperbolehkan memposting lowongan secara gratis tanpa di pungut
-                                        biaya sepeserpun, tanpa batasan jumlah lowongan yang dapat di posting. Itulah
-                                        yang membedakan NAKERBISA dengan platform lowongan kerja swasta</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingThree">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseThree" aria-expanded="false"
-                                    aria-controls="collapseThree">
-                                    Apakah pengguna di pungut biaya untuk menggunakan fitur NAKERBISA ?
-                                </button>
-                            </h2>
-                            <div id="collapseThree" class="accordion-collapse collapse"
-                                aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    <p>
-                                        Tidak semua fitur NAKERBISA adalah bentuk pelayanan publik dalam hal penempatan
-                                        kerja dari pemerintah Kab. Rembang untuk pencari kerja, penyedia kerja.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                            @endforeach
+                        @else
+                            <p>Belum ada pertanyaan yang tersedia.</p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -482,19 +462,22 @@
 
                         <!-- Single Item -->
                         <div class="swiper-slide">
-                            <img src="{{ asset('assets/nakerbisa_fe/img/client/logo-pemkab-rembang.webp') }}" alt="Thumb">
+                            <img src="{{ asset('assets/nakerbisa_fe/img/client/logo-pemkab-rembang.webp') }}"
+                                alt="Thumb">
                         </div>
                         <!-- End Single Item -->
 
                         <!-- Single Item -->
                         <div class="swiper-slide">
-                            <img src="{{ asset('assets/nakerbisa_fe/img/client/emakaryo_white.png') }}" alt="Thumb">
+                            <img src="{{ asset('assets/nakerbisa_fe/img/client/emakaryo_white.png') }}"
+                                alt="Thumb">
                         </div>
                         <!-- End Single Item -->
 
                         <!-- Single Item -->
                         <div class="swiper-slide">
-                            <img src="{{ asset('assets/nakerbisa_fe/img/client/karirhub-lower.svg') }}" alt="Thumb">
+                            <img src="{{ asset('assets/nakerbisa_fe/img/client/karirhub-lower.svg') }}"
+                                alt="Thumb">
                         </div>
                         <!-- End Single Item -->
 

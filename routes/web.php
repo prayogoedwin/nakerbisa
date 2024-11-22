@@ -12,12 +12,8 @@ use App\Http\Controllers\NakerFaqController;
 use App\Http\Controllers\NakerGaleriController;
 use App\Http\Controllers\NakerInfografisController;
 
-Route::get('/', function () {
-    return view('depan.depan_index');
-});
-
-
-
+// Menggunakan controller DepanController untuk mengambil data FAQ
+Route::get('/', [DepanController::class, 'index']);
 Route::get('/depan/bkk', [DepanController::class, 'bkk']);
 Route::get('/depan/blk', [DepanController::class, 'blk']);
 Route::get('/depan/login', [DepanController::class, 'login']);

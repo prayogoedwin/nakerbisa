@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Depan; // Import model Depan
+use App\Models\NakerFaq;
 use App\Models\User;
 use App\Models\UserBkk;
 use App\Models\UserBlk;
@@ -19,7 +20,11 @@ class DepanController extends Controller
     //index
     public function index()
     {
-        return view('depan.depan_index');
+        // Mengambil semua data FAQ
+        $data = NakerFaq::all();
+
+        // Mengirim data ke view depan_index
+        return view('depan.depan_index', compact('data'));
     }
 
     public function bkk()
