@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Depan; // Import model Depan
+use App\Models\NakerBerita;
 use App\Models\NakerFaq;
 use App\Models\User;
 use App\Models\UserBkk;
@@ -76,9 +77,14 @@ class DepanController extends Controller
         return view('depan.depan_galeri');
     }
 
+    // Fungsi untuk menampilkan berita
     public function berita()
     {
-        return view('depan.depan_berita');
+        // Mengambil semua data berita yang sudah terverifikasi atau memiliki status aktif
+        $berita = NakerBerita::where('status', true)->orderBy('created_at', 'desc')->get();
+
+        // Mengirim data berita ke view
+        return view('depan.depan_berita', compact('berita'));
     }
 
     public function daftar_akun(Request $request)
