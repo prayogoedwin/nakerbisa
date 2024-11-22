@@ -113,13 +113,12 @@
                                 <div class="form-group">
                                     <label for="jab">Kabupaten / Kota</label>
                                     <select class="form-control" name="kabkota_id" id="kabkota_id" required>
-                                        <option value="">Pilih Kabkota</option>
-                                        @foreach ($kabkotas as $kabkot)
-                                            <option value="{{ $kabkot->id }}">{{ $kabkot->name }}</option>
-                                        @endforeach
+                                        {{-- Didefaultkan value 1 --}}
+                                        <option value="1" selected>Pilih Kabkota</option>
                                     </select>
                                 </div>
                             </div>
+                            
                             <div class="col-sm-12">
                                 <div class="col-sm-12">
                                     <div class="form-group">
