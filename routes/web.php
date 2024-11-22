@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DepanController;
+use App\Http\Controllers\LowonganController;
 use App\Http\Controllers\NakerBeritaController;
 use App\Http\Controllers\NakerBeritaNewController;
 use App\Http\Controllers\NakerFaqController;
@@ -99,6 +100,11 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('/admin/get/{id}', [AdminController::class, 'getAdmin'])->name('admin.detail');
         Route::put('/admin/update/{id}', [AdminController::class, 'update'])->name('admin.update');
         Route::delete('/admin/delete/{id}', [AdminController::class, 'softdelete'])->name('admin.softdelete');
+    });
+
+    Route::prefix('penyedias')->group(function () {
+        Route::get('/lowongan', [LowonganController::class, 'index'])->name('lowongan.index');
+        Route::post('/lowongan/add', [LowonganController::class, 'store'])->name('lowongan.add');
     });
 });
 
