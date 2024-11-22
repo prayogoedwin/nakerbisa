@@ -10,7 +10,7 @@
             <div class="col-lg-12 col-md-12">
                 <h1>Berita & Informasi</h1>
                 <ul class="breadcrumb">
-                    <li><a href="#"><i class="fas fa-home"></i> Beranda</a></li>
+                    <li><a href="{{ route('beranda') }}"><i class="fas fa-home"></i> Beranda</a></li>
                     <li>Berita & Informasi</li>
                 </ul>
             </div>
@@ -44,7 +44,7 @@
                                 </div>
                                 <h4>
                                     <!-- Link ke halaman detail berita -->
-                                    <a href="#">{{ $item->name }}</a>
+                                    <a href="{{ route('berita.show', $item->id) }}">{{ $item->name }}</a>
                                 </h4>
                             </div>
                         </div>

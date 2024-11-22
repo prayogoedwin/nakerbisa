@@ -13,7 +13,7 @@ use App\Http\Controllers\NakerGaleriController;
 use App\Http\Controllers\NakerInfografisController;
 
 // Menggunakan controller DepanController untuk mengambil data FAQ
-Route::get('/', [DepanController::class, 'index']);
+Route::get('/', [DepanController::class, 'index'])->name('beranda');
 Route::get('/depan/bkk', [DepanController::class, 'bkk']);
 Route::get('/depan/blk', [DepanController::class, 'blk']);
 Route::get('/depan/login', [DepanController::class, 'login']);
@@ -25,6 +25,7 @@ Route::get('/depan/lowongan-kerja-ema', [DepanController::class, 'lowongan_kerja
 Route::get('/depan/lowongan-kerja-krr', [DepanController::class, 'lowongan_kerja_krr']);
 Route::get('/depan/infografis', [DepanController::class, 'infografis']);
 Route::get('/depan/berita', [DepanController::class, 'berita'])->name('berita');
+Route::get('/depan/berita/{id}', [DepanController::class, 'show'])->name('berita.show');
 Route::post('/depan/daftar-akun', [DepanController::class, 'daftar_akun'])->name('daftar-akun');
 Route::get('/depan/daftar', [DepanController::class, 'daftar']); //with role
 Route::post('/depan/cek-awal-akun', [DepanController::class, 'cek_awal_akun'])->name('cek-awal-akun');

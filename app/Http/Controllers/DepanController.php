@@ -88,6 +88,15 @@ class DepanController extends Controller
         return view('depan.depan_berita', compact('berita'));
     }
 
+    public function show($id)
+    {
+        // Mengambil berita berdasarkan ID
+        $berita = NakerBerita::findOrFail($id);
+
+        // Mengirim data berita ke tampilan
+        return view('depan.depan_berita_detail', compact('berita'));
+    }
+
 
     public function daftar_akun(Request $request)
     {

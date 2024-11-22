@@ -10,7 +10,7 @@
             <div class="col-lg-12 col-md-12">
                 <h1>Galeri</h1>
                 <ul class="breadcrumb">
-                    <li><a href="#"><i class="fas fa-home"></i> Beranda</a></li>
+                    <li><a href="{{ route('beranda') }}"><i class="fas fa-home"></i> Beranda</a></li>
                     <li>Galeri</li>
                 </ul>
             </div>

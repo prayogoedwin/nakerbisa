@@ -11,7 +11,7 @@
             <div class="col-lg-12 col-md-12">
                 <h1>BLK</h1>
                 <ul class="breadcrumb">
-                    <li><a href="#"><i class="fas fa-home"></i> Beranda</a></li>
+                    <li><a href="{{ route('beranda') }}"><i class="fas fa-home"></i> Beranda</a></li>
                     <li>BLK</li>
                 </ul>
             </div>
@@ -26,9 +26,6 @@
     <div class="container">
         <div class="services-details-items">
             <div class="row">
-
-
-
                 <div class="col-xl-12 col-lg-5 mt-md-120 mt-xs-50 services-sidebar">
                     <!-- Single Widget -->
                     <div class="single-widget services-list-widget">
