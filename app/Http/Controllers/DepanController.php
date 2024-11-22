@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Depan; // Import model Depan
 use App\Models\NakerBerita;
 use App\Models\NakerFaq;
+use App\Models\NakerGaleri;
 use App\Models\NakerInfografis;
 use App\Models\User;
 use App\Models\UserBkk;
@@ -79,7 +80,11 @@ class DepanController extends Controller
 
     public function galeri()
     {
-        return view('depan.depan_galeri');
+        $galeri = NakerGaleri::where('status', true)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);  
+
+        return view('depan.depan_galeri', compact('galeri'));
     }
 
     public function berita()
