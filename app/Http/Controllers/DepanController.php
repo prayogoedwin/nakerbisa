@@ -22,14 +22,15 @@ class DepanController extends Controller
 {
     //
     //index
-    public function index()
+    public function index(Request $request)
     {
         // Mengambil semua data FAQ
         $faq = NakerFaq::all();
 
-        // Mengirim faq ke view depan_index
+        // Mengirim data ke view
         return view('depan.depan_index', compact('faq'));
     }
+
 
     public function bkk()
     {
@@ -51,24 +52,31 @@ class DepanController extends Controller
         return view('depan.depan_register');
     }
 
-    public function lowongan_kerja()
+    public function lowongan_kerja(Request $request)
     {
-        // Ambil data lowongan yang sudah disetujui
-        $lowonganDisetujui = Lowongan::select(
-            'id',
-            'judul_lowongan',
-            'tanggal_start',
-            'tanggal_end',
-            'deskripsi',
-        )
-            ->where('status_id', 1) // Ganti 'approved' dengan nilai sebenarnya untuk status disetujui
-            ->whereNull('deleted_at')       // Pastikan data tidak dihapus
-            ->orderBy('tanggal_start', 'desc') // Urutkan berdasarkan tanggal mulai terbaru
+        // Ambil parameter pencarian
+        $judulLowongan = $request->input('judul_lowongan');
+        $pendidikanId = $request->input('pendidikan_id');
+        $lokasiId = $request->input('kabkota_id');
+
+        // Query pencarian berdasarkan parameter
+        $lowonganDisetujui = Lowongan::where('status_id', 1) // Lowongan yang disetujui
+            ->when($judulLowongan, function ($query, $judulLowongan) {
+                return $query->where('judul_lowongan', 'like', '%' . $judulLowongan . '%');
+            })
+            ->when($pendidikanId, function ($query, $pendidikanId) {
+                return $query->where('pendidikan_id', $pendidikanId);
+            })
+            ->when($lokasiId, function ($query, $lokasiId) {
+                return $query->where('kabkota_id', $lokasiId);
+            })
+            ->orderBy('tanggal_start', 'desc')
             ->get();
 
-        // Kirim data ke view
+        // Kirim data hasil pencarian ke view
         return view('depan.depan_lowongan_kerja', compact('lowonganDisetujui'));
     }
+
 
 
     public function lowongan_kerja_disabilitas()

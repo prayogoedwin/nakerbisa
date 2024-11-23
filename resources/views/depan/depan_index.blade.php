@@ -286,63 +286,60 @@
         <div class="row align-center">
             <div class="col-lg-6">
                 <h2 class="title">Cari Lowongan Kerja <br> Paling Sesuai</h2>
-                <form action="#">
+                <form action="{{ url('depan/lowongan-kerja') }}" method="GET">
                     <div class="row">
-
-
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <label for="name">Judul Lowongan</label>
-                                <input class="form-control" id="name" name="name"
+                                <label for="judul_lowongan">Judul Lowongan</label>
+                                <input class="form-control" id="judul_lowongan" name="judul_lowongan"
                                     placeholder="Ketik Judul Lowongan" type="text">
                             </div>
                         </div>
-
                     </div>
 
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label for="subject">Pendidikan</label>
-                                <select id="subject">
+                                <label for="pendidikan_id">Pendidikan</label>
+                                <select id="pendidikan_id" name="pendidikan_id" class="form-control">
+                                    <option value="">Pilih Pendidikan</option>
                                     <option value="1">SD</option>
                                     <option value="2">SMP</option>
-                                    <option value="4">SMA / SMK</option>
-                                    <option value="5">D1</option>
-                                    <option value="6">D2</option>
+                                    <option value="3">SMA / SMK</option>
+                                    <option value="4">D1</option>
+                                    <option value="5">D2</option>
                                     <option value="6">D3</option>
-                                    <option value="6">D4</option>
-                                    <option value="6">S1</option>
-                                    <option value="6">S2</option>
-                                    <option value="6">S3</option>
+                                    <option value="7">D4</option>
+                                    <option value="8">S1</option>
+                                    <option value="9">S2</option>
+                                    <option value="10">S3</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label for="subject">Lokasi Perusahaan</label>
-                                <select id="subject">
+                                <label for="kabkota_id">Lokasi Perusahaan</label>
+                                <select id="kabkota_id" name="kabkota_id" class="form-control">
+                                    <option value="">Pilih Lokasi</option>
                                     <option value="1">Kabupaten Berau</option>
                                     <option value="2">Kabupaten Kutai Barat</option>
-                                    <option value="4">Kabupaten Kutai Kartanegara</option>
-                                    <option value="5">Kabupaten Kutai Timur</option>
-                                    <option value="6">Kabupaten Mahakam Ulu</option>
+                                    <option value="3">Kabupaten Kutai Kartanegara</option>
+                                    <option value="4">Kabupaten Kutai Timur</option>
+                                    <option value="5">Kabupaten Mahakam Ulu</option>
                                     <option value="6">Kabupaten Paser</option>
-                                    <option value="6">Kabupaten Penajam Paser Utara</option>
-                                    <option value="6">Kota Balikpapan</option>
-                                    <option value="6">Kota Bontang</option>
-                                    <option value="6">Kota Samarinda</option>
+                                    <option value="7">Kabupaten Penajam Paser Utara</option>
+                                    <option value="8">Kota Balikpapan</option>
+                                    <option value="9">Kota Bontang</option>
+                                    <option value="10">Kota Samarinda</option>
                                 </select>
                             </div>
                         </div>
-
-
                     </div>
 
                     <div class="row">
                         <div class="col-lg-12">
-                            <button type="submit" name="submit" id="submit" class="button btn btn-success"
+                            <button type="submit" class="button btn btn-success"
                                 style="background-color: #fff !important; color:grey">
                                 Cari Lowongan Kerja
                             </button>
@@ -350,6 +347,7 @@
                     </div>
                 </form>
             </div>
+
             <div class="col-lg-6 text-end">
                 <div class="achivement-counter">
                     <ul>
