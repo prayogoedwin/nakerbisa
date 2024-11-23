@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DepanController;
+use App\Http\Controllers\LowonganAdminController;
 use App\Http\Controllers\LowonganController;
 use App\Http\Controllers\NakerBeritaController;
 use App\Http\Controllers\NakerBeritaNewController;
@@ -105,6 +106,12 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
     Route::prefix('penyedias')->group(function () {
         Route::get('/lowongan', [LowonganController::class, 'index'])->name('lowongan.index');
         Route::post('/lowongan/add', [LowonganController::class, 'store'])->name('lowongan.add');
+    });
+
+    Route::prefix('admins')->group(function () {
+        Route::get('/lowongan', [LowonganAdminController::class, 'index'])->name('lowongan.admin.index');
+        Route::get('/lowongan/get/{id}', [LowonganAdminController::class, 'show'])->name('lowongan.admin.detail');
+        Route::put('/lowongan/update/{id}', [LowonganAdminController::class, 'update'])->name('lowongan.admin.update');
     });
 });
 

@@ -24,7 +24,8 @@
         </li>
 
         <!-- Layouts -->
-        <li class="menu-item {{ request()->routeIs('roles.*') || request()->routeIs('faq.*') || request()->routeIs('infografis.*') || request()->routeIs('galeri.*') || request()->routeIs('berita.*') ? 'active open' : '' }}">
+        <li
+            class="menu-item {{ request()->routeIs('roles.*') || request()->routeIs('faq.*') || request()->routeIs('infografis.*') || request()->routeIs('galeri.*') || request()->routeIs('berita.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">Setting</div>
@@ -102,15 +103,15 @@
 
 
         <!-- Layouts -->
-        <li class="menu-item">
+        <li class="menu-item {{ request()->routeIs('lowongan.admin.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-table"></i>
                 <div data-i18n="Layouts">Lowongan Kerja</div>
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('lowongan.admin.index') ? 'active' : '' }}">
+                    <a href="{{ route('lowongan.admin.index') }}" class="menu-link">
                         <div data-i18n="Without menu">Lowongan Kerja</div>
                     </a>
                 </li>
