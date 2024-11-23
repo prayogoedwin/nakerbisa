@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Depan; // Import model Depan
+use App\Models\Lowongan;
 use App\Models\NakerBerita;
 use App\Models\NakerFaq;
 use App\Models\NakerGaleri;
@@ -52,8 +53,23 @@ class DepanController extends Controller
 
     public function lowongan_kerja()
     {
-        return view('depan.depan_lowongan_kerja');
+        // Ambil data lowongan yang sudah disetujui
+        $lowonganDisetujui = Lowongan::select(
+            'id',
+            'judul_lowongan',
+            'tanggal_start',
+            'tanggal_end',
+            'deskripsi',
+        )
+            ->where('status_id', 1) // Ganti 'approved' dengan nilai sebenarnya untuk status disetujui
+            ->whereNull('deleted_at')       // Pastikan data tidak dihapus
+            ->orderBy('tanggal_start', 'desc') // Urutkan berdasarkan tanggal mulai terbaru
+            ->get();
+
+        // Kirim data ke view
+        return view('depan.depan_lowongan_kerja', compact('lowonganDisetujui'));
     }
+
 
     public function lowongan_kerja_disabilitas()
     {
@@ -73,7 +89,7 @@ class DepanController extends Controller
     {
         $infografis = NakerInfografis::where('status', true)
             ->orderBy('created_at', 'desc')
-            ->paginate(10);  
+            ->paginate(10);
 
         return view('depan.depan_infografis', compact('infografis'));
     }
@@ -82,7 +98,7 @@ class DepanController extends Controller
     {
         $galeri = NakerGaleri::where('status', true)
             ->orderBy('created_at', 'desc')
-            ->paginate(10);  
+            ->paginate(10);
 
         return view('depan.depan_galeri', compact('galeri'));
     }
@@ -91,7 +107,7 @@ class DepanController extends Controller
     {
         $berita = NakerBerita::where('status', true)
             ->orderBy('created_at', 'desc')
-            ->paginate(10);  
+            ->paginate(10);
 
         return view('depan.depan_berita', compact('berita'));
     }

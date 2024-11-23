@@ -87,180 +87,33 @@
 
         <div class="blog-item-box">
             <div class="row">
-                <!-- Single Item -->
-                <div class="col-xl-4 col-md-6 single-item">
-                    <div class="blog-style-one">
-                        <div class="thumb">
-                            <a href="#"><img src="{{ asset('assets/nakerbisa_fe/img/800x600.png') }}" alt="Thumb"></a>
-                        </div>
-                        <div class="info">
-                            <div class="blog-meta">
-                                <ul>
-                                    <li class="sub-title">
-                                        PT. Berlian Mas
-                                    </li>
+                @foreach ($lowonganDisetujui as $lowongan)
+                    <div class="col-xl-4 col-md-6 single-item">
+                        <div class="blog-style-one">
+                            <div class="thumb">
+                                <a href="#">
+                                    <img src="{{ asset('assets/nakerbisa_fe/img/800x600.png') }}" alt="Thumb">
 
-                                </ul>
-                                <ul>
-
-                                    <li>
-                                        Expire in: 12 August, 2023
-                                    </li>
-                                </ul>
+                                </a>
                             </div>
-                            <h3>
-                                <a href="blog-single-with-sidebar.html">Admin Toko.</a>
-                            </h3>
-                            <a href="#" class="btn-simple"><i class="fas fa-angle-right"></i> Read more</a>
+                            <div class="info">
+                                <div class="blog-meta">
+                                    <ul>
+                                        <li class="sub-title">Perusahaan</li>
+                                    </ul>
+                                    <ul>
+                                        <li>Expire in:
+                                            {{ \Carbon\Carbon::parse($lowongan->tanggal_end)->format('d F, Y') }}</li>
+                                    </ul>
+                                </div>
+                                <h3>
+                                    <a href="#">{{ $lowongan->judul_lowongan }}</a>
+                                </h3>
+                                <a href="#" class="btn-simple"><i class="fas fa-angle-right"></i> Read more</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- Single Item -->
-                <!-- Single Item -->
-                <div class="col-xl-4 col-md-6 single-item">
-                    <div class="blog-style-one">
-                        <div class="thumb">
-                            <a href="#"><img src="{{ asset('assets/nakerbisa_fe/img/800x600.png') }}" alt="Thumb"></a>
-                        </div>
-                        <div class="info">
-                            <div class="blog-meta">
-                                <ul>
-                                    <li class="sub-title">
-                                        PT. Air Minum Gunung
-                                    </li>
-
-                                </ul>
-                                <ul>
-
-                                    <li>
-                                        Expire in: 12 August, 2023
-                                    </li>
-                                </ul>
-                            </div>
-                            <h3>
-                                <a href="blog-single-with-sidebar.html">Quality Control.</a>
-                            </h3>
-                            <a href="#" class="btn-simple"><i class="fas fa-angle-right"></i> Read more</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Single Item -->
-                <!-- Single Item -->
-                <div class="col-xl-4 col-md-6 single-item">
-                    <div class="blog-style-one">
-                        <div class="thumb">
-                            <a href="#"><img src="{{ asset('assets/nakerbisa_fe/img/800x600.png') }}" alt="Thumb"></a>
-                        </div>
-                        <div class="info">
-                            <div class="blog-meta">
-                                <ul>
-                                    <li class="sub-title">
-                                        PT. Elektronika Perkakas
-                                    </li>
-
-                                </ul>
-                                <ul>
-
-                                    <li>
-                                        Expire in: 12 August, 2023
-                                    </li>
-                                </ul>
-                            </div>
-                            <h3>
-                                <a href="blog-single-with-sidebar.html">Operator Mesin.</a>
-                            </h3>
-                            <a href="#" class="btn-simple"><i class="fas fa-angle-right"></i> Read more</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Single Item -->
-                <!-- Single Item -->
-                <div class="col-xl-4 col-md-6 single-item">
-                    <div class="blog-style-one">
-                        <div class="thumb">
-                            <a href="#"><img src="{{ asset('assets/nakerbisa_fe/img/800x600.png') }}" alt="Thumb"></a>
-                        </div>
-                        <div class="info">
-                            <div class="blog-meta">
-                                <ul>
-                                    <li class="sub-title">
-                                        PT. Batu Alam Permai
-                                    </li>
-
-                                </ul>
-                                <ul>
-
-                                    <li>
-                                        Expire in: 12 August, 2023
-                                    </li>
-                                </ul>
-                            </div>
-                            <h3>
-                                <a href="blog-single-with-sidebar.html">Carpenter.</a>
-                            </h3>
-                            <a href="#" class="btn-simple"><i class="fas fa-angle-right"></i> Read more</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Single Item -->
-                <!-- Single Item -->
-                <div class="col-xl-4 col-md-6 single-item">
-                    <div class="blog-style-one">
-                        <div class="thumb">
-                            <a href="#"><img src="{{ asset('assets/nakerbisa_fe/img/800x600.png') }}" alt="Thumb"></a>
-                        </div>
-                        <div class="info">
-                            <div class="blog-meta">
-                                <ul>
-                                    <li class="sub-title">
-                                        PT. Stone Bara
-                                    </li>
-
-                                </ul>
-                                <ul>
-
-                                    <li>
-                                        Expire in: 12 August, 2023
-                                    </li>
-                                </ul>
-                            </div>
-                            <h3>
-                                <a href="blog-single-with-sidebar.html">Operator Dump Truck.</a>
-                            </h3>
-                            <a href="#" class="btn-simple"><i class="fas fa-angle-right"></i> Read more</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Single Item -->
-                <!-- Single Item -->
-                <div class="col-xl-4 col-md-6 single-item">
-                    <div class="blog-style-one">
-                        <div class="thumb">
-                            <a href="#"><img src="{{ asset('assets/nakerbisa_fe/img/800x600.png') }}" alt="Thumb"></a>
-                        </div>
-                        <div class="info">
-                            <div class="blog-meta">
-                                <ul>
-                                    <li class="sub-title">
-                                        PT. Sawit Hasil Bumi
-                                    </li>
-
-                                </ul>
-                                <ul>
-
-                                    <li>
-                                        Expire in: 12 August, 2023
-                                    </li>
-                                </ul>
-                            </div>
-                            <h3>
-                                <a href="blog-single-with-sidebar.html">Supervisor Lapangan.</a>
-                            </h3>
-                            <a href="#" class="btn-simple"><i class="fas fa-angle-right"></i> Read more</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Single Item -->
+                @endforeach
             </div>
         </div>
         <!-- Pagination -->
