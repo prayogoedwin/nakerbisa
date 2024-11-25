@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DepanController;
 use App\Http\Controllers\LowonganAdminController;
 use App\Http\Controllers\LowonganController;
+use App\Http\Controllers\LowonganPencariController;
 use App\Http\Controllers\NakerBeritaController;
 use App\Http\Controllers\NakerBeritaNewController;
 use App\Http\Controllers\NakerFaqController;
@@ -112,6 +113,14 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('/lowongan', [LowonganAdminController::class, 'index'])->name('lowongan.admin.index');
         Route::get('/lowongan/get/{id}', [LowonganAdminController::class, 'show'])->name('lowongan.admin.detail');
         Route::put('/lowongan/update/{id}', [LowonganAdminController::class, 'update'])->name('lowongan.admin.update');
+    });
+
+    Route::prefix('pencaris')->group(function () {
+        Route::get('/lowongan', [LowonganPencariController::class, 'index'])->name('lowongan.pencari.index');
+        Route::get('/lowongan/get/{id}', [LowonganPencariController::class, 'show'])->name('lowongan.pencari.detail');
+        Route::put('/lowongan/lamar/{id}', [LowonganPencariController::class, 'lamar'])->name('lowongan.pencari.lamar');
+
+        // Route::get('/ak1', [Ak1PencariController::class, 'index'])->name('ak1.index');
     });
 });
 
