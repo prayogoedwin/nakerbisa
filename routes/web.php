@@ -14,11 +14,15 @@ use App\Http\Controllers\NakerBeritaNewController;
 use App\Http\Controllers\NakerFaqController;
 use App\Http\Controllers\NakerGaleriController;
 use App\Http\Controllers\NakerInfografisController;
+use App\Http\Controllers\UserPencariController;
+
+
 
 // Menggunakan controller DepanController untuk mengambil data FAQ
 Route::get('/', [DepanController::class, 'index'])->name('beranda');
 Route::get('/depan/bkk', [DepanController::class, 'bkk']);
 Route::get('/depan/blk', [DepanController::class, 'blk']);
+Route::get('/depan/statistik', [DepanController::class, 'statistik']);
 Route::get('/depan/login', [DepanController::class, 'login']);
 Route::get('/depan/register', [DepanController::class, 'register']);
 Route::get('/depan/galeri', [DepanController::class, 'galeri'])->name('galeri');
@@ -67,6 +71,8 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
     Route::get('/dashboard', [BackController::class, 'index'])->name('dashboard');
     Route::get('/sample', [BackController::class, 'sample'])->name('sample');
 
+    Route::get('/statistik', [BackController::class, 'statistik'])->name('statistik');
+
     Route::prefix('setting')->group(function () {
         Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
 
@@ -102,33 +108,30 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('/admin/get/{id}', [AdminController::class, 'getAdmin'])->name('admin.detail');
         Route::put('/admin/update/{id}', [AdminController::class, 'update'])->name('admin.update');
         Route::delete('/admin/delete/{id}', [AdminController::class, 'softdelete'])->name('admin.softdelete');
+
+        Route::get('/pencari', [UserPencariController::class, 'index'])->name('userpencari.index');
+        Route::delete('/pencari/delete/{id}', [UserPencariController::class, 'softdelete'])->name('userpencari.softdelete');
+        Route::put('/pencari/reset/{id}', [UserPencariController::class, 'reset'])->name('userpencari.reset');
+
+        Route::get('/penyedia', [UserPenyediaController::class, 'index'])->name('userperush.index');
+
+        
     });
 
-    Route::prefix('penyedias')->group(function () {
-        Route::get('/lowongan', [LowonganController::class, 'index'])->name('lowongan.index');
-        Route::post('/lowongan/add', [LowonganController::class, 'store'])->name('lowongan.add');
-    });
 
-    Route::prefix('admins')->group(function () {
-        Route::get('/lowongan', [LowonganAdminController::class, 'index'])->name('lowongan.admin.index');
-        Route::get('/lowongan/get/{id}', [LowonganAdminController::class, 'show'])->name('lowongan.admin.detail');
-        Route::put('/lowongan/update/{id}', [LowonganAdminController::class, 'update'])->name('lowongan.admin.update');
-    });
 
-    Route::prefix('pencaris')->group(function () {
-        Route::get('/lowongan', [LowonganPencariController::class, 'index'])->name('lowongan.pencari.index');
-        Route::get('/lowongan/get/{id}', [LowonganPencariController::class, 'show'])->name('lowongan.pencari.detail');
-        Route::put('/lowongan/lamar/{id}', [LowonganPencariController::class, 'lamar'])->name('lowongan.pencari.lamar');
+    Route::get('/lowongan', [LowonganController::class, 'index'])->name('lowongan.index');
+    Route::get('/lowongan/{id}', [LowonganController::class, 'show'])->name('lowongan.detail');
+    Route::put('/lowongan/update/{id}', [LowonganController::class, 'update'])->name('lowongan.update');
+    Route::post('/lowongan/lamar/{id}', [LowonganController::class, 'lamar'])->name('lowongan.lamar');
+    Route::get('/lowongan/pelamar/{id}', [LowonganController::class, 'pelamar'])->name('lowongan.pelamar');
+    Route::post('/lowongan/add', [LowonganController::class, 'store'])->name('lowongan.add');
+    Route::delete('/lowongan/delete/{id}', [LowonganController::class, 'softdelete'])->name('lowongan.softdelete');
 
-        // Route::get('/ak1', [Ak1PencariController::class, 'index'])->name('ak1.index');
-    });
+
 });
 
 
 Route::middleware('guest')->get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/act_login', [AuthController::class, 'login'])->name('login.action');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-
-// Route::name('setting')->prefix('setting')->group(function () {
-//     Route::get('/banner', [BackController::class, 'settingBanner'])->name('banner');
-//   });

@@ -19,7 +19,7 @@ function getKabkota()
     // ->get();
 
     return DB::table('naker_kabkota')
-        ->whereIn('province_id', [64])  // Daftar id
+        ->whereIn('province_id', [33])  // Daftar id
         ->get();
 }
 
@@ -52,6 +52,13 @@ function getProvinsi(){
     return DB::table('naker_provinsi')
     ->get();
 }
+
+function getProgresLoker(){
+    return DB::table('naker_progres')
+        ->where('modul', 'lowongan') // Menambahkan kondisi where untuk modul = 'lamaran'
+        ->get();
+}
+
 
 function encode_url($url){
     $random1 = substr(sha1(rand()), 0, 40);

@@ -33,7 +33,7 @@
                     <div class="info">
                         <h4>{{ $berita->name }}</h4>
                         <p class="meta">
-                            <span><i class="fas fa-user"></i> ADMIN ETAM KERKA</span>
+                            <span><i class="fas fa-user"></i> ADMIN NAKERBISA</span>
                             <span>{{ $berita->created_at->format('d F, Y') }}</span>
                         </p>
                         <div class="content">

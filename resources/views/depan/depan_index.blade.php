@@ -12,12 +12,13 @@
                     <div class="col-xl-6 col-lg-7">
                         <div class="information">
                             <h2 class="wow fadeInUp" data-wow-delay="500ms" data-wow-duration="400ms">
-                                SELAMAT DATANG<br />
-                                DI NAKERBISA REMBANG
+                                SELAMAT&nbsp;&nbsp;DATANG<br />
+                                DI &nbsp;&nbsp; NAKERBISA REMBANG
                                 </span>
                             </h2>
                             <p class="wow fadeInUp" data-wow-delay="900ms" data-wow-duration="400ms">
-                                Sistem Informasi Penempatan Tenaga Kerja Kabupaten Rembang
+                                {{-- Sistem Informasi Ketenagakerjaan Kabupaten Rembang --}}
+                                Tenaga Kerja Rembang Berani Inovatif Santun dan Akuntabel
                             </p>
 
                             <div class="button mt-30 wow fadeInUp" data-wow-duration="400ms">
@@ -31,7 +32,7 @@
 
                     <div class="col-xl-6 col-lg-5 pl-60 pl-md-15 pl-xs-15">
                         <div class="thumb">
-                            <img src="{{ asset('assets/nakerbisa_fe/img/illustration/2.png') }}" alt="Thumb">
+                            <img src="{{ asset('assets/nakerbisa_fe/img/self/mascot_nakerbisa.png') }}" alt="Thumb">
                         </div>
                     </div>
 
@@ -430,7 +431,7 @@
 
             <div class="col-lg-5 offset-lg-1 mt-120 mt-md-50 mt-xs-30">
                 <div class="faq-thumb">
-                    <img src="{{ asset('assets/nakerbisa_fe/img/illustration/6.png') }}" alt="Image Not Found">
+                    <img src="{{ asset('assets/nakerbisa_fe/img/self/mascot_mikir.png') }}" alt="Image Not Found">
                 </div>
             </div>
 
@@ -508,97 +509,42 @@
     <div class="container">
         <div class="row">
             <!-- Single Item -->
+          
+
+            @if ($beritaTerbaru->count())
+            @foreach ($beritaTerbaru as $bindex => $beritaTerbaru)
             <div class="col-lg-6 mt-md-30 mt-xs-30">
-                <div class="blog-style-one solid mb-30">
-                    <div class="thumb">
-                        <img src="{{ asset('assets/nakerbisa_fe/img/1500x800.png') }}" alt="Image Not Found">
-                        <div class="tags"><a href="#">Berita</a></div>
-                        <div class="info">
-                            <div class="blog-meta">
-                                <ul>
-                                    <li>
-                                        <a href="#"><i class="fas fa-user"></i> ADMIN ETAM KERKA</a>
-                                    </li>
-                                    <li>
-                                        20 Oktober, 2024
-                                    </li>
-                                </ul>
-                            </div>
-                            <h4>
-                                <a href="blog-single-with-sidebar.html">Pelatikan Presiden Prabowo Subianto.</a>
-                            </h4>
-                        </div>
-                    </div>
-                </div>
                 <div class="blog-style-one solid">
                     <div class="thumb">
-                        <img src="{{ asset('assets/nakerbisa_fe/img/1500x800.png') }}" alt="Image Not Found">
-                        <div class="tags"><a href="#">Pengumuman</a></div>
+                        <img src="{{ asset('storage/' . $beritaTerbaru->cover) }}" alt="Image Not Found">
+                        <a href="{{ route('berita.show', ['id' => $beritaTerbaru->id]) }}">Berita</a>
                         <div class="info">
                             <div class="blog-meta">
                                 <ul>
                                     <li>
-                                        <a href="#"><i class="fas fa-user"></i> ADMIN ETAM KERKA</a>
+                                        <a href="{{ route('berita.show', ['id' => $beritaTerbaru->id]) }}"><i class="fas fa-user"></i> ADMIN NAKERBISA</a>
                                     </li>
                                     <li>
-                                        01 Oktober, 2024
+                                        {{ date('d F, Y', strtotime($beritaTerbaru->created_at)) }}
                                     </li>
                                 </ul>
                             </div>
                             <h4>
-                                <a href="blog-single-with-sidebar.html">Per Hari Ini Tersedia Lowongan 40 Baru.</a>
+                                <a href="{{ route('berita.show', ['id' => $beritaTerbaru->id]) }}">{{ $beritaTerbaru->name }}</a>
                             </h4>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- End Single Item -->
-            <!-- Single Item -->
-            <div class="col-lg-6 mt-md-30 mt-xs-30">
-                <div class="blog-style-one solid mb-30">
-                    <div class="thumb">
-                        <img src="{{ asset('assets/nakerbisa_fe/img/1500x800.png') }}" alt="Image Not Found">
-                        <div class="tags"><a href="#">Kegiatan</a></div>
-                        <div class="info">
-                            <div class="blog-meta">
-                                <ul>
-                                    <li>
-                                        <a href="#"><i class="fas fa-user"></i> ADMIN ETAM KERKA</a>
-                                    </li>
-                                    <li>
-                                        27 Oktober, 2024
-                                    </li>
-                                </ul>
-                            </div>
-                            <h4>
-                                <a href="blog-single-with-sidebar.html">Rapat Rencan Launching ETAM KERJA.</a>
-                            </h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="blog-style-one solid">
-                    <div class="thumb">
-                        <img src="{{ asset('assets/nakerbisa_fe/img/1500x800.png') }}" alt="Image Not Found">
-                        <div class="tags"><a href="#">Infografis</a></div>
-                        <div class="info">
-                            <div class="blog-meta">
-                                <ul>
-                                    <li>
-                                        <a href="#"><i class="fas fa-user"></i> ADMIN ETAM KERKA</a>
-                                    </li>
-                                    <li>
-                                        29 Oktober, 2024
-                                    </li>
-                                </ul>
-                            </div>
-                            <h4>
-                                <a href="blog-single-with-sidebar.html">Statistik Penempatan Kerja Terbaru.</a>
-                            </h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End Single Item -->
+            @endforeach
+            @else
+                <p>Belum ada pertanyaan yang tersedia.</p>
+            @endif
+
+            
+
+
         </div>
     </div>
 </div>

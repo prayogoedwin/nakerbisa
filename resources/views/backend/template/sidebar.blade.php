@@ -23,6 +23,13 @@
             </a>
         </li>
 
+        <li class="menu-item {{ request()->routeIs('statistik') ? 'active' : '' }}">
+            <a href="{{ route('statistik') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-pie-chart"></i>
+                <div data-i18n="Analytics">Statistik</div>
+            </a>
+        </li>
+
         <!-- Layouts -->
         <li
             class="menu-item {{ request()->routeIs('roles.*') || request()->routeIs('faq.*') || request()->routeIs('infografis.*') || request()->routeIs('galeri.*') || request()->routeIs('berita.*') ? 'active open' : '' }}">
@@ -37,11 +44,11 @@
                         <div data-i18n="Without menu">Roles</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                {{-- <li class="menu-item">
                     <a href="#" class="menu-link">
                         <div data-i18n="Without menu">Banner</div>
                     </a>
-                </li>
+                </li> --}}
                 <li class="menu-item {{ request()->routeIs('infografis.index') ? 'active' : '' }}">
                     <a href="{{ route('infografis.index') }}" class="menu-link">
                         <div data-i18n="Infografis">Infografis</div>
@@ -77,19 +84,20 @@
                         <div data-i18n="Without menu">Admins</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                {{-- <li class="menu-item">
                     <a href="#" class="menu-link">
                         <div data-i18n="Without navbar">Officers</div>
                     </a>
-                </li>
+                </li> --}}
                 <li class="menu-item">
                     <a href="#" class="menu-link">
                         <div data-i18n="Without navbar">Perusahaan</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
-                        <div data-i18n="Without navbar">Pencari Kerja</div>
+
+                <li class="menu-item {{ request()->routeIs('userpencari.index') ? 'active' : '' }}">
+                    <a href="{{ route('userpencari.index') }}" class="menu-link">
+                        <div data-i18n="Without menu">Pencari Kerja</div>
                     </a>
                 </li>
                 <!-- <li class="menu-item">
@@ -103,18 +111,19 @@
 
 
         <!-- Layouts -->
-        <li class="menu-item {{ request()->routeIs('lowongan.admin.*') ? 'active open' : '' }}">
+        <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-table"></i>
                 <div data-i18n="Layouts">Lowongan Kerja</div>
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item {{ request()->routeIs('lowongan.admin.index') ? 'active' : '' }}">
-                    <a href="{{ route('lowongan.admin.index') }}" class="menu-link">
+                <li class="menu-item">
+                    <a href="#" class="menu-link">
                         <div data-i18n="Without menu">Lowongan Kerja</div>
                     </a>
                 </li>
+
                 <li class="menu-item">
                     <a href="#" class="menu-link">
                         <div data-i18n="Without navbar">History Loker</div>

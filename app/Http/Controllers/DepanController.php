@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class DepanController extends Controller
 {
@@ -26,9 +27,15 @@ class DepanController extends Controller
     {
         // Mengambil semua data FAQ
         $faq = NakerFaq::all();
+        $beritaTerbaru = NakerBerita::select('id', 'name', 'cover', 'status')
+        ->where('status', 1)
+        ->whereNull('deleted_at')
+        ->orderBy('id', 'desc')
+        ->limit(4)
+        ->get();
 
-        // Mengirim data ke view
-        return view('depan.depan_index', compact('faq'));
+        // Mengirim faq ke view depan_index
+        return view('depan.depan_index', compact('faq', 'beritaTerbaru'));
     }
 
 
@@ -86,13 +93,33 @@ class DepanController extends Controller
 
     public function lowongan_kerja_ema()
     {
-        return view('depan.depan_lowongan_kerja_ema');
+        // Fetch the data from the external API
+        $response = Http::get('https://bursakerja.jatengprov.go.id/api/lowongan/index');
+
+        // Check if the response is successful
+        if ($response->successful()) {
+            // Get the data from the response
+            $vacancies = $response->json()['data'];
+
+            // Pass the data to the view
+            return view('depan.depan_lowongan_kerja_ema', compact('vacancies'));
+        } else {
+            // Handle the error if the request fails
+            return view('depan.depan_lowongan_kerja_ema', ['vacancies' => []]);
+        }
     }
 
     public function lowongan_kerja_krr()
     {
         return view('depan.depan_lowongan_kerja_krr');
     }
+
+    public function statistik()
+    {
+        return view('depan.depan_statistik');
+    }
+
+
     public function infografis()
     {
         $infografis = NakerInfografis::where('status', true)

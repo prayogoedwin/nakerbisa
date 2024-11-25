@@ -10,9 +10,11 @@
     <title>NAKERBISA</title>
 
     <meta name="description" content="" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/nakerbisa_be/img/favicon/favicon.ico') }}" />
+
+    <!-- ========== Favicon Icon ========== -->
+    <link rel="shortcut icon" href="{{ asset('assets/nakerbisa_fe/img/self/icon-nakerbisa.png') }}" type="image/x-icon">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

@@ -31,8 +31,8 @@
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item {{ request()->routeIs('lowongan.pencari.index') ? 'active' : '' }}">
-                    <a href="{{ route('lowongan.pencari.index') }}" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('lowongan.index') ? 'active' : '' }}">
+                    <a href="{{ route('lowongan.index') }}" class="menu-link">
                         <div data-i18n="Without menu">Lowongan Kerja</div>
                     </a>
                 </li>

@@ -1,0 +1,207 @@
+@extends('backend.template.backend')
+
+@section('content')
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            <!-- Layout container -->
+            <div class="layout-page">
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+                    <!-- Content -->
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <h4 class="fw-bold py-3">Statistik</h4>
+                        
+                        <!-- Row 1: Job Seekers -->
+                        <h5 class="fw-bold py-3">Data Pencari Kerja</h5>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div id="genderChart" style="width: 100%; height: 400px;"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="educationChart" style="width: 100%; height: 400px;"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="generationChart" style="width: 100%; height: 400px;"></div>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <!-- Row 2: Companies -->
+                        <h5 class="fw-bold py-3">Data Penyedia Kerja</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div id="sectorChart" style="width: 100%; height: 400px;"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div id="cityChart" style="width: 100%; height: 400px;"></div>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <!-- Row 1: Job Seekers and Job Vacancies -->
+                        <h5 class="fw-bold py-3">Data Lowongan</h5>
+                        <div class="row">
+                            <!-- Existing Job Seeker Charts -->
+                            <div class="col-md-4">
+                                <div id="lowonganPendidikanChart" style="width: 100%; height: 400px;"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="lowonganGenderChart" style="width: 100%; height: 400px;"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="lowonganAktifChart" style="width: 100%; height: 400px;"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- / Content -->
+
+                    <div class="content-backdrop fade"></div>
+                </div>
+                <!-- Content wrapper -->
+            </div>
+            <!-- / Layout page -->
+        </div>
+    </div>
+@endsection
+
+@push('js')
+    <!-- Include Highcharts -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Gender Chart (Job Seekers)
+            Highcharts.chart('genderChart', {
+                chart: { type: 'pie' },
+                title: { text: 'Jumlah Pencari Kerja Berdasarkan Gender' },
+                series: [{
+                    name: 'Jumlah',
+                    colorByPoint: true,
+                    data: [
+                        { name: 'Pria', y: 60 },  // Replace 60 with dynamic data
+                        { name: 'Wanita', y: 40 } // Replace 40 with dynamic data
+                    ]
+                }]
+            });
+
+            // Education Chart (Job Seekers)
+            Highcharts.chart('educationChart', {
+                chart: { type: 'pie' },
+                title: { text: 'Jumlah Pencari Kerja Berdasarkan Pendidikan' },
+                series: [{
+                    name: 'Jumlah',
+                    colorByPoint: true,
+                    data: [
+                        { name: 'SD', y: 10 },
+                        { name: 'SMP', y: 20 },
+                        { name: 'SMA', y: 50 },
+                        { name: 'D3', y: 10 },
+                        { name: 'S1', y: 5 },
+                        { name: 'S2', y: 4 },
+                        { name: 'S3', y: 1 }
+                    ]
+                }]
+            });
+
+            // Generation Chart (Job Seekers)
+            Highcharts.chart('generationChart', {
+                chart: { type: 'pie' },
+                title: { text: 'Jumlah Pencari Kerja Berdasarkan Generasi' },
+                series: [{
+                    name: 'Jumlah',
+                    colorByPoint: true,
+                    data: [
+                        { name: 'Baby Boomers', y: 5 },
+                        { name: 'Millennials', y: 50 },
+                        { name: 'Gen Z', y: 40 },
+                        { name: 'Gen Alpha', y: 5 }
+                    ]
+                }]
+            });
+
+            // Sector Chart (Companies)
+            Highcharts.chart('sectorChart', {
+                chart: { type: 'pie' },
+                title: { text: 'Jumlah Perusahaan Berdasarkan Sektor' },
+                series: [{
+                    name: 'Jumlah',
+                    colorByPoint: true,
+                    data: [
+                        { name: 'Teknologi Informasi', y: 15 },  // Replace with dynamic data
+                        { name: 'Pendidikan', y: 10 },
+                        { name: 'Kesehatan', y: 8 },
+                        { name: 'Keuangan', y: 20 },
+                        { name: 'Manufaktur', y: 12 },
+                        { name: 'Hiburan', y: 5 }
+                    ]
+                }]
+            });
+
+            // City Chart (Companies)
+            Highcharts.chart('cityChart', {
+                chart: { type: 'pie' },
+                title: { text: 'Jumlah Perusahaan Berdasarkan Asal Kota' },
+                series: [{
+                    name: 'Jumlah',
+                    colorByPoint: true,
+                    data: [
+                        { name: 'Rembang', y: 25 },   // Replace with dynamic data
+                        { name: 'Luar Rembang', y: 75 }
+                    ]
+                }]
+            });
+
+            // Lowongan Berdasarkan Pendidikan
+            Highcharts.chart('lowonganPendidikanChart', {
+                chart: { type: 'pie' },
+                title: { text: 'Jumlah Lowongan Berdasarkan Pendidikan' },
+                series: [{
+                    name: 'Jumlah',
+                    colorByPoint: true,
+                    data: [
+                        { name: 'SD', y: 5 },  // Replace with dynamic data
+                        { name: 'SMP', y: 10 },
+                        { name: 'SMA', y: 35 },
+                        { name: 'D3', y: 25 },
+                        { name: 'S1', y: 15 },
+                        { name: 'S2', y: 7 },
+                        { name: 'S3', y: 3 }
+                    ]
+                }]
+            });
+
+            // Lowongan Berdasarkan Kebutuhan Gender
+            Highcharts.chart('lowonganGenderChart', {
+                chart: { type: 'pie' },
+                title: { text: 'Jumlah Lowongan Berdasarkan Kebutuhan Gender' },
+                series: [{
+                    name: 'Jumlah',
+                    colorByPoint: true,
+                    data: [
+                        { name: 'Pria', y: 60 },  // Replace with dynamic data
+                        { name: 'Wanita', y: 40 }
+                    ]
+                }]
+            });
+
+            // Lowongan Berdasarkan Status Expired (Aktif/Expired)
+            Highcharts.chart('lowonganAktifChart', {
+                chart: { type: 'pie' },
+                title: { text: 'Jumlah Lowongan Berdasarkan Status Expired' },
+                series: [{
+                    name: 'Jumlah',
+                    colorByPoint: true,
+                    data: [
+                        { name: 'Aktif', y: 70 },  // Replace with dynamic data
+                        { name: 'Expired', y: 30 }
+                    ]
+                }]
+            });
+
+
+        });
+    </script>
+@endpush

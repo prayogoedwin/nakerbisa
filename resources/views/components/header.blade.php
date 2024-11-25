@@ -12,7 +12,7 @@
     <title>Nakerbisa - Tenaga Kerja Rembang Berani Inovatif Santun dan Akuntabel</title>
 
     <!-- ========== Favicon Icon ========== -->
-    <link rel="shortcut icon" href="{{ asset('assets/nakerbisa_be/img/icon-nakerbisa.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('assets/nakerbisa_fe/img/self/icon-nakerbisa.png') }}" type="image/x-icon">
 
     <!-- ========== Start Stylesheet ========== -->
     <link href="{{ asset('assets/nakerbisa_fe/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -164,7 +164,7 @@
 
                         <!-- <li><a href="bkk.html">BKK</a></li> -->
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Data</a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Skill</a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ url('/depan/bkk') }}">BKK</a></li>
                                 <li><a href="{{ url('/depan/blk') }}">BLK</a></li>

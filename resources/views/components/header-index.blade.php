@@ -12,7 +12,7 @@
     <title>Nakerbisa - Tenaga Kerja Rembang Berani Inovatif Santun dan Akuntabel</title>
 
     <!-- ========== Favicon Icon ========== -->
-    <link rel="shortcut icon" href="{{ asset('assets/nakerbisa_be/img/icon-nakerbisa.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('assets/nakerbisa_fe/img/self/icon-nakerbisa.png') }}" type="image/x-icon">
 
     <!-- ========== Start Stylesheet ========== -->
     <link href="{{ asset('assets/nakerbisa_fe/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -105,9 +105,9 @@
                     </button>
                     <a class="navbar-brand" href="{{ url('/') }}">
                         <!-- Logo khusus hanya untuk halaman index -->
-                        <img src="{{ asset('assets/nakerbisa_be/img/nakerbisa-white.png') }}"class="logo logo-display"
+                        <img src="{{ asset('assets/nakerbisa_fe/img/self/nakerbisa_white.png') }}"class="logo logo-display"
                             alt="Logo">
-                        <img src="{{ asset('assets/nakerbisa_be/img/nakerbisa-rembang.png') }}"
+                        <img src="{{ asset('assets/nakerbisa_fe/img/self/nakerbisa-rembang.png') }}"
                             class="logo logo-scrolled" alt="Logo">
 
                     </a>
@@ -142,20 +142,31 @@
                             </ul>
                         </li> -->
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Lowongan</a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Karir</a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ url('/depan/lowongan-kerja') }}">Lowongan Kerja</a></li>
                                 <li><a href="{{ url('/depan/lowongan-kerja-ema') }}">Lowongan Emakaryo</a></li>
-                                <li><a href="{{ url('/depan/lowongan-kerja-krr') }}">Lowongan Karirhub</a></li>
+                                <li><a href="https://karirhub.kemnaker.go.id/">Lowongan Karirhub</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Talent</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url('/depan/bkk') }}">Wilayah</a></li>
+                                <li><a href="{{ url('/depan/blk') }}">Tempat Kerja</a></li>
+                                <li><a href="{{ url('/depan/blk') }}">Pendidikan</a></li>
+                                <li><a href="{{ url('/depan/blk') }}">Ketrampilan</a></li>
+                                
                             </ul>
                         </li>
 
                         <!-- <li><a href="bkk.html">BKK</a></li> -->
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Data</a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Skill</a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ url('/depan/bkk') }}">BKK</a></li>
-                                <li><a href="{{ url('/depan/blk') }}">BLK</a></li>
+                                <li><a href="{{ url('/depan/blk') }}">BLK/BLKK/LPK/LPKS</a></li>
                             </ul>
                         </li>
 
@@ -165,6 +176,7 @@
                                 <li><a href="{{ url('/depan/infografis') }}">Infografis</a></li>
                                 <li><a href="{{ url('/depan/galeri') }}">Galeri</a></li>
                                 <li><a href="{{ url('/depan/berita') }}">Pengumuman</a></li>
+                                <li><a href="{{ url('/depan/berita') }}">Ketentuan</a></li>
                                 <!-- <li><a href="kontak.html">Kontak</a></li> -->
                             </ul>
                         </li>

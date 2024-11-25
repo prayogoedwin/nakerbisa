@@ -27,6 +27,10 @@ class BackController extends Controller
 
     }
 
+    public function statistik(){
+        return view('backend.statistik.index');
+    }
+
     public function sample () {
         return view('backend.sample.index');
     }

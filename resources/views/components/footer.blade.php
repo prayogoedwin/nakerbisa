@@ -12,8 +12,9 @@
             <div class="row">
                 <div class="col-lg-4 col-md-6 footer-item pr-50 pr-xs-15">
                     <div class="f-item about">
-                        <img class="logo" src="{{ asset('assets/nakerbisa_be/img/nakerbisa-white.png') }}"
-                            alt="Logo">
+                       
+                            <img class="logo" src="{{ asset('assets/nakerbisa_fe/img/self/nakerbisa_white.png') }}"
+                             alt="Logo">
                         <p>
                             NAKERBISA adalah Sistem Informasi Penempatan Tenaga Kerja yang di kelola oleh Dinas
                             Perindustrian dan Tenaga Kerja Kabupaten Rembang. <br />
@@ -194,10 +195,10 @@
                         <label for="">Daftar Sebagai</label>
                         <select name="role_dipilih" id="role_dipilih" required>
                             <option value="">Pilih</option>
-                            <option value="pencari-kerja">Pencari Kerja</option>
+                            <option value="pencari-kerja">Tenaga Kerja</option>
                             <option value="penyedia-kerja">Penyedia Kerja</option>
                             <option value="admin-bkk">BKK</option>
-                            <option value="admin-blk">BLK</option>
+                            <option value="admin-blk">BLK/BLKK/LPKS</option>
                         </select>
                     </div>
                 </div>
