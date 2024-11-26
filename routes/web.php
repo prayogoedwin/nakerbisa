@@ -14,6 +14,7 @@ use App\Http\Controllers\NakerBeritaNewController;
 use App\Http\Controllers\NakerFaqController;
 use App\Http\Controllers\NakerGaleriController;
 use App\Http\Controllers\NakerInfografisController;
+use App\Http\Controllers\PencariProfilController;
 use App\Http\Controllers\UserPencariController;
 use App\Http\Controllers\UserPenyediaController;
 
@@ -98,6 +99,15 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('/berita/{id}/edit', [NakerBeritaController::class, 'edit'])->name('berita.edit');
         Route::put('/berita/{id}', [NakerBeritaController::class, 'update'])->name('berita.update');
         Route::delete('/berita/delete/{id}', [NakerBeritaController::class, 'destroy'])->name('berita.destroy');
+    });
+
+    Route::prefix('profil')->group(function () {
+        Route::get('/pendidikan', [PencariProfilController::class, 'index'])->name('pendidikan.index');
+        Route::post('/pendidikan/add', [PencariProfilController::class, 'store'])->name('pendidikan.add');
+        Route::get('/pendidikan/get/{id}', [PencariProfilController::class, 'getData'])->name('pendidikan.detail');
+        Route::delete('/pendidikan/delete/{id}', [PencariProfilController::class, 'softdelete'])->name('pendidikan.softdelete');
+        Route::put('/pendidikan/update/{id}', [PencariProfilController::class, 'update'])->name('pendidikan.update');
+
     });
 
     Route::prefix('users')->group(function () {
