@@ -9,6 +9,13 @@
                 <div class="content-wrapper">
                     <!-- Content -->
                     <div class="container-xxl flex-grow-1 container-p-y">
+                        <!-- Breadcrumb -->
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{ route('profil.index') }}">Profil</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Tambah Data Keterampilan</li>
+                            </ol>
+                        </nav>
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="card">
@@ -66,7 +73,8 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label class="floating-label" for="lembaga_penyelenggara">Lembaga Penyelenggara</label>
-                                    <input type="text" class="form-control" id="lembaga_penyelenggara" name="lembaga_penyelenggara">
+                                    <input type="text" class="form-control" id="lembaga_penyelenggara"
+                                        name="lembaga_penyelenggara">
                                 </div>
                             </div>
 
@@ -154,7 +162,8 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label class="floating-label" for="editLembagaPenguji">Lembaga Penguji</label>
-                                <input type="text" class="form-control" id="editLembagaPenguji" name="lembaga_penguji">
+                                <input type="text" class="form-control" id="editLembagaPenguji"
+                                    name="lembaga_penguji">
                             </div>
                         </div>
 

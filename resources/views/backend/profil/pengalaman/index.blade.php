@@ -9,6 +9,13 @@
                 <div class="content-wrapper">
                     <!-- Content -->
                     <div class="container-xxl flex-grow-1 container-p-y">
+                        <!-- Breadcrumb -->
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{ route('profil.index') }}">Profil</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Tambah Data Pengalaman</li>
+                            </ol>
+                        </nav>
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="card">

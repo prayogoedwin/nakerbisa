@@ -18,6 +18,7 @@ use App\Http\Controllers\PencariKeterampilanController;
 use App\Http\Controllers\PencariPendidikanController;
 use App\Http\Controllers\PencariPengalamanController;
 use App\Http\Controllers\PencariProfilController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserPencariController;
 use App\Http\Controllers\UserPenyediaController;
 
@@ -105,6 +106,9 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
     });
 
     Route::prefix('profil')->group(function () {
+
+        Route::get('/', [ProfileController::class, 'index'])->name('profil.index');
+
         Route::get('/pendidikan', [PencariPendidikanController::class, 'index'])->name('pendidikan.index');
         Route::post('/pendidikan/add', [PencariPendidikanController::class, 'store'])->name('pendidikan.add');
         Route::get('/pendidikan/get/{id}', [PencariPendidikanController::class, 'getData'])->name('pendidikan.detail');
