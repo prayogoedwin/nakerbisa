@@ -48,5 +48,10 @@ class User extends Authenticatable
         ];
     }
 
-    protected $dates = ['deleted_at']; 
+    protected $dates = ['deleted_at'];
+
+    public function pencari()
+    {
+        return $this->hasOne(UserPencari::class, 'user_id', 'id');
+    }
 }

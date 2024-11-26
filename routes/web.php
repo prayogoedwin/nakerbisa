@@ -109,6 +109,8 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
 
         Route::get('/', [ProfileController::class, 'index'])->name('profil.index');
 
+        Route::get('/cetak-cv', [ProfileController::class, 'cetakCV'])->name('cetak.cv');
+
         Route::get('/pendidikan', [PencariPendidikanController::class, 'index'])->name('pendidikan.index');
         Route::post('/pendidikan/add', [PencariPendidikanController::class, 'store'])->name('pendidikan.add');
         Route::get('/pendidikan/get/{id}', [PencariPendidikanController::class, 'getData'])->name('pendidikan.detail');

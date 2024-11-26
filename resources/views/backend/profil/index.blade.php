@@ -12,6 +12,9 @@
                         <div class="row">
                             <div class="col-xl-12">
                                 <h4 class="mb-4">Profile</h4>
+                                <a href="{{ route('cetak.cv') }}" class="btn btn-primary">
+                                    <i class="feather icon-download"></i> Cetak CV
+                                </a>  
                             </div>
                         </div>
                         <!-- Section Dropdown (Update Pendidikan) -->
