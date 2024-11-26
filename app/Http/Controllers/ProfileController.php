@@ -12,8 +12,15 @@ class ProfileController extends Controller
     //
     public function index(Request $request)
     {
-        // Mengambil data pendidikan berdasarkan user_id
-        $pendidikan = NakerPencariPendidikan::where('user_id', auth()->id())->get();
+        $pendidikan = NakerPencariPendidikan::select(
+            'naker_pencari_pendidikan.*',
+            'naker_pendidikan.name as pendidikan_name', // Nama Pendidikan
+            'naker_jurusan.nama as jurusan_name'       // Nama Jurusan
+        )
+            ->join('naker_pendidikan', 'naker_pencari_pendidikan.pendidikan_id', '=', 'naker_pendidikan.id') // Join tabel pendidikan
+            ->leftJoin('naker_jurusan', 'naker_pencari_pendidikan.jurusan_id', '=', 'naker_jurusan.id')      // Join tabel jurusan (left join untuk jurusan opsional)
+            ->where('naker_pencari_pendidikan.user_id', auth()->id()) // Hanya data milik user saat ini
+            ->get();
 
         // Mengambil data keterampilan berdasarkan user_id
         $keterampilan = NakerPencariKeterampilan::where('user_id', auth()->id())->get();

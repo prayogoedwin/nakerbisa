@@ -40,9 +40,9 @@
                                                             <div class="list-group-item">
                                                                 <h5 class="mb-3"><strong>Nama Sekolah:</strong>
                                                                     {{ $item->nama_sekolah }}</h5>
-                                                                <p><strong>Alamat Sekolah:</strong>
-                                                                    {{ $item->alamat_sekolah }}</p>
-                                                                <p><strong>Jurusan:</strong> {{ $item->jurusan_id }}</p>
+                                                                <p><strong>Alamat Sekolah:</strong> {{ $item->alamat_sekolah }}</p>
+                                                                <p><strong>Pendidikan:</strong> {{ $item->pendidikan_name }}</p>
+                                                                <p><strong>Jurusan:</strong> {{ $item->jurusan_name ?? 'Tidak Ada Jurusan' }}</p>
                                                                 <p><strong>Tahun Lulus:</strong> {{ $item->lulus }}</p>
                                                             </div>
                                                         @endforeach
@@ -52,7 +52,7 @@
                                                         Data pendidikan belum tersedia.
                                                     </div>
                                                 @endif
-
+                        
                                                 <!-- Button Tambah Data Pendidikan -->
                                                 <div class="d-flex justify-content-end mt-4">
                                                     <a href="{{ route('pendidikan.index') }}"
@@ -66,6 +66,7 @@
                                 </div>
                             </div>
                         </section>
+                        
 
                         <!-- Section Dropdown (Update Pengalaman Kerja) -->
                         <!-- Section Dropdown (Update Pengalaman Kerja) -->
