@@ -38,7 +38,15 @@ class ProfileController extends Controller
 
         // Muat relasi `pencari` untuk mendapatkan data lengkap
         $user->load('pencari');
-        $pendidikan = NakerPencariPendidikan::where('user_id', $user->id)->get();
+        $pendidikan = NakerPencariPendidikan::select(
+            'naker_pencari_pendidikan.*',
+            'naker_jurusan.nama as jurusan_name',
+            'naker_pendidikan.name as pendidikan_name' // Nama tingkat pendidikan
+        )
+            ->leftJoin('naker_jurusan', 'naker_pencari_pendidikan.jurusan_id', '=', 'naker_jurusan.id')
+            ->leftJoin('naker_pendidikan', 'naker_pencari_pendidikan.pendidikan_id', '=', 'naker_pendidikan.id')
+            ->where('user_id', $user->id)
+            ->get();
         $pengalaman = NakerPencariPengalaman::where('user_id', $user->id)->get();
         $keterampilan = NakerPencariKeterampilan::where('user_id', $user->id)->get();
 

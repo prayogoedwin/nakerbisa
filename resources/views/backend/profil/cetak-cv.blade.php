@@ -64,15 +64,18 @@
             </section>
         @endif
 
-        <!-- Pendidikan -->
         @if ($pendidikan->isNotEmpty())
             <section class="section">
                 <h2>Pendidikan</h2>
                 <ul>
                     @foreach ($pendidikan as $item)
                         <li>
-                            <p><span class="bold">{{ $item->nama_sekolah }}</span>, {{ $item->jurusan_id }}</p>
-                            <p>{{ $item->alamat_sekolah }} | Tahun Lulus: {{ $item->lulus }}</p>
+                            <p>
+                                <span class="bold">{{ $item->pendidikan_name ?? 'Tidak Ada Pendidikan' }}</span> -
+                                <span class="bold">{{ $item->nama_sekolah }}</span>,
+                                {{ $item->jurusan_name ?? 'Tidak Ada Jurusan' }} | Tahun Lulus: {{ $item->lulus }}
+                            </p>
+                            <p class="content">{{ $item->alamat_sekolah }}</p>
                         </li>
                     @endforeach
                 </ul>
@@ -86,9 +89,10 @@
                 <ul>
                     @foreach ($pengalaman as $item)
                         <li>
-                            <p><span class="bold">{{ $item->nama_perusahaan }}</span> - {{ $item->jabatan }}</p>
+                            <p><span class="bold">{{ $item->nama_perusahaan }}</span> - {{ $item->jabatan }} |
+                                {{ $item->mulai_tahun }} - {{ $item->berhenti_tahun }}</p>
+                            </p>
                             <p>{{ $item->alamat_perusahaan }}</p>
-                            <p>{{ $item->mulai_tahun }} - {{ $item->berhenti_tahun }}</p>
                         </li>
                     @endforeach
                 </ul>
