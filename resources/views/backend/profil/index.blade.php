@@ -197,39 +197,37 @@
 
 @push('js')
     <script>
-        $(document).ready(function() {
-            $('#simpletable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: '{{ route('pendidikan.index') }}', // Rute mengambil data
-                autoWidth: false,
-                columns: [{
-                        data: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    }, // No
-                    {
-                        data: 'pendidikan_id'
-                    }, // ID Pendidikan
-                    {
-                        data: 'jurusan_id'
-                    }, // ID Jurusan
-                    {
-                        data: 'nama_sekolah'
-                    }, // Nama Sekolah
-                    {
-                        data: 'alamat_sekolah'
-                    }, // Alamat Sekolah
-                    {
-                        data: 'lulus'
-                    }, // Tahun Lulus
-                    {
-                        data: 'options',
-                        orderable: false,
-                        searchable: false
-                    } // Tombol aksi
-                ]
-            });
+        $('#simpletable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '{{ route('pendidikan.index') }}',
+            autoWidth: false,
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                }, // No
+                {
+                    data: 'pendidikan_name'
+                }, // Nama Pendidikan
+                {
+                    data: 'jurusan_name'
+                }, // Nama Jurusan
+                {
+                    data: 'nama_sekolah'
+                }, // Nama Sekolah
+                {
+                    data: 'alamat_sekolah'
+                }, // Alamat Sekolah
+                {
+                    data: 'lulus'
+                }, // Tahun Lulus
+                {
+                    data: 'options',
+                    orderable: false,
+                    searchable: false
+                } // Tombol aksi
+            ]
         });
     </script>
 

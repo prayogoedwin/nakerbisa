@@ -13,14 +13,23 @@ class PencariProfilController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $datas = NakerPencariPendidikan::select('id', 'user_id', 'pendidikan_id', 'jurusan_id', 'nama_sekolah', 'alamat_sekolah', 'lulus');
+            $datas = NakerPencariPendidikan::select(
+                'naker_pencari_pendidikan.id',
+                'naker_pendidikan.name as pendidikan_name', // Nama Pendidikan
+                'naker_jurusan.nama as jurusan_name',       // Nama Jurusan
+                'naker_pencari_pendidikan.nama_sekolah',
+                'naker_pencari_pendidikan.alamat_sekolah',
+                'naker_pencari_pendidikan.lulus'
+            )
+                ->join('naker_pendidikan', 'naker_pencari_pendidikan.pendidikan_id', '=', 'naker_pendidikan.id') // Join tabel pendidikan
+                ->leftJoin('naker_jurusan', 'naker_pencari_pendidikan.jurusan_id', '=', 'naker_jurusan.id');      // Join tabel jurusan (left join untuk jurusan opsional)
 
             return DataTables::of($datas)
                 ->addIndexColumn()
                 ->addColumn('options', function ($data) {
                     return '
-                    <button class="btn btn-primary btn-sm" onclick="showEditModal(' . $data->id . ')">Edit</button>
-                    <button class="btn btn-danger btn-sm" onclick="confirmDelete(' . $data->id . ')">Delete</button>
+                <button class="btn btn-primary btn-sm" onclick="showEditModal(' . $data->id . ')">Edit</button>
+                <button class="btn btn-danger btn-sm" onclick="confirmDelete(' . $data->id . ')">Delete</button>
                 ';
                 })
                 ->rawColumns(['options'])
@@ -29,7 +38,6 @@ class PencariProfilController extends Controller
 
         return view('backend.profil.index');
     }
-
 
     // Method untuk menyimpan data user baru
     public function store(Request $request)
