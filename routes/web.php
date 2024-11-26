@@ -106,6 +106,7 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
     });
 
     Route::prefix('profil')->group(function () {
+        Route::put('/admin/update-user/{id}', [ProfileController::class, 'updateUser'])->name('admin.update-user');
 
         Route::get('/', [ProfileController::class, 'index'])->name('profil.index');
 

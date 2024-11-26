@@ -51,7 +51,7 @@
     <div class="container">
         <!-- Header -->
         <section class="section">
-            <h1>{{ $user->name }}</h1>
+            <h1>{{ $user->name ?? 'No Username' }} </h1>
             <p>{{ $user->email }} | {{ $user->whatsapp ?? 'No Phone Provided' }} |
                 {{ $user->pencari->alamat ?? 'No Address Provided' }}</p>
         </section>
@@ -72,10 +72,10 @@
                         <li>
                             <p>
                                 <span class="bold">{{ $item->pendidikan_name ?? 'Tidak Ada Pendidikan' }}</span> -
-                                <span class="bold">{{ $item->nama_sekolah }}</span>,
-                                {{ $item->jurusan_name ?? 'Tidak Ada Jurusan' }} | Tahun Lulus: {{ $item->lulus }}
+                                <span class="bold">{{ $item->nama_sekolah ?? 'Tidak Ada Nama Sekolah' }}</span>,
+                                {{ $item->jurusan_name ?? 'Tidak Ada Jurusan' }} | Tahun Lulus: {{ $item->lulus ?? 'Tidak Ada Tahun Lulus' }}
                             </p>
-                            <p class="content">{{ $item->alamat_sekolah }}</p>
+                            <p class="content">{{ $item->alamat_sekolah ?? 'Tidak Ada Alamat Sekolah' }}</p>
                         </li>
                     @endforeach
                 </ul>
@@ -89,10 +89,10 @@
                 <ul>
                     @foreach ($pengalaman as $item)
                         <li>
-                            <p><span class="bold">{{ $item->nama_perusahaan }}</span> - {{ $item->jabatan }} |
-                                {{ $item->mulai_tahun }} - {{ $item->berhenti_tahun }}</p>
+                            <p><span class="bold">{{ $item->nama_perusahaan ?? 'Tidak Ada Nama Perusahaan' }}</span> - {{ $item->jabatan ?? 'Tidak Ada Nama Jabatan' }} |
+                                {{ $item->mulai_tahun ?? '-' }} - {{ $item->berhenti_tahun ?? '-'}}</p>
                             </p>
-                            <p>{{ $item->alamat_perusahaan }}</p>
+                            <p>{{ $item->alamat_perusahaan ?? '-' }}</p>
                         </li>
                     @endforeach
                 </ul>
@@ -106,9 +106,9 @@
                 <ul>
                     @foreach ($keterampilan as $item)
                         <li>
-                            <p>{{ $item->lembaga_penyelenggara }} - {{ $item->no_sertifikat }}</p>
-                            <p>{{ $item->alamat_penyelenggara }}</p>
-                            <p>{{ $item->lulus_tahun }} | {{ $item->lembaga_penguji }}</p>
+                            <p>{{ $item->lembaga_penyelenggara ?? '-' }} - {{ $item->no_sertifikat ?? '-' }}</p>
+                            <p>{{ $item->alamat_penyelenggara ?? '-' }}</p>
+                            <p>{{ $item->lulus_tahun ?? '-' }} | {{ $item->lembaga_penguji ?? '-' }}</p>
                         </li>
                     @endforeach
                 </ul>

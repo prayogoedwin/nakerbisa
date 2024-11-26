@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\NakerPencariKeterampilan;
 use App\Models\NakerPencariPendidikan;
 use App\Models\NakerPencariPengalaman;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
@@ -31,6 +32,33 @@ class ProfileController extends Controller
         // Mengirim data ke view
         return view('backend.profil.index', compact('pendidikan', 'keterampilan', 'pengalaman'));
     }
+
+    public function updateUser(Request $request, $id)
+    {
+        // Validasi data input
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $id,
+            'password' => 'nullable|string|min:8',
+        ]);
+
+        // Ambil user berdasarkan ID
+        $user = User::findOrFail($id);
+
+        // Perbarui data user
+        $user->name = $request->name;
+        $user->email = $request->email;
+
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->password);
+        }
+
+        $user->save();
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('profil.index')->with('success', 'Profil berhasil diperbarui.');
+    }
+
 
     public function cetakCV()
     {
