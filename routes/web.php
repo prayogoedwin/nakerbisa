@@ -15,6 +15,7 @@ use App\Http\Controllers\NakerFaqController;
 use App\Http\Controllers\NakerGaleriController;
 use App\Http\Controllers\NakerInfografisController;
 use App\Http\Controllers\PencariPendidikanController;
+use App\Http\Controllers\PencariPengalamanController;
 use App\Http\Controllers\PencariProfilController;
 use App\Http\Controllers\UserPencariController;
 use App\Http\Controllers\UserPenyediaController;
@@ -109,6 +110,11 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::delete('/pendidikan/delete/{id}', [PencariPendidikanController::class, 'softdelete'])->name('pendidikan.softdelete');
         Route::put('/pendidikan/update/{id}', [PencariPendidikanController::class, 'update'])->name('pendidikan.update');
 
+        Route::get('/pengalaman', [PencariPengalamanController::class, 'index'])->name('pengalaman.index');
+        Route::post('/pengalaman/add', [PencariPengalamanController::class, 'store'])->name('pengalaman.add');
+        Route::get('/pengalaman/{id}', [PencariPengalamanController::class, 'show'])->name('pengalaman.detail');
+        Route::put('/pengalaman/update/{id}', [PencariPengalamanController::class, 'update'])->name('pengalaman.update');
+        Route::delete('/pengalaman/delete/{id}', [PencariPengalamanController::class, 'softdelete'])->name('pengalaman.softdelete');
     });
 
     Route::prefix('users')->group(function () {
@@ -124,8 +130,6 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::put('/pencari/reset/{id}', [UserPencariController::class, 'reset'])->name('userpencari.reset');
 
         Route::get('/penyedia', [UserPenyediaController::class, 'index'])->name('userperush.index');
-
-        
     });
 
 
@@ -137,8 +141,6 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
     Route::get('/lowongan/pelamar/{id}', [LowonganController::class, 'pelamar'])->name('lowongan.pelamar');
     Route::post('/lowongan/add', [LowonganController::class, 'store'])->name('lowongan.add');
     Route::delete('/lowongan/delete/{id}', [LowonganController::class, 'softdelete'])->name('lowongan.softdelete');
-
-
 });
 
 

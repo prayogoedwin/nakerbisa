@@ -36,7 +36,7 @@ class PencariPendidikanController extends Controller
                 ->make(true);
         }
 
-        return view('backend.profil.index');
+        return view('backend.profil.pendidikan.index');
     }
 
     // Method untuk menyimpan data user baru
