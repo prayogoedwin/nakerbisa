@@ -14,6 +14,7 @@ use App\Http\Controllers\NakerBeritaNewController;
 use App\Http\Controllers\NakerFaqController;
 use App\Http\Controllers\NakerGaleriController;
 use App\Http\Controllers\NakerInfografisController;
+use App\Http\Controllers\PencariPendidikanController;
 use App\Http\Controllers\PencariProfilController;
 use App\Http\Controllers\UserPencariController;
 use App\Http\Controllers\UserPenyediaController;
@@ -102,11 +103,11 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
     });
 
     Route::prefix('profil')->group(function () {
-        Route::get('/pendidikan', [PencariProfilController::class, 'index'])->name('pendidikan.index');
-        Route::post('/pendidikan/add', [PencariProfilController::class, 'store'])->name('pendidikan.add');
-        Route::get('/pendidikan/get/{id}', [PencariProfilController::class, 'getData'])->name('pendidikan.detail');
-        Route::delete('/pendidikan/delete/{id}', [PencariProfilController::class, 'softdelete'])->name('pendidikan.softdelete');
-        Route::put('/pendidikan/update/{id}', [PencariProfilController::class, 'update'])->name('pendidikan.update');
+        Route::get('/pendidikan', [PencariPendidikanController::class, 'index'])->name('pendidikan.index');
+        Route::post('/pendidikan/add', [PencariPendidikanController::class, 'store'])->name('pendidikan.add');
+        Route::get('/pendidikan/get/{id}', [PencariPendidikanController::class, 'getData'])->name('pendidikan.detail');
+        Route::delete('/pendidikan/delete/{id}', [PencariPendidikanController::class, 'softdelete'])->name('pendidikan.softdelete');
+        Route::put('/pendidikan/update/{id}', [PencariPendidikanController::class, 'update'])->name('pendidikan.update');
 
     });
 

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;  // Mengimpor DataTables
 use Illuminate\Support\Facades\Validator;
 
-class PencariProfilController extends Controller
+class PencariPendidikanController extends Controller
 {
     //
     public function index(Request $request)
