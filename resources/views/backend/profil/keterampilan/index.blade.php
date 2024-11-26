@@ -28,11 +28,11 @@
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
-                                                        <th>Nama Perusahaan</th>
-                                                        <th>Alamat Perusahaan</th>
-                                                        <th>Jabatan</th>
-                                                        <th>Mulai Tahun</th>
-                                                        <th>Berhenti Tahun</th>
+                                                        <th>Lembaga Penyelenggara</th>
+                                                        <th>Alamat Penyelenggara</th>
+                                                        <th>Tahun Lulus</th>
+                                                        <th>No Sertifikat</th>
+                                                        <th>Lembaga Penguji</th>
                                                         <th>Options</th>
                                                     </tr>
                                                 </thead>
@@ -57,7 +57,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah Pengalaman</h5>
+                    <h5 class="modal-title">Tambah Keterampilan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -65,37 +65,37 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="floating-label" for="nama_perusahaan">Nama Perusahaan</label>
-                                    <input type="text" class="form-control" id="nama_perusahaan" name="nama_perusahaan">
+                                    <label class="floating-label" for="lembaga_penyelenggara">Lembaga Penyelenggara</label>
+                                    <input type="text" class="form-control" id="lembaga_penyelenggara" name="lembaga_penyelenggara">
                                 </div>
                             </div>
 
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="floating-label" for="alamat_perusahaan">Alamat Perusahaan</label>
-                                    <input type="text" class="form-control" id="alamat_perusahaan"
-                                        name="alamat_perusahaan">
+                                    <label class="floating-label" for="alamat_penyelenggara">Alamat Penyelenggara</label>
+                                    <input type="text" class="form-control" id="alamat_penyelenggara"
+                                        name="alamat_penyelenggara">
                                 </div>
                             </div>
 
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="floating-label" for="mulai_tahun">Mulai Tahun</label>
-                                    <input type="number" class="form-control" id="mulai_tahun" name="mulai_tahun">
+                                    <label class="floating-label" for="lulus_tahun">Lulus Tahun</label>
+                                    <input type="number" class="form-control" id="lulus_tahun" name="lulus_tahun">
                                 </div>
                             </div>
 
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="floating-label" for="berhenti_tahun">Berhenti Tahun</label>
-                                    <input type="number" class="form-control" id="berhenti_tahun" name="berhenti_tahun">
+                                    <label class="floating-label" for="no_sertifikat">No Sertifikat</label>
+                                    <input type="number" class="form-control" id="no_sertifikat" name="no_sertifikat">
                                 </div>
                             </div>
 
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="floating-label" for="jabatan">Jabatan</label>
-                                    <input type="text" class="form-control" id="jabatan" name="jabatan">
+                                    <label class="floating-label" for="lembaga_penguji">Lembaga Penguji</label>
+                                    <input type="text" class="form-control" id="lembaga_penguji" name="lembaga_penguji">
                                 </div>
                             </div>
 
@@ -115,52 +115,52 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalEditLabel">Edit Pengalaman</h5>
+                    <h5 class="modal-title" id="modalEditLabel">Edit Keterampilan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="editExperienceForm">
+                    <form id="editKeterampilanForm">
                         <input type="hidden" id="editId">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="floating-label" for="editNamaPerusahaan">Nama Perusahaan</label>
-                                <input type="text" class="form-control" id="editNamaPerusahaan"
-                                    name="nama_perusahaan">
+                                <label class="floating-label" for="editLembagaPenyelenggara">Lembaga Penyelenggara</label>
+                                <input type="text" class="form-control" id="editLembagaPenyelenggara"
+                                    name="lembaga_penyelenggara">
                             </div>
                         </div>
 
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="floating-label" for="editAlamatPerusahaan">Alamat Perusahaan</label>
-                                <input type="text" class="form-control" id="editAlamatPerusahaan"
-                                    name="alamat_perusahaan">
+                                <label class="floating-label" for="editAlamatPenyelenggara">Alamat Penyelenggara</label>
+                                <input type="text" class="form-control" id="editAlamatPenyelenggara"
+                                    name="alamat_penyelenggara">
                             </div>
                         </div>
 
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="floating-label" for="editMulaiTahun">Mulai Tahun</label>
-                                <input type="number" class="form-control" id="editMulaiTahun" name="mulai_tahun">
+                                <label class="floating-label" for="editLulusTahun">Lulus Tahun</label>
+                                <input type="number" class="form-control" id="editLulusTahun" name="lulus_tahun">
                             </div>
                         </div>
 
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="floating-label" for="editBerhentiTahun">Berhenti Tahun</label>
-                                <input type="number" class="form-control" id="editBerhentiTahun" name="berhenti_tahun">
+                                <label class="floating-label" for="editNoSertifikat">No Sertifikat</label>
+                                <input type="number" class="form-control" id="editNoSertifikat" name="no_sertifikat">
                             </div>
                         </div>
 
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="floating-label" for="editJabatan">Jabatan</label>
-                                <input type="text" class="form-control" id="editJabatan" name="jabatan">
+                                <label class="floating-label" for="editLembagaPenguji">Lembaga Penguji</label>
+                                <input type="text" class="form-control" id="editLembagaPenguji" name="lembaga_penguji">
                             </div>
                         </div>
 
                         <div class="col-sm-12 text-end">
                             <button type="button" class="btn btn-primary mt-3"
-                                onclick="updateExperience()">Submit</button>
+                                onclick="updateKeterampilan()">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -176,7 +176,7 @@
             $('#simpletable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('pengalaman.index') }}',
+                ajax: '{{ route('keterampilan.index') }}',
                 autoWidth: false,
                 columns: [{
                         data: 'DT_RowIndex',
@@ -184,19 +184,19 @@
                         searchable: false
                     },
                     {
-                        data: 'nama_perusahaan'
+                        data: 'lembaga_penyelenggara'
                     },
                     {
-                        data: 'alamat_perusahaan'
+                        data: 'alamat_penyelenggara'
                     },
                     {
-                        data: 'jabatan'
+                        data: 'lembaga_penguji'
                     },
                     {
-                        data: 'mulai_tahun'
+                        data: 'lulus_tahun'
                     },
                     {
-                        data: 'berhenti_tahun'
+                        data: 'no_sertifikat'
                     },
                     {
                         data: 'options',
@@ -214,25 +214,25 @@
         $('#registerForm').submit(function(e) {
             e.preventDefault();
             var formData = {
-                nama_perusahaan: $('#nama_perusahaan').val(),
-                alamat_perusahaan: $('#alamat_perusahaan').val(),
-                mulai_tahun: $('#mulai_tahun').val(),
-                berhenti_tahun: $('#berhenti_tahun').val(),
-                jabatan: $('#jabatan').val(),
+                lembaga_penyelenggara: $('#lembaga_penyelenggara').val(),
+                alamat_penyelenggara: $('#alamat_penyelenggara').val(),
+                lulus_tahun: $('#lulus_tahun').val(),
+                no_sertifikat: $('#no_sertifikat').val(),
+                lembaga_penguji: $('#lembaga_penguji').val(),
                 _token: '{{ csrf_token() }}'
             };
 
             $.ajax({
                 type: 'POST',
-                url: '{{ route('pengalaman.add') }}',
+                url: '{{ route('keterampilan.add') }}',
                 data: formData,
                 success: function(response) {
                     if (response.success) {
-                        alert('Berhasil menambahkan data pengalaman');
+                        alert('Berhasil menambahkan data keterampilan');
                         $('#modal-report').modal('hide');
                         location.reload();
                     } else {
-                        alert('Gagal menambahkan data pengalaman');
+                        alert('Gagal menambahkan data keterampilan');
                     }
                 },
                 error: function(xhr) {
@@ -244,7 +244,7 @@
 
     <script>
         function showEditModal(id) {
-            var detailUrl = "{{ route('pengalaman.detail', ':id') }}".replace(':id', id);
+            var detailUrl = "{{ route('keterampilan.detail', ':id') }}".replace(':id', id);
             $.ajax({
                 url: detailUrl,
                 type: 'GET',
@@ -253,11 +253,11 @@
 
                     // Populate the form with the current data
                     $('#editId').val(dt.id);
-                    $('#editNamaPerusahaan').val(dt.nama_perusahaan);
-                    $('#editAlamatPerusahaan').val(dt.alamat_perusahaan);
-                    $('#editMulaiTahun').val(dt.mulai_tahun);
-                    $('#editBerhentiTahun').val(dt.berhenti_tahun);
-                    $('#editJabatan').val(dt.jabatan);
+                    $('#editLembagaPenyelenggara').val(dt.lembaga_penyelenggara);
+                    $('#editAlamatPenyelenggara').val(dt.alamat_penyelenggara);
+                    $('#editLulusTahun').val(dt.lulus_tahun);
+                    $('#editNoSertifikat').val(dt.no_sertifikat);
+                    $('#editLembagaPenguji').val(dt.lembaga_penguji);
 
                     // Show the modal
                     $('#modal-edit').modal('show');
@@ -268,28 +268,28 @@
             });
         }
 
-        function updateExperience() {
+        function updateKeterampilan() {
             var id = $('#editId').val();
             var formData = {
-                nama_perusahaan: $('#editNamaPerusahaan').val(),
-                alamat_perusahaan: $('#editAlamatPerusahaan').val(),
-                mulai_tahun: $('#editMulaiTahun').val(),
-                berhenti_tahun: $('#editBerhentiTahun').val(),
-                jabatan: $('#editJabatan').val(),
+                lembaga_penyelenggara: $('#editLembagaPenyelenggara').val(),
+                alamat_penyelenggara: $('#editAlamatPenyelenggara').val(),
+                lulus_tahun: $('#editLulusTahun').val(),
+                no_sertifikat: $('#editNoSertifikat').val(),
+                lembaga_penguji: $('#editLembagaPenguji').val(),
                 _token: '{{ csrf_token() }}'
             };
 
             $.ajax({
-                url: "{{ route('pengalaman.update', ':id') }}".replace(':id', id),
+                url: "{{ route('keterampilan.update', ':id') }}".replace(':id', id),
                 type: 'PUT',
                 data: formData,
                 success: function(response) {
                     if (response.success) {
-                        alert('Pengalaman berhasil diperbarui');
+                        alert('Keterampilan berhasil diperbarui');
                         $('#modal-edit').modal('hide');
                         location.reload();
                     } else {
-                        alert('Gagal memperbarui pengalaman');
+                        alert('Gagal memperbarui keterampilan');
                     }
                 },
                 error: function(xhr) {
@@ -302,8 +302,8 @@
 
     <script>
         function confirmDelete(id) {
-            var deleteUrl = "{{ route('pengalaman.softdelete', ':id') }}".replace(':id', id);
-            if (confirm("Are you sure you want to delete this record?")) {
+            var deleteUrl = "{{ route('keterampilan.softdelete', ':id') }}".replace(':id', id);
+            if (confirm("Yakin hapus data?")) {
                 // Send a request to the server to soft delete the record
                 $.ajax({
                     url: deleteUrl,

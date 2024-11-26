@@ -10,7 +10,7 @@ class NakerPencariKeterampilan extends Model
     //
     use SoftDeletes;
 
-    protected $table = 'naker_pencari_ketrampilan';
+    protected $table = 'naker_pencari_keterampilan';
 
     protected $fillable = [
         'user_id',

@@ -14,6 +14,7 @@ use App\Http\Controllers\NakerBeritaNewController;
 use App\Http\Controllers\NakerFaqController;
 use App\Http\Controllers\NakerGaleriController;
 use App\Http\Controllers\NakerInfografisController;
+use App\Http\Controllers\PencariKeterampilanController;
 use App\Http\Controllers\PencariPendidikanController;
 use App\Http\Controllers\PencariPengalamanController;
 use App\Http\Controllers\PencariProfilController;
@@ -115,6 +116,12 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('/pengalaman/{id}', [PencariPengalamanController::class, 'show'])->name('pengalaman.detail');
         Route::put('/pengalaman/update/{id}', [PencariPengalamanController::class, 'update'])->name('pengalaman.update');
         Route::delete('/pengalaman/delete/{id}', [PencariPengalamanController::class, 'softdelete'])->name('pengalaman.softdelete');
+
+        Route::get('/keterampilan', [PencariKeterampilanController::class, 'index'])->name('keterampilan.index');
+        Route::post('/keterampilan/add', [PencariKeterampilanController::class, 'store'])->name('keterampilan.add');
+        Route::get('/keterampilan/{id}', [PencariKeterampilanController::class, 'show'])->name('keterampilan.detail');
+        Route::put('/keterampilan/update/{id}', [PencariKeterampilanController::class, 'update'])->name('keterampilan.update');
+        Route::delete('/keterampilan/delete/{id}', [PencariKeterampilanController::class, 'softdelete'])->name('keterampilan.softdelete');
     });
 
     Route::prefix('users')->group(function () {
