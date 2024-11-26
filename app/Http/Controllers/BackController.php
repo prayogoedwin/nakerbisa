@@ -13,7 +13,7 @@ class BackController extends Controller
             return view('backend.dashboard.index');
         }
 
-        if(Auth::user()->roles[0]['name'] == 'pencari-kerja'){
+        if(Auth::user()->roles[0]['name'] == 'tenaga-kerja'){
             return view('backend.dashboard.index_pencari');
         }
 

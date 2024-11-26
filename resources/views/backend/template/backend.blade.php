@@ -4,7 +4,7 @@
     @include('backend.template.sidebar')
 @endif
 
-@if (Auth::user()->roles[0]['name'] == 'pencari-kerja')
+@if (Auth::user()->roles[0]['name'] == 'tenaga-kerja')
     @include('backend.template.sidebar-pencari')
 @endif
 

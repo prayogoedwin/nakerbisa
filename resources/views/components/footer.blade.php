@@ -195,7 +195,7 @@
                         <label for="">Daftar Sebagai</label>
                         <select name="role_dipilih" id="role_dipilih" required>
                             <option value="">Pilih</option>
-                            <option value="pencari-kerja">Tenaga Kerja</option>
+                            <option value="tenaga-kerja">Tenaga Kerja</option>
                             <option value="penyedia-kerja">Penyedia Kerja</option>
                             <option value="admin-bkk">BKK</option>
                             <option value="admin-blk">BLK/BLKK/LPKS</option>

@@ -18,7 +18,7 @@ class RoleSeeder extends Seeder
             'super-admin',
             'admin-provinsi',
             'admin-kabkota',
-            'pencari-kerja',
+            'tenaga-kerja',
             'penyedia-kerja',
             'admin-bkk',
             'pimpinan',

@@ -105,7 +105,7 @@
 
         <!-- Step 3 -->
         <div id="step3-container">
-            @if ($dt['role'] == 'pencari-kerja')
+            @if ($dt['role'] == 'tenaga-kerja')
                 @include('depan.step3_pencarikerja')
             @endif
 

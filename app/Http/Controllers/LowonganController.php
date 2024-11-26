@@ -22,7 +22,7 @@ class LowonganController extends Controller
         $userRole = auth()->user()->roles->first()->name;
         if ($request->ajax()) {
   
-            if ($userRole == 'pencari-kerja' ) {
+            if ($userRole == 'tenaga-kerja' ) {
                 //pencari kerja
                 $lokers = Lowongan::select(
                     'naker_lowongan.id',

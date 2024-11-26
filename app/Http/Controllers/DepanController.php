@@ -171,13 +171,13 @@ class DepanController extends Controller
         $rl = $request->input('rl'); // atau bisa juga menggunakan $request->query('rl')
         $decode_rl = decode_url($rl);
 
-        if (!in_array($decode_rl, ['pencari-kerja', 'penyedia-kerja', 'admin-bkk', 'admin-blk'])) {
+        if (!in_array($decode_rl, ['tenaga-kerja', 'penyedia-kerja', 'admin-bkk', 'admin-blk'])) {
             return abort(404);
         }
 
         $nm_role = '';
-        if ($decode_rl == 'pencari-kerja') {
-            $nm_role = 'Pencari Kerja';
+        if ($decode_rl == 'tenaga-kerja') {
+            $nm_role = 'Tenaga Kerja';
         } else if ($decode_rl == 'penyedia-kerja') {
             $nm_role = 'Penyedia Kerja';
         } else if ($decode_rl == 'admin-bkk') {

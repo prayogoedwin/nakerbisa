@@ -15,8 +15,7 @@ use App\Http\Controllers\NakerFaqController;
 use App\Http\Controllers\NakerGaleriController;
 use App\Http\Controllers\NakerInfografisController;
 use App\Http\Controllers\UserPencariController;
-
-
+use App\Http\Controllers\UserPenyediaController;
 
 // Menggunakan controller DepanController untuk mengambil data FAQ
 Route::get('/', [DepanController::class, 'index'])->name('beranda');
