@@ -28,11 +28,11 @@ class DepanController extends Controller
         // Mengambil semua data FAQ
         $faq = NakerFaq::all();
         $beritaTerbaru = NakerBerita::select('id', 'name', 'cover', 'status')
-        ->where('status', 1)
-        ->whereNull('deleted_at')
-        ->orderBy('id', 'desc')
-        ->limit(4)
-        ->get();
+            ->where('status', 1)
+            ->whereNull('deleted_at')
+            ->orderBy('id', 'desc')
+            ->limit(4)
+            ->get();
 
         // Mengirim faq ke view depan_index
         return view('depan.depan_index', compact('faq', 'beritaTerbaru'));
@@ -320,7 +320,11 @@ class DepanController extends Controller
                 // 'updated_at',
                 // 'deleted_at',
                 'is_diterima' => 0,
-                'medsos' => $request->medsos
+                'medsos' => $request->medsos,
+                'status_saat_ini' => $request->status_saat_ini,
+                'sektor_pekerjaan_saat_ini' => $request->status_saat_ini === 'bekerja' ? $request->sektor_pekerjaan_saat_ini : null,
+                'jam_kerja' => $request->status_saat_ini === 'bekerja' ? $request->jam_kerja : null,
+                'gaji' => $request->status_saat_ini === 'bekerja' ? $request->gaji : null,
             ]);
 
             DB::commit();

@@ -439,6 +439,13 @@
         });
     </script>
 
+    <script>
+        function togglePekerjaanFields(status) {
+            const pekerjaanFields = document.getElementById('pekerjaan-fields');
+            pekerjaanFields.style.display = (status === 'bekerja') ? 'block' : 'none';
+        }
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

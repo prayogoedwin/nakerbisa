@@ -4,6 +4,7 @@
         $agamas = getAgama();
         $pendidikans = getPendidikan();
         $maritals = getMarital();
+        $sektors = getSektor();
         ?>
         {{-- <div class="mb-3">
             <label for="email" class="form-label">email</label>
@@ -102,6 +103,36 @@
                         <option value="{{ $marit->id }}">{{ $marit->name }}</option>
                     @endforeach
                 </select>
+            </div>
+            <div class="mb-3">
+                <label for="status_saat_ini" class="form-label">Status Saat Ini</label>
+                <select class="form-select" id="status_saat_ini" name="status_saat_ini" required onchange="togglePekerjaanFields(this.value)">
+                    <option selected disabled>Pilih Status Saat Ini</option>
+                    <option value="bekerja">Bekerja</option>
+                    <option value="belum_bekerja">Belum Bekerja</option>
+                    <option value="tidak_bekerja">Tidak Bekerja</option>
+                </select>
+            </div>
+            <div id="pekerjaan-fields" style="display: none;">
+                <div class="mb-3">
+                    <label for="sektor_pekerjaan_saat_ini" class="form-label">Sektor Pekerjaan Saat Ini</label>
+                    <select class="form-select" id="sektor_pekerjaan_saat_ini" name="sektor_pekerjaan_saat_ini">
+                        <option selected disabled>Pilih Sektor Pekerjaan</option>
+                        @foreach ($sektors as $sektor)
+                            <option value="{{ $sektor->id }}">{{ $sektor->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="jam_kerja" class="form-label">Jam Kerja (per hari)</label>
+                    <input type="number" class="form-control" id="jam_kerja" name="jam_kerja">
+                </div>
+
+                <div class="mb-3">
+                    <label for="gaji" class="form-label">Gaji (per hari)</label>
+                    <input type="number" step="0.01" class="form-control" id="gaji" name="gaji">
+                </div>
             </div>
             <div class="mb-3">
                 <label for="mediaSosial" class="form-label">Media Sosial</label>

@@ -44,7 +44,11 @@ class UserPencari extends Model
         'updated_at',
         'deleted_at',
         'is_diterima',
-        'medsos'
+        'medsos',
+        'status_saat_ini',
+        'sektor_pekerjaan_saat_ini',
+        'jam_kerja',
+        'gaji',
     ];
 
     protected $dates = ['deleted_at'];
