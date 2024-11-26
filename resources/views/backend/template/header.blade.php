@@ -129,12 +129,15 @@
                         <li>
                             <div class="dropdown-divider"></div>
                         </li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="bx bx-user me-2"></i>
-                                <span class="align-middle">Profil</span>
-                            </a>
-                        </li>
+                        @if (Auth::check() && Auth::user()->roles[0]['name'] == 'tenaga-kerja')
+                            <li>
+                                <a class="dropdown-item" href="{{ route('profil.index') }}">
+                                    <i class="bx bx-user me-2"></i>
+                                    <span class="align-middle">Profil</span>
+                                </a>
+                            </li>
+                        @endif
+
                         <li>
                             <a href="{{ route('logout') }}" class="dropdown-item" href="#">
                                 <i class="bx bx-cog me-2"></i>
