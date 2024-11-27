@@ -2,7 +2,7 @@
     <div class="app-brand demo">
         <a href="index.html" class="app-brand-link">
             <span class="app-brand-logo demo">
-                <img src="{{ asset('assets/nakerbisa_be/img/nakerbisa-rembang.png') }}" width="150px">
+                <img src="{{ asset('assets/nakerbisa_be/img/nakerbisa-rembang.png') }}" width="200px">
             </span>
             <!-- <span class="app-brand-text demo menu-text fw-bolder ms-2">NAKERBISA</span> -->
         </a>

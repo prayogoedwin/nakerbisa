@@ -75,7 +75,7 @@
                                 <span class="bold">{{ $item->nama_sekolah ?? 'Tidak Ada Nama Sekolah' }}</span>,
                                 {{ $item->jurusan_name ?? 'Tidak Ada Jurusan' }} | Tahun Lulus: {{ $item->lulus ?? 'Tidak Ada Tahun Lulus' }}
                             </p>
-                            <p class="content">{{ $item->alamat_sekolah ?? 'Tidak Ada Alamat Sekolah' }}</p>
+                            {{-- <p class="content">{{ $item->alamat_sekolah ?? 'Tidak Ada Alamat Sekolah' }}</p> --}}
                         </li>
                     @endforeach
                 </ul>
@@ -92,7 +92,7 @@
                             <p><span class="bold">{{ $item->nama_perusahaan ?? 'Tidak Ada Nama Perusahaan' }}</span> - {{ $item->jabatan ?? 'Tidak Ada Nama Jabatan' }} |
                                 {{ $item->mulai_tahun ?? '-' }} - {{ $item->berhenti_tahun ?? '-'}}</p>
                             </p>
-                            <p>{{ $item->alamat_perusahaan ?? '-' }}</p>
+                            {{-- <p>{{ $item->alamat_perusahaan ?? '-' }}</p> --}}
                         </li>
                     @endforeach
                 </ul>
@@ -106,9 +106,9 @@
                 <ul>
                     @foreach ($keterampilan as $item)
                         <li>
-                            <p>{{ $item->lembaga_penyelenggara ?? '-' }} - {{ $item->no_sertifikat ?? '-' }}</p>
-                            <p>{{ $item->alamat_penyelenggara ?? '-' }}</p>
-                            <p>{{ $item->lulus_tahun ?? '-' }} | {{ $item->lembaga_penguji ?? '-' }}</p>
+                            <p>{{ $item->lembaga_penyelenggara ?? '-' }} - {{ $item->no_sertifikat ?? '-' }} - {{ $item->lulus_tahun ?? '-' }} | {{ $item->lembaga_penguji ?? '-' }}</p>
+                            {{-- <p>{{ $item->alamat_penyelenggara ?? '-' }}</p> --}}
+                            {{-- <p></p> --}}
                         </li>
                     @endforeach
                 </ul>

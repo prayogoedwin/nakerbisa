@@ -19,49 +19,12 @@
                             <div class="col-xl-12">
                                 <h4 class="mb-4">Profile</h4>
                                 <a href="{{ route('cetak.cv') }}" class="btn btn-primary">
-                                    <i class="feather icon-download"></i> Cetak CV
+                                    <i class="feather icon-download"></i> Cetak CV ATS
                                 </a>
                             </div>
                         </div>
                         @auth
-                            <section class="section mt-3">
-                                <div class="row">
-                                    <div class="col-12 col-lg-6">
-                                        <div class="card">
-                                            <div class="card-body py-4 px-4">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar avatar-xl" style="border-radius:60px">
-                                                        <span>
-                                                            <i class="bi bi-person-fill" style="font-size: 50px"></i>
-                                                        </span>
-                                                    </div>
-                                                    <div class="ms-3 name">
-                                                        <h5 class="font-bold fs-6 m-1">Name</h5>
-                                                        <h6 class="text-muted mb-0 fs-6">{{ auth()->user()->name }}</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-lg-6">
-                                        <div class="card">
-                                            <div class="card-body py-4 px-4">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar avatar-xl" style="border-radius:60px">
-                                                        <span>
-                                                            <i class="bi bi-envelope-fill" style="font-size: 50px"></i>
-                                                        </span>
-                                                    </div>
-                                                    <div class="ms-3 name">
-                                                        <h5 class="font-bold fs-6 m-1">Email</h5>
-                                                        <h6 class="text-muted mb-0 fs-6">{{ auth()->user()->email }}</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </section>
+                      
                             <!-- Section Dropdown (Update User) -->
                             <section class="section mt-3">
                                 <div class="card">
@@ -86,7 +49,7 @@
                                                         @method('PUT')
                                                         <div class="form-body">
                                                             <div class="row">
-                                                                <div class="col-12">
+                                                                <div class="col-6">
                                                                     <div class="form-group">
                                                                         <label for="first-name-vertical text-black">Name</label>
                                                                         <input type="text" id="first-name-vertical"
@@ -95,7 +58,7 @@
                                                                             value="{{ auth()->user()->name }}">
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-12">
+                                                                <div class="col-6">
                                                                     <div class="form-group">
                                                                         <label for="email-id-vertical text-black">Email</label>
                                                                         <input type="email" id="email-id-vertical"
@@ -104,7 +67,19 @@
                                                                             value="{{ auth()->user()->email }}">
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-12">
+
+                                                                <div class="col-6">
+                                                                    <div class="form-group">
+                                                                        <label for="whatsapp-id-vertical text-black">Whatsapp</label>
+                                                                        <input type="text" id="whatsapp-id-vertical"
+                                                                            class="form-control" name="whatsapp"
+                                                                            placeholder="whatsapp"
+                                                                            value="{{ auth()->user()->whatsapp }}">
+                                                                    </div>
+                                                                </div>
+
+
+                                                                <div class="col-6">
                                                                     <div class="form-group">
                                                                         <label
                                                                             for="password-vertical text-black">Password</label>
@@ -132,6 +107,91 @@
                                 </div>
                             </section>
                         @endauth
+
+                        <!-- Section Dropdown (Update Profil) -->
+                        <section class="section mt-3">
+                            <div class="card">
+                                <div class="accordion accordion-flush" id="accordionFlushExample">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="flush-headingOne">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
+                                                aria-expanded="false" aria-controls="flush-collapseOne">
+                                                <h4 class="card-title">Update Profil</h4>
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseOne" class="accordion-collapse collapse show"
+                                            aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample"
+                                            style="">
+                                            <div class="accordion-body">
+
+                                                <form class="form form-vertical"
+                                                    action="{{ route('admin.update-user', auth()->user()->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="form-body">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <div class="form-group ">
+                                                                    <label for="first-name-vertical text-black">Nama</label>
+                                                                    <input type="text" id="first-name-vertical"
+                                                                        class="form-control" name="name"
+                                                                        placeholder="Name"
+                                                                        value="{{ $profil->name }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="email-id-vertical text-black">KTP</label>
+                                                                    <input type="email" id="email-id-vertical"
+                                                                        class="form-control" name="email"
+                                                                        placeholder="Email"
+                                                                        value="{{ $profil->ktp }}">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="tempat-vertical text-black">Tempat Lahir</label>
+                                                                    <input type="text" id="tempat-vertical"
+                                                                        class="form-control" name="name"
+                                                                        placeholder="Tempat Lahir"
+                                                                        value="{{ $profil->tempat_lahir }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="email-id-vertical text-black">Tanggal Lahir</label>
+                                                                    <input type="date" id="date-id-vertical"
+                                                                        class="form-control" name="tanggal_lahir"
+                                                                        placeholder="Email"
+                                                                        value="{{ $profil->tanggal_lahir }}">
+                                                                </div>
+                                                            </div>
+
+
+                                                           
+
+                                                           
+
+                                                            <div class="col-12 d-flex justify-content-end">
+                                                                <button type="submit"
+                                                                    class="btn btn-primary me-1 mb-1 mt-3">
+                                                                    Update
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+
                         <!-- Section Dropdown (Update Pendidikan) -->
                         <section class="section mt-3">
                             <div class="card">
@@ -144,7 +204,7 @@
                                                 <h4 class="card-title">Pendidikan</h4>
                                             </button>
                                         </h2>
-                                        <div id="flush-collapsePendidikan" class="accordion-collapse collapse"
+                                        <div id="flush-collapsePendidikan" class="accordion-collapse collapse show"
                                             aria-labelledby="flush-headingPendidikan"
                                             data-bs-parent="#accordionFlushPendidikan">
                                             <div class="accordion-body">
@@ -196,7 +256,7 @@
                                                 <h4 class="card-title">Pengalaman Kerja</h4>
                                             </button>
                                         </h2>
-                                        <div id="flush-collapsePengalaman" class="accordion-collapse collapse"
+                                        <div id="flush-collapsePengalaman" class="accordion-collapse collapse show"
                                             aria-labelledby="flush-headingPengalaman"
                                             data-bs-parent="#accordionFlushPengalaman">
                                             <div class="accordion-body">
@@ -250,7 +310,7 @@
                                                 <h4 class="card-title">Keterampilan</h4>
                                             </button>
                                         </h2>
-                                        <div id="flush-collapseKeterampilan" class="accordion-collapse collapse"
+                                        <div id="flush-collapseKeterampilan" class="accordion-collapse collapse show"
                                             aria-labelledby="flush-headingKeterampilan"
                                             data-bs-parent="#accordionFlushKeterampilan">
                                             <div class="accordion-body">

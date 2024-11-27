@@ -50,6 +50,9 @@
                     <span data-text-preloader="K" class="letters-loading">
                         K
                     </span>
+                    <span data-text-preloader="E" class="letters-loading">
+                        E
+                    </span>
                     <span data-text-preloader="R" class="letters-loading">
                         R
                     </span>

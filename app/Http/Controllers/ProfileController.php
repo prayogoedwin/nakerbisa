@@ -6,6 +6,7 @@ use App\Models\NakerPencariKeterampilan;
 use App\Models\NakerPencariPendidikan;
 use App\Models\NakerPencariPengalaman;
 use App\Models\User;
+use App\Models\UserPencari;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
@@ -13,6 +14,11 @@ class ProfileController extends Controller
     //
     public function index(Request $request)
     {
+        $user = auth()->user();
+
+        // dd($user->id);
+        // die();
+        $profil = UserPencari::where('user_id', $user->id)->first();  // Sesuaikan relasi dengan tabel User jika ada
         $pendidikan = NakerPencariPendidikan::select(
             'naker_pencari_pendidikan.*',
             'naker_pendidikan.name as pendidikan_name', // Nama Pendidikan
@@ -30,7 +36,7 @@ class ProfileController extends Controller
         $pengalaman = NakerPencariPengalaman::where('user_id', auth()->id())->get();
 
         // Mengirim data ke view
-        return view('backend.profil.index', compact('pendidikan', 'keterampilan', 'pengalaman'));
+        return view('backend.profil.index', compact('profil', 'pendidikan', 'keterampilan', 'pengalaman'));
     }
 
     public function updateUser(Request $request, $id)
