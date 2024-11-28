@@ -136,6 +136,7 @@
                                                 <?php
                                                 $kabkotas = getKabkota();
                                                 $pendidikans = getPendidikan();
+                                                $maritals = getMarital();
                                                 ?>
                                                 <form class="form form-vertical"
                                                     action="{{ route('admin.update-profil', auth()->user()->id) }}"
@@ -276,6 +277,22 @@
                                                                     <input type="text" id="tahun_lulus"
                                                                         class="form-control" name="tahun_lulus"
                                                                         value="{{ $profil->tahun_lulus }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="stsperkawinan" class="form-label">Status
+                                                                        Perkawinan</label>
+                                                                    <select class="form-select" id="status_perkawinan_id"
+                                                                        name="status_perkawinan_id" required>
+                                                                        <option selected disabled>Pilih Status</option>
+                                                                        @foreach ($maritals as $marit)
+                                                                            <option value="{{ $marit->id }}"
+                                                                                {{ $profil->id_status_perkawinan == $marit->id ? 'selected' : '' }}>
+                                                                                {{ $marit->name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                             <!-- Tambahkan input lainnya sesuai kebutuhan -->

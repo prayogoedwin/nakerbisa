@@ -71,8 +71,9 @@ class ProfileController extends Controller
         $profil = UserPencari::where('user_id', $id)->firstOrFail();
         $kabkotas = getKabkota(); // Mengambil semua kabupaten/kota
         $pendidikans = getPendidikan();
+        $maritals = getMarital(); // Status perkawinan
 
-        return view('profil.edit', compact('profil', 'kabkotas', 'pendidikans'));
+        return view('profil.edit', compact('profil', 'kabkotas', 'pendidikans', 'maritals'));
     }
 
     public function updateProfil(Request $request, $id)
@@ -92,6 +93,7 @@ class ProfileController extends Controller
             'pendidikan_id' => 'required|integer',
             'jurusan_id' => 'required|integer',
             'tahun_lulus' => 'required|integer',
+            'status_perkawinan_id' => 'required',
             // Validasi lainnya sesuai kebutuhan
         ]);
 
@@ -112,6 +114,7 @@ class ProfileController extends Controller
             'id_pendidikan' => $request->pendidikan_id,
             'id_jurusan' => $request->jurusan_id,
             'tahun_lulus' => $request->tahun_lulus,
+            'id_status_perkawinan' => $request->status_perkawinan_id, 
         ]);
 
         return redirect()->route('profil.index')->with('success', 'Update data Profil berhasil diperbarui.');
