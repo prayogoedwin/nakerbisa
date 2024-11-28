@@ -8,6 +8,7 @@ use App\Models\NakerPencariPengalaman;
 use App\Models\User;
 use App\Models\UserPencari;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -64,6 +65,16 @@ class ProfileController extends Controller
         // Redirect dengan pesan sukses
         return redirect()->route('profil.index')->with('success', 'Update data User berhasil diperbarui.');
     }
+
+    public function editProfil($id)
+    {
+        $profil = UserPencari::where('user_id', $id)->firstOrFail();
+        $kabkotas = getKabkota(); // Mengambil semua kabupaten/kota
+
+        return view('profil.edit', compact('profil', 'kabkotas'));
+    }
+
+
 
     public function updateProfil(Request $request, $id)
     {

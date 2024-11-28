@@ -195,36 +195,39 @@
                                                                         Kota</label>
                                                                     <select class="form-select" id="kabkota_id"
                                                                         name="kabkota_id" required>
-                                                                        <option selected disabled>Pilih Kabupaten/Kota
-                                                                        </option>
+                                                                        <option disabled>Pilih Kabupaten/Kota</option>
                                                                         @foreach ($kabkotas as $kabkot)
-                                                                            <option value="{{ $kabkot->id }}">
-                                                                                {{ $kabkot->name }}</option>
+                                                                            <option value="{{ $kabkot->id }}"
+                                                                                {{ $profil->id_kota == $kabkot->id ? 'selected' : '' }}>
+                                                                                {{ $kabkot->name }}
+                                                                            </option>
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
                                                             </div>
+
                                                             <div class="col-6">
                                                                 <div class="form-group">
                                                                     <label for="kecamatan"
                                                                         class="form-label">Kecamatan</label>
                                                                     <select class="form-select" id="kecamatan_id"
                                                                         name="kecamatan_id" required>
-                                                                        <option selected disabled>Pilih Kecamatan</option>
+                                                                        <option disabled>Pilih Kecamatan</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
+
                                                             <div class="col-6">
                                                                 <div class="form-group">
                                                                     <label for="kelurahan" class="form-label">Desa /
                                                                         Kelurahan</label>
                                                                     <select class="form-select" id="desa_id"
                                                                         name="desa_id" required>
-                                                                        <option selected disabled>Pilih Desa/Kelurahan
-                                                                        </option>
+                                                                        <option disabled>Pilih Desa/Kelurahan</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
+
                                                             <div class="col-6">
                                                                 <div class="form-group">
                                                                     <label for="alamat">Alamat</label>
@@ -461,6 +464,71 @@
                 $(this).prop("checked") ? $("#password").prop("type", "text") : $("#password").prop("type",
                     "password");
             });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            var kabkotaId = "{{ $profil->id_kota }}";
+            var kecamatanId = "{{ $profil->id_kecamatan }}";
+            var desaId = "{{ $profil->id_desa }}";
+
+            // Muat data kecamatan jika ada kabkota terpilih
+            if (kabkotaId) {
+                loadKecamatan(kabkotaId, kecamatanId);
+            }
+
+            // Muat data desa jika ada kecamatan terpilih
+            if (kecamatanId) {
+                loadDesa(kecamatanId, desaId);
+            }
+
+            $('#kabkota_id').on('change', function() {
+                var kabkotaId = $(this).val();
+                $('#kecamatan_id').empty().append('<option disabled>Pilih Kecamatan</option>');
+                $('#desa_id').empty().append('<option disabled>Pilih Desa/Kelurahan</option>');
+
+                if (kabkotaId) {
+                    loadKecamatan(kabkotaId);
+                }
+            });
+
+            $('#kecamatan_id').on('change', function() {
+                var kecamatanId = $(this).val();
+                $('#desa_id').empty().append('<option disabled>Pilih Desa/Kelurahan</option>');
+
+                if (kecamatanId) {
+                    loadDesa(kecamatanId);
+                }
+            });
+
+            function loadKecamatan(kabkotaId, selectedId = null) {
+                $.ajax({
+                    url: "{{ route('get-kecamatan-bykabkota', ':id') }}".replace(':id', kabkotaId),
+                    type: 'GET',
+                    success: function(response) {
+                        $.each(response, function(index, kecamatan) {
+                            $('#kecamatan_id').append('<option value="' + kecamatan.id + '"' +
+                                (kecamatan.id == selectedId ? ' selected' : '') + '>' +
+                                kecamatan.name + '</option>');
+                        });
+                    }
+                });
+            }
+
+            function loadDesa(kecamatanId, selectedId = null) {
+                $.ajax({
+                    url: "{{ route('get-desa-bykecamatan', ':id') }}".replace(':id', kecamatanId),
+                    type: 'GET',
+                    success: function(response) {
+                        $.each(response, function(index, desa) {
+                            $('#desa_id').append('<option value="' + desa.id + '"' +
+                                (desa.id == selectedId ? ' selected' : '') + '>' +
+                                desa.name + '</option>');
+                        });
+                    }
+                });
+            }
         });
     </script>
 
