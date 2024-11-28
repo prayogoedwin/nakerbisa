@@ -287,6 +287,7 @@
 
 
     <script>
+        // Memuat data jurusan saat modal dibuka
         function showEditModal(id) {
             var detailUrl = "{{ route('pendidikan.detail', ':id') }}".replace(':id', id);
 
@@ -297,13 +298,11 @@
                     if (response.success) {
                         let dt = response.data;
                         $('#editId').val(dt.id);
-                        $('#editPendidikanId').val(dt.pendidikan_id); // Set pendidikan_id
-
-                        // Setelah pendidikan dipilih, update dropdown jurusan
-                        var pendidikanId = dt.pendidikan_id;
-                        $('#editPendidikanId').trigger('change'); // Trigger change untuk update jurusan
-
-                        $('#editJurusanId').val(dt.jurusan_id); // Set jurusan_id
+                        $('#editPendidikanId').val(dt.pendidikan_id).trigger(
+                        'change'); // Trigger change untuk load jurusan
+                        setTimeout(() => {
+                            $('#editJurusanId').val(dt.jurusan_id); // Set jurusan setelah load
+                        }, 500); // Beri waktu untuk load data
                         $('#editNamaSekolah').val(dt.nama_sekolah);
                         $('#editAlamatSekolah').val(dt.alamat_sekolah);
                         $('#editLulus').val(dt.lulus);
@@ -322,30 +321,27 @@
 
     <script>
         $('#editPendidikanId').on('change', function() {
-            var pendidikanId = this.value;
+            var pendidikanId = $(this).val();
 
-            // Panggil API untuk mendapatkan jurusan berdasarkan pendidikan_id
-            $.ajax({
-                url: "{{ route('get-jurusan-bypendidikan', ':id') }}".replace(':id',
-                    pendidikanId), // Panggil API
-                type: 'GET',
-                success: function(response) {
-                    // Kosongkan dropdown jurusan sebelumnya
-                    $('#editJurusanId').empty();
+            // Kosongkan dropdown jurusan sebelumnya
+            $('#editJurusanId').empty().append('<option selected disabled>Pilih Jurusan</option>');
 
-                    // Tambahkan opsi default
-                    $('#editJurusanId').append('<option selected disabled>Pilih Jurusan</option>');
-
-                    // Loop data jurusan dan tambahkan ke dropdown
-                    $.each(response, function(index, jurusan) {
-                        $('#editJurusanId').append('<option value="' + jurusan.id + '">' +
-                            jurusan.nama + '</option>');
-                    });
-                },
-                error: function(xhr) {
-                    console.error(xhr);
-                }
-            });
+            if (pendidikanId) {
+                // Panggil API untuk mendapatkan jurusan berdasarkan pendidikan_id
+                $.ajax({
+                    url: "{{ route('get-jurusan-bypendidikan', ':id') }}".replace(':id', pendidikanId),
+                    type: 'GET',
+                    success: function(response) {
+                        $.each(response, function(index, jurusan) {
+                            $('#editJurusanId').append('<option value="' + jurusan.id + '">' +
+                                jurusan.nama + '</option>');
+                        });
+                    },
+                    error: function(xhr) {
+                        console.error(xhr);
+                    }
+                });
+            }
         });
     </script>
 
