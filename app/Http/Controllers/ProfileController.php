@@ -67,31 +67,45 @@ class ProfileController extends Controller
 
     public function updateProfil(Request $request, $id)
     {
-        // Validasi data input
         $request->validate([
             'name' => 'required|string|max:100',
             'ktp' => 'required|string|max:20',
             'tempat_lahir' => 'required|string|max:20',
             'tanggal_lahir' => 'required|date',
-            // Tambahkan validasi lainnya sesuai kebutuhan
+            'gender' => 'required|in:L,P',
+            'id_provinsi' => '64', // Validasi statis untuk id_provinsi
+            'kabkota_id' => 'required|integer', // Menggunakan kabkota_id dari input
+            'kecamatan_id' => 'required|integer', // Menggunakan kecamatan_id dari input
+            'desa_id' => 'required|string|max:10', // Menggunakan desa_id dari input
+            'alamat' => 'required|string|max:200',
+            'kodepos' => 'required|string|max:5',
+            'id_pendidikan' => 'required|integer',
+            'id_jurusan' => 'required|integer',
+            'tahun_lulus' => 'required|integer',
+            // Validasi lainnya sesuai kebutuhan
         ]);
 
-        // Ambil data User dan UserPencari berdasarkan ID
         $userPencari = UserPencari::where('user_id', $id)->firstOrFail();
 
-        // Update data profil
         $userPencari->update([
             'name' => $request->name,
             'ktp' => $request->ktp,
             'tempat_lahir' => $request->tempat_lahir,
             'tanggal_lahir' => $request->tanggal_lahir,
-            // Tambahkan update lainnya sesuai kebutuhan
+            'gender' => $request->gender,
+            'id_provinsi' => '64', // Tetap seperti ini jika statis
+            'id_kota' => $request->kabkota_id, // Menyimpan kabkota_id sebagai id_kota
+            'id_kecamatan' => $request->kecamatan_id, // Menyimpan kecamatan_id sebagai id_kecamatan
+            'id_desa' => $request->desa_id, // Menyimpan desa_id sebagai id_desa
+            'alamat' => $request->alamat,
+            'kodepos' => $request->kodepos,
+            'id_pendidikan' => $request->id_pendidikan,
+            'id_jurusan' => $request->id_jurusan,
+            'tahun_lulus' => $request->tahun_lulus,
         ]);
 
-        // Redirect dengan pesan sukses
         return redirect()->route('profil.index')->with('success', 'Update data Profil berhasil diperbarui.');
     }
-
 
 
     public function cetakCV()

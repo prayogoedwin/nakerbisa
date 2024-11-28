@@ -14,6 +14,14 @@
                                 {{ session('success') }}
                             </div>
                         @endif
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                @foreach ($errors->all() as $error)
+                                    {{ $error }}<br>
+                                @endforeach
+                            </div>
+                        @endif
+
 
                         <div class="row">
                             <div class="col-xl-12">
@@ -125,6 +133,9 @@
                                             aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample"
                                             style="">
                                             <div class="accordion-body">
+                                                <?php
+                                                $kabkotas = getKabkota();
+                                                ?>
                                                 <form class="form form-vertical"
                                                     action="{{ route('admin.update-profil', auth()->user()->id) }}"
                                                     method="POST">
@@ -134,45 +145,131 @@
                                                         <div class="row">
                                                             <div class="col-6">
                                                                 <div class="form-group">
-                                                                    <label
-                                                                        for="first-name-vertical text-black">Nama</label>
-                                                                    <input type="text" id="first-name-vertical"
+                                                                    <label for="name">Nama</label>
+                                                                    <input type="text" id="name"
                                                                         class="form-control" name="name"
-                                                                        placeholder="Name" value="{{ $profil->name }}">
+                                                                        value="{{ $profil->name }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="form-group">
-                                                                    <label for="email-id-vertical text-black">KTP</label>
-                                                                    <input type="text" id="ktp-id-vertical"
+                                                                    <label for="ktp">KTP</label>
+                                                                    <input type="text" id="ktp"
                                                                         class="form-control" name="ktp"
-                                                                        placeholder="KTP" value="{{ $profil->ktp }}">
+                                                                        value="{{ $profil->ktp }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="form-group">
-                                                                    <label for="tempat-vertical text-black">Tempat
-                                                                        Lahir</label>
-                                                                    <input type="text" id="tempat-vertical"
+                                                                    <label for="tempat_lahir">Tempat Lahir</label>
+                                                                    <input type="text" id="tempat_lahir"
                                                                         class="form-control" name="tempat_lahir"
-                                                                        placeholder="Tempat Lahir"
                                                                         value="{{ $profil->tempat_lahir }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="form-group">
-                                                                    <label for="date-id-vertical text-black">Tanggal
-                                                                        Lahir</label>
-                                                                    <input type="date" id="date-id-vertical"
+                                                                    <label for="tanggal_lahir">Tanggal Lahir</label>
+                                                                    <input type="date" id="tanggal_lahir"
                                                                         class="form-control" name="tanggal_lahir"
                                                                         value="{{ $profil->tanggal_lahir }}">
                                                                 </div>
                                                             </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="gender">Jenis Kelamin</label>
+                                                                    <select id="gender" class="form-control"
+                                                                        name="gender">
+                                                                        <option value="L"
+                                                                            {{ $profil->gender == 'L' ? 'selected' : '' }}>
+                                                                            Laki-laki</option>
+                                                                        <option value="P"
+                                                                            {{ $profil->gender == 'P' ? 'selected' : '' }}>
+                                                                            Perempuan</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="kabkota" class="form-label">Kabupaten /
+                                                                        Kota</label>
+                                                                    <select class="form-select" id="kabkota_id"
+                                                                        name="kabkota_id" required>
+                                                                        <option selected disabled>Pilih Kabupaten/Kota
+                                                                        </option>
+                                                                        @foreach ($kabkotas as $kabkot)
+                                                                            <option value="{{ $kabkot->id }}">
+                                                                                {{ $kabkot->name }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="kecamatan"
+                                                                        class="form-label">Kecamatan</label>
+                                                                    <select class="form-select" id="kecamatan_id"
+                                                                        name="kecamatan_id" required>
+                                                                        <option selected disabled>Pilih Kecamatan</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="kelurahan" class="form-label">Desa /
+                                                                        Kelurahan</label>
+                                                                    <select class="form-select" id="desa_id"
+                                                                        name="desa_id" required>
+                                                                        <option selected disabled>Pilih Desa/Kelurahan
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="alamat">Alamat</label>
+                                                                    <input type="text" id="alamat"
+                                                                        class="form-control" name="alamat"
+                                                                        value="{{ $profil->alamat }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="kodepos">Kode Pos</label>
+                                                                    <input type="text" id="kodepos"
+                                                                        class="form-control" name="kodepos"
+                                                                        value="{{ $profil->kodepos }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="id_pendidikan">Pendidikan</label>
+                                                                    <input type="text" id="id_pendidikan"
+                                                                        class="form-control" name="id_pendidikan"
+                                                                        value="{{ $profil->id_pendidikan }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="id_jurusan">Jurusan</label>
+                                                                    <input type="text" id="id_jurusan"
+                                                                        class="form-control" name="id_jurusan"
+                                                                        value="{{ $profil->id_jurusan }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="tahun_lulus">Tahun Lulus</label>
+                                                                    <input type="text" id="tahun_lulus"
+                                                                        class="form-control" name="tahun_lulus"
+                                                                        value="{{ $profil->tahun_lulus }}">
+                                                                </div>
+                                                            </div>
+                                                            <!-- Tambahkan input lainnya sesuai kebutuhan -->
+
                                                             <div class="col-12 d-flex justify-content-end">
                                                                 <button type="submit"
-                                                                    class="btn btn-primary me-1 mb-1 mt-3">
-                                                                    Update
-                                                                </button>
+                                                                    class="btn btn-primary me-1 mb-1 mt-3">Update</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -363,6 +460,95 @@
             $("#show-password").change(function() {
                 $(this).prop("checked") ? $("#password").prop("type", "text") : $("#password").prop("type",
                     "password");
+            });
+        });
+    </script>
+
+    <script>
+        $('#kabkota_id').on('change', function() {
+            // console.log(this.value);
+            var kd = this.value
+
+            // Panggil API untuk mendapatkan kecamatan berdasarkan kabkota_id
+            $.ajax({
+                url: "{{ route('get-kecamatan-bykabkota', ':id') }}".replace(':id', kd), // Panggil API
+                type: 'GET',
+                success: function(response) {
+                    // Kosongkan dropdown kecamatan sebelumnya
+                    $('#kecamatan_id').empty();
+
+                    $('#desa_id').empty();
+                    $('#desa_id').append('<option selected disabled>Pilih Desa/Kelurahan</option>');
+
+                    // Tambahkan opsi default
+                    $('#kecamatan_id').append('<option selected disabled>Pilih Kecamatan</option>');
+
+                    // Loop data kecamatan dan tambahkan ke dropdown
+                    $.each(response, function(index, kecamatan) {
+                        $('#kecamatan_id').append('<option value="' + kecamatan.id + '">' +
+                            kecamatan.name + '</option>');
+                    });
+                },
+                error: function(xhr) {
+                    console.error(xhr);
+                }
+            });
+        });
+
+
+        $('#kecamatan_id').on('change', function() {
+            // console.log(this.value);
+            var kd = this.value
+
+            // Panggil API untuk mendapatkan kecamatan berdasarkan kabkota_id
+            $.ajax({
+                url: "{{ route('get-desa-bykecamatan', ':id') }}".replace(':id', kd), // Panggil API
+                type: 'GET',
+                success: function(response) {
+                    // Kosongkan dropdown kecamatan sebelumnya
+                    $('#desa_id').empty();
+
+                    // Tambahkan opsi default
+                    $('#desa_id').append('<option selected disabled>Pilih Desa/Kelurahan</option>');
+
+                    // Loop data kecamatan dan tambahkan ke dropdown
+                    $.each(response, function(index, kecamatan) {
+                        $('#desa_id').append('<option value="' + kecamatan.id + '">' +
+                            kecamatan.name + '</option>');
+                    });
+                },
+                error: function(xhr) {
+                    console.error(xhr);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $('#provinsi_id').on('change', function() {
+            // console.log(this.value);
+            var kd = this.value
+
+            // Panggil API untuk mendapatkan kecamatan berdasarkan kabkota_id
+            $.ajax({
+                url: "{{ route('get-kabkota-byprov', ':id') }}".replace(':id', kd), // Panggil API
+                type: 'GET',
+                success: function(response) {
+                    // Kosongkan dropdown kecamatan sebelumnya
+                    $('#kabkota_id').empty();
+
+                    // Tambahkan opsi default
+                    $('#kabkota_id').append('<option selected disabled>Pilih Kabupaten/Kota</option>');
+
+                    // Loop data kecamatan dan tambahkan ke dropdown
+                    $.each(response, function(index, kabkota) {
+                        $('#kabkota_id').append('<option value="' + kabkota.id + '">' +
+                            kabkota.name + '</option>');
+                    });
+                },
+                error: function(xhr) {
+                    console.error(xhr);
+                }
             });
         });
     </script>
