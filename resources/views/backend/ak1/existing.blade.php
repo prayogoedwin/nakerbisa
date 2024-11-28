@@ -10,112 +10,81 @@
                 <div class="content-wrapper">
                     <!-- Content -->
                     <div class="container-xxl flex-grow-1 container-p-y">
-                        <div class="row">
-                            <div class="col-lg-12 mb-4 order-0">
-                                <div class="card">
-                                    <div class="d-flex align-items-end row">
-                                        <div class="col-sm-7">
-                                            <div class="card-body">
-                                                <h5 class="card-title text-primary">Selamat Datang Admin! 🎉</h5>
-                                                <p class="mb-4">
-                                                    Ada setidaknya <span class="fw-bold">72</span> lowongan baru belum di
-                                                    verifikasi hari ini. Mohon segera diverifikasi agar dapat segera
-                                                    terlihat disisi pencari kerja.
-                                                </p>
-
-                                                <a href="javascript:;" class="btn btn-sm btn-outline-primary">Verifikasi
-                                                    Sekarang</a>
-                                            </div>
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                @foreach ($errors->all() as $error)
+                                    {{ $error }}<br>
+                                @endforeach
+                            </div>
+                        @endif
+                        <div class="container mt-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Cetak AK1 - Pencarian KTP</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form method="GET" action="{{ route('ak1.existing') }}">
+                                        <div class="mb-3">
+                                            <label for="ktp" class="form-label">Masukkan Nomor KTP</label>
+                                            <input type="text" id="ktp" name="ktp" class="form-control"
+                                                value="{{ request('ktp') }}" required>
                                         </div>
-                                        <div class="col-sm-5 text-center text-sm-left">
-                                            <div class="card-body pb-0 px-0 px-md-4">
-                                                <!-- <img
-                                      src="../assets/img/illustrations/man-with-laptop-light.png"
-                                      height="140"
-                                      alt="View Badge User"
-                                      data-app-dark-img="illustrations/man-with-laptop-dark.png"
-                                      data-app-light-img="illustrations/man-with-laptop-light.png"
-                                    /> -->
-                                            </div>
-                                        </div>
-                                    </div>
+                                        <button type="submit" class="btn btn-primary">Cari KTP</button>
+                                    </form>
                                 </div>
                             </div>
 
-                            <div class="col-lg-12 col-md-4 order-1">
-                                <div class="row">
-
-                                    <div class="col-lg-3 col-md-12 col-4 mb-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="card-title d-flex align-items-start justify-content-between">
-                                                    <div class="avatar flex-shrink-0">
-                                                        <img src="{{ asset('assets/nakerbisa_be/img/icons/unicons/chart-success.png') }}"
-                                                            alt="chart success" class="rounded" />
-                                                    </div>
-
-                                                </div>
-                                                <span class="fw-semibold d-block mb-1">Pencari Kerja</span>
-                                                <h3 class="card-title mb-2">100</h3>
-                                                <!-- <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small> -->
-                                            </div>
-                                        </div>
+                            @if ($user)
+                                <div class="card mt-4">
+                                    <div class="card-header">
+                                        <h5>Detail Profil</h5>
                                     </div>
+                                    <div class="card-body">
+                                        <form method="POST" action="{{ route('ak1.update', $user->id) }}">
+                                            @csrf
+                                            @method('PUT')
 
-                                    <div class="col-lg-3 col-md-12 col-4 mb-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="card-title d-flex align-items-start justify-content-between">
-                                                    <div class="avatar flex-shrink-0">
-                                                        <img src="{{ asset('assets/nakerbisa_be/img/icons/unicons/chart-success.png') }}"
-                                                            alt="chart success" class="rounded" />
-                                                    </div>
-
-                                                </div>
-                                                <span class="fw-semibold d-block mb-1">Penyedia Kerja</span>
-                                                <h3 class="card-title mb-2">18</h3>
-                                                <!-- <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small> -->
+                                            <div class="mb-3">
+                                                <label for="name" class="form-label">Nama Lengkap</label>
+                                                <input type="text" id="name" name="name" class="form-control"
+                                                    value="{{ $user->name }}">
                                             </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-md-12 col-4 mb-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="card-title d-flex align-items-start justify-content-between">
-                                                    <div class="avatar flex-shrink-0">
-                                                        <img src="{{ asset('assets/nakerbisa_be/img/icons/unicons/chart-success.png') }}"
-                                                            alt="chart success" class="rounded" />
-                                                    </div>
-
-                                                </div>
-                                                <span class="fw-semibold d-block mb-1">Lowongan AKtif</span>
-                                                <h3 class="card-title mb-2">27</h3>
-                                                <!-- <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small> -->
+                                            <div class="mb-3">
+                                                <label for="ktp" class="form-label">KTP</label>
+                                                <input type="text" id="ktp" name="ktp" class="form-control"
+                                                    value="{{ $user->pencari->ktp }}" disabled>
                                             </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-md-12 col-4 mb-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="card-title d-flex align-items-start justify-content-between">
-                                                    <div class="avatar flex-shrink-0">
-                                                        <img src="{{ asset('assets/nakerbisa_be/img/icons/unicons/chart-success.png') }}"
-                                                            alt="chart success" class="rounded" />
-                                                    </div>
-
-                                                </div>
-                                                <span class="fw-semibold d-block mb-1">Lamaran Dalam Proses</span>
-                                                <h3 class="card-title mb-2">150</h3>
-                                                <!-- <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small> -->
+                                            <div class="mb-3">
+                                                <label for="alamat" class="form-label">Alamat</label>
+                                                <input type="text" id="alamat" name="alamat" class="form-control"
+                                                    value="{{ $user->pencari->alamat ?? '' }}">
                                             </div>
-                                        </div>
-                                    </div>
+                                            <div class="mb-3">
+                                                <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
+                                                <input type="date" id="tanggal_lahir" name="tanggal_lahir"
+                                                    class="form-control" value="{{ $user->pencari->tanggal_lahir ?? '' }}">
+                                            </div>
 
+                                            <!-- Add other fields as required -->
+
+                                            <button type="submit" class="btn btn-success">Update</button>
+                                            <a href="{{ route('ak1.print', $user->id) }}"
+                                                class="btn btn-primary">Cetak AK1</a>
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
+                            @elseif(request('ktp'))
+                                <div class="alert alert-warning mt-4">
+                                    Data tidak ditemukan untuk KTP: {{ request('ktp') }}
+                                </div>
+                            @endif
                         </div>
+
                     </div>
                     <!-- / Content -->
 

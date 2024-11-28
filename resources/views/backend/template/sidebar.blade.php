@@ -141,7 +141,7 @@
 
 
         <!-- Layouts -->
-        <li class="menu-item">
+        <li class="menu-item {{ request()->routeIs('ak1.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-file"></i>
                 <div data-i18n="Layouts">AK1</div>
@@ -149,7 +149,7 @@
 
             <ul class="menu-sub">
                 <!-- Trigger Menu Item -->
-                <li class="menu-item">
+                <li class="menu-item {{ request()->routeIs('ak1.existing') || request()->routeIs('ak1.new') ? 'active' : '' }}">
                     <a href="javascript:void(0);" class="menu-link" data-bs-toggle="modal" data-bs-target="#ak1Modal">
                         <div data-i18n="Without menu">Cetak AK1</div>
                     </a>

@@ -148,9 +148,13 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('/penyedia', [UserPenyediaController::class, 'index'])->name('userperush.index');
     });
 
-    Route::prefix('admin/ak1')->group(function () {
-        Route::get('/new', [Ak1Controller::class, 'cetakBaru'])->name('admin.ak1.new');
-        Route::get('/existing', [Ak1Controller::class, 'cetakExisting'])->name('admin.ak1.existing');
+    Route::prefix('ak1')->group(function () {
+        Route::get('/new', [Ak1Controller::class, 'cetakBaru'])->name('ak1.new');
+        Route::get('/existing', [Ak1Controller::class, 'cetakExisting'])->name('ak1.existing');
+
+        Route::get('ak1/existing', [Ak1Controller::class, 'cetakExisting'])->name('ak1.existing');
+        Route::put('ak1/update/{id}', [Ak1Controller::class, 'updateUser'])->name('ak1.update');
+        Route::get('ak1/print/{id}', [Ak1Controller::class, 'printAk1'])->name('ak1.print');
     });
 
 

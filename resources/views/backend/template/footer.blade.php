@@ -125,10 +125,10 @@
     <!-- Trigger pop-up -->
     <script>
         function cetakBaru() {
-            window.location.href = '{{ route('admin.ak1.new') }}';
+            window.location.href = '{{ route('ak1.new') }}';
         }
 
         function cetakExisting() {
-            window.location.href = '{{ route('admin.ak1.existing') }}';
+            window.location.href = '{{ route('ak1.existing') }}';
         }
     </script>
