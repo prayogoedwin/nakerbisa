@@ -11,7 +11,7 @@
                     href="https://themeselection.com" target="_blank" class="footer-link fw-bolder">PT Ezra Pratama</a> --}}
             </div>
             <div>
-            made with ❤️ by
+                made with ❤️ by
                 <a href="https://themeselection.com" target="_blank" class="footer-link fw-bolder">ThemeSelection</a> & <a
                     href="https://themeselection.com" target="_blank" class="footer-link fw-bolder">PT Ezra Pratama</a>
 
@@ -58,6 +58,25 @@
     <script src="{{ asset('assets') }}/etam_be/js/plugins/apexcharts.min.js"></script>
     <!-- custom-chart js -->
     {{-- <script src="{{ asset('assets') }}/etam_be/js/pages/dashboard-main.js"></script> --}}
+
+    <!-- Modal Dialog -->
+    <div class="modal fade" id="ak1Modal" tabindex="-1" aria-labelledby="ak1ModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ak1ModalLabel">Pilih Opsi Cetak AK1</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p>Silakan pilih apakah pengguna sudah memiliki akun atau belum.</p>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" onclick="cetakBaru()">Belum Punya Akun</button>
+                        <button class="btn btn-secondary" onclick="cetakExisting()">Sudah Punya Akun</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         $(document).ready(function() {
             checkCookie();
@@ -100,5 +119,16 @@
                 ticks = 1;
                 setCookie("modelopen", ticks, 1);
             }
+        }
+    </script>
+
+    <!-- Trigger pop-up -->
+    <script>
+        function cetakBaru() {
+            window.location.href = '{{ route('admin.ak1.new') }}';
+        }
+
+        function cetakExisting() {
+            window.location.href = '{{ route('admin.ak1.existing') }}';
         }
     </script>

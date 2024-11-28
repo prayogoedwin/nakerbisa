@@ -5,6 +5,7 @@ use App\Http\Controllers\BackController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Ak1Controller;
 use App\Http\Controllers\DepanController;
 use App\Http\Controllers\LowonganAdminController;
 use App\Http\Controllers\LowonganController;
@@ -147,6 +148,10 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('/penyedia', [UserPenyediaController::class, 'index'])->name('userperush.index');
     });
 
+    Route::prefix('admin/ak1')->group(function () {
+        Route::get('/new', [Ak1Controller::class, 'cetakBaru'])->name('admin.ak1.new');
+        Route::get('/existing', [Ak1Controller::class, 'cetakExisting'])->name('admin.ak1.existing');
+    });
 
 
     Route::get('/lowongan', [LowonganController::class, 'index'])->name('lowongan.index');

@@ -148,8 +148,9 @@
             </a>
 
             <ul class="menu-sub">
+                <!-- Trigger Menu Item -->
                 <li class="menu-item">
-                    <a href="layouts-without-menu.html" class="menu-link">
+                    <a href="javascript:void(0);" class="menu-link" data-bs-toggle="modal" data-bs-target="#ak1Modal">
                         <div data-i18n="Without menu">Cetak AK1</div>
                     </a>
                 </li>
@@ -160,8 +161,7 @@
                 </li>
             </ul>
         </li>
-
-
+        
         <!-- Layouts -->
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
