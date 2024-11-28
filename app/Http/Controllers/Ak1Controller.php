@@ -202,11 +202,6 @@ class Ak1Controller extends Controller
     }
 
 
-    public function cetakBaru()
-    {
-        return view('backend.ak1.create'); // Halaman untuk input user baru
-    }
-
     public function cetakExisting(Request $request)
     {
         $user = null;
