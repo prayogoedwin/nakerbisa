@@ -72,8 +72,9 @@ class ProfileController extends Controller
         $kabkotas = getKabkota(); // Mengambil semua kabupaten/kota
         $pendidikans = getPendidikan();
         $maritals = getMarital(); // Status perkawinan
+        $agamas = getAgama();
 
-        return view('profil.edit', compact('profil', 'kabkotas', 'pendidikans', 'maritals'));
+        return view('profil.edit', compact('profil', 'kabkotas', 'pendidikans', 'maritals', 'agamas'));
     }
 
     public function updateProfil(Request $request, $id)
@@ -94,6 +95,7 @@ class ProfileController extends Controller
             'jurusan_id' => 'required|integer',
             'tahun_lulus' => 'required|integer',
             'status_perkawinan_id' => 'required',
+            'agama_id' => 'required|integer',
             // Validasi lainnya sesuai kebutuhan
         ]);
 
@@ -115,6 +117,7 @@ class ProfileController extends Controller
             'id_jurusan' => $request->jurusan_id,
             'tahun_lulus' => $request->tahun_lulus,
             'id_status_perkawinan' => $request->status_perkawinan_id, 
+            'id_agama' => $request->agama_id, 
         ]);
 
         return redirect()->route('profil.index')->with('success', 'Update data Profil berhasil diperbarui.');

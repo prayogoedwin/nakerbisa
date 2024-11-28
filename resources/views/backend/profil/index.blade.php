@@ -137,6 +137,7 @@
                                                 $kabkotas = getKabkota();
                                                 $pendidikans = getPendidikan();
                                                 $maritals = getMarital();
+                                                $agamas = getAgama();
                                                 ?>
                                                 <form class="form form-vertical"
                                                     action="{{ route('admin.update-profil', auth()->user()->id) }}"
@@ -291,6 +292,17 @@
                                                                                 {{ $profil->id_status_perkawinan == $marit->id ? 'selected' : '' }}>
                                                                                 {{ $marit->name }}
                                                                             </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="agama" class="form-label">Agama</label>
+                                                                    <select class="form-select" id="agama_id" name="agama_id" required>
+                                                                        <option selected disabled>Pilih Agama</option>
+                                                                        @foreach ($agamas as $ag)
+                                                                            <option value="{{ $ag->id }}" {{ $profil->id_agama == $ag->id ? 'selected' : '' }}>{{ $ag->name }}</option>
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
