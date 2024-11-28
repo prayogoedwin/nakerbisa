@@ -28,6 +28,11 @@ function getAgama(){
         ->get();
 }
 
+function getStatusKerja(){
+    return DB::table('status_kerja')
+        ->get();
+}
+
 function getPendidikan(){
     return DB::table('naker_pendidikan')
     ->get();

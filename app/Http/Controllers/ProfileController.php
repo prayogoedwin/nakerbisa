@@ -73,8 +73,10 @@ class ProfileController extends Controller
         $pendidikans = getPendidikan();
         $maritals = getMarital(); // Status perkawinan
         $agamas = getAgama();
+        $statusKerjas = getStatusKerja();
+        $sektors = getSektor();
 
-        return view('profil.edit', compact('profil', 'kabkotas', 'pendidikans', 'maritals', 'agamas'));
+        return view('profil.edit', compact('profil', 'kabkotas', 'pendidikans', 'maritals', 'agamas', 'sektors', 'statusKerjas'));
     }
 
     public function updateProfil(Request $request, $id)
@@ -96,6 +98,11 @@ class ProfileController extends Controller
             'tahun_lulus' => 'required|integer',
             'status_perkawinan_id' => 'required',
             'agama_id' => 'required|integer',
+            'medsos' => 'required|string|max:200',
+            'status_kerja_id' => 'required|string|max:200',
+            'sektor_pekerjaan_saat_ini' => 'nullable',
+            'jam_kerja' => 'nullable',
+            'gaji' => 'nullable',
             // Validasi lainnya sesuai kebutuhan
         ]);
 
@@ -118,6 +125,11 @@ class ProfileController extends Controller
             'tahun_lulus' => $request->tahun_lulus,
             'id_status_perkawinan' => $request->status_perkawinan_id, 
             'id_agama' => $request->agama_id, 
+            'medsos' => $request->medsos,
+            'status_saat_ini' => $request->status_kerja_id,
+            'sektor_pekerjaan_saat_ini' => $request->status_kerja_id === '1' ? $request->sektor_pekerjaan_saat_ini : null,
+            'jam_kerja' => $request->status_kerja_id === '1' ? $request->jam_kerja : null,
+            'gaji' => $request->status_kerja_id === '1' ? $request->gaji : null,
         ]);
 
         return redirect()->route('profil.index')->with('success', 'Update data Profil berhasil diperbarui.');

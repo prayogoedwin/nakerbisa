@@ -138,6 +138,8 @@
                                                 $pendidikans = getPendidikan();
                                                 $maritals = getMarital();
                                                 $agamas = getAgama();
+                                                $sektors = getSektor();
+                                                $statusKerjas = getStatusKerja();
                                                 ?>
                                                 <form class="form form-vertical"
                                                     action="{{ route('admin.update-profil', auth()->user()->id) }}"
@@ -299,12 +301,67 @@
                                                             <div class="col-6">
                                                                 <div class="form-group">
                                                                     <label for="agama" class="form-label">Agama</label>
-                                                                    <select class="form-select" id="agama_id" name="agama_id" required>
+                                                                    <select class="form-select" id="agama_id"
+                                                                        name="agama_id" required>
                                                                         <option selected disabled>Pilih Agama</option>
                                                                         @foreach ($agamas as $ag)
-                                                                            <option value="{{ $ag->id }}" {{ $profil->id_agama == $ag->id ? 'selected' : '' }}>{{ $ag->name }}</option>
+                                                                            <option value="{{ $ag->id }}"
+                                                                                {{ $profil->id_agama == $ag->id ? 'selected' : '' }}>
+                                                                                {{ $ag->name }}</option>
                                                                         @endforeach
                                                                     </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="medsos">medsos</label>
+                                                                    <input type="text" id="medsos"
+                                                                        class="form-control" name="medsos"
+                                                                        value="{{ $profil->medsos }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="statusKerja" class="form-label">Status Kerja</label>
+                                                                    <select class="form-select" id="status_kerja_id"
+                                                                        name="status_kerja_id" required onchange="togglePekerjaanFields(this.value)">
+                                                                        <option selected disabled>Pilih Status Kerja</option>
+                                                                        @foreach ($statusKerjas as $kerja)
+                                                                            <option value="{{ $kerja->id }}"
+                                                                                {{ $profil->status_saat_ini == $kerja->id ? 'selected' : '' }}>
+                                                                                {{ $kerja->status }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                            </div>
+                                                            <div id="pekerjaan-fields" style="display: none;">
+                                                                <div class="mb-3">
+                                                                    <label for="sektor_pekerjaan_saat_ini"
+                                                                        class="form-label">Sektor Pekerjaan Saat
+                                                                        Ini</label>
+                                                                    <select class="form-select"
+                                                                        id="sektor_pekerjaan_saat_ini"
+                                                                        name="sektor_pekerjaan_saat_ini">
+                                                                        <option selected disabled>Pilih Sektor Pekerjaan
+                                                                        </option>
+                                                                        @foreach ($sektors as $sektor)
+                                                                            <option value="{{ $sektor->id }}" {{ $profil->sektor_pekerjaan_saat_ini == $sektor->id ? 'selected' : '' }}>
+                                                                                {{ $sektor->name }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+
+                                                                <div class="mb-3">
+                                                                    <label for="jam_kerja" class="form-label">Jam Kerja
+                                                                        (per hari)</label>
+                                                                    <input type="number" class="form-control"
+                                                                        id="jam_kerja" name="jam_kerja" value="{{ $profil->jam_kerja }}">
+                                                                </div>
+
+                                                                <div class="mb-3">
+                                                                    <label for="gaji" class="form-label">Gaji (per
+                                                                        hari)</label>
+                                                                    <input type="number" step="0.01"
+                                                                        class="form-control" id="gaji"
+                                                                        name="gaji" value="{{ $profil->gaji }}">
                                                                 </div>
                                                             </div>
                                                             <!-- Tambahkan input lainnya sesuai kebutuhan -->
@@ -504,6 +561,13 @@
                     "password");
             });
         });
+    </script>
+
+    <script>
+        function togglePekerjaanFields(status) {
+            const pekerjaanFields = document.getElementById('pekerjaan-fields');
+            pekerjaanFields.style.display = (status === '1') ? 'block' : 'none';
+        }
     </script>
 
     <script>
