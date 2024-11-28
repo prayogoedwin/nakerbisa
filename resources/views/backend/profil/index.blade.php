@@ -321,18 +321,24 @@
                                                                 </div>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="statusKerja" class="form-label">Status Kerja</label>
-                                                                    <select class="form-select" id="status_kerja_id"
-                                                                        name="status_kerja_id" required onchange="togglePekerjaanFields(this.value)">
-                                                                        <option selected disabled>Pilih Status Kerja</option>
-                                                                        @foreach ($statusKerjas as $kerja)
-                                                                            <option value="{{ $kerja->id }}"
-                                                                                {{ $profil->status_saat_ini == $kerja->id ? 'selected' : '' }}>
-                                                                                {{ $kerja->status }}</option>
-                                                                        @endforeach
-                                                                    </select>
+                                                                <label for="statusKerja" class="form-label">Status
+                                                                    Kerja</label>
+                                                                <select class="form-select" id="status_kerja_id"
+                                                                    name="status_kerja_id" required
+                                                                    onchange="togglePekerjaanFields(this.value)">
+                                                                    <option selected disabled>Pilih Status Kerja</option>
+                                                                    @foreach ($statusKerjas as $kerja)
+                                                                        <option value="{{ $kerja->id }}"
+                                                                            {{ $profil->status_saat_ini == $kerja->id ? 'selected' : '' }}>
+                                                                            {{ $kerja->status }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
                                                             </div>
-                                                            <div id="pekerjaan-fields" style="display: none;">
+
+                                                            <!-- Bidang pekerjaan yang tersembunyi saat status kerja bukan '1' -->
+                                                            <div id="pekerjaan-fields"
+                                                                style="display: {{ $profil->status_saat_ini == 1 ? 'block' : 'none' }};">
                                                                 <div class="mb-3">
                                                                     <label for="sektor_pekerjaan_saat_ini"
                                                                         class="form-label">Sektor Pekerjaan Saat
@@ -343,8 +349,10 @@
                                                                         <option selected disabled>Pilih Sektor Pekerjaan
                                                                         </option>
                                                                         @foreach ($sektors as $sektor)
-                                                                            <option value="{{ $sektor->id }}" {{ $profil->sektor_pekerjaan_saat_ini == $sektor->id ? 'selected' : '' }}>
-                                                                                {{ $sektor->name }}</option>
+                                                                            <option value="{{ $sektor->id }}"
+                                                                                {{ $profil->sektor_pekerjaan_saat_ini == $sektor->id ? 'selected' : '' }}>
+                                                                                {{ $sektor->name }}
+                                                                            </option>
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
@@ -353,7 +361,8 @@
                                                                     <label for="jam_kerja" class="form-label">Jam Kerja
                                                                         (per hari)</label>
                                                                     <input type="number" class="form-control"
-                                                                        id="jam_kerja" name="jam_kerja" value="{{ $profil->jam_kerja }}">
+                                                                        id="jam_kerja" name="jam_kerja"
+                                                                        value="{{ $profil->jam_kerja }}">
                                                                 </div>
 
                                                                 <div class="mb-3">
@@ -364,6 +373,7 @@
                                                                         name="gaji" value="{{ $profil->gaji }}">
                                                                 </div>
                                                             </div>
+
                                                             <!-- Tambahkan input lainnya sesuai kebutuhan -->
 
                                                             <div class="col-12 d-flex justify-content-end">
@@ -564,11 +574,19 @@
     </script>
 
     <script>
+        // Fungsi untuk menampilkan atau menyembunyikan bidang pekerjaan
         function togglePekerjaanFields(status) {
             const pekerjaanFields = document.getElementById('pekerjaan-fields');
             pekerjaanFields.style.display = (status === '1') ? 'block' : 'none';
         }
+
+        // Periksa status saat ini setelah halaman dimuat
+        window.onload = function() {
+            const statusKerjaSelect = document.getElementById('status_kerja_id');
+            togglePekerjaanFields(statusKerjaSelect.value); // Periksa nilai awal pada halaman load
+        };
     </script>
+
 
     <script>
         $(document).ready(function() {
