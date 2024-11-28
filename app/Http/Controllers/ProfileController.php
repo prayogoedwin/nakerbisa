@@ -154,6 +154,6 @@ class ProfileController extends Controller
         $pengalaman = NakerPencariPengalaman::where('user_id', $user->id)->get();
         $keterampilan = NakerPencariKeterampilan::where('user_id', $user->id)->get();
 
-        return view('backend.profil.cetak-cv', compact('user', 'pendidikan', 'pengalaman', 'keterampilan'));
+        return view('backend.profil.cetak-cv-new', compact('user', 'pendidikan', 'pengalaman', 'keterampilan'));
     }
 }
