@@ -5,6 +5,7 @@
         $pendidikans = getPendidikan();
         $maritals = getMarital();
         $sektors = getSektor();
+        $statusKerjas = getStatusKerja();
         ?>
         {{-- <div class="mb-3">
             <label for="email" class="form-label">email</label>
@@ -105,12 +106,12 @@
                 </select>
             </div>
             <div class="mb-3">
-                <label for="status_saat_ini" class="form-label">Status Saat Ini</label>
+                <label for="agama" class="form-label">Status Saat Ini</label>
                 <select class="form-select" id="status_saat_ini" name="status_saat_ini" required onchange="togglePekerjaanFields(this.value)">
                     <option selected disabled>Pilih Status Saat Ini</option>
-                    <option value="bekerja">Bekerja</option>
-                    <option value="belum_bekerja">Belum Bekerja</option>
-                    <option value="tidak_bekerja">Tidak Bekerja</option>
+                    @foreach ($statusKerjas as $kerja)
+                        <option value="{{ $kerja->id }}">{{ $kerja->status }}</option>
+                    @endforeach
                 </select>
             </div>
             <div id="pekerjaan-fields" style="display: none;">

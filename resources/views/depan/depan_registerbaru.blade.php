@@ -442,7 +442,7 @@
     <script>
         function togglePekerjaanFields(status) {
             const pekerjaanFields = document.getElementById('pekerjaan-fields');
-            pekerjaanFields.style.display = (status === 'bekerja') ? 'block' : 'none';
+            pekerjaanFields.style.display = (status === '1') ? 'block' : 'none';
         }
     </script>
 

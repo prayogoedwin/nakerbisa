@@ -322,9 +322,9 @@ class DepanController extends Controller
                 'is_diterima' => 0,
                 'medsos' => $request->medsos,
                 'status_saat_ini' => $request->status_saat_ini,
-                'sektor_pekerjaan_saat_ini' => $request->status_saat_ini === 'bekerja' ? $request->sektor_pekerjaan_saat_ini : null,
-                'jam_kerja' => $request->status_saat_ini === 'bekerja' ? $request->jam_kerja : null,
-                'gaji' => $request->status_saat_ini === 'bekerja' ? $request->gaji : null,
+                'sektor_pekerjaan_saat_ini' => $request->status_saat_ini === '1' ? $request->sektor_pekerjaan_saat_ini : null,
+                'jam_kerja' => $request->status_saat_ini === '1' ? $request->jam_kerja : null,
+                'gaji' => $request->status_saat_ini === '1' ? $request->gaji : null,
             ]);
 
             DB::commit();
