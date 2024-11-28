@@ -12,6 +12,9 @@ class PencariPengalamanController extends Controller
     //
     public function index(Request $request)
     {
+        // Get the current authenticated user
+        $userId = auth()->user()->id;
+
         if ($request->ajax()) {
             $datas = NakerPencariPengalaman::select(
                 'id',
@@ -20,7 +23,7 @@ class PencariPengalamanController extends Controller
                 'mulai_tahun',
                 'berhenti_tahun',
                 'jabatan'
-            );
+            )->where('naker_pencari_pengalaman.user_id', $userId); // Filter berdasarkan user_id yang login;
 
             return DataTables::of($datas)
                 ->addIndexColumn()

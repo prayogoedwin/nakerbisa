@@ -12,7 +12,11 @@ class PencariPendidikanController extends Controller
     //
     public function index(Request $request)
     {
+        // Get the current authenticated user
+        $userId = auth()->user()->id;
+
         if ($request->ajax()) {
+            // Fetch the data filtered by the logged-in user's user_id
             $datas = NakerPencariPendidikan::select(
                 'naker_pencari_pendidikan.id',
                 'naker_pendidikan.name as pendidikan_name', // Nama Pendidikan
@@ -22,8 +26,10 @@ class PencariPendidikanController extends Controller
                 'naker_pencari_pendidikan.lulus'
             )
                 ->join('naker_pendidikan', 'naker_pencari_pendidikan.pendidikan_id', '=', 'naker_pendidikan.id') // Join tabel pendidikan
-                ->leftJoin('naker_jurusan', 'naker_pencari_pendidikan.jurusan_id', '=', 'naker_jurusan.id');      // Join tabel jurusan (left join untuk jurusan opsional)
+                ->leftJoin('naker_jurusan', 'naker_pencari_pendidikan.jurusan_id', '=', 'naker_jurusan.id')      // Left join tabel jurusan (opsional)
+                ->where('naker_pencari_pendidikan.user_id', $userId); // Filter berdasarkan user_id yang login
 
+            // Return the data as JSON for DataTables
             return DataTables::of($datas)
                 ->addIndexColumn()
                 ->addColumn('options', function ($data) {
@@ -38,6 +44,7 @@ class PencariPendidikanController extends Controller
 
         return view('backend.profil.pendidikan.index');
     }
+
 
     // Method untuk menyimpan data user baru
     public function store(Request $request)

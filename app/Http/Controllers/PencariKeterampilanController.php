@@ -12,6 +12,9 @@ class PencariKeterampilanController extends Controller
     //
     public function index(Request $request)
     {
+        // Get the current authenticated user
+        $userId = auth()->user()->id;
+
         if ($request->ajax()) {
             $datas = NakerPencariKeterampilan::select(
                 'id',
@@ -20,7 +23,7 @@ class PencariKeterampilanController extends Controller
                 'lulus_tahun',
                 'no_sertifikat',
                 'lembaga_penguji'
-            );
+            )->where('naker_pencari_keterampilan.user_id', $userId);
 
             return DataTables::of($datas)
                 ->addIndexColumn()

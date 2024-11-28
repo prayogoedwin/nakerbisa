@@ -22,11 +22,20 @@ class AuthController extends Controller
 
         // Jika validasi captcha dan kredensial login berhasil
         if (Auth::attempt(['email' => $request->username, 'password' => $request->password])) {
+
+            // Check if the user has 'tenaga-kerja' role
+            if (Auth::user()->roles[0]['name'] == 'tenaga-kerja') {
+                // Redirect to the profile page with a notification to update the profile
+                return redirect()->route('profil.index')->with('info', 'Silahkan update profil diri anda');
+            }
+
+            // Default redirection for other roles
             return redirect()->route('dashboard'); // Ganti dengan rute yang sesuai
         }
 
         return back()->withErrors(['login_error' => 'Invalid credentials or captcha']);
     }
+
 
     public function logout(Request $request)
     {
@@ -36,6 +45,3 @@ class AuthController extends Controller
         return redirect('/login');
     }
 }
-
-
-?>

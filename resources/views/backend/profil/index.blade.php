@@ -21,8 +21,11 @@
                                 @endforeach
                             </div>
                         @endif
-
-
+                        @if (session('info'))
+                            <div class="alert alert-warning">
+                                {{ session('info') }}
+                            </div>
+                        @endif
                         <div class="row">
                             <div class="col-xl-12">
                                 <h4 class="mb-4">Profile</h4>
