@@ -70,11 +70,10 @@ class ProfileController extends Controller
     {
         $profil = UserPencari::where('user_id', $id)->firstOrFail();
         $kabkotas = getKabkota(); // Mengambil semua kabupaten/kota
+        $pendidikans = getPendidikan();
 
-        return view('profil.edit', compact('profil', 'kabkotas'));
+        return view('profil.edit', compact('profil', 'kabkotas', 'pendidikans'));
     }
-
-
 
     public function updateProfil(Request $request, $id)
     {
@@ -90,8 +89,8 @@ class ProfileController extends Controller
             'desa_id' => 'required|string|max:10', // Menggunakan desa_id dari input
             'alamat' => 'required|string|max:200',
             'kodepos' => 'required|string|max:5',
-            'id_pendidikan' => 'required|integer',
-            'id_jurusan' => 'required|integer',
+            'pendidikan_id' => 'required|integer',
+            'jurusan_id' => 'required|integer',
             'tahun_lulus' => 'required|integer',
             // Validasi lainnya sesuai kebutuhan
         ]);
@@ -110,8 +109,8 @@ class ProfileController extends Controller
             'id_desa' => $request->desa_id, // Menyimpan desa_id sebagai id_desa
             'alamat' => $request->alamat,
             'kodepos' => $request->kodepos,
-            'id_pendidikan' => $request->id_pendidikan,
-            'id_jurusan' => $request->id_jurusan,
+            'id_pendidikan' => $request->pendidikan_id,
+            'id_jurusan' => $request->jurusan_id,
             'tahun_lulus' => $request->tahun_lulus,
         ]);
 

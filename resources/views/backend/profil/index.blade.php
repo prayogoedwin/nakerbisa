@@ -135,6 +135,7 @@
                                             <div class="accordion-body">
                                                 <?php
                                                 $kabkotas = getKabkota();
+                                                $pendidikans = getPendidikan();
                                                 ?>
                                                 <form class="form form-vertical"
                                                     action="{{ route('admin.update-profil', auth()->user()->id) }}"
@@ -244,20 +245,29 @@
                                                                         value="{{ $profil->kodepos }}">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-6">
+                                                            <div class="col-sm-6">
                                                                 <div class="form-group">
-                                                                    <label for="id_pendidikan">Pendidikan</label>
-                                                                    <input type="text" id="id_pendidikan"
-                                                                        class="form-control" name="id_pendidikan"
-                                                                        value="{{ $profil->id_pendidikan }}">
+                                                                    <label for="pendidikan_id">Pendidikan</label>
+                                                                    <select class="form-control" id="pendidikan_id"
+                                                                        name="pendidikan_id" required>
+                                                                        <option selected disabled>Pilih Pendidikan</option>
+                                                                        @foreach ($pendidikans as $pend)
+                                                                            <option value="{{ $pend->id }}"
+                                                                                {{ $profil->id_pendidikan == $pend->id ? 'selected' : '' }}>
+                                                                                {{ $pend->name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-6">
+
+                                                            <div class="col-sm-6">
                                                                 <div class="form-group">
-                                                                    <label for="id_jurusan">Jurusan</label>
-                                                                    <input type="text" id="id_jurusan"
-                                                                        class="form-control" name="id_jurusan"
-                                                                        value="{{ $profil->id_jurusan }}">
+                                                                    <label for="jurusan_id">Jurusan</label>
+                                                                    <select class="form-control" id="jurusan_id"
+                                                                        name="jurusan_id" required>
+                                                                        <option selected disabled>Pilih Jurusan</option>
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                             <div class="col-6">
@@ -590,6 +600,33 @@
                 }
             });
         });
+
+        $('#pendidikan_id').on('change', function() {
+            // console.log(this.value);
+            var kd = this.value
+
+            // Panggil API untuk mendapatkan kecamatan berdasarkan kabkota_id
+            $.ajax({
+                url: "{{ route('get-jurusan-bypendidikan', ':id') }}".replace(':id', kd), // Panggil API
+                type: 'GET',
+                success: function(response) {
+                    // Kosongkan dropdown kecamatan sebelumnya
+                    $('#jurusan_id').empty();
+
+                    // Tambahkan opsi default
+                    $('#jurusan_id').append('<option selected disabled>Pilih Jurusan</option>');
+
+                    // Loop data kecamatan dan tambahkan ke dropdown
+                    $.each(response, function(index, jurusan) {
+                        $('#jurusan_id').append('<option value="' + jurusan.id + '">' +
+                            jurusan.nama + '</option>');
+                    });
+                },
+                error: function(xhr) {
+                    console.error(xhr);
+                }
+            });
+        });
     </script>
 
     <script>
@@ -618,6 +655,44 @@
                     console.error(xhr);
                 }
             });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            var pendidikanId = "{{ $profil->id_pendidikan }}";
+            var jurusanId = "{{ $profil->id_jurusan }}";
+
+            // Jika ada pendidikan terpilih, muat jurusan terkait
+            if (pendidikanId) {
+                loadJurusan(pendidikanId, jurusanId);
+            }
+
+            $('#pendidikan_id').on('change', function() {
+                var pendidikanId = $(this).val();
+                $('#jurusan_id').empty().append('<option selected disabled>Pilih Jurusan</option>');
+
+                if (pendidikanId) {
+                    loadJurusan(pendidikanId);
+                }
+            });
+
+            function loadJurusan(pendidikanId, selectedId = null) {
+                $.ajax({
+                    url: "{{ route('get-jurusan-bypendidikan', ':id') }}".replace(':id', pendidikanId),
+                    type: 'GET',
+                    success: function(response) {
+                        $.each(response, function(index, jurusan) {
+                            $('#jurusan_id').append('<option value="' + jurusan.id + '"' +
+                                (jurusan.id == selectedId ? ' selected' : '') + '>' +
+                                jurusan.nama + '</option>');
+                        });
+                    },
+                    error: function(xhr) {
+                        console.error(xhr);
+                    }
+                });
+            }
         });
     </script>
 @endpush
