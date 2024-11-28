@@ -62,8 +62,36 @@ class ProfileController extends Controller
         $user->save();
 
         // Redirect dengan pesan sukses
-        return redirect()->route('profil.index')->with('success', 'Profil berhasil diperbarui.');
+        return redirect()->route('profil.index')->with('success', 'Update data User berhasil diperbarui.');
     }
+
+    public function updateProfil(Request $request, $id)
+    {
+        // Validasi data input
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'ktp' => 'required|string|max:20',
+            'tempat_lahir' => 'required|string|max:20',
+            'tanggal_lahir' => 'required|date',
+            // Tambahkan validasi lainnya sesuai kebutuhan
+        ]);
+
+        // Ambil data User dan UserPencari berdasarkan ID
+        $userPencari = UserPencari::where('user_id', $id)->firstOrFail();
+
+        // Update data profil
+        $userPencari->update([
+            'name' => $request->name,
+            'ktp' => $request->ktp,
+            'tempat_lahir' => $request->tempat_lahir,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            // Tambahkan update lainnya sesuai kebutuhan
+        ]);
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('profil.index')->with('success', 'Update data Profil berhasil diperbarui.');
+    }
+
 
 
     public function cetakCV()

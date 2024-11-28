@@ -24,7 +24,7 @@
                             </div>
                         </div>
                         @auth
-                      
+
                             <!-- Section Dropdown (Update User) -->
                             <section class="section mt-3">
                                 <div class="card">
@@ -70,7 +70,8 @@
 
                                                                 <div class="col-6">
                                                                     <div class="form-group">
-                                                                        <label for="whatsapp-id-vertical text-black">Whatsapp</label>
+                                                                        <label
+                                                                            for="whatsapp-id-vertical text-black">Whatsapp</label>
                                                                         <input type="text" id="whatsapp-id-vertical"
                                                                             class="form-control" name="whatsapp"
                                                                             placeholder="whatsapp"
@@ -124,57 +125,49 @@
                                             aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample"
                                             style="">
                                             <div class="accordion-body">
-
                                                 <form class="form form-vertical"
-                                                    action="{{ route('admin.update-user', auth()->user()->id) }}"
+                                                    action="{{ route('admin.update-profil', auth()->user()->id) }}"
                                                     method="POST">
                                                     @csrf
                                                     @method('PUT')
                                                     <div class="form-body">
                                                         <div class="row">
                                                             <div class="col-6">
-                                                                <div class="form-group ">
-                                                                    <label for="first-name-vertical text-black">Nama</label>
+                                                                <div class="form-group">
+                                                                    <label
+                                                                        for="first-name-vertical text-black">Nama</label>
                                                                     <input type="text" id="first-name-vertical"
                                                                         class="form-control" name="name"
-                                                                        placeholder="Name"
-                                                                        value="{{ $profil->name }}">
+                                                                        placeholder="Name" value="{{ $profil->name }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="form-group">
                                                                     <label for="email-id-vertical text-black">KTP</label>
-                                                                    <input type="email" id="email-id-vertical"
-                                                                        class="form-control" name="email"
-                                                                        placeholder="Email"
-                                                                        value="{{ $profil->ktp }}">
+                                                                    <input type="text" id="ktp-id-vertical"
+                                                                        class="form-control" name="ktp"
+                                                                        placeholder="KTP" value="{{ $profil->ktp }}">
                                                                 </div>
                                                             </div>
-
                                                             <div class="col-6">
                                                                 <div class="form-group">
-                                                                    <label for="tempat-vertical text-black">Tempat Lahir</label>
+                                                                    <label for="tempat-vertical text-black">Tempat
+                                                                        Lahir</label>
                                                                     <input type="text" id="tempat-vertical"
-                                                                        class="form-control" name="name"
+                                                                        class="form-control" name="tempat_lahir"
                                                                         placeholder="Tempat Lahir"
                                                                         value="{{ $profil->tempat_lahir }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="form-group">
-                                                                    <label for="email-id-vertical text-black">Tanggal Lahir</label>
+                                                                    <label for="date-id-vertical text-black">Tanggal
+                                                                        Lahir</label>
                                                                     <input type="date" id="date-id-vertical"
                                                                         class="form-control" name="tanggal_lahir"
-                                                                        placeholder="Email"
                                                                         value="{{ $profil->tanggal_lahir }}">
                                                                 </div>
                                                             </div>
-
-
-                                                           
-
-                                                           
-
                                                             <div class="col-12 d-flex justify-content-end">
                                                                 <button type="submit"
                                                                     class="btn btn-primary me-1 mb-1 mt-3">
@@ -217,7 +210,8 @@
                                                                     {{ $item->nama_sekolah }}</h5>
                                                                 <p><strong>Alamat Sekolah:</strong>
                                                                     {{ $item->alamat_sekolah }}</p>
-                                                                <p><strong>Pendidikan:</strong> {{ $item->pendidikan_name }}
+                                                                <p><strong>Pendidikan:</strong>
+                                                                    {{ $item->pendidikan_name }}
                                                                 </p>
                                                                 <p><strong>Jurusan:</strong>
                                                                     {{ $item->jurusan_name ?? 'Tidak Ada Jurusan' }}</p>
