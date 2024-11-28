@@ -56,6 +56,11 @@
 
     <!-- Apex Chart -->
     <script src="{{ asset('assets') }}/etam_be/js/plugins/apexcharts.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- custom-chart js -->
     {{-- <script src="{{ asset('assets') }}/etam_be/js/pages/dashboard-main.js"></script> --}}
 
@@ -70,7 +75,11 @@
                 <div class="modal-body text-center">
                     <p>Silakan pilih apakah pengguna sudah memiliki akun atau belum.</p>
                     <div class="d-grid gap-2">
-                        <button class="btn btn-primary" onclick="cetakBaru()">Belum Punya Akun</button>
+                        <form action="{{ route('daftar-akun-ak1') }}" method="POST">
+                            @csrf
+                            <button type="submit" name="role_dipilih" value="tenaga-kerja"
+                                class="btn btn-primary">Tenaga Kerja</button>
+                        </form>
                         <button class="btn btn-secondary" onclick="cetakExisting()">Sudah Punya Akun</button>
                     </div>
                 </div>
@@ -124,10 +133,6 @@
 
     <!-- Trigger pop-up -->
     <script>
-        function cetakBaru() {
-            window.location.href = '{{ route('ak1.new') }}';
-        }
-
         function cetakExisting() {
             window.location.href = '{{ route('ak1.existing') }}';
         }

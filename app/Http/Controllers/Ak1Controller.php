@@ -4,10 +4,204 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Back; // Import model Depan
+use App\Models\UserPencari;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
+use Spatie\Permission\Models\Role;
+
 
 class Ak1Controller extends Controller
 {
     //
+
+    public function daftar_akun(Request $request)
+    {
+        $request->validate([
+            'role_dipilih' => 'required',
+        ]);
+
+        $url_role = encode_url($request->role_dipilih);
+
+        return redirect()->to('back/daftar?rl=' . $url_role);
+    }
+
+    public function daftar(Request $request)
+    {
+        $rl = $request->input('rl'); // atau bisa juga menggunakan $request->query('rl')
+        $decode_rl = decode_url($rl);
+
+        if (!in_array($decode_rl, ['tenaga-kerja', 'penyedia-kerja', 'admin-bkk', 'admin-blk'])) {
+            return abort(404);
+        }
+
+        $nm_role = '';
+        if ($decode_rl == 'tenaga-kerja') {
+            $nm_role = 'Tenaga Kerja';
+        } else if ($decode_rl == 'penyedia-kerja') {
+            $nm_role = 'Penyedia Kerja';
+        } else if ($decode_rl == 'admin-bkk') {
+            $nm_role = 'BKK';
+        } else if ($decode_rl == 'admin-blk') {
+            $nm_role = 'BLK';
+        }
+
+
+        $depanModel = new Back();
+        $data['agama'] = $depanModel->getAllAgama(); // Mendapatkan semua data agama
+        $data['kabkota'] = $depanModel->getKabkotaByProvince();
+
+        $data['dt'] = array(
+            'role' => $decode_rl,
+            'role_name' => $nm_role
+        );
+
+        session()->forget('email_registered');
+        // dd(session('email_registered'));
+
+        // dd($data);
+        return view('backend.ak1.create', $data);
+        // echo json_encode($data);
+    }
+
+
+    public function cek_awal_akun(Request $request)
+    {
+        // return response()->json([
+        //     'email' => $request->email,
+        //     'wa' => $request->wa,
+        // ]);
+
+        $userEmail = User::where('email', $request->email)->first();
+        if ($userEmail) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Email sudah pernah terdaftar'
+            ]);
+        }
+
+        $userWa = User::where('whatsapp', $request->wa)->first();
+        if ($userWa) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Nomor whatsapp sudah pernah terdaftar'
+            ]);
+        }
+
+        $role = Role::where('name', $request->role)->first();
+
+        //create users
+        $user = User::create([
+            'name' => $request->email,
+            'email' => $request->email,
+            'whatsapp' => $request->wa,
+            'password' => $request->password
+        ]);
+        $user->syncRoles($role->name);
+
+        $otp = generateOtp();
+        $user->update([
+            'otp' => $otp,
+            // 'otp_created_at' => now()
+        ]);
+        // dd($userWa);
+        sendWa($user->whatsapp, 'Lanjutkan pendaftaran dengan memasukkan Kode OTP berikut : *' . $otp . '*');
+
+        session(['email_registered' => $request->email]);
+        // dd(session('email_registered'));
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Email dan nomor Whatsapp dapat digunakan',
+            'data' => $user
+        ]);
+    }
+
+    public function cek_awal_otp(Request $request)
+    {
+
+        $cek = User::where([
+            ['email', '=', $request->email_registered],
+            ['otp', '=', $request->otp]
+        ])->first();
+
+        if (!$cek) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Kode OTP salah'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Verifikasi kode OTP berhasil',
+            'session_email' => session('email_registered')
+        ]);
+    }
+
+    public function akhir_daftar_akun(Request $request)
+    {
+        $imel = session('email_registered');
+        $user = User::where('email', $imel)->first();
+
+        DB::beginTransaction();
+        try {
+            // create affiliator
+            UserPencari::create([
+                'user_id' => $user->id,
+                'ktp' => $request->nik,
+                'name' => $request->nama_lengkap,
+                'tempat_lahir' => $request->tempat_lahir,
+                'tanggal_lahir' => $request->tanggal_lahir,
+                'gender' => $request->gender_id,
+                'id_provinsi' => '64',
+                'id_kota' => $request->kabkota_id,
+                'id_kecamatan' => $request->kecamatan_id,
+                'id_desa' => $request->desa_id,
+                'alamat' => $request->alamat,
+                'kodepos' => $request->kodepos,
+                'id_pendidikan' => $request->pendidikan_id,
+                'id_jurusan' => $request->jurusan_id,
+                'tahun_lulus' => $request->tahun_lulus,
+                'id_status_perkawinan' => $request->status_perkawinan_id,
+                'id_agama' => $request->agama_id,
+                'foto' => null,
+                'status_id' => 1,
+                'is_alumni_bkk' => 0,
+                'bkk_id' => null,
+                'toket' => null,
+                'disabilitas' => null,
+                'jenis_disabilitas' => null,
+                'keterangan_disabilitas' => null,
+                'posted_by' => $user->id,
+                'created_at' => date('Y-m-d H:i:s'),
+                'is_diterima' => 0,
+                'medsos' => $request->medsos,
+                'status_saat_ini' => $request->status_saat_ini,
+                'sektor_pekerjaan_saat_ini' => $request->status_saat_ini === '1' ? $request->sektor_pekerjaan_saat_ini : null,
+                'jam_kerja' => $request->status_saat_ini === '1' ? $request->jam_kerja : null,
+                'gaji' => $request->status_saat_ini === '1' ? $request->gaji : null,
+            ]);
+
+            DB::commit();
+
+            // Redirect ke halaman ak1.new atau ak1.existing
+            return redirect()->route('ak1.existing')->with('success', 'Berhasil membuat akun');
+            // Atau bisa juga mengarahkan ke halaman ak1.existing jika itu yang Anda inginkan
+            // return redirect()->route('ak1.existing')->with('success', 'Berhasil membuat akun, silakan login');
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error($th);
+            return response()->json([
+                'status' => 0,
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+
     public function cetakBaru()
     {
         return view('backend.ak1.create'); // Halaman untuk input user baru

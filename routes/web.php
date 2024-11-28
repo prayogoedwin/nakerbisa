@@ -55,6 +55,14 @@ Route::post('/depan/akhir_daftar-akun-blk', [DepanController::class, 'akhir_daft
 
 Route::get('/depan/getkabkotabyid/{prov_id}', [DepanController::class, 'getKabkotaByProv'])->name('get-kabkota-byprov');
 
+Route::post('/depan/daftar-akun', [Ak1Controller::class, 'daftar_akun'])->name('daftar-akun-ak1');
+Route::get('/back/daftar', [Ak1Controller::class, 'daftar']); //with role
+Route::post('/back/cek-awal-akun', [Ak1Controller::class, 'cek_awal_akun'])->name('cek-awal-akun-ak1');
+Route::post('/back/cek-awal-otp', [Ak1Controller::class, 'cek_awal_otp'])->name('cek-awal-otp-ak1');
+
+Route::post('/back/akhir_daftar-akun', [Ak1Controller::class, 'akhir_daftar_akun'])->name('akhir-daftar-akun-ak1');
+
+
 
 
 
