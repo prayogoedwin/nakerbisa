@@ -45,6 +45,14 @@
                                         <h5>Detail Profil</h5>
                                     </div>
                                     <div class="card-body">
+                                        <?php
+                                        $kabkotas = getKabkota();
+                                        $pendidikans = getPendidikan();
+                                        $maritals = getMarital();
+                                        $agamas = getAgama();
+                                        $sektors = getSektor();
+                                        $statusKerjas = getStatusKerja();
+                                        ?>
                                         <form method="POST" action="{{ route('ak1.update', $user->id) }}">
                                             @csrf
                                             @method('PUT')
@@ -69,12 +77,32 @@
                                                 <input type="date" id="tanggal_lahir" name="tanggal_lahir"
                                                     class="form-control" value="{{ $user->pencari->tanggal_lahir ?? '' }}">
                                             </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="kodepos">Kode Pos</label>
+                                                    <input type="text" id="kodepos" class="form-control" name="kodepos"
+                                                        value="{{ $user->pencari->kodepos }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="agama" class="form-label">Agama</label>
+                                                    <select class="form-select" id="agama_id" name="agama_id" required>
+                                                        <option selected disabled>Pilih Agama</option>
+                                                        @foreach ($agamas as $ag)
+                                                            <option value="{{ $ag->id }}"
+                                                                {{ $user->pencari->id_agama == $ag->id ? 'selected' : '' }}>
+                                                                {{ $ag->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
 
                                             <!-- Add other fields as required -->
 
-                                            <button type="submit" class="btn btn-success">Update</button>
+                                            <button type="submit" class="btn btn-success mt-3">Update</button>
                                             <a href="{{ route('ak1.print', $user->id) }}"
-                                                class="btn btn-primary">Cetak AK1</a>
+                                                class="btn btn-primary mt-3">Cetak AK1</a>
                                         </form>
                                     </div>
                                 </div>

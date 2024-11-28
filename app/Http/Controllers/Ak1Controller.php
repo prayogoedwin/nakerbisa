@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Back; // Import model Depan
+use App\Models\NakerPencariKeterampilan;
+use App\Models\NakerPencariPendidikan;
+use App\Models\NakerPencariPengalaman;
 use App\Models\UserPencari;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -228,8 +231,22 @@ class Ak1Controller extends Controller
     public function printAk1($id)
     {
         $user = User::with('pencari')->findOrFail($id);
+        $statusKerjas = getStatusKerja();
+        $pendidikan = NakerPencariPendidikan::select(
+            'naker_pencari_pendidikan.*',
+            'naker_jurusan.nama as jurusan_name',
+            'naker_pendidikan.name as pendidikan_name' // Nama tingkat pendidikan
+        )
+            ->leftJoin('naker_jurusan', 'naker_pencari_pendidikan.jurusan_id', '=', 'naker_jurusan.id')
+            ->leftJoin('naker_pendidikan', 'naker_pencari_pendidikan.pendidikan_id', '=', 'naker_pendidikan.id')
+            ->where('user_id', $user->id)
+            ->get();
+
+        $keterampilan = NakerPencariKeterampilan::where('user_id', $user->id)->get();
+
+        $pengalaman = NakerPencariPengalaman::where('user_id', $user->id)->get();
 
         // Generate and return AK1 print view
-        return view('backend.ak1.print', compact('user'));
+        return view('backend.ak1.print', compact('user', 'statusKerjas', 'pendidikan', 'keterampilan', 'pengalaman'));
     }
 }
