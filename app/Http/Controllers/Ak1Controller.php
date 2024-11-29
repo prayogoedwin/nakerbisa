@@ -209,6 +209,7 @@ class Ak1Controller extends Controller
     public function cetakExisting(Request $request)
     {
         $user = null;
+        
 
         if ($request->has('ktp')) {
             $user = User::whereHas('pencari', function ($query) use ($request) {
@@ -219,23 +220,41 @@ class Ak1Controller extends Controller
         return view('backend.ak1.existing', compact('user'));
     }
 
-
     public function updateUser(Request $request, $id)
     {
         $user = User::findOrFail($id);
 
         $request->validate([
             'name' => 'required|string|max:100',
-            'alamat' => 'nullable|string|max:255',
-            'tanggal_lahir' => 'nullable|date',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validasi foto
+            'tempat_lahir' => 'required|string|max:20',
+            'tanggal_lahir' => 'required|date',
+            'gender' => 'required|in:L,P',
+            'id_provinsi' => '64',
+            'kabkota_id' => 'required|integer',
+            'kecamatan_id' => 'required|integer',
+            'desa_id' => 'required|string|max:10',
+            'alamat' => 'required|string|max:200',
+            'kodepos' => 'required|string|max:5',
+            'pendidikan_id' => 'required|integer',
+            'jurusan_id' => 'required|integer',
+            'tahun_lulus' => 'required|integer',
+            'status_perkawinan_id' => 'required',
+            'agama_id' => 'required|integer',
+            'medsos' => 'required|string|max:200',
+            'status_kerja_id' => 'required|integer',
+            'sektor_pekerjaan_saat_ini' => 'nullable|integer',
+            'jam_kerja' => 'nullable|integer',
+            'gaji' => 'nullable|numeric',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        // Update nama pengguna
-        $user->update($request->only(['name']));
+        // Update data user
+        $user->name = $request->name;
+        $user->save();
 
         // Update data pencari kerja
         $pencari = $user->pencari;
+
         if ($request->hasFile('foto')) {
             // Hapus foto lama jika ada
             if ($pencari->foto && Storage::disk('public')->exists($pencari->foto)) {
@@ -247,10 +266,40 @@ class Ak1Controller extends Controller
             $pencari->foto = $fotoPath;
         }
 
-        $pencari->update($request->only(['alamat', 'tanggal_lahir']));
+        // Update atribut pencari
+        $pencari->name = $request->name;
+        $pencari->tempat_lahir = $request->tempat_lahir;
+        $pencari->tanggal_lahir = $request->tanggal_lahir;
+        $pencari->gender = $request->gender;
+        $pencari->id_kota = $request->kabkota_id;
+        $pencari->id_kecamatan = $request->kecamatan_id;
+        $pencari->id_desa = $request->desa_id;
+        $pencari->alamat = $request->alamat;
+        $pencari->kodepos = $request->kodepos;
+        $pencari->id_pendidikan = $request->pendidikan_id;
+        $pencari->id_jurusan = $request->jurusan_id;
+        $pencari->tahun_lulus = $request->tahun_lulus;
+        $pencari->id_status_perkawinan = $request->status_perkawinan_id;
+        $pencari->id_agama = $request->agama_id;
+        $pencari->medsos = $request->medsos;
+        $pencari->status_saat_ini = $request->status_kerja_id;
+
+        // Kondisional untuk pekerjaan jika status kerja aktif
+        if ($request->status_kerja_id == 1) {
+            $pencari->sektor_pekerjaan_saat_ini = $request->sektor_pekerjaan_saat_ini;
+            $pencari->jam_kerja = $request->jam_kerja;
+            $pencari->gaji = $request->gaji;
+        } else {
+            $pencari->sektor_pekerjaan_saat_ini = null;
+            $pencari->jam_kerja = null;
+            $pencari->gaji = null;
+        }
+
+        $pencari->save();
 
         return redirect()->back()->with('success', 'Profil berhasil diperbarui');
     }
+
 
 
     public function printAk1($id)
