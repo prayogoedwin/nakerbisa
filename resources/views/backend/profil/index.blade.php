@@ -146,7 +146,7 @@
                                                 ?>
                                                 <form class="form form-vertical"
                                                     action="{{ route('admin.update-profil', auth()->user()->id) }}"
-                                                    method="POST">
+                                                    method="POST" enctype="multipart/form-data">
                                                     @csrf
                                                     @method('PUT')
                                                     <div class="form-body">
@@ -376,7 +376,15 @@
                                                                         name="gaji" value="{{ $profil->gaji }}">
                                                                 </div>
                                                             </div>
-
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="foto">Upload Foto</label>
+                                                                    <input type="file" id="foto" class="form-control" name="foto">
+                                                                    @if ($profil->foto)
+                                                                        <img src="{{ asset('storage/' . $profil->foto) }}" alt="Foto Profil" class="img-thumbnail mt-2" width="150">
+                                                                    @endif
+                                                                </div>
+                                                            </div>
                                                             <!-- Tambahkan input lainnya sesuai kebutuhan -->
 
                                                             <div class="col-12 d-flex justify-content-end">

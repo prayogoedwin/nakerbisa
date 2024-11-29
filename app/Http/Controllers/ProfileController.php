@@ -8,6 +8,7 @@ use App\Models\NakerPencariPengalaman;
 use App\Models\User;
 use App\Models\UserPencari;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
@@ -87,10 +88,10 @@ class ProfileController extends Controller
             'tempat_lahir' => 'required|string|max:20',
             'tanggal_lahir' => 'required|date',
             'gender' => 'required|in:L,P',
-            'id_provinsi' => '64', // Validasi statis untuk id_provinsi
-            'kabkota_id' => 'required|integer', // Menggunakan kabkota_id dari input
-            'kecamatan_id' => 'required|integer', // Menggunakan kecamatan_id dari input
-            'desa_id' => 'required|string|max:10', // Menggunakan desa_id dari input
+            'id_provinsi' => '64',
+            'kabkota_id' => 'required|integer',
+            'kecamatan_id' => 'required|integer',
+            'desa_id' => 'required|string|max:10',
             'alamat' => 'required|string|max:200',
             'kodepos' => 'required|string|max:5',
             'pendidikan_id' => 'required|integer',
@@ -103,10 +104,21 @@ class ProfileController extends Controller
             'sektor_pekerjaan_saat_ini' => 'nullable',
             'jam_kerja' => 'nullable',
             'gaji' => 'nullable',
-            // Validasi lainnya sesuai kebutuhan
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validasi untuk foto
         ]);
 
         $userPencari = UserPencari::where('user_id', $id)->firstOrFail();
+
+        if ($request->hasFile('foto')) {
+            // Cek dan hapus foto lama jika ada
+            if (!empty($userPencari->foto) && Storage::disk('public')->exists($userPencari->foto)) {
+                Storage::disk('public')->delete($userPencari->foto);
+            }
+
+            // Simpan foto baru
+            $filePath = $request->file('foto')->store('profile_photos', 'public');
+            $userPencari->foto = $filePath;
+        }
 
         $userPencari->update([
             'name' => $request->name,
@@ -114,17 +126,17 @@ class ProfileController extends Controller
             'tempat_lahir' => $request->tempat_lahir,
             'tanggal_lahir' => $request->tanggal_lahir,
             'gender' => $request->gender,
-            'id_provinsi' => '64', // Tetap seperti ini jika statis
-            'id_kota' => $request->kabkota_id, // Menyimpan kabkota_id sebagai id_kota
-            'id_kecamatan' => $request->kecamatan_id, // Menyimpan kecamatan_id sebagai id_kecamatan
-            'id_desa' => $request->desa_id, // Menyimpan desa_id sebagai id_desa
+            'id_provinsi' => '64',
+            'id_kota' => $request->kabkota_id,
+            'id_kecamatan' => $request->kecamatan_id,
+            'id_desa' => $request->desa_id,
             'alamat' => $request->alamat,
             'kodepos' => $request->kodepos,
             'id_pendidikan' => $request->pendidikan_id,
             'id_jurusan' => $request->jurusan_id,
             'tahun_lulus' => $request->tahun_lulus,
-            'id_status_perkawinan' => $request->status_perkawinan_id, 
-            'id_agama' => $request->agama_id, 
+            'id_status_perkawinan' => $request->status_perkawinan_id,
+            'id_agama' => $request->agama_id,
             'medsos' => $request->medsos,
             'status_saat_ini' => $request->status_kerja_id,
             'sektor_pekerjaan_saat_ini' => $request->status_kerja_id === '1' ? $request->sektor_pekerjaan_saat_ini : null,
@@ -132,9 +144,8 @@ class ProfileController extends Controller
             'gaji' => $request->status_kerja_id === '1' ? $request->gaji : null,
         ]);
 
-        return redirect()->route('profil.index')->with('success', 'Update data Profil berhasil diperbarui.');
+        return redirect()->route('profil.index')->with('success', 'Profil berhasil diperbarui.');
     }
-
 
     public function cetakCV()
     {
