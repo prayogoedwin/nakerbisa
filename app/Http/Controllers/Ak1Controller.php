@@ -326,31 +326,38 @@ class Ak1Controller extends Controller
         $keterampilan = NakerPencariKeterampilan::where('user_id', $user->id)->get();
         $pengalaman = NakerPencariPengalaman::where('user_id', $user->id)->get();
 
-        // Insert data ke tabel naker_ak1
-        $uniqueCode = md5($id . Carbon::now()->toDateTimeString());
-        $expiredDate = Carbon::now()->addMonths(6);
+        // Periksa apakah ada data AK1 yang masih berlaku
+        $nakerAk1 = NakerAk1::where('id_user', $user->id)
+            ->where('berlaku_hingga', '>', Carbon::now()) // Jika berlaku_hingga lebih besar dari sekarang
+            ->first();
 
-        $nakerAk1 = new NakerAk1();
-        $nakerAk1->id_user = $user->id;
-        $nakerAk1->tanggal_cetak = Carbon::now();
-        $nakerAk1->berlaku_hingga = $expiredDate;
-        $nakerAk1->status_cetak = '0'; // 0 = Mandiri (user)
-        $nakerAk1->unik_kode = $uniqueCode;
-        $nakerAk1->save();
+        if (!$nakerAk1) {
+            // Jika tidak ada, buat entri baru
+            $uniqueCode = md5($id . Carbon::now()->toDateTimeString());
+            $expiredDate = Carbon::now()->addMonths(6);
 
-        // Membuat QR Code
-        $qrData = route('ak1.view', $nakerAk1->unik_kode);
-        $qrCode = QrCode::size(200)->generate($qrData);
+            $nakerAk1 = new NakerAk1();
+            $nakerAk1->id_user = $user->id;
+            $nakerAk1->tanggal_cetak = Carbon::now();
+            $nakerAk1->berlaku_hingga = $expiredDate;
+            $nakerAk1->status_cetak = '1'; // 0 = admin (admin)
+            $nakerAk1->unik_kode = $uniqueCode;
 
-        // Menyimpan QR Code ke dalam penyimpanan menggunakan Storage
-        $qrPath = 'qrcodes/' . $uniqueCode . '.svg';
-        Storage::disk('public')->put($qrPath, $qrCode); // Menyimpan QR Code di folder storage/app/public/qrcodes
-        $nakerAk1->qr = $qrPath;
-        $nakerAk1->save();
+            // Membuat QR Code
+            $qrData = route('ak1.view', $nakerAk1->unik_kode);
+            $qrCode = QrCode::size(200)->generate($qrData);
+
+            // Menyimpan QR Code ke dalam penyimpanan
+            $qrPath = 'qrcodes/' . $uniqueCode . '.svg';
+            Storage::disk('public')->put($qrPath, $qrCode); // Menyimpan QR Code di folder storage/app/public/qrcodes
+            $nakerAk1->qr = $qrPath;
+            $nakerAk1->save();
+        }
 
         // Mengembalikan tampilan untuk cetak AK1
         return view('backend.ak1.print', compact('user', 'statusKerjas', 'pendidikan', 'keterampilan', 'pengalaman', 'nakerAk1'));
     }
+
 
     public function viewAk1($unik_kode)
     {
