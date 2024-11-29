@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Yajra\DataTables\Facades\DataTables;  // Mengimpor DataTables
 
 
 class Ak1Controller extends Controller
@@ -360,10 +361,41 @@ class Ak1Controller extends Controller
         return view('backend.ak1.view', compact('ak1'));
     }
 
-    public function dataAk1()
+    public function dataAk1(Request $request)
     {
-        // Ambil semua data AK1 beserta relasi user
-        $ak1s = NakerAk1::with('user')->get();
-        return view('backend.ak1.data', compact('ak1s'));
+        if ($request->ajax()) {
+            // Ambil data AK1 beserta relasi user
+            $datas = NakerAk1::with('user:id,name')
+                ->select(
+                    'id',
+                    'id_user',
+                    'tanggal_cetak',
+                    'status_cetak',
+                    'berlaku_hingga',
+                    'qr'
+                );
+
+            return DataTables::of($datas)
+                ->addIndexColumn()
+                ->addColumn('nama_tenaga_kerja', function ($data) {
+                    return $data->user->name ?? '-';
+                })
+                ->addColumn('tanggal_cetak', function ($data) {
+                    return \Carbon\Carbon::parse($data->tanggal_cetak)->format('d-m-Y');
+                })
+                ->addColumn('berlaku_hingga', function ($data) {
+                    return \Carbon\Carbon::parse($data->berlaku_hingga)->format('d-m-Y');
+                })
+                ->addColumn('status_cetak', function ($data) {
+                    return $data->status_cetak == '0' ? 'Mandiri' : 'Admin';
+                })
+                ->addColumn('qr_code', function ($data) {
+                    return '<img src="' . asset('storage/' . $data->qr) . '" width="50" alt="QR Code">';
+                })
+                ->rawColumns(['qr_code']) // Membiarkan kolom qr_code di-render sebagai HTML
+                ->make(true);
+        }
+
+        return view('backend.ak1.data');
     }
 }

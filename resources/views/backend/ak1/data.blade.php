@@ -10,31 +10,29 @@
                 <div class="content-wrapper">
                     <!-- Content -->
                     <div class="container-xxl flex-grow-1 container-p-y">
-                        <h1>Data AK1</h1>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Nama Tenaga Kerja</th>
-                                    <th>Tanggal Cetak</th>
-                                    <th>Status Cetak</th>
-                                    <th>Berhenti Berlaku</th>
-                                    <th>QR Code</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($ak1s as $ak1)
-                                    <tr>
-                                        <td>{{ $ak1->id }}</td>
-                                        <td>{{ $ak1->user->name }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($ak1->tanggal_cetak)->format('d-m-Y') }}</td>
-                                        <td>{{ $ak1->status_cetak == '0' ? 'Mandiri' : 'Admin' }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($ak1->berlaku_hingga)->format('d-m-Y') }}</td>
-                                        <td><img src="{{ asset('storage/' . $ak1->qr) }}" width="50" alt="QR Code"></td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h1>Data AK1</h1>
+                                        <div class="table-responsive">
+                                            <table id="ak1table" class="table table-bordered table-striped mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Nama Tenaga Kerja</th>
+                                                        <th>Tanggal Cetak</th>
+                                                        <th>Status Cetak</th>
+                                                        <th>Berhenti Berlaku</th>
+                                                        <th>QR Code</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- / Content -->
 
@@ -48,3 +46,43 @@
         <div class="layout-overlay layout-menu-toggle"></div>
     </div>
 @endsection
+
+@push('js')
+    <script>
+        $(document).ready(function() {
+            $('#ak1table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{ route('ak1.data') }}',
+                autoWidth: false,
+                columns: [{
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'nama_tenaga_kerja',
+                        name: 'user.name'
+                    },
+                    {
+                        data: 'tanggal_cetak',
+                        name: 'tanggal_cetak'
+                    },
+                    {
+                        data: 'status_cetak',
+                        name: 'status_cetak'
+                    },
+                    {
+                        data: 'berlaku_hingga',
+                        name: 'berlaku_hingga'
+                    },
+                    {
+                        data: 'qr_code',
+                        orderable: false,
+                        searchable: false
+                    }
+                ]
+            });
+        });
+    </script>
+@endpush
