@@ -340,8 +340,11 @@ class Ak1Controller extends Controller
             $nakerAk1->id_user = $user->id;
             $nakerAk1->tanggal_cetak = Carbon::now();
             $nakerAk1->berlaku_hingga = $expiredDate;
-            $nakerAk1->status_cetak = '1'; // 0 = admin (admin)
+            $nakerAk1->status_cetak = '1'; // 0 = mandiri (mandiri)
             $nakerAk1->unik_kode = $uniqueCode;
+
+            // Tambahkan id_user yang mencetak
+            $nakerAk1->dicetak_oleh = auth()->user()->id;
 
             // Membuat QR Code
             $qrData = route('ak1.view', $nakerAk1->unik_kode);

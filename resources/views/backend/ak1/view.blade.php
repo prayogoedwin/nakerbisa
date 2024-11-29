@@ -9,9 +9,12 @@
 
 <body>
     <h1>Detail AK1</h1>
-    <p><strong>Tanggal Cetak:</strong> {{ \Carbon\Carbon::parse($ak1->tanggal_cetak)->locale('id')->translatedFormat('d F Y') }}</p>
+    <p><strong>Tanggal Cetak:</strong>
+        {{ \Carbon\Carbon::parse($ak1->tanggal_cetak)->locale('id')->translatedFormat('d F Y') }}</p>
     <p><strong>Status Cetak:</strong> {{ $ak1->status_cetak == '0' ? 'Mandiri' : 'Admin' }}</p>
-    <p><strong>Berhenti Berlaku:</strong> {{ \Carbon\Carbon::parse($ak1->berlaku_hingga)->locale('id')->translatedFormat('d F Y') }}</p>
+    <p><strong>Dicetak oleh:</strong> {{ $ak1->dicetakOleh->name ?? 'Tidak diketahui' }}</p>
+    <p><strong>Berhenti Berlaku:</strong>
+        {{ \Carbon\Carbon::parse($ak1->berlaku_hingga)->locale('id')->translatedFormat('d F Y') }}</p>
     <p><strong>QR Code:</strong></p>
     <img src="{{ asset('storage/' . $ak1->qr) }}" alt="QR Code">
 </body>
