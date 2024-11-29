@@ -468,4 +468,43 @@ class Ak1Controller extends Controller
 
         return view('backend.ak1.data');
     }
+
+    public function dataAk1Tk(Request $request)
+    {
+        if ($request->ajax()) {
+            // Ambil data AK1 milik pengguna yang sedang login
+            $datas = NakerAk1::with('user:id,name')
+                ->where('id_user', auth()->user()->id) // Filter berdasarkan pengguna yang login
+                ->select(
+                    'id',
+                    'id_user',
+                    'tanggal_cetak',
+                    'status_cetak',
+                    'berlaku_hingga',
+                    'qr'
+                );
+
+            return DataTables::of($datas)
+                ->addIndexColumn()
+                ->addColumn('nama_tenaga_kerja', function ($data) {
+                    return $data->user->name ?? '-';
+                })
+                ->addColumn('tanggal_cetak', function ($data) {
+                    return \Carbon\Carbon::parse($data->tanggal_cetak)->format('d-m-Y');
+                })
+                ->addColumn('berlaku_hingga', function ($data) {
+                    return \Carbon\Carbon::parse($data->berlaku_hingga)->format('d-m-Y');
+                })
+                ->addColumn('status_cetak', function ($data) {
+                    return $data->status_cetak == '0' ? 'Mandiri' : 'Admin';
+                })
+                ->addColumn('qr_code', function ($data) {
+                    return '<img src="' . asset('storage/' . $data->qr) . '" width="50" alt="QR Code">';
+                })
+                ->rawColumns(['qr_code']) // Membiarkan kolom qr_code di-render sebagai HTML
+                ->make(true);
+        }
+
+        return view('backend.ak1.data_tk'); // Sesuaikan dengan nama view untuk tenaga kerja
+    }
 }

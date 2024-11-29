@@ -166,7 +166,7 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('ak1/printTenagaKerja/{id}', [Ak1Controller::class, 'printAk1TenagaKerja'])->name('ak1.printTk');
 
         Route::get('/data', [Ak1Controller::class, 'dataAk1'])->name('ak1.data');
-
+        Route::get('/data-ak1-tk', [Ak1Controller::class, 'dataAk1Tk'])->name('ak1.dataTk');
     });
 
 
