@@ -53,7 +53,7 @@
 
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="{{ route('ak1.print', auth()->user()->id) }}" class="menu-link">
+                    <a href="{{ route('ak1.printTk', auth()->user()->id) }}" class="menu-link">
                         <div data-i18n="Without menu">Cetak AK1</div>
                     </a>
                 </li>

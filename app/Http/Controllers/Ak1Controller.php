@@ -311,6 +311,11 @@ class Ak1Controller extends Controller
         // Ambil data user dan relasinya
         $user = User::with('pencari')->findOrFail($id);
 
+        // Periksa apakah pengguna yang sedang login memiliki izin untuk mengakses data ini
+        if (auth()->user()->id !== $user->id) {
+            abort(403, 'Unauthorized action.'); // Kode 403: Forbidden
+        }
+
         // Ambil data status kerja, pendidikan, keterampilan, dan pengalaman
         $statusKerjas = getStatusKerja();
         $pendidikan = NakerPencariPendidikan::select(
@@ -341,6 +346,66 @@ class Ak1Controller extends Controller
             $nakerAk1->tanggal_cetak = Carbon::now();
             $nakerAk1->berlaku_hingga = $expiredDate;
             $nakerAk1->status_cetak = '1'; // 0 = mandiri (mandiri)
+            $nakerAk1->unik_kode = $uniqueCode;
+
+            // Tambahkan id_user yang mencetak
+            $nakerAk1->dicetak_oleh = auth()->user()->id;
+
+            // Membuat QR Code
+            $qrData = route('ak1.view', $nakerAk1->unik_kode);
+            $qrCode = QrCode::size(200)->generate($qrData);
+
+            // Menyimpan QR Code ke dalam penyimpanan
+            $qrPath = 'qrcodes/' . $uniqueCode . '.svg';
+            Storage::disk('public')->put($qrPath, $qrCode); // Menyimpan QR Code di folder storage/app/public/qrcodes
+            $nakerAk1->qr = $qrPath;
+            $nakerAk1->save();
+        }
+
+        // Mengembalikan tampilan untuk cetak AK1
+        return view('backend.ak1.print', compact('user', 'statusKerjas', 'pendidikan', 'keterampilan', 'pengalaman', 'nakerAk1'));
+    }
+
+    public function printAk1TenagaKerja($id)
+    {
+        // Ambil data user dan relasinya
+        $user = User::with('pencari')->findOrFail($id);
+
+        // Periksa apakah pengguna yang sedang login memiliki izin untuk mengakses data ini
+        if (auth()->user()->id !== $user->id) {
+            abort(403, 'Unauthorized action.'); // Kode 403: Forbidden
+        }
+
+        // Ambil data status kerja, pendidikan, keterampilan, dan pengalaman
+        $statusKerjas = getStatusKerja();
+        $pendidikan = NakerPencariPendidikan::select(
+            'naker_pencari_pendidikan.*',
+            'naker_jurusan.nama as jurusan_name',
+            'naker_pendidikan.name as pendidikan_name'
+        )
+            ->leftJoin('naker_jurusan', 'naker_pencari_pendidikan.jurusan_id', '=', 'naker_jurusan.id')
+            ->leftJoin('naker_pendidikan', 'naker_pencari_pendidikan.pendidikan_id', '=', 'naker_pendidikan.id')
+            ->where('user_id', $user->id)
+            ->get();
+
+        $keterampilan = NakerPencariKeterampilan::where('user_id', $user->id)->get();
+        $pengalaman = NakerPencariPengalaman::where('user_id', $user->id)->get();
+
+        // Periksa apakah ada data AK1 yang masih berlaku
+        $nakerAk1 = NakerAk1::where('id_user', $user->id)
+            ->where('berlaku_hingga', '>', Carbon::now()) // Jika berlaku_hingga lebih besar dari sekarang
+            ->first();
+
+        if (!$nakerAk1) {
+            // Jika tidak ada, buat entri baru
+            $uniqueCode = md5($id . Carbon::now()->toDateTimeString());
+            $expiredDate = Carbon::now()->addMonths(6);
+
+            $nakerAk1 = new NakerAk1();
+            $nakerAk1->id_user = $user->id;
+            $nakerAk1->tanggal_cetak = Carbon::now();
+            $nakerAk1->berlaku_hingga = $expiredDate;
+            $nakerAk1->status_cetak = '0'; // 0 = mandiri (mandiri)
             $nakerAk1->unik_kode = $uniqueCode;
 
             // Tambahkan id_user yang mencetak

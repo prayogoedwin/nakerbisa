@@ -163,6 +163,7 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
 
         Route::put('ak1/update/{id}', [Ak1Controller::class, 'updateUser'])->name('ak1.update');
         Route::get('ak1/print/{id}', [Ak1Controller::class, 'printAk1'])->name('ak1.print');
+        Route::get('ak1/printTenagaKerja/{id}', [Ak1Controller::class, 'printAk1TenagaKerja'])->name('ak1.printTk');
 
         Route::get('/data', [Ak1Controller::class, 'dataAk1'])->name('ak1.data');
 
