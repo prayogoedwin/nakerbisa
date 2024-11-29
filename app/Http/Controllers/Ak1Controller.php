@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Back; // Import model Depan
+use App\Models\NakerAk1;
 use App\Models\NakerPencariKeterampilan;
 use App\Models\NakerPencariPendidikan;
 use App\Models\NakerPencariPengalaman;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
+use Carbon\Carbon;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 
 class Ak1Controller extends Controller
@@ -209,7 +212,7 @@ class Ak1Controller extends Controller
     public function cetakExisting(Request $request)
     {
         $user = null;
-        
+
 
         if ($request->has('ktp')) {
             $user = User::whereHas('pencari', function ($query) use ($request) {
@@ -304,12 +307,15 @@ class Ak1Controller extends Controller
 
     public function printAk1($id)
     {
+        // Ambil data user dan relasinya
         $user = User::with('pencari')->findOrFail($id);
+
+        // Ambil data status kerja, pendidikan, keterampilan, dan pengalaman
         $statusKerjas = getStatusKerja();
         $pendidikan = NakerPencariPendidikan::select(
             'naker_pencari_pendidikan.*',
             'naker_jurusan.nama as jurusan_name',
-            'naker_pendidikan.name as pendidikan_name' // Nama tingkat pendidikan
+            'naker_pendidikan.name as pendidikan_name'
         )
             ->leftJoin('naker_jurusan', 'naker_pencari_pendidikan.jurusan_id', '=', 'naker_jurusan.id')
             ->leftJoin('naker_pendidikan', 'naker_pencari_pendidikan.pendidikan_id', '=', 'naker_pendidikan.id')
@@ -317,10 +323,47 @@ class Ak1Controller extends Controller
             ->get();
 
         $keterampilan = NakerPencariKeterampilan::where('user_id', $user->id)->get();
-
         $pengalaman = NakerPencariPengalaman::where('user_id', $user->id)->get();
 
-        // Generate and return AK1 print view
-        return view('backend.ak1.print', compact('user', 'statusKerjas', 'pendidikan', 'keterampilan', 'pengalaman'));
+        // Insert data ke tabel naker_ak1
+        $uniqueCode = md5($id . Carbon::now()->toDateTimeString());
+        $expiredDate = Carbon::now()->addMonths(6);
+
+        $nakerAk1 = new NakerAk1();
+        $nakerAk1->id_user = $user->id;
+        $nakerAk1->tanggal_cetak = Carbon::now();
+        $nakerAk1->berlaku_hingga = $expiredDate;
+        $nakerAk1->status_cetak = '0'; // 0 = Mandiri (user)
+        $nakerAk1->unik_kode = $uniqueCode;
+        $nakerAk1->save();
+
+        // Membuat QR Code
+        $qrData = route('ak1.view', $nakerAk1->unik_kode);
+        $qrCode = QrCode::size(200)->generate($qrData);
+
+        // Menyimpan QR Code ke dalam penyimpanan menggunakan Storage
+        $qrPath = 'qrcodes/' . $uniqueCode . '.svg';
+        Storage::disk('public')->put($qrPath, $qrCode); // Menyimpan QR Code di folder storage/app/public/qrcodes
+        $nakerAk1->qr = $qrPath;
+        $nakerAk1->save();
+
+        // Mengembalikan tampilan untuk cetak AK1
+        return view('backend.ak1.print', compact('user', 'statusKerjas', 'pendidikan', 'keterampilan', 'pengalaman', 'nakerAk1'));
+    }
+
+    public function viewAk1($unik_kode)
+    {
+        // Mencari data AK1 berdasarkan kode unik
+        $ak1 = NakerAk1::where('unik_kode', $unik_kode)->firstOrFail();
+
+        // Menampilkan halaman dengan detail AK1
+        return view('backend.ak1.view', compact('ak1'));
+    }
+
+    public function dataAk1()
+    {
+        // Ambil semua data AK1 beserta relasi user
+        $ak1s = NakerAk1::with('user')->get();
+        return view('backend.ak1.data', compact('ak1s'));
     }
 }

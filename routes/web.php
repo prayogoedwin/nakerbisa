@@ -62,6 +62,8 @@ Route::post('/back/cek-awal-otp', [Ak1Controller::class, 'cek_awal_otp'])->name(
 
 Route::post('/back/akhir_daftar-akun', [Ak1Controller::class, 'akhir_daftar_akun'])->name('akhir-daftar-akun-ak1');
 
+Route::get('ak1/cek/{unik_kode}', [Ak1Controller::class, 'viewAk1'])->name('ak1.view');
+
 
 
 
@@ -161,6 +163,9 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
 
         Route::put('ak1/update/{id}', [Ak1Controller::class, 'updateUser'])->name('ak1.update');
         Route::get('ak1/print/{id}', [Ak1Controller::class, 'printAk1'])->name('ak1.print');
+
+        Route::get('/data', [Ak1Controller::class, 'dataAk1'])->name('ak1.data');
+
     });
 
 

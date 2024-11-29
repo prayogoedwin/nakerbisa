@@ -154,11 +154,13 @@
                         <div data-i18n="Without menu">Cetak AK1</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">Data AK1</div>
+                <li class="menu-item {{ request()->routeIs('ak1.data') ? 'active' : '' }}">
+                    <a href="{{ route('ak1.data') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-file"></i>
+                        <div data-i18n="Data AK1">Data AK1</div>
                     </a>
                 </li>
+                
             </ul>
         </li>
         
