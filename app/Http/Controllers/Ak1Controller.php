@@ -12,6 +12,7 @@ use App\Models\UserPencari;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 
 
@@ -222,11 +223,35 @@ class Ak1Controller extends Controller
     public function updateUser(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        $user->update($request->only(['name'])); // Update nama
-        $user->pencari()->update($request->only(['alamat', 'tanggal_lahir'])); // Update data pencari kerja
+
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'alamat' => 'nullable|string|max:255',
+            'tanggal_lahir' => 'nullable|date',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validasi foto
+        ]);
+
+        // Update nama pengguna
+        $user->update($request->only(['name']));
+
+        // Update data pencari kerja
+        $pencari = $user->pencari;
+        if ($request->hasFile('foto')) {
+            // Hapus foto lama jika ada
+            if ($pencari->foto && Storage::disk('public')->exists($pencari->foto)) {
+                Storage::disk('public')->delete($pencari->foto);
+            }
+
+            // Simpan foto baru
+            $fotoPath = $request->file('foto')->store('profile_photos', 'public');
+            $pencari->foto = $fotoPath;
+        }
+
+        $pencari->update($request->only(['alamat', 'tanggal_lahir']));
 
         return redirect()->back()->with('success', 'Profil berhasil diperbarui');
     }
+
 
     public function printAk1($id)
     {

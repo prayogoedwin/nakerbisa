@@ -53,51 +53,79 @@
                                         $sektors = getSektor();
                                         $statusKerjas = getStatusKerja();
                                         ?>
-                                        <form method="POST" action="{{ route('ak1.update', $user->id) }}">
+                                        <form method="POST" enctype="multipart/form-data"
+                                            action="{{ route('ak1.update', $user->id) }}">
                                             @csrf
                                             @method('PUT')
-
-                                            <div class="mb-3">
-                                                <label for="name" class="form-label">Nama Lengkap</label>
-                                                <input type="text" id="name" name="name" class="form-control"
-                                                    value="{{ $user->name }}">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="ktp" class="form-label">KTP</label>
-                                                <input type="text" id="ktp" name="ktp" class="form-control"
-                                                    value="{{ $user->pencari->ktp }}" disabled>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="alamat" class="form-label">Alamat</label>
-                                                <input type="text" id="alamat" name="alamat" class="form-control"
-                                                    value="{{ $user->pencari->alamat ?? '' }}">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
-                                                <input type="date" id="tanggal_lahir" name="tanggal_lahir"
-                                                    class="form-control" value="{{ $user->pencari->tanggal_lahir ?? '' }}">
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <label for="kodepos">Kode Pos</label>
-                                                    <input type="text" id="kodepos" class="form-control" name="kodepos"
-                                                        value="{{ $user->pencari->kodepos }}">
+                                            <div class="form-body">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label for="name" class="form-label">Nama Lengkap</label>
+                                                            <input type="text" id="name" name="name"
+                                                                class="form-control" value="{{ $user->name }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label for="ktp" class="form-label">KTP</label>
+                                                            <input type="text" id="ktp" name="ktp"
+                                                                class="form-control" value="{{ $user->pencari->ktp }}"
+                                                                disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label for="alamat" class="form-label">Alamat</label>
+                                                            <input type="text" id="alamat" name="alamat"
+                                                                class="form-control"
+                                                                value="{{ $user->pencari->alamat ?? '' }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label for="tanggal_lahir" class="form-label">Tanggal
+                                                                Lahir</label>
+                                                            <input type="date" id="tanggal_lahir" name="tanggal_lahir"
+                                                                class="form-control"
+                                                                value="{{ $user->pencari->tanggal_lahir ?? '' }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label for="kodepos">Kode Pos</label>
+                                                            <input type="text" id="kodepos" class="form-control"
+                                                                name="kodepos" value="{{ $user->pencari->kodepos }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label for="agama" class="form-label">Agama</label>
+                                                            <select class="form-select" id="agama_id" name="agama_id"
+                                                                required>
+                                                                <option selected disabled>Pilih Agama</option>
+                                                                @foreach ($agamas as $ag)
+                                                                    <option value="{{ $ag->id }}"
+                                                                        {{ $user->pencari->id_agama == $ag->id ? 'selected' : '' }}>
+                                                                        {{ $ag->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label for="foto" class="form-label">Foto</label>
+                                                            <input type="file" id="foto" name="foto"
+                                                                class="form-control">
+                                                            @if ($user->pencari->foto)
+                                                                <img src="{{ asset('storage/' . $user->pencari->foto) }}"
+                                                                    alt="Foto Profil" class="img-thumbnail mt-2"
+                                                                    width="150">
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <label for="agama" class="form-label">Agama</label>
-                                                    <select class="form-select" id="agama_id" name="agama_id" required>
-                                                        <option selected disabled>Pilih Agama</option>
-                                                        @foreach ($agamas as $ag)
-                                                            <option value="{{ $ag->id }}"
-                                                                {{ $user->pencari->id_agama == $ag->id ? 'selected' : '' }}>
-                                                                {{ $ag->name }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-
                                             <!-- Add other fields as required -->
 
                                             <button type="submit" class="btn btn-success mt-3">Update</button>

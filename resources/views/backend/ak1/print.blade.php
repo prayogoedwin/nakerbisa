@@ -396,8 +396,7 @@
                         <div style="width: 100%;">
                             <div style="display: flex;">
                                 <div class="signing">
-                                    <img src="https://bursakerja.jatengprov.go.id/" width="118" height="118"
-                                        alt="" />
+                                    <img src="{{ asset('storage/' . $user->pencari->foto) }}" width="118" height="118" alt="Foto Profil" />
                                     <p>TTD Pencari Kerja</p>
                                 </div>
                                 <div class="info-detail">
@@ -415,7 +414,7 @@
                                     <p style="margin-bottom: 0px;"><span>Alamat</span>{{ $user->pencari->alamat }},
                                         {{ $user->pencari->kodepos }}</p>
                                     <p style="margin-bottom: 0px;"><span>No.
-                                            Telp</span>{{ $user->pencari->no_telp ?? 'Tidak tersedia' }}</p>
+                                            Telp</span>{{ $user->whatsapp ?? 'Tidak tersedia' }}</p>
                                     <p style="margin-bottom: 0px;"><span>Berlaku s.d.</span> 28 NOVEMBER 2024 s.d 28
                                         NOVEMBER 2026</p>
                                 </div>
