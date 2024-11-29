@@ -378,11 +378,17 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="form-group">
-                                                                    <label for="foto">Upload Foto</label>
-                                                                    <input type="file" id="foto" class="form-control" name="foto">
+                                                                    <label for="foto">Upload Foto Formal</label>
+                                                                    <input type="file" id="foto"
+                                                                        class="form-control" name="foto">
                                                                     @if ($profil->foto)
-                                                                        <img src="{{ asset('storage/' . $profil->foto) }}" alt="Foto Profil" class="img-thumbnail mt-2" width="150">
+                                                                        <img src="{{ asset('storage/' . $profil->foto) }}"
+                                                                            alt="Foto Profil" class="img-thumbnail mt-2"
+                                                                            width="150">
                                                                     @endif
+                                                                    <!-- Keterangan bahwa foto formal wajib diupload -->
+                                                                    <small class="text-danger">Foto Formal Wajib
+                                                                        Diupload</small>
                                                                 </div>
                                                             </div>
                                                             <!-- Tambahkan input lainnya sesuai kebutuhan -->
