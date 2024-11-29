@@ -311,11 +311,6 @@ class Ak1Controller extends Controller
         // Ambil data user dan relasinya
         $user = User::with('pencari')->findOrFail($id);
 
-        // Periksa apakah pengguna yang sedang login memiliki izin untuk mengakses data ini
-        if (auth()->user()->id !== $user->id) {
-            abort(403, 'Unauthorized action.'); // Kode 403: Forbidden
-        }
-
         // Ambil data status kerja, pendidikan, keterampilan, dan pengalaman
         $statusKerjas = getStatusKerja();
         $pendidikan = NakerPencariPendidikan::select(
