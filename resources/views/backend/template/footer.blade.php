@@ -79,7 +79,7 @@
                         <form action="{{ route('daftar-akun-ak1') }}" method="POST">
                             @csrf
                             <button type="submit" name="role_dipilih" value="tenaga-kerja"
-                                class="btn btn-primary">Tenaga Kerja</button>
+                                class="btn btn-primary">Belum Punya Akun</button>
                         </form>
                         <button class="btn btn-secondary" onclick="cetakExisting()">Sudah Punya Akun</button>
                     </div>
