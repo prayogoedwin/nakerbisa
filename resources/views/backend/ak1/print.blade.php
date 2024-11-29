@@ -375,8 +375,20 @@
                     <!-- <p class="fill-square"><b>No. Induk Kependudukan</b> <span><em>2</em><em>6</em><em>7</em><em>8</em><em>9</em><em>0</em><em>0</em><em>0</em><em>2</em><em>1</em><em>2</em><em>4</em><em>5</em><em>8</em><em>2</em><em>1</em></span></p> -->
                     <p class="fill-square"><b>No. Induk Kependudukan</b>
                         <span>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $user->pencari->ktp ?? '-' }}</span>
+                            <em class="empty"></em>
+
+
+                            <em class="empty"></em>
+                            @if (!empty($user->pencari->ktp))
+                                @foreach (str_split($user->pencari->ktp) as $digit)
+                                    <em>{{ $digit }}</em>
+                                @endforeach
+                            @else
+                                <em>-</em>
+                            @endif
+                        </span>
                     </p>
+                    
 
 
 
