@@ -67,9 +67,6 @@
         <p><strong>Dicetak oleh:</strong> {{ $ak1->dicetakOleh->name ?? 'Tidak diketahui' }}</p>
         <p><strong>Berhenti Berlaku:</strong>
             {{ \Carbon\Carbon::parse($ak1->berlaku_hingga)->locale('id')->translatedFormat('d F Y') }}</p>
-        <div class="qr-code">
-            <img src="{{ asset('storage/' . $ak1->qr) }}" alt="QR Code">
-        </div>
     </div>
 </body>
 
