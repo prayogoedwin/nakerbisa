@@ -104,6 +104,18 @@
                                     <input type="text" class="form-control" id="editKodepos" name="kodepos" required>
                                 </div>
                             </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="editTahunlulus">Tahun Lulus</label>
+                                    <input type="text" class="form-control" id="editTahunlulus" name="tahun_lulus" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="editMedsos">Medsos</label>
+                                    <input type="text" class="form-control" id="editMedsos" name="medsos" required>
+                                </div>
+                            </div>
                         </div>
                         <button type="button" class="btn btn-primary mt-3" onclick="updatePencari()">Submit</button>
                     </form>
@@ -162,6 +174,8 @@
                         $('#editGender').val(data.gender);
                         $('#editAlamat').val(data.alamat);
                         $('#editKodepos').val(data.kodepos);
+                        $('#editTahunlulus').val(data.tahun_lulus);
+                        $('#editMedsos').val(data.medsos);
                         $('#modal-edit').modal('show');
                     }
                 },
@@ -181,6 +195,8 @@
                 gender: $('#editGender').val(),
                 alamat: $('#editAlamat').val(),
                 kodepos: $('#editKodepos').val(),
+                tahun_lulus: $('#editTahunlulus').val(),
+                medsos: $('#editMedsos').val(),
                 _token: "{{ csrf_token() }}"
             };
 

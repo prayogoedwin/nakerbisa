@@ -50,6 +50,8 @@ class DataController extends Controller
             'tanggal_lahir' => 'required|date',
             'gender' => 'required|in:L,P',
             'kodepos' => 'required|string|max:5',
+            'tahun_lulus' => 'required|integer',
+            'medsos' => 'required|string|max:200',
         ]);
 
         $userPencari = UserPencari::find($id);
@@ -70,6 +72,8 @@ class DataController extends Controller
             'tanggal_lahir' => $request->tanggal_lahir,
             'gender' => $request->gender,
             'kodepos' => $request->kodepos,
+            'tahun_lulus' => $request->tahun_lulus,
+            'medsos' => $request->medsos,
         ]);
 
         return response()->json([
