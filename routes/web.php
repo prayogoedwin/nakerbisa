@@ -173,6 +173,9 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
     Route::prefix('data')->group(function () {
         Route::get('pencari', [DataController::class, 'pencari'])->name('data.pencari');
         Route::get('penyedia', [DataController::class, 'penyedia'])->name('data.penyedia');
+
+        Route::get('/data-pencari/{id}', [DataController::class, 'getDetailPencari'])->name('data.pencari.detail');
+        Route::put('/data-pencari/{id}', [DataController::class, 'updatePencari'])->name('data.pencari.update');
     });
 
     Route::get('/lowongan', [LowonganController::class, 'index'])->name('lowongan.index');

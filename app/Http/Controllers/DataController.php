@@ -21,6 +21,53 @@ class DataController extends Controller
         return view('backend.data.pencari');
     }
 
+    public function getDetailPencari(Request $request, $id)
+    {
+        $userPencari = UserPencari::find($id);
+
+        if (!$userPencari) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Data tidak ditemukan',
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $userPencari,
+        ]);
+    }
+
+    // Update job seeker data
+    public function updatePencari(Request $request, $id)
+    {
+        // Validate the input
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:100',
+            'alamat' => 'required|string|max:200',
+        ]);
+
+        $userPencari = UserPencari::find($id);
+
+        if (!$userPencari) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Data tidak ditemukan',
+            ]);
+        }
+
+        // Update the userPencari record
+        $userPencari->update([
+            'name' => $request->name,
+            'alamat' => $request->alamat,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data berhasil diperbarui',
+        ]);
+    }
+
     public function penyedia(Request $request)
     {
         if ($request->ajax()) {
