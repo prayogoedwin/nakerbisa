@@ -56,13 +56,54 @@
                 <div class="modal-body">
                     <form id="editForm">
                         <input type="hidden" id="editId">
-                        <div class="form-group">
-                            <label for="editName">Nama</label>
-                            <input type="text" class="form-control" id="editName" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="editAlamat">Alamat</label>
-                            <input type="text" class="form-control" id="editAlamat" name="alamat" required>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="editName">Nama</label>
+                                    <input type="text" class="form-control" id="editName" name="name" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="editKtp">No. KTP</label>
+                                    <input type="text" class="form-control" id="editKtp" name="ktp" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="editTempatLahir">Tempat Lahir</label>
+                                    <input type="text" class="form-control" id="editTempatLahir" name="tempat_lahir"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="editTanggalLahir">Tanggal Lahir</label>
+                                    <input type="date" class="form-control" id="editTanggalLahir" name="tanggal_lahir"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="editGender">Gender</label>
+                                    <select class="form-control" id="editGender" name="gender" required>
+                                        <option value="L">Laki-Laki</option>
+                                        <option value="P">Perempuan</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="editAlamat">Alamat</label>
+                                    <input type="text" class="form-control" id="editAlamat" name="alamat" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="editKodepos">Kode Pos</label>
+                                    <input type="text" class="form-control" id="editKodepos" name="kodepos" required>
+                                </div>
+                            </div>
                         </div>
                         <button type="button" class="btn btn-primary mt-3" onclick="updatePencari()">Submit</button>
                     </form>
@@ -115,7 +156,12 @@
                         let data = response.data;
                         $('#editId').val(data.id);
                         $('#editName').val(data.name);
+                        $('#editKtp').val(data.ktp);
+                        $('#editTempatLahir').val(data.tempat_lahir);
+                        $('#editTanggalLahir').val(data.tanggal_lahir);
+                        $('#editGender').val(data.gender);
                         $('#editAlamat').val(data.alamat);
+                        $('#editKodepos').val(data.kodepos);
                         $('#modal-edit').modal('show');
                     }
                 },
@@ -129,7 +175,12 @@
             var formData = {
                 id: $('#editId').val(),
                 name: $('#editName').val(),
+                ktp: $('#editKtp').val(),
+                tempat_lahir: $('#editTempatLahir').val(),
+                tanggal_lahir: $('#editTanggalLahir').val(),
+                gender: $('#editGender').val(),
                 alamat: $('#editAlamat').val(),
+                kodepos: $('#editKodepos').val(),
                 _token: "{{ csrf_token() }}"
             };
 

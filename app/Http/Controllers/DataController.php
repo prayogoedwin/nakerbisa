@@ -45,6 +45,11 @@ class DataController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:100',
             'alamat' => 'required|string|max:200',
+            'ktp' => 'required|string|max:20',
+            'tempat_lahir' => 'required|string|max:20',
+            'tanggal_lahir' => 'required|date',
+            'gender' => 'required|in:L,P',
+            'kodepos' => 'required|string|max:5',
         ]);
 
         $userPencari = UserPencari::find($id);
@@ -60,6 +65,11 @@ class DataController extends Controller
         $userPencari->update([
             'name' => $request->name,
             'alamat' => $request->alamat,
+            'ktp' => $request->ktp,
+            'tempat_lahir' => $request->tempat_lahir,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'gender' => $request->gender,
+            'kodepos' => $request->kodepos,
         ]);
 
         return response()->json([
