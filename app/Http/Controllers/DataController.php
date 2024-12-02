@@ -18,7 +18,7 @@ class DataController extends Controller
             return DataTables::eloquent($query)->make(true);
         }
 
-        return view('backend.data.pencari');
+        return view ('backend.data.pencari');
     }
 
     public function getDetailPencari(Request $request, $id)
