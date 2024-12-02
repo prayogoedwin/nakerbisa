@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Ak1Controller;
+use App\Http\Controllers\DataController;
 use App\Http\Controllers\DepanController;
 use App\Http\Controllers\LowonganAdminController;
 use App\Http\Controllers\LowonganController;
@@ -169,6 +170,10 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('/data-ak1-tk', [Ak1Controller::class, 'dataAk1Tk'])->name('ak1.dataTk');
     });
 
+    Route::prefix('data')->group(function () {
+        Route::get('pencari', [DataController::class, 'pencari'])->name('data.pencari');
+        Route::get('penyedia', [DataController::class, 'penyedia'])->name('data.penyedia');
+    });
 
     Route::get('/lowongan', [LowonganController::class, 'index'])->name('lowongan.index');
     Route::get('/lowongan/{id}', [LowonganController::class, 'show'])->name('lowongan.detail');

@@ -109,6 +109,25 @@
             </ul>
         </li>
 
+        <li class="menu-item {{ request()->routeIs('data.*') ? 'active open' : '' }}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-data"></i>
+                <div data-i18n="Data">Data</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item {{ request()->routeIs('data.pencari') ? 'active' : '' }}">
+                    <a href="{{ route('data.pencari') }}" class="menu-link">
+                        <div data-i18n="Without menu">Pencari</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('data.penyedia') ? 'active' : '' }}">
+                    <a href="{{ route('data.penyedia') }}" class="menu-link">
+                        <div data-i18n="Without menu">Penyedia</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
 
         <!-- Layouts -->
         <li class="menu-item">
@@ -149,8 +168,10 @@
 
             <ul class="menu-sub">
                 <!-- Trigger Menu Item -->
-                <li class="menu-item {{ request()->routeIs('ak1.existing') || request()->routeIs('ak1.new') ? 'active' : '' }}">
-                    <a href="javascript:void(0);" class="menu-link" data-bs-toggle="modal" data-bs-target="#ak1Modal">
+                <li
+                    class="menu-item {{ request()->routeIs('ak1.existing') || request()->routeIs('ak1.new') ? 'active' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link" data-bs-toggle="modal"
+                        data-bs-target="#ak1Modal">
                         <div data-i18n="Without menu">Cetak AK1</div>
                     </a>
                 </li>
@@ -160,10 +181,10 @@
                         <div data-i18n="Data AK1">Data AK1</div>
                     </a>
                 </li>
-                
+
             </ul>
         </li>
-        
+
         <!-- Layouts -->
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
