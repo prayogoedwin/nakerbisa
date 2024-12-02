@@ -195,7 +195,7 @@ class Ak1Controller extends Controller
             DB::commit();
 
             // Redirect ke halaman ak1.new atau ak1.existing
-            return redirect()->route('ak1.existing')->with('success', 'Berhasil membuat akun');
+            return redirect()->route('ak1.existing', ['ktp' => $request->nik])->with('success', 'Berhasil membuat akun');
             // Atau bisa juga mengarahkan ke halaman ak1.existing jika itu yang Anda inginkan
             // return redirect()->route('ak1.existing')->with('success', 'Berhasil membuat akun, silakan login');
 
