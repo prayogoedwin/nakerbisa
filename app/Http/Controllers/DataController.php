@@ -18,7 +18,7 @@ class DataController extends Controller
             return DataTables::eloquent($query)->make(true);
         }
 
-        return view ('backend.data.pencari');
+        return view('backend.data.pencari');
     }
 
     public function getDetailPencari(Request $request, $id)
@@ -52,6 +52,9 @@ class DataController extends Controller
             'kodepos' => 'required|string|max:5',
             'tahun_lulus' => 'required|integer',
             'medsos' => 'required|string|max:200',
+            'id_kota' => 'required|integer',
+            'id_kecamatan' => 'required|integer',
+            'id_desa' => 'required|string|max:10',
         ]);
 
         $userPencari = UserPencari::find($id);

@@ -106,8 +106,28 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
+                                    <label for="editIdKota">ID Kota</label>
+                                    <input type="text" class="form-control" id="editIdKota" name="id_kota" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="editIdKecamatan">ID Kecamatan</label>
+                                    <input type="text" class="form-control" id="editIdKecamatan" name="id_kecamatan"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="editIdDesa">ID Desa</label>
+                                    <input type="text" class="form-control" id="editIdDesa" name="id_desa" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
                                     <label for="editTahunlulus">Tahun Lulus</label>
-                                    <input type="text" class="form-control" id="editTahunlulus" name="tahun_lulus" required>
+                                    <input type="text" class="form-control" id="editTahunlulus" name="tahun_lulus"
+                                        required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -176,6 +196,10 @@
                         $('#editKodepos').val(data.kodepos);
                         $('#editTahunlulus').val(data.tahun_lulus);
                         $('#editMedsos').val(data.medsos);
+                        $('#editIdKota').val(data.id_kota);
+                        $('#editIdKecamatan').val(data.id_kecamatan);
+                        $('#editIdDesa').val(data.id_desa);
+                        $('#editTahunlulus').val(data.tahun_lulus);
                         $('#modal-edit').modal('show');
                     }
                 },
@@ -197,6 +221,9 @@
                 kodepos: $('#editKodepos').val(),
                 tahun_lulus: $('#editTahunlulus').val(),
                 medsos: $('#editMedsos').val(),
+                id_kota: $('#editIdKota').val(),
+                id_kecamatan: $('#editIdKecamatan').val(),
+                id_desa: $('#editIdDesa').val(),
                 _token: "{{ csrf_token() }}"
             };
 
