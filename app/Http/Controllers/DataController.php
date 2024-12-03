@@ -18,14 +18,41 @@ class DataController extends Controller
     public function pencari(Request $request)
     {
         if ($request->ajax()) {
-            $query = UserPencari::select(['id', 'name', 'alamat']);
+            // Kolom-kolom yang ingin ditampilkan
+            $query = UserPencari::select([
+                'id',
+                'ktp',
+                'name',
+                'tempat_lahir',
+                'tanggal_lahir',
+                'gender',
+                'alamat',
+                'kodepos',
+                'tahun_lulus',
+                'medsos',
+                'status_saat_ini',
+                'sektor_pekerjaan_saat_ini',
+                'jam_kerja',
+                'gaji'
+            ]);
 
             return DataTables::eloquent($query)
                 ->filter(function ($query) use ($request) {
                     if ($request->has('search') && $request->search['value'] !== '') {
                         $search = $request->search['value'];
-                        $query->where('name', 'like', "%{$search}%")
-                            ->orWhere('alamat', 'like', "%{$search}%");
+                        $query->where('ktp', 'like', "%{$search}%")
+                            ->orWhere('name', 'like', "%{$search}%")
+                            ->orWhere('alamat', 'like', "%{$search}%")
+                            ->orWhere('tempat_lahir', 'like', "%{$search}%")
+                            ->orWhere('tanggal_lahir', 'like', "%{$search}%")
+                            ->orWhere('gender', 'like', "%{$search}%")
+                            ->orWhere('kodepos', 'like', "%{$search}%")
+                            ->orWhere('tahun_lulus', 'like', "%{$search}%")
+                            ->orWhere('medsos', 'like', "%{$search}%")
+                            ->orWhere('status_saat_ini', 'like', "%{$search}%")
+                            ->orWhere('sektor_pekerjaan_saat_ini', 'like', "%{$search}%")
+                            ->orWhere('jam_kerja', 'like', "%{$search}%")
+                            ->orWhere('gaji', 'like', "%{$search}%");
                     }
                 })
                 ->addIndexColumn()
@@ -140,15 +167,42 @@ class DataController extends Controller
 
     public function export(Request $request)
     {
-        $query = UserPencari::select(['id', 'name', 'alamat']);
+        $query = UserPencari::select([
+            'id',
+            'ktp',
+            'name',
+            'tempat_lahir',
+            'tanggal_lahir',
+            'gender',
+            'alamat',
+            'kodepos',
+            'tahun_lulus',
+            'medsos',
+            'status_saat_ini',
+            'sektor_pekerjaan_saat_ini',
+            'jam_kerja',
+            'gaji'
+        ]);
 
         // Terapkan filter pencarian dari DataTables
         if ($request->has('search') && $request->search !== '') {
             $search = $request->search;
-            $query->where('name', 'like', "%{$search}%")
-                ->orWhere('alamat', 'like', "%{$search}%");
+            $query->where('ktp', 'like', "%{$search}%")
+                ->orWhere('name', 'like', "%{$search}%")
+                ->orWhere('alamat', 'like', "%{$search}%")
+                ->orWhere('tempat_lahir', 'like', "%{$search}%")
+                ->orWhere('tanggal_lahir', 'like', "%{$search}%")
+                ->orWhere('gender', 'like', "%{$search}%")
+                ->orWhere('kodepos', 'like', "%{$search}%")
+                ->orWhere('tahun_lulus', 'like', "%{$search}%")
+                ->orWhere('medsos', 'like', "%{$search}%")
+                ->orWhere('status_saat_ini', 'like', "%{$search}%")
+                ->orWhere('sektor_pekerjaan_saat_ini', 'like', "%{$search}%")
+                ->orWhere('jam_kerja', 'like', "%{$search}%")
+                ->orWhere('gaji', 'like', "%{$search}%");
         }
 
+        // Ambil data setelah difilter
         $pencariData = $query->get();
 
         $fileName = 'data_pencari.csv';
@@ -157,21 +211,55 @@ class DataController extends Controller
             'Content-Disposition' => "attachment; filename=\"$fileName\"",
         ];
 
-        $columns = ['ID', 'Nama', 'Alamat'];
+        // Kolom-kolom yang akan diekspor ke CSV
+        $columns = [
+            'ID',
+            'KTP',
+            'Nama',
+            'Tempat Lahir',
+            'Tanggal Lahir',
+            'Gender',
+            'Alamat',
+            'Kodepos',
+            'Tahun Lulus',
+            'Medsos',
+            'Status Saat Ini',
+            'Sektor Pekerjaan Saat Ini',
+            'Jam Kerja',
+            'Gaji'
+        ];
 
+        // Callback untuk menulis data ke CSV
         $callback = function () use ($pencariData, $columns) {
             $file = fopen('php://output', 'w');
-            fputcsv($file, $columns);
+            fputcsv($file, $columns); // Tulis header CSV
 
             foreach ($pencariData as $data) {
-                fputcsv($file, [$data->id, $data->name, $data->alamat]);
+                fputcsv($file, [
+                    $data->id,
+                    $data->ktp,
+                    $data->name,
+                    $data->tempat_lahir,
+                    $data->tanggal_lahir,
+                    $data->gender,
+                    $data->alamat,
+                    $data->kodepos,
+                    $data->tahun_lulus,
+                    $data->medsos,
+                    $data->status_saat_ini,
+                    $data->sektor_pekerjaan_saat_ini,
+                    $data->jam_kerja,
+                    $data->gaji
+                ]);
             }
 
             fclose($file);
         };
 
+        // Mengirimkan file CSV ke browser
         return response()->stream($callback, 200, $headers);
     }
+
 
 
 

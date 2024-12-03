@@ -33,8 +33,19 @@
                                                 <thead>
                                                     <tr>
                                                         <th>ID</th>
+                                                        <th>KTP</th>
                                                         <th>Nama</th>
                                                         <th>Alamat</th>
+                                                        <th>Tempat Lahir</th>
+                                                        <th>Tanggal Lahir</th>
+                                                        <th>Gender</th>
+                                                        <th>Kodepos</th>
+                                                        <th>Tahun Lulus</th>
+                                                        <th>Medsos</th>
+                                                        <th>Status Saat Ini</th>
+                                                        <th>Sektor Pekerjaan Saat Ini</th>
+                                                        <th>Jam Kerja</th>
+                                                        <th>Gaji</th>
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
@@ -70,6 +81,10 @@
                         name: 'id'
                     },
                     {
+                        data: 'ktp',
+                        name: 'ktp'
+                    },
+                    {
                         data: 'name',
                         name: 'name'
                     },
@@ -78,11 +93,51 @@
                         name: 'alamat'
                     },
                     {
+                        data: 'tempat_lahir',
+                        name: 'tempat_lahir'
+                    },
+                    {
+                        data: 'tanggal_lahir',
+                        name: 'tanggal_lahir'
+                    },
+                    {
+                        data: 'gender',
+                        name: 'gender'
+                    },
+                    {
+                        data: 'kodepos',
+                        name: 'kodepos'
+                    },
+                    {
+                        data: 'tahun_lulus',
+                        name: 'tahun_lulus'
+                    },
+                    {
+                        data: 'medsos',
+                        name: 'medsos'
+                    },
+                    {
+                        data: 'status_saat_ini',
+                        name: 'status_saat_ini'
+                    },
+                    {
+                        data: 'sektor_pekerjaan_saat_ini',
+                        name: 'sektor_pekerjaan_saat_ini'
+                    },
+                    {
+                        data: 'jam_kerja',
+                        name: 'jam_kerja'
+                    },
+                    {
+                        data: 'gaji',
+                        name: 'gaji'
+                    },
+                    {
                         data: 'options',
                         name: 'options',
                         orderable: false,
                         searchable: false
-                    }
+                    } // Aksi (edit button)
                 ],
                 language: {
                     emptyTable: "Tidak ada data tersedia di tabel",
