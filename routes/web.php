@@ -30,6 +30,7 @@ Route::get('/', [DepanController::class, 'index'])->name('beranda');
 Route::get('/depan/bkk', [DepanController::class, 'bkk']);
 Route::get('/depan/blk', [DepanController::class, 'blk']);
 Route::get('/depan/talent-ketrampilan', [DepanController::class, 'talent_ketrampilan']);
+Route::get('/depan/talent-pendidikan', [DepanController::class, 'talent_pendidikan']);
 Route::get('/depan/statistik', [DepanController::class, 'statistik']);
 Route::get('/depan/login', [DepanController::class, 'login']);
 Route::get('/depan/register', [DepanController::class, 'register']);

@@ -64,10 +64,15 @@ class DepanController extends Controller
     {
         $ketrampilan = NakerPencariKeahlianKeterampilan::select('keahlian')
             ->orderBy('created_at', 'desc')
-            ->limit(100) 
-            ->paginate(10); 
+            ->limit(100)
+            ->paginate(10);
 
         return view('depan.depan_talent-ketrampilan', compact('ketrampilan'));
+    }
+
+    public function talent_pendidikan()
+    {
+        return view('depan.depan_talent-pendidikan');
     }
 
     public function login()
