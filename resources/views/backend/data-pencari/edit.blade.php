@@ -354,10 +354,10 @@
 
                                                 <!-- Button Tambah Data Pendidikan -->
                                                 <div class="d-flex justify-content-end mt-4">
-                                                    <a href="{{ route('pendidikan.index') }}"
+                                                    {{-- <a href="{{ route('pendidikan.index') }}"
                                                         class="btn btn-success btn-sm btn-round has-ripple">
                                                         <i class="feather icon-plus"></i> Update Data
-                                                    </a>
+                                                    </a> --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -406,10 +406,10 @@
 
                                                 <!-- Button Tambah Data Pengalaman Kerja -->
                                                 <div class="d-flex justify-content-end mt-4">
-                                                    <a href="{{ route('pengalaman.index') }}"
+                                                    {{-- <a href="{{ route('pengalaman.index') }}"
                                                         class="btn btn-success btn-sm btn-round has-ripple">
                                                         <i class="feather icon-plus"></i> Update Data
-                                                    </a>
+                                                    </a> --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -461,10 +461,10 @@
 
                                                 <!-- Button Tambah Data Keterampilan -->
                                                 <div class="d-flex justify-content-end mt-4">
-                                                    <a href="{{ route('keterampilan.index') }}"
+                                                    {{-- <a href="{{ route('keterampilan.index') }}"
                                                         class="btn btn-success btn-sm btn-round has-ripple">
                                                         <i class="feather icon-plus"></i> Update Data
-                                                    </a>
+                                                    </a> --}}
                                                 </div>
                                             </div>
                                         </div>
