@@ -254,6 +254,13 @@ class DataController extends Controller
             fputcsv($file, $columns); // Tulis header CSV
 
             foreach ($pencariData as $data) {
+                // Ambil nama wilayah untuk setiap kolom
+                $provinsi = DB::table('naker_provinsi')->where('id', $data->id_provinsi)->value('name');
+                $kota = DB::table('naker_kabkota')->where('id', $data->id_kota)->value('name');
+                $kecamatan = DB::table('naker_kecamatan')->where('id', $data->id_kecamatan)->value('name');
+                $desa = DB::table('naker_desa')->where('id', $data->id_desa)->value('name');
+
+                // Tulis data ke CSV dengan nama wilayah
                 fputcsv($file, [
                     $data->id,
                     $data->ktp,
@@ -269,10 +276,10 @@ class DataController extends Controller
                     $data->sektor_pekerjaan_saat_ini,
                     $data->jam_kerja,
                     $data->gaji,
-                    $data->id_provinsi,
-                    $data->id_kota,
-                    $data->id_kecamatan,
-                    $data->id_desa
+                    $provinsi, // Nama Provinsi
+                    $kota,     // Nama Kota
+                    $kecamatan, // Nama Kecamatan
+                    $desa      // Nama Desa
                 ]);
             }
 
@@ -282,6 +289,7 @@ class DataController extends Controller
         // Mengirimkan file CSV ke browser
         return response()->stream($callback, 200, $headers);
     }
+
 
     public function penyedia(Request $request)
     {
