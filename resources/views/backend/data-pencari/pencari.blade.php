@@ -42,6 +42,8 @@
                                                         <th>Kodepos</th>
                                                         <th>Tahun Lulus</th>
                                                         <th>Medsos</th>
+                                                        <th>Pendidikan</th>
+                                                        <th>Jurusan</th>
                                                         <th>Kota</th>
                                                         <th>Kecamatan</th>
                                                         <th>Desa</th>
@@ -118,6 +120,14 @@
                     {
                         data: 'medsos',
                         name: 'medsos'
+                    },
+                    {
+                        data: 'pendidikan',
+                        name: 'pendidikan'
+                    },
+                    {
+                        data: 'jurusan',
+                        name: 'jurusan'
                     },
                     {
                         data: 'kota',
