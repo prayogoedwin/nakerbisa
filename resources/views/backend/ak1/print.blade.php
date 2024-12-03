@@ -326,7 +326,7 @@
                         <ul>
                             @forelse ($keterampilan as $skill)
                                 <li>
-                                    {{ $skill->keahlian ?? '-' }}<br>
+                                    {{ $skill->keahlian ?? '-' }}
                                 </li>
                             @empty
                                 <li>-</li>

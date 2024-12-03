@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\NakerPencariKeahlianKeterampilan;
 use App\Models\NakerPencariKeterampilan;
 use App\Models\NakerPencariPendidikan;
 use App\Models\NakerPencariPengalaman;
@@ -51,10 +52,13 @@ class DataController extends Controller
         // Ambil data keterampilan berdasarkan user_id dari $pencari
         $keterampilan = NakerPencariKeterampilan::where('user_id', $pencari->user_id)->get();
 
+        // Ambil data keahlian berdasarkan user_id dari $pencari
+        $keahlian = NakerPencariKeahlianKeterampilan::where('user_id', $pencari->user_id)->get();
+
         // Ambil data pengalaman kerja berdasarkan user_id dari $pencari
         $pengalaman = NakerPencariPengalaman::where('user_id', $pencari->user_id)->get();
 
-        return view('backend.data-pencari.edit', compact('pencari', 'pendidikan', 'keterampilan', 'pengalaman'));
+        return view('backend.data-pencari.edit', compact('pencari', 'pendidikan', 'keterampilan', 'pengalaman', 'keahlian'));
     }
 
     public function updateDataPencari(Request $request, $id)

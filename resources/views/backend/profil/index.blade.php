@@ -381,11 +381,14 @@
                                                                     <label for="foto">Upload Foto Formal</label>
                                                                     <input type="file" id="foto"
                                                                         class="form-control" name="foto">
-                                                                        @if ($profil->foto)
-                                                                        <img src="{{ asset('storage/' . $profil->foto) }}" alt="Foto Profil" class="img-thumbnail mt-2" width="150">
+                                                                    @if ($profil->foto)
+                                                                        <img src="{{ asset('storage/' . $profil->foto) }}"
+                                                                            alt="Foto Profil" class="img-thumbnail mt-2"
+                                                                            width="150">
                                                                     @else
                                                                         <!-- Tampilkan keterangan hanya jika foto belum ada -->
-                                                                        <small class="text-danger">Foto Formal Wajib Diupload!</small>
+                                                                        <small class="text-danger">Foto Formal Wajib
+                                                                            Diupload!</small>
                                                                     @endif
                                                                 </div>
                                                             </div>
@@ -586,12 +589,13 @@
                                                 <!-- Tampilkan Data Keterampilan -->
                                                 @if ($keahlian->isNotEmpty())
                                                     <div class="list-group">
-                                                        @foreach ($keahlian as $item)
-                                                            <div class="list-group-item">
-                                                                <p><strong>Keahlian :</strong>
-                                                                    {{ $item->keahlian }}</p>
-                                                            </div>
-                                                        @endforeach
+                                                        <ul>
+                                                            @foreach ($keahlian as $item)
+                                                                <li>
+                                                                    {{ $item->keahlian ?? '-' }}
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
                                                     </div>
                                                 @else
                                                     <div class="alert alert-warning" role="alert">
