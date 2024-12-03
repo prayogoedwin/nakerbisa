@@ -42,14 +42,13 @@
                                                         <th>Kodepos</th>
                                                         <th>Tahun Lulus</th>
                                                         <th>Medsos</th>
+                                                        <th>Kota</th>
+                                                        <th>Kecamatan</th>
+                                                        <th>Desa</th>
                                                         <th>Status Saat Ini</th>
                                                         <th>Sektor Pekerjaan Saat Ini</th>
                                                         <th>Jam Kerja</th>
                                                         <th>Gaji</th>
-                                                        <th>Provinsi</th>
-                                                        <th>Kota</th>
-                                                        <th>Kecamatan</th>
-                                                        <th>Desa</th>
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
@@ -121,6 +120,18 @@
                         name: 'medsos'
                     },
                     {
+                        data: 'kota',
+                        name: 'kota'
+                    },
+                    {
+                        data: 'kecamatan',
+                        name: 'kecamatan'
+                    },
+                    {
+                        data: 'desa',
+                        name: 'desa'
+                    },
+                    {
                         data: 'status',
                         name: 'status'
                     },
@@ -135,22 +146,6 @@
                     {
                         data: 'gaji',
                         name: 'gaji'
-                    },
-                    {
-                        data: 'provinsi',
-                        name: 'provinsi'
-                    },
-                    {
-                        data: 'kota',
-                        name: 'kota'
-                    },
-                    {
-                        data: 'kecamatan',
-                        name: 'kecamatan'
-                    },
-                    {
-                        data: 'desa',
-                        name: 'desa'
                     },
                     {
                         data: 'options',

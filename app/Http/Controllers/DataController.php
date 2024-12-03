@@ -35,18 +35,12 @@ class DataController extends Controller
                 'users_pencari.sektor_pekerjaan_saat_ini',
                 'users_pencari.jam_kerja',
                 'users_pencari.gaji',
-                'users_pencari.id_provinsi',
                 'users_pencari.id_kota',
                 'users_pencari.id_kecamatan',
                 'users_pencari.id_desa'
             ]);
 
             return DataTables::eloquent($query)
-                ->addColumn('provinsi', function ($data) {
-                    // Ambil nama provinsi berdasarkan id_provinsi
-                    $provinsi = DB::table('naker_provinsi')->where('id', $data->id_provinsi)->value('name');
-                    return $provinsi ?? 'Tidak Ditemukan';
-                })
                 ->addColumn('kota', function ($data) {
                     // Ambil nama kota berdasarkan id_kota
                     $kota = DB::table('naker_kabkota')->where('id', $data->id_kota)->value('name');
@@ -195,14 +189,13 @@ class DataController extends Controller
             'kodepos',
             'tahun_lulus',
             'medsos',
+            'id_kota',
+            'id_kecamatan',
+            'id_desa',
             'status_saat_ini',
             'sektor_pekerjaan_saat_ini',
             'jam_kerja',
-            'gaji',
-            'id_provinsi',
-            'id_kota',
-            'id_kecamatan',
-            'id_desa'
+            'gaji'
         ]);
 
         // Terapkan filter pencarian dari DataTables
@@ -217,14 +210,13 @@ class DataController extends Controller
                 ->orWhere('kodepos', 'like', "%{$search}%")
                 ->orWhere('tahun_lulus', 'like', "%{$search}%")
                 ->orWhere('medsos', 'like', "%{$search}%")
+                ->orWhere('id_kota', 'like', "%{$search}%")
+                ->orWhere('id_kecamatan', 'like', "%{$search}%")
+                ->orWhere('id_desa', 'like', "%{$search}%")
                 ->orWhere('status_saat_ini', 'like', "%{$search}%")
                 ->orWhere('sektor_pekerjaan_saat_ini', 'like', "%{$search}%")
                 ->orWhere('jam_kerja', 'like', "%{$search}%")
-                ->orWhere('gaji', 'like', "%{$search}%")
-                ->orWhere('id_provinsi', 'like', "%{$search}%")
-                ->orWhere('id_kota', 'like', "%{$search}%")
-                ->orWhere('id_kecamatan', 'like', "%{$search}%")
-                ->orWhere('id_desa', 'like', "%{$search}%");
+                ->orWhere('gaji', 'like', "%{$search}%");
         }
 
         // Ambil data setelah difilter
@@ -248,14 +240,13 @@ class DataController extends Controller
             'Kodepos',
             'Tahun Lulus',
             'Medsos',
+            'Kota',
+            'Kecamatan',
+            'Desa',
             'Status Saat Ini',
             'Sektor Pekerjaan Saat Ini',
             'Jam Kerja',
             'Gaji',
-            'Provinsi',
-            'Kota',
-            'Kecamatan',
-            'Desa'
         ];
 
         // Callback untuk menulis data ke CSV
@@ -265,7 +256,6 @@ class DataController extends Controller
 
             foreach ($pencariData as $data) {
                 // Ambil nama wilayah untuk setiap kolom
-                $provinsi = DB::table('naker_provinsi')->where('id', $data->id_provinsi)->value('name');
                 $kota = DB::table('naker_kabkota')->where('id', $data->id_kota)->value('name');
                 $kecamatan = DB::table('naker_kecamatan')->where('id', $data->id_kecamatan)->value('name');
                 $desa = DB::table('naker_desa')->where('id', $data->id_desa)->value('name');
@@ -284,14 +274,13 @@ class DataController extends Controller
                     $data->kodepos,
                     $data->tahun_lulus,
                     $data->medsos,
+                    $kota,     
+                    $kecamatan, 
+                    $desa,     
                     $status,
                     $sektor,
                     $data->jam_kerja,
-                    $data->gaji,
-                    $provinsi, 
-                    $kota,     
-                    $kecamatan, 
-                    $desa     
+                    $data->gaji
                 ]);
             }
 
