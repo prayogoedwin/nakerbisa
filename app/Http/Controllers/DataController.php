@@ -135,33 +135,72 @@ class DataController extends Controller
 
     public function exportCsv()
     {
-        // Mendapatkan data nama dan alamat dari UserPencari
-        $pencariData = UserPencari::select('name', 'alamat')->get();
+        $fileName = 'data_pencari.csv';
 
-        // Menentukan nama file CSV
-        $filename = "data_pencari_" . date('Ymd') . ".csv";
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"$fileName\"",
+        ];
 
-        // Menentukan header response
-        header('Content-Type: text/csv');
-        header('Content-Disposition: attachment;filename=' . $filename);
+        $columns = [
+            'KTP',
+            'Nama',
+            'Tempat Lahir',
+            'Tanggal Lahir',
+            'Gender',
+            'Alamat',
+            'Kode Pos',
+            'Tahun Lulus',
+            'Medsos',
+            'Status Saat Ini',
+            'Sektor Pekerjaan Saat Ini',
+            'Jam Kerja',
+            'Gaji'
+        ];
 
-        // Membuka output stream
-        $file = fopen('php://output', 'w');
+        $callback = function () use ($columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
 
-        // Menambahkan header kolom di CSV
-        fputcsv($file, ['Nama', 'Alamat']);
+            UserPencari::select([
+                'ktp',
+                'name',
+                'tempat_lahir',
+                'tanggal_lahir',
+                'gender',
+                'alamat',
+                'kodepos',
+                'tahun_lulus',
+                'medsos',
+                'status_saat_ini',
+                'sektor_pekerjaan_saat_ini',
+                'jam_kerja',
+                'gaji'
+            ])->chunk(1000, function ($pencariData) use ($file) {
+                foreach ($pencariData as $data) {
+                    fputcsv($file, [
+                        $data->ktp,
+                        $data->name,
+                        $data->tempat_lahir,
+                        $data->tanggal_lahir,
+                        $data->gender,
+                        $data->alamat,
+                        $data->kodepos,
+                        $data->tahun_lulus,
+                        $data->medsos,
+                        $data->status_saat_ini,
+                        $data->sektor_pekerjaan_saat_ini,
+                        $data->jam_kerja,
+                        $data->gaji,
+                    ]);
+                }
+            });
 
-        // Menulis data ke dalam CSV
-        foreach ($pencariData as $row) {
-            fputcsv($file, [$row->name, $row->alamat]);
-        }
+            fclose($file);
+        };
 
-        // Menutup output stream
-        fclose($file);
-        exit;
+        return response()->stream($callback, 200, $headers);
     }
-
-
 
 
     public function penyedia(Request $request)
