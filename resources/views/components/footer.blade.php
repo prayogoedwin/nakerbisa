@@ -12,9 +12,9 @@
             <div class="row">
                 <div class="col-lg-4 col-md-6 footer-item pr-50 pr-xs-15">
                     <div class="f-item about">
-                       
-                            <img class="logo" src="{{ asset('assets/nakerbisa_fe/img/self/nakerbisa_white.png') }}"
-                             alt="Logo">
+
+                        <img class="logo" src="{{ asset('assets/nakerbisa_fe/img/self/nakerbisa_white.png') }}"
+                            alt="Logo">
                         <p>
                             NAKERBISA adalah Sistem Informasi Penempatan Tenaga Kerja yang di kelola oleh Dinas
                             Perindustrian dan Tenaga Kerja Kabupaten Rembang. <br />
@@ -240,6 +240,56 @@
         $('#modalPilihPeran').modal('show');
     }
 </script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+
+<script>
+    // Pie chart untuk laki-laki
+    @isset($pendidikanLakiLaki)
+        Highcharts.chart('pie-chart-laki', {
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: 'Pendidikan Tenaga Kerja Laki-Laki'
+            },
+            series: [{
+                name: 'Pendidikan',
+                data: [
+                    @foreach ($pendidikanLakiLaki as $item)
+                        {
+                            name: "{{ $item->pendidikan }}",
+                            y: {{ $item->total }}
+                        },
+                    @endforeach
+                ]
+            }]
+        });
+    @endisset
+
+    // Pie chart untuk perempuan
+    @isset($pendidikanPerempuan)
+        Highcharts.chart('pie-chart-perempuan', {
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: 'Pendidikan Tenaga Kerja Perempuan'
+            },
+            series: [{
+                name: 'Pendidikan',
+                data: [
+                    @foreach ($pendidikanPerempuan as $item)
+                        {
+                            name: "{{ $item->pendidikan }}",
+                            y: {{ $item->total }}
+                        },
+                    @endforeach
+                ]
+            }]
+        });
+    @endisset
+</script>
+
 </body>
 
 </html>

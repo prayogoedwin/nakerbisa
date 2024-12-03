@@ -72,8 +72,26 @@ class DepanController extends Controller
 
     public function talent_pendidikan()
     {
-        return view('depan.depan_talent-pendidikan');
+        // Ambil data berdasarkan kecamatan, pendidikan, dan gender (laki-laki/perempuan)
+        $pendidikanLakiLaki = UserPencari::select('naker_pendidikan.name as pendidikan', DB::raw('count(*) as total'))
+            ->join('naker_pendidikan', 'users_pencari.id_pendidikan', '=', 'naker_pendidikan.id')
+            ->where('users_pencari.gender', 'L')
+            ->groupBy('users_pencari.id_pendidikan')
+            ->get();
+
+        $pendidikanPerempuan = UserPencari::select('naker_pendidikan.name as pendidikan', DB::raw('count(*) as total'))
+            ->join('naker_pendidikan', 'users_pencari.id_pendidikan', '=', 'naker_pendidikan.id')
+            ->where('users_pencari.gender', 'P')
+            ->groupBy('users_pencari.id_pendidikan')
+            ->get();
+
+        // Kirim data ke view, dan pastikan variabel ada di setiap view
+        return view('depan.depan_talent-pendidikan', [
+            'pendidikanLakiLaki' => $pendidikanLakiLaki ?? [],
+            'pendidikanPerempuan' => $pendidikanPerempuan ?? [],
+        ]);
     }
+
 
     public function login()
     {
