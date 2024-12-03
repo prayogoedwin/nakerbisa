@@ -21,13 +21,18 @@ class DataController extends Controller
             $query = UserPencari::select(['id', 'name', 'alamat']);
 
             return DataTables::eloquent($query)
+                ->filter(function ($query) use ($request) {
+                    if ($request->has('search') && $request->search['value'] !== '') {
+                        $search = $request->search['value'];
+                        $query->where('name', 'like', "%{$search}%")
+                            ->orWhere('alamat', 'like', "%{$search}%");
+                    }
+                })
                 ->addIndexColumn()
                 ->addColumn('options', function ($data) {
-                    return '
-                        <a href="' . route('data.pencari.edit', $data->id) . '" class="btn btn-primary btn-sm">Edit</a>
-                    ';
+                    return '<a href="' . route('data.pencari.edit', $data->id) . '" class="btn btn-primary btn-sm">Edit</a>';
                 })
-                ->rawColumns(['options']) // Izinkan kolom options untuk merender HTML
+                ->rawColumns(['options'])
                 ->make(true);
         }
 
@@ -133,74 +138,41 @@ class DataController extends Controller
         return redirect()->route('data.pencari')->with('success', 'Profil berhasil diperbarui.');
     }
 
-    public function exportCsv()
+    public function export(Request $request)
     {
-        $fileName = 'data_pencari.csv';
+        $query = UserPencari::select(['id', 'name', 'alamat']);
 
+        // Terapkan filter pencarian dari DataTables
+        if ($request->has('search') && $request->search !== '') {
+            $search = $request->search;
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('alamat', 'like', "%{$search}%");
+        }
+
+        $pencariData = $query->get();
+
+        $fileName = 'data_pencari.csv';
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => "attachment; filename=\"$fileName\"",
         ];
 
-        $columns = [
-            'KTP',
-            'Nama',
-            'Tempat Lahir',
-            'Tanggal Lahir',
-            'Gender',
-            'Alamat',
-            'Kode Pos',
-            'Tahun Lulus',
-            'Medsos',
-            'Status Saat Ini',
-            'Sektor Pekerjaan Saat Ini',
-            'Jam Kerja',
-            'Gaji'
-        ];
+        $columns = ['ID', 'Nama', 'Alamat'];
 
-        $callback = function () use ($columns) {
+        $callback = function () use ($pencariData, $columns) {
             $file = fopen('php://output', 'w');
             fputcsv($file, $columns);
 
-            UserPencari::select([
-                'ktp',
-                'name',
-                'tempat_lahir',
-                'tanggal_lahir',
-                'gender',
-                'alamat',
-                'kodepos',
-                'tahun_lulus',
-                'medsos',
-                'status_saat_ini',
-                'sektor_pekerjaan_saat_ini',
-                'jam_kerja',
-                'gaji'
-            ])->chunk(1000, function ($pencariData) use ($file) {
-                foreach ($pencariData as $data) {
-                    fputcsv($file, [
-                        $data->ktp,
-                        $data->name,
-                        $data->tempat_lahir,
-                        $data->tanggal_lahir,
-                        $data->gender,
-                        $data->alamat,
-                        $data->kodepos,
-                        $data->tahun_lulus,
-                        $data->medsos,
-                        $data->status_saat_ini,
-                        $data->sektor_pekerjaan_saat_ini,
-                        $data->jam_kerja,
-                        $data->gaji,
-                    ]);
-                }
-            });
+            foreach ($pencariData as $data) {
+                fputcsv($file, [$data->id, $data->name, $data->alamat]);
+            }
 
             fclose($file);
         };
 
         return response()->stream($callback, 200, $headers);
     }
+
 
 
     public function penyedia(Request $request)

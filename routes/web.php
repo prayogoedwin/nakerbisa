@@ -182,7 +182,7 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
 
     Route::prefix('data')->group(function () {
         Route::get('pencari', [DataController::class, 'pencari'])->name('data.pencari');
-        Route::get('pencari/export', [DataController::class, 'exportCsv'])->name('data.pencari.export');
+        Route::get('pencari/export', [DataController::class, 'export'])->name('data.pencari.export');
         Route::get('penyedia', [DataController::class, 'penyedia'])->name('data.penyedia');
 
         Route::get('/pencari/edit/{id}', [DataController::class, 'edit'])->name('data.pencari.edit');

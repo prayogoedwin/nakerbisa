@@ -27,7 +27,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <h1>Data Pencari Kerja</h1>
-                                        <a href="{{ route('data.pencari.export') }}" class="btn btn-success">Export CSV</a>
+                                        <a href="#" id="export-csv" class="btn btn-success">Export CSV</a>
                                         <div class="table-responsive">
                                             <table id="pencari-table" class="table table-bordered">
                                                 <thead>
@@ -60,33 +60,45 @@
 
 @push('js')
     <script>
-        $('#pencari-table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: '{{ route('data.pencari') }}',
-            columns: [{
-                    data: 'id',
-                    name: 'id'
-                },
-                {
-                    data: 'name',
-                    name: 'name'
-                },
-                {
-                    data: 'alamat',
-                    name: 'alamat'
-                },
-                {
-                    data: 'options',
-                    name: 'options',
-                    orderable: false,
-                    searchable: false
-                } // Tambahkan kolom tombol Edit
-            ],
-            language: {
-                emptyTable: "Tidak ada data tersedia di tabel",
-                processing: "Memproses...",
-            },
+        $(document).ready(function() {
+            let table = $('#pencari-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{ route('data.pencari') }}',
+                columns: [{
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'alamat',
+                        name: 'alamat'
+                    },
+                    {
+                        data: 'options',
+                        name: 'options',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                language: {
+                    emptyTable: "Tidak ada data tersedia di tabel",
+                    processing: "Memproses...",
+                }
+            });
+
+            $('#export-csv').on('click', function(e) {
+                e.preventDefault();
+                let searchValue = table.search();
+
+                let url = '{{ route('data.pencari.export') }}';
+                url += '?search=' + encodeURIComponent(searchValue);
+
+                window.location.href = url;
+            });
         });
     </script>
 @endpush
