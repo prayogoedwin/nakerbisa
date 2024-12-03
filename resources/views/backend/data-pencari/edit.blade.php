@@ -428,7 +428,7 @@
                                             <button class="accordion-button collapsed" type="button"
                                                 data-bs-toggle="collapse" data-bs-target="#flush-collapseKeterampilan"
                                                 aria-expanded="false" aria-controls="flush-collapseKeterampilan">
-                                                <h4 class="card-title">Keterampilan</h4>
+                                                <h4 class="card-title">Sertifikasi</h4>
                                             </button>
                                         </h2>
                                         <div id="flush-collapseKeterampilan" class="accordion-collapse collapse show"
@@ -455,7 +455,7 @@
                                                     </div>
                                                 @else
                                                     <div class="alert alert-warning" role="alert">
-                                                        Data keterampilan belum tersedia.
+                                                        Data sertifikasi belum tersedia.
                                                     </div>
                                                 @endif
 

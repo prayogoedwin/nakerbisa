@@ -13,7 +13,7 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('profil.index') }}">Profil</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Tambah Data Sertifikasi</li>
+                                <li class="breadcrumb-item active" aria-current="page">Tambah Data Keahlian & Keterampilan</li>
                             </ol>
                         </nav>
                         <div class="row">
@@ -35,11 +35,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
-                                                        <th>Lembaga Penyelenggara</th>
-                                                        <th>Alamat Penyelenggara</th>
-                                                        <th>Tahun Lulus</th>
-                                                        <th>No Sertifikat</th>
-                                                        <th>Lembaga Penguji</th>
+                                                        <th>Keahlian</th>
                                                         <th>Options</th>
                                                     </tr>
                                                 </thead>
@@ -64,7 +60,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah Sertifikasi</h5>
+                    <h5 class="modal-title">Tambah Keahlian & Keterampilan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -72,41 +68,11 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="floating-label" for="lembaga_penyelenggara">Lembaga Penyelenggara</label>
-                                    <input type="text" class="form-control" id="lembaga_penyelenggara"
-                                        name="lembaga_penyelenggara">
+                                    <label class="floating-label" for="keahlian">Keahlian</label>
+                                    <input type="text" class="form-control" id="keahlian"
+                                        name="keahlian">
                                 </div>
                             </div>
-
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label class="floating-label" for="alamat_penyelenggara">Alamat Penyelenggara</label>
-                                    <input type="text" class="form-control" id="alamat_penyelenggara"
-                                        name="alamat_penyelenggara">
-                                </div>
-                            </div>
-
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label class="floating-label" for="lulus_tahun">Lulus Tahun</label>
-                                    <input type="number" class="form-control" id="lulus_tahun" name="lulus_tahun">
-                                </div>
-                            </div>
-
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label class="floating-label" for="no_sertifikat">No Sertifikat</label>
-                                    <input type="number" class="form-control" id="no_sertifikat" name="no_sertifikat">
-                                </div>
-                            </div>
-
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label class="floating-label" for="lembaga_penguji">Lembaga Penguji</label>
-                                    <input type="text" class="form-control" id="lembaga_penguji" name="lembaga_penguji">
-                                </div>
-                            </div>
-
                             <div class="col-sm-12 text-end">
                                 <button class="btn btn-primary mt-3">Submit</button>
                                 <button type="reset" class="btn btn-danger mt-3">Clear</button>
@@ -123,7 +89,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalEditLabel">Edit Sertifikasi</h5>
+                    <h5 class="modal-title" id="modalEditLabel">Edit Keahlian & Keterampilan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -131,42 +97,11 @@
                         <input type="hidden" id="editId">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="floating-label" for="editLembagaPenyelenggara">Lembaga Penyelenggara</label>
-                                <input type="text" class="form-control" id="editLembagaPenyelenggara"
-                                    name="lembaga_penyelenggara">
+                                <label class="floating-label" for="edtiKeahlian">Keahlian</label>
+                                <input type="text" class="form-control" id="edtiKeahlian"
+                                    name="keahlian">
                             </div>
                         </div>
-
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label class="floating-label" for="editAlamatPenyelenggara">Alamat Penyelenggara</label>
-                                <input type="text" class="form-control" id="editAlamatPenyelenggara"
-                                    name="alamat_penyelenggara">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label class="floating-label" for="editLulusTahun">Lulus Tahun</label>
-                                <input type="number" class="form-control" id="editLulusTahun" name="lulus_tahun">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label class="floating-label" for="editNoSertifikat">No Sertifikat</label>
-                                <input type="number" class="form-control" id="editNoSertifikat" name="no_sertifikat">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label class="floating-label" for="editLembagaPenguji">Lembaga Penguji</label>
-                                <input type="text" class="form-control" id="editLembagaPenguji"
-                                    name="lembaga_penguji">
-                            </div>
-                        </div>
-
                         <div class="col-sm-12 text-end">
                             <button type="button" class="btn btn-primary mt-3"
                                 onclick="updateKeterampilan()">Submit</button>
@@ -185,7 +120,7 @@
             $('#simpletable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('keterampilan.index') }}',
+                ajax: '{{ route('keahlian-keterampilan.index') }}',
                 autoWidth: false,
                 columns: [{
                         data: 'DT_RowIndex',
@@ -193,19 +128,7 @@
                         searchable: false
                     },
                     {
-                        data: 'lembaga_penyelenggara'
-                    },
-                    {
-                        data: 'alamat_penyelenggara'
-                    },
-                    {
-                        data: 'lembaga_penguji'
-                    },
-                    {
-                        data: 'lulus_tahun'
-                    },
-                    {
-                        data: 'no_sertifikat'
+                        data: 'keahlian'
                     },
                     {
                         data: 'options',
@@ -223,25 +146,21 @@
         $('#registerForm').submit(function(e) {
             e.preventDefault();
             var formData = {
-                lembaga_penyelenggara: $('#lembaga_penyelenggara').val(),
-                alamat_penyelenggara: $('#alamat_penyelenggara').val(),
-                lulus_tahun: $('#lulus_tahun').val(),
-                no_sertifikat: $('#no_sertifikat').val(),
-                lembaga_penguji: $('#lembaga_penguji').val(),
+                keahlian: $('#keahlian').val(),
                 _token: '{{ csrf_token() }}'
             };
 
             $.ajax({
                 type: 'POST',
-                url: '{{ route('keterampilan.add') }}',
+                url: '{{ route('keahlian-keterampilan.add') }}',
                 data: formData,
                 success: function(response) {
                     if (response.success) {
-                        alert('Berhasil menambahkan data sertifikasi');
+                        alert('Berhasil menambahkan data keterampilan');
                         $('#modal-report').modal('hide');
                         location.reload();
                     } else {
-                        alert('Gagal menambahkan data sertifikasi');
+                        alert('Gagal menambahkan data keterampilan');
                     }
                 },
                 error: function(xhr) {
@@ -253,7 +172,7 @@
 
     <script>
         function showEditModal(id) {
-            var detailUrl = "{{ route('keterampilan.detail', ':id') }}".replace(':id', id);
+            var detailUrl = "{{ route('keahlian-keterampilan.detail', ':id') }}".replace(':id', id);
             $.ajax({
                 url: detailUrl,
                 type: 'GET',
@@ -262,11 +181,7 @@
 
                     // Populate the form with the current data
                     $('#editId').val(dt.id);
-                    $('#editLembagaPenyelenggara').val(dt.lembaga_penyelenggara);
-                    $('#editAlamatPenyelenggara').val(dt.alamat_penyelenggara);
-                    $('#editLulusTahun').val(dt.lulus_tahun);
-                    $('#editNoSertifikat').val(dt.no_sertifikat);
-                    $('#editLembagaPenguji').val(dt.lembaga_penguji);
+                    $('#edtiKeahlian').val(dt.keahlian);
 
                     // Show the modal
                     $('#modal-edit').modal('show');
@@ -280,21 +195,17 @@
         function updateKeterampilan() {
             var id = $('#editId').val();
             var formData = {
-                lembaga_penyelenggara: $('#editLembagaPenyelenggara').val(),
-                alamat_penyelenggara: $('#editAlamatPenyelenggara').val(),
-                lulus_tahun: $('#editLulusTahun').val(),
-                no_sertifikat: $('#editNoSertifikat').val(),
-                lembaga_penguji: $('#editLembagaPenguji').val(),
+                keahlian: $('#edtiKeahlian').val(),
                 _token: '{{ csrf_token() }}'
             };
 
             $.ajax({
-                url: "{{ route('keterampilan.update', ':id') }}".replace(':id', id),
+                url: "{{ route('keahlian-keterampilan.update', ':id') }}".replace(':id', id),
                 type: 'PUT',
                 data: formData,
                 success: function(response) {
                     if (response.success) {
-                        alert('Sertifikasi berhasil diperbarui');
+                        alert('Keterampilan berhasil diperbarui');
                         $('#modal-edit').modal('hide');
                         location.reload();
                     } else {
@@ -311,7 +222,7 @@
 
     <script>
         function confirmDelete(id) {
-            var deleteUrl = "{{ route('keterampilan.softdelete', ':id') }}".replace(':id', id);
+            var deleteUrl = "{{ route('keahlian-keterampilan.softdelete', ':id') }}".replace(':id', id);
             if (confirm("Yakin hapus data?")) {
                 // Send a request to the server to soft delete the record
                 $.ajax({

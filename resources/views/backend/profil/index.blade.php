@@ -522,7 +522,7 @@
                                             <button class="accordion-button collapsed" type="button"
                                                 data-bs-toggle="collapse" data-bs-target="#flush-collapseKeterampilan"
                                                 aria-expanded="false" aria-controls="flush-collapseKeterampilan">
-                                                <h4 class="card-title">Keterampilan</h4>
+                                                <h4 class="card-title">Sertifikasi</h4>
                                             </button>
                                         </h2>
                                         <div id="flush-collapseKeterampilan" class="accordion-collapse collapse show"
@@ -549,13 +549,59 @@
                                                     </div>
                                                 @else
                                                     <div class="alert alert-warning" role="alert">
-                                                        Data keterampilan belum tersedia.
+                                                        Data sertifikasi belum tersedia.
                                                     </div>
                                                 @endif
 
                                                 <!-- Button Tambah Data Keterampilan -->
                                                 <div class="d-flex justify-content-end mt-4">
                                                     <a href="{{ route('keterampilan.index') }}"
+                                                        class="btn btn-success btn-sm btn-round has-ripple">
+                                                        <i class="feather icon-plus"></i> Update Data
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Section Dropdown (Update Keterampilan) -->
+                        <section class="section mt-3">
+                            <div class="card">
+                                <div class="accordion accordion-flush" id="accordionFlushKeterampilan">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="flush-headingKeterampilan">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#flush-collapseKeterampilan"
+                                                aria-expanded="false" aria-controls="flush-collapseKeterampilan">
+                                                <h4 class="card-title">Keahlian & Keterampilan</h4>
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseKeterampilan" class="accordion-collapse collapse show"
+                                            aria-labelledby="flush-headingKeterampilan"
+                                            data-bs-parent="#accordionFlushKeterampilan">
+                                            <div class="accordion-body">
+                                                <!-- Tampilkan Data Keterampilan -->
+                                                @if ($keahlian->isNotEmpty())
+                                                    <div class="list-group">
+                                                        @foreach ($keahlian as $item)
+                                                            <div class="list-group-item">
+                                                                <p><strong>Keahlian :</strong>
+                                                                    {{ $item->keahlian }}</p>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                @else
+                                                    <div class="alert alert-warning" role="alert">
+                                                        Data Keahlian belum tersedia.
+                                                    </div>
+                                                @endif
+
+                                                <!-- Button Tambah Data Keterampilan -->
+                                                <div class="d-flex justify-content-end mt-4">
+                                                    <a href="{{ route('keahlian-keterampilan.index') }}"
                                                         class="btn btn-success btn-sm btn-round has-ripple">
                                                         <i class="feather icon-plus"></i> Update Data
                                                     </a>

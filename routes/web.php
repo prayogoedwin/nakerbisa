@@ -16,6 +16,7 @@ use App\Http\Controllers\NakerBeritaNewController;
 use App\Http\Controllers\NakerFaqController;
 use App\Http\Controllers\NakerGaleriController;
 use App\Http\Controllers\NakerInfografisController;
+use App\Http\Controllers\PencariKeahlianKeterampilanController;
 use App\Http\Controllers\PencariKeterampilanController;
 use App\Http\Controllers\PencariPendidikanController;
 use App\Http\Controllers\PencariPengalamanController;
@@ -142,6 +143,12 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('/keterampilan/{id}', [PencariKeterampilanController::class, 'show'])->name('keterampilan.detail');
         Route::put('/keterampilan/update/{id}', [PencariKeterampilanController::class, 'update'])->name('keterampilan.update');
         Route::delete('/keterampilan/delete/{id}', [PencariKeterampilanController::class, 'softdelete'])->name('keterampilan.softdelete');
+
+        Route::get('/keahlian-keterampilan', [PencariKeahlianKeterampilanController::class, 'index'])->name('keahlian-keterampilan.index');
+        Route::post('/keahlian-keterampilan/add', [PencariKeahlianKeterampilanController::class, 'store'])->name('keahlian-keterampilan.add');
+        Route::get('/keahlian-keterampilan/{id}', [PencariKeahlianKeterampilanController::class, 'show'])->name('keahlian-keterampilan.detail');
+        Route::put('/keahlian-keterampilan/update/{id}', [PencariKeahlianKeterampilanController::class, 'update'])->name('keahlian-keterampilan.update');
+        Route::delete('/keahlian-keterampilan/delete/{id}', [PencariKeahlianKeterampilanController::class, 'softdelete'])->name('keahlian-keterampilan.softdelete');
     });
 
     Route::prefix('users')->group(function () {

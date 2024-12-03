@@ -322,16 +322,11 @@
 
                 <div class="inner-content" style="margin-top:50px">
                     <div class="__left">
-                        <h6>KETERAMPILAN</h6>
+                        <h6>KEAHLIAN & KETERAMPILAN</h6>
                         <ul>
                             @forelse ($keterampilan as $skill)
                                 <li>
-                                    <strong>Lembaga Penyelenggara:</strong>
-                                    {{ $skill->lembaga_penyelenggara ?? '-' }}<br>
-                                    <strong>Alamat Penyelenggara:</strong> {{ $skill->alamat_penyelenggara ?? '-' }}<br>
-                                    <strong>Lulus Tahun:</strong> {{ $skill->lulus_tahun ?? '-' }}<br>
-                                    <strong>No. Sertifikat:</strong> {{ $skill->no_sertifikat ?? '-' }}<br>
-                                    <strong>Lembaga Penguji:</strong> {{ $skill->lembaga_penguji ?? '-' }}
+                                    {{ $skill->keahlian ?? '-' }}<br>
                                 </li>
                             @empty
                                 <li>-</li>

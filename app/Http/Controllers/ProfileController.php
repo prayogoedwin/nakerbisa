@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\NakerPencariKeahlianKeterampilan;
 use App\Models\NakerPencariKeterampilan;
 use App\Models\NakerPencariPendidikan;
 use App\Models\NakerPencariPengalaman;
@@ -34,11 +35,14 @@ class ProfileController extends Controller
         // Mengambil data keterampilan berdasarkan user_id
         $keterampilan = NakerPencariKeterampilan::where('user_id', auth()->id())->get();
 
+        // Mengambil data keterampilan berdasarkan user_id
+        $keahlian = NakerPencariKeahlianKeterampilan::where('user_id', auth()->id())->get();
+
         // Mengambil data pengalaman kerja berdasarkan user_id
         $pengalaman = NakerPencariPengalaman::where('user_id', auth()->id())->get();
 
         // Mengirim data ke view
-        return view('backend.profil.index', compact('profil', 'pendidikan', 'keterampilan', 'pengalaman'));
+        return view('backend.profil.index', compact('profil', 'pendidikan', 'keterampilan', 'pengalaman', 'keahlian'));
     }
 
     public function updateUser(Request $request, $id)
