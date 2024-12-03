@@ -153,7 +153,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Talent</a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ url('/depan/bkk') }}">Wilayah</a></li>
+                                <li><a href="{{ url('/depan/talent-wilayah') }}">Wilayah</a></li>
                                 <li><a href="{{ url('/depan/blk') }}">Tempat Kerja</a></li>
                                 <li><a href="{{ url('/depan/talent-pendidikan') }}">Pendidikan</a></li>
                                 <li><a href="{{ url('/depan/talent-ketrampilan') }}">Ketrampilan</a></li>

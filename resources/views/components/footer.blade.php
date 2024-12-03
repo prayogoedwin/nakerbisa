@@ -290,6 +290,44 @@
     @endisset
 </script>
 
+<script>
+    // Bar chart untuk rekap data tenaga kerja per kecamatan
+    @isset($rekapData)
+        Highcharts.chart('bar-chart-wilayah', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Rekap Data Tenaga Kerja di Kabupaten Rembang'
+            },
+            xAxis: {
+                categories: [
+                    @foreach ($rekapData as $data)
+                        "{{ $data['name'] }}",
+                    @endforeach
+                ],
+                title: {
+                    text: 'Kecamatan'
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Jumlah Tenaga Kerja'
+                }
+            },
+            series: [{
+                name: 'Tenaga Kerja',
+                data: [
+                    @foreach ($rekapData as $data)
+                        {{ $data['total'] }},
+                    @endforeach
+                ]
+            }]
+        });
+    @endisset
+</script>
+
 </body>
 
 </html>

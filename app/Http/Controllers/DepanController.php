@@ -92,6 +92,34 @@ class DepanController extends Controller
         ]);
     }
 
+    public function talent_wilayah()
+    {
+        // Ambil semua kecamatan di Rembang
+        $kecamatanData = DB::table('naker_kecamatan')
+            ->select('id', 'name')
+            ->where('id', 'LIKE', '3317%') // 3317 untuk kecamatan di Rembang
+            ->get();
+
+        // Hitung jumlah tenaga kerja per kecamatan dari tabel users_pencari
+        $dataTenagaKerja = DB::table('users_pencari')
+            ->select('id_kecamatan', DB::raw('count(*) as total'))
+            ->where('id_kecamatan', 'LIKE', '3317%') // Filter kecamatan Rembang
+            ->groupBy('id_kecamatan')
+            ->pluck('total', 'id_kecamatan');
+
+        // Gabungkan data kecamatan dengan jumlah tenaga kerja, default 0 jika tidak ada data
+        $rekapData = $kecamatanData->map(function ($item) use ($dataTenagaKerja) {
+            return [
+                'name' => $item->name,
+                'total' => $dataTenagaKerja->get($item->id, 0), // Jika tidak ada, tampilkan 0
+            ];
+        });
+
+        return view('depan.depan_talent-wilayah', compact('rekapData'));
+    }
+
+
+
 
     public function login()
     {
