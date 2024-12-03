@@ -358,8 +358,7 @@
                             </div>
                             <div class="fun-fact">
                                 <div class="counter">
-                                    <div class="timer" data-to="10" data-speed="2000">10</div>
-                                    <!-- <div class="operator"></div> -->
+                                    <div class="timer" data-to="{{ $lowonganTerbaruCount ?? '-'  }}" data-speed="2000">{{ $lowonganTerbaruCount ?? '-'  }}</div>
                                 </div>
                                 <span class="medium">Lowongan Terbaru</span>
                             </div>
@@ -370,14 +369,13 @@
                             </div>
                             <div class="fun-fact">
                                 <div class="counter">
-                                    <div class="timer" data-to="51" data-speed="2000">51</div>
-                                    <!-- <div class="operator"></div> -->
+                                    <div class="timer" data-to="{{ $lowonganAktifCount ?? '-'  }}" data-speed="2000">{{ $lowonganAktifCount ?? '-'  }}</div>
                                 </div>
                                 <span class="medium">Lowongan Aktif</span>
                             </div>
                         </li>
                     </ul>
-                </div>
+                </div>                
             </div>
         </div>
     </div>

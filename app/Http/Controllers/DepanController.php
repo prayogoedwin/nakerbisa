@@ -27,6 +27,8 @@ class DepanController extends Controller
     {
         // Mengambil semua data FAQ
         $faq = NakerFaq::all();
+
+        // Mengambil berita terbaru
         $beritaTerbaru = NakerBerita::select('id', 'name', 'cover', 'status')
             ->where('status', 1)
             ->whereNull('deleted_at')
@@ -34,8 +36,16 @@ class DepanController extends Controller
             ->limit(4)
             ->get();
 
-        // Mengirim faq ke view depan_index
-        return view('depan.depan_index', compact('faq', 'beritaTerbaru'));
+        // Menghitung jumlah lowongan terbaru (misalnya berdasarkan lowongan yang dibuat dalam 30 hari terakhir)
+        $lowonganTerbaruCount = Lowongan::where('created_at', '>=', now()->subDays(30))
+            ->count();
+
+        // Menghitung jumlah lowongan aktif (status_id = 1, misalnya)
+        $lowonganAktifCount = Lowongan::where('status_id', 1)
+            ->count();
+
+        // Mengirim data ke view
+        return view('depan.depan_index', compact('faq', 'beritaTerbaru', 'lowonganTerbaruCount', 'lowonganAktifCount'));
     }
 
 
