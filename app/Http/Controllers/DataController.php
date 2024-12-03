@@ -39,7 +39,9 @@ class DataController extends Controller
                 'users_pencari.id_kecamatan',
                 'users_pencari.id_desa',
                 'users_pencari.id_pendidikan',
-                'users_pencari.id_jurusan'
+                'users_pencari.id_jurusan',
+                'users_pencari.id_agama',
+                'users_pencari.id_status_perkawinan'
             ]);
 
             return DataTables::eloquent($query)
@@ -77,6 +79,16 @@ class DataController extends Controller
                     // Ambil nama jurusan berdasarkan id_jurusan
                     $jurusan = DB::table('naker_jurusan')->where('id', $data->id_jurusan)->value('nama');
                     return $jurusan ?? '-';
+                })
+                ->addColumn('marital', function ($data) {
+                    // Ambil nama marital berdasarkan id_status_perkawinan
+                    $marital = DB::table('naker_marital')->where('id', $data->id_status_perkawinan)->value('name');
+                    return $marital ?? '-';
+                })
+                ->addColumn('agama', function ($data) {
+                    // Ambil nama agama berdasarkan id_agama
+                    $agama = DB::table('naker_agama')->where('id', $data->id_agama)->value('name');
+                    return $agama ?? '-';
                 })
                 ->addIndexColumn()
                 ->addColumn('options', function ($data) {
@@ -201,6 +213,8 @@ class DataController extends Controller
             'kodepos',
             'tahun_lulus',
             'medsos',
+            'id_status_perkawinan',
+            'id_agama',
             'id_pendidikan',
             'id_jurusan',
             'id_kota',
@@ -224,6 +238,8 @@ class DataController extends Controller
                 ->orWhere('kodepos', 'like', "%{$search}%")
                 ->orWhere('tahun_lulus', 'like', "%{$search}%")
                 ->orWhere('medsos', 'like', "%{$search}%")
+                ->orWhere('id_status_perkawinan', 'like', "%{$search}%")
+                ->orWhere('id_agama', 'like', "%{$search}%")
                 ->orWhere('id_pendidikan', 'like', "%{$search}%")
                 ->orWhere('id_jurusan', 'like', "%{$search}%")
                 ->orWhere('id_kota', 'like', "%{$search}%")
@@ -256,8 +272,10 @@ class DataController extends Controller
             'Kodepos',
             'Tahun Lulus',
             'Medsos',
-            'id_pendidikan',
-            'id_jurusan',
+            'Status Perkawinan',
+            'Agama',
+            'Pendidikan',
+            'Jurusan',
             'Kota',
             'Kecamatan',
             'Desa',
@@ -281,6 +299,8 @@ class DataController extends Controller
                 $status = DB::table('status_kerja')->where('id', $data->status_saat_ini)->value('status');
                 $pendidikan = DB::table('naker_pendidikan')->where('id', $data->id_pendidikan)->value('name');
                 $jurusan = DB::table('naker_jurusan')->where('id', $data->id_jurusan)->value('nama');
+                $marital = DB::table('naker_marital')->where('id', $data->id_status_perkawinan)->value('name');
+                $agama = DB::table('naker_agama')->where('id', $data->id_agama)->value('name');
 
                 // Tulis data ke CSV dengan nama wilayah
                 fputcsv($file, [
@@ -294,6 +314,8 @@ class DataController extends Controller
                     $data->kodepos,
                     $data->tahun_lulus,
                     $data->medsos,
+                    $marital,
+                    $agama,
                     $pendidikan,
                     $jurusan,
                     $kota,     

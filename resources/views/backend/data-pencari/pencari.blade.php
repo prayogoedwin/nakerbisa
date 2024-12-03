@@ -42,6 +42,8 @@
                                                         <th>Kodepos</th>
                                                         <th>Tahun Lulus</th>
                                                         <th>Medsos</th>
+                                                        <th>Status Perkawinan</th>
+                                                        <th>Agama</th>
                                                         <th>Pendidikan</th>
                                                         <th>Jurusan</th>
                                                         <th>Kota</th>
@@ -120,6 +122,14 @@
                     {
                         data: 'medsos',
                         name: 'medsos'
+                    },
+                    {
+                        data: 'marital',
+                        name: 'marital'
+                    },
+                    {
+                        data: 'agama',
+                        name: 'agama'
                     },
                     {
                         data: 'pendidikan',
