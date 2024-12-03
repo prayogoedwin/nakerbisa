@@ -133,6 +133,35 @@ class DataController extends Controller
         return redirect()->route('data.pencari')->with('success', 'Profil berhasil diperbarui.');
     }
 
+    public function exportCsv()
+    {
+        // Mendapatkan data nama dan alamat dari UserPencari
+        $pencariData = UserPencari::select('name', 'alamat')->get();
+
+        // Menentukan nama file CSV
+        $filename = "data_pencari_" . date('Ymd') . ".csv";
+
+        // Menentukan header response
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename=' . $filename);
+
+        // Membuka output stream
+        $file = fopen('php://output', 'w');
+
+        // Menambahkan header kolom di CSV
+        fputcsv($file, ['Nama', 'Alamat']);
+
+        // Menulis data ke dalam CSV
+        foreach ($pencariData as $row) {
+            fputcsv($file, [$row->name, $row->alamat]);
+        }
+
+        // Menutup output stream
+        fclose($file);
+        exit;
+    }
+
+
 
 
     public function penyedia(Request $request)

@@ -27,6 +27,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <h1>Data Pencari Kerja</h1>
+                                        <a href="{{ route('data.pencari.export') }}" class="btn btn-success">Export CSV</a>
                                         <div class="table-responsive">
                                             <table id="pencari-table" class="table table-bordered">
                                                 <thead>
