@@ -46,6 +46,10 @@
                                                         <th>Sektor Pekerjaan Saat Ini</th>
                                                         <th>Jam Kerja</th>
                                                         <th>Gaji</th>
+                                                        <th>Provinsi</th>
+                                                        <th>Kota</th>
+                                                        <th>Kecamatan</th>
+                                                        <th>Desa</th>
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
@@ -133,11 +137,27 @@
                         name: 'gaji'
                     },
                     {
+                        data: 'id_provinsi',
+                        name: 'id_provinsi'
+                    },
+                    {
+                        data: 'id_kota',
+                        name: 'id_kota'
+                    },
+                    {
+                        data: 'id_kecamatan',
+                        name: 'id_kecamatan'
+                    },
+                    {
+                        data: 'id_desa',
+                        name: 'id_desa'
+                    },
+                    {
                         data: 'options',
                         name: 'options',
                         orderable: false,
                         searchable: false
-                    } // Aksi (edit button)
+                    }
                 ],
                 language: {
                     emptyTable: "Tidak ada data tersedia di tabel",

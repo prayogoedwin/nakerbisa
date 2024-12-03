@@ -33,7 +33,11 @@ class DataController extends Controller
                 'status_saat_ini',
                 'sektor_pekerjaan_saat_ini',
                 'jam_kerja',
-                'gaji'
+                'gaji',
+                'id_provinsi',
+                'id_kota',
+                'id_kecamatan',
+                'id_desa'
             ]);
 
             return DataTables::eloquent($query)
@@ -52,7 +56,11 @@ class DataController extends Controller
                             ->orWhere('status_saat_ini', 'like', "%{$search}%")
                             ->orWhere('sektor_pekerjaan_saat_ini', 'like', "%{$search}%")
                             ->orWhere('jam_kerja', 'like', "%{$search}%")
-                            ->orWhere('gaji', 'like', "%{$search}%");
+                            ->orWhere('gaji', 'like', "%{$search}%")
+                            ->orWhere('id_provinsi', 'like', "%{$search}%")
+                            ->orWhere('id_kota', 'like', "%{$search}%")
+                            ->orWhere('id_kecamatan', 'like', "%{$search}%")
+                            ->orWhere('id_desa', 'like', "%{$search}%");
                     }
                 })
                 ->addIndexColumn()
@@ -181,7 +189,11 @@ class DataController extends Controller
             'status_saat_ini',
             'sektor_pekerjaan_saat_ini',
             'jam_kerja',
-            'gaji'
+            'gaji',
+            'id_provinsi',
+            'id_kota',
+            'id_kecamatan',
+            'id_desa'
         ]);
 
         // Terapkan filter pencarian dari DataTables
@@ -199,7 +211,11 @@ class DataController extends Controller
                 ->orWhere('status_saat_ini', 'like', "%{$search}%")
                 ->orWhere('sektor_pekerjaan_saat_ini', 'like', "%{$search}%")
                 ->orWhere('jam_kerja', 'like', "%{$search}%")
-                ->orWhere('gaji', 'like', "%{$search}%");
+                ->orWhere('gaji', 'like', "%{$search}%")
+                ->orWhere('id_provinsi', 'like', "%{$search}%")
+                ->orWhere('id_kota', 'like', "%{$search}%")
+                ->orWhere('id_kecamatan', 'like', "%{$search}%")
+                ->orWhere('id_desa', 'like', "%{$search}%");
         }
 
         // Ambil data setelah difilter
@@ -226,7 +242,11 @@ class DataController extends Controller
             'Status Saat Ini',
             'Sektor Pekerjaan Saat Ini',
             'Jam Kerja',
-            'Gaji'
+            'Gaji',
+            'Provinsi',
+            'Kota',
+            'Kecamatan',
+            'Desa'
         ];
 
         // Callback untuk menulis data ke CSV
@@ -249,7 +269,11 @@ class DataController extends Controller
                     $data->status_saat_ini,
                     $data->sektor_pekerjaan_saat_ini,
                     $data->jam_kerja,
-                    $data->gaji
+                    $data->gaji,
+                    $data->id_provinsi,
+                    $data->id_kota,
+                    $data->id_kecamatan,
+                    $data->id_desa
                 ]);
             }
 
@@ -259,9 +283,6 @@ class DataController extends Controller
         // Mengirimkan file CSV ke browser
         return response()->stream($callback, 200, $headers);
     }
-
-
-
 
     public function penyedia(Request $request)
     {
