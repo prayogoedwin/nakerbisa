@@ -8,6 +8,7 @@ use App\Models\NakerBerita;
 use App\Models\NakerFaq;
 use App\Models\NakerGaleri;
 use App\Models\NakerInfografis;
+use App\Models\NakerPencariKeahlianKeterampilan;
 use App\Models\User;
 use App\Models\UserBkk;
 use App\Models\UserBlk;
@@ -57,6 +58,16 @@ class DepanController extends Controller
     public function blk()
     {
         return view('depan.depan_blk');
+    }
+
+    public function talent_ketrampilan()
+    {
+        $ketrampilan = NakerPencariKeahlianKeterampilan::select('keahlian')
+            ->orderBy('created_at', 'desc')
+            ->limit(100) 
+            ->paginate(10); 
+
+        return view('depan.depan_talent-ketrampilan', compact('ketrampilan'));
     }
 
     public function login()
