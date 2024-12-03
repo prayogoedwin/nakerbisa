@@ -137,20 +137,20 @@
                         name: 'gaji'
                     },
                     {
-                        data: 'id_provinsi',
-                        name: 'id_provinsi'
+                        data: 'provinsi',
+                        name: 'provinsi'
                     },
                     {
-                        data: 'id_kota',
-                        name: 'id_kota'
+                        data: 'kota',
+                        name: 'kota'
                     },
                     {
-                        data: 'id_kecamatan',
-                        name: 'id_kecamatan'
+                        data: 'kecamatan',
+                        name: 'kecamatan'
                     },
                     {
-                        data: 'id_desa',
-                        name: 'id_desa'
+                        data: 'desa',
+                        name: 'desa'
                     },
                     {
                         data: 'options',

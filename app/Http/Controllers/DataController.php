@@ -11,6 +11,7 @@ use App\Models\UserPenyedia;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;  // Mengimpor DataTables
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class DataController extends Controller
 {
@@ -18,50 +19,48 @@ class DataController extends Controller
     public function pencari(Request $request)
     {
         if ($request->ajax()) {
-            // Kolom-kolom yang ingin ditampilkan
+            // Ambil data users_pencari beserta nama wilayah
             $query = UserPencari::select([
-                'id',
-                'ktp',
-                'name',
-                'tempat_lahir',
-                'tanggal_lahir',
-                'gender',
-                'alamat',
-                'kodepos',
-                'tahun_lulus',
-                'medsos',
-                'status_saat_ini',
-                'sektor_pekerjaan_saat_ini',
-                'jam_kerja',
-                'gaji',
-                'id_provinsi',
-                'id_kota',
-                'id_kecamatan',
-                'id_desa'
+                'users_pencari.id',
+                'users_pencari.ktp',
+                'users_pencari.name',
+                'users_pencari.tempat_lahir',
+                'users_pencari.tanggal_lahir',
+                'users_pencari.gender',
+                'users_pencari.alamat',
+                'users_pencari.kodepos',
+                'users_pencari.tahun_lulus',
+                'users_pencari.medsos',
+                'users_pencari.status_saat_ini',
+                'users_pencari.sektor_pekerjaan_saat_ini',
+                'users_pencari.jam_kerja',
+                'users_pencari.gaji',
+                'users_pencari.id_provinsi',
+                'users_pencari.id_kota',
+                'users_pencari.id_kecamatan',
+                'users_pencari.id_desa'
             ]);
 
             return DataTables::eloquent($query)
-                ->filter(function ($query) use ($request) {
-                    if ($request->has('search') && $request->search['value'] !== '') {
-                        $search = $request->search['value'];
-                        $query->where('ktp', 'like', "%{$search}%")
-                            ->orWhere('name', 'like', "%{$search}%")
-                            ->orWhere('alamat', 'like', "%{$search}%")
-                            ->orWhere('tempat_lahir', 'like', "%{$search}%")
-                            ->orWhere('tanggal_lahir', 'like', "%{$search}%")
-                            ->orWhere('gender', 'like', "%{$search}%")
-                            ->orWhere('kodepos', 'like', "%{$search}%")
-                            ->orWhere('tahun_lulus', 'like', "%{$search}%")
-                            ->orWhere('medsos', 'like', "%{$search}%")
-                            ->orWhere('status_saat_ini', 'like', "%{$search}%")
-                            ->orWhere('sektor_pekerjaan_saat_ini', 'like', "%{$search}%")
-                            ->orWhere('jam_kerja', 'like', "%{$search}%")
-                            ->orWhere('gaji', 'like', "%{$search}%")
-                            ->orWhere('id_provinsi', 'like', "%{$search}%")
-                            ->orWhere('id_kota', 'like', "%{$search}%")
-                            ->orWhere('id_kecamatan', 'like', "%{$search}%")
-                            ->orWhere('id_desa', 'like', "%{$search}%");
-                    }
+                ->addColumn('provinsi', function ($data) {
+                    // Ambil nama provinsi berdasarkan id_provinsi
+                    $provinsi = DB::table('naker_provinsi')->where('id', $data->id_provinsi)->value('name');
+                    return $provinsi ?? 'Tidak Ditemukan';
+                })
+                ->addColumn('kota', function ($data) {
+                    // Ambil nama kota berdasarkan id_kota
+                    $kota = DB::table('naker_kabkota')->where('id', $data->id_kota)->value('name');
+                    return $kota ?? 'Tidak Ditemukan';
+                })
+                ->addColumn('kecamatan', function ($data) {
+                    // Ambil nama kecamatan berdasarkan id_kecamatan
+                    $kecamatan = DB::table('naker_kecamatan')->where('id', $data->id_kecamatan)->value('name');
+                    return $kecamatan ?? 'Tidak Ditemukan';
+                })
+                ->addColumn('desa', function ($data) {
+                    // Ambil nama desa berdasarkan id_desa
+                    $desa = DB::table('naker_desa')->where('id', $data->id_desa)->value('name');
+                    return $desa ?? 'Tidak Ditemukan';
                 })
                 ->addIndexColumn()
                 ->addColumn('options', function ($data) {
