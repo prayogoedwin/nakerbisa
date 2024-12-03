@@ -121,12 +121,12 @@
                         name: 'medsos'
                     },
                     {
-                        data: 'status_saat_ini',
-                        name: 'status_saat_ini'
+                        data: 'status',
+                        name: 'status'
                     },
                     {
-                        data: 'sektor_pekerjaan_saat_ini',
-                        name: 'sektor_pekerjaan_saat_ini'
+                        data: 'sektor',
+                        name: 'sektor'
                     },
                     {
                         data: 'jam_kerja',

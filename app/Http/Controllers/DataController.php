@@ -62,6 +62,16 @@ class DataController extends Controller
                     $desa = DB::table('naker_desa')->where('id', $data->id_desa)->value('name');
                     return $desa ?? 'Tidak Ditemukan';
                 })
+                ->addColumn('sektor', function ($data) {
+                    // Ambil nama sektor berdasarkan sektor_pekerjaan_saat_ini
+                    $sektor = DB::table('naker_sektor')->where('id', $data->sektor_pekerjaan_saat_ini)->value('name');
+                    return $sektor ?? '-';
+                })
+                ->addColumn('status', function ($data) {
+                    // Ambil nama sektor berdasarkan status_saat_ini
+                    $status = DB::table('status_kerja')->where('id', $data->status_saat_ini)->value('status');
+                    return $status ?? '-';
+                })
                 ->addIndexColumn()
                 ->addColumn('options', function ($data) {
                     return '<a href="' . route('data.pencari.edit', $data->id) . '" class="btn btn-primary btn-sm">Edit</a>';
@@ -259,6 +269,8 @@ class DataController extends Controller
                 $kota = DB::table('naker_kabkota')->where('id', $data->id_kota)->value('name');
                 $kecamatan = DB::table('naker_kecamatan')->where('id', $data->id_kecamatan)->value('name');
                 $desa = DB::table('naker_desa')->where('id', $data->id_desa)->value('name');
+                $sektor = DB::table('naker_sektor')->where('id', $data->sektor_pekerjaan_saat_ini)->value('name');
+                $status = DB::table('status_kerja')->where('id', $data->status_saat_ini)->value('status');
 
                 // Tulis data ke CSV dengan nama wilayah
                 fputcsv($file, [
@@ -272,14 +284,14 @@ class DataController extends Controller
                     $data->kodepos,
                     $data->tahun_lulus,
                     $data->medsos,
-                    $data->status_saat_ini,
-                    $data->sektor_pekerjaan_saat_ini,
+                    $status,
+                    $sektor,
                     $data->jam_kerja,
                     $data->gaji,
-                    $provinsi, // Nama Provinsi
-                    $kota,     // Nama Kota
-                    $kecamatan, // Nama Kecamatan
-                    $desa      // Nama Desa
+                    $provinsi, 
+                    $kota,     
+                    $kecamatan, 
+                    $desa     
                 ]);
             }
 
