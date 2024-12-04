@@ -130,7 +130,23 @@ class BackController extends Controller
                 ];
             });
 
-        return view('backend.statistik.index', compact('genderChartData', 'educationChartData', 'generationChartData', 'sectorCounts', 'cityCounts', 'educationCounts'));
+        $lowonganGenderData = Lowongan::select(DB::raw('sum(jumlah_pria) as total_pria'), DB::raw('sum(jumlah_wanita) as total_wanita'))
+            ->first();
+
+        $lowonganGenderChartData = [
+            ['name' => 'Pria', 'y' => (int) $lowonganGenderData->total_pria],
+            ['name' => 'Wanita', 'y' => (int) $lowonganGenderData->total_wanita]
+        ];
+
+        return view('backend.statistik.index', compact(
+            'genderChartData',
+            'educationChartData',
+            'generationChartData',
+            'sectorCounts',
+            'cityCounts',
+            'educationCounts',
+            'lowonganGenderChartData'
+        ));
     }
 
 
