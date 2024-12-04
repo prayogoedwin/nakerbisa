@@ -24,7 +24,7 @@
         </li>
 
         <!-- Layouts -->
-        <li class="menu-item {{ request()->routeIs('lowongan.pencari.*') ? 'active open' : '' }}">
+        <li class="menu-item {{ request()->routeIs('lowongan.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-table"></i>
                 <div data-i18n="Layouts">Lowongan Kerja</div>
