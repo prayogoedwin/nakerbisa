@@ -79,7 +79,7 @@
             var generationChartData = @json($generationChartData);
             var sectorChartData = @json($sectorCounts);
             var cityChartData = @json($cityCounts);
-            var educationChartData = @json($educationCounts);
+            var educationLowonganChartData = @json($educationCounts);
 
             Highcharts.chart('genderChart', {
                 chart: {
@@ -166,7 +166,7 @@
                 series: [{
                     name: 'Jumlah',
                     colorByPoint: true,
-                    data: educationChartData
+                    data: educationLowonganChartData
                 }]
             });
 
