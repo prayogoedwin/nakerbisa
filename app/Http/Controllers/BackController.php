@@ -138,6 +138,23 @@ class BackController extends Controller
             ['name' => 'Wanita', 'y' => (int) $lowonganGenderData->total_wanita]
         ];
 
+
+        $currentDate = now(); // Mendapatkan tanggal saat ini
+
+        // Menghitung jumlah lowongan aktif
+        $activeLowonganCount = Lowongan::where('tanggal_start', '<=', $currentDate)
+            ->where('tanggal_end', '>=', $currentDate)
+            ->count();
+
+        // Menghitung jumlah lowongan expired
+        $expiredLowonganCount = Lowongan::where('tanggal_end', '<', $currentDate)
+            ->count();
+
+        $lowonganAktifChartData = [
+            ['name' => 'Aktif', 'y' => $activeLowonganCount],
+            ['name' => 'Expired', 'y' => $expiredLowonganCount]
+        ];
+
         return view('backend.statistik.index', compact(
             'genderChartData',
             'educationChartData',
@@ -145,7 +162,8 @@ class BackController extends Controller
             'sectorCounts',
             'cityCounts',
             'educationCounts',
-            'lowonganGenderChartData'
+            'lowonganGenderChartData',
+            'lowonganAktifChartData'
         ));
     }
 

@@ -81,6 +81,7 @@
             var cityChartData = @json($cityCounts);
             var educationLowonganChartData = @json($educationCounts);
             var lowonganGenderChartData = @json($lowonganGenderChartData);
+            var lowonganAktifChartData = @json($lowonganAktifChartData);
 
             Highcharts.chart('genderChart', {
                 chart: {
@@ -197,19 +198,9 @@
                 series: [{
                     name: 'Jumlah',
                     colorByPoint: true,
-                    data: [{
-                            name: 'Aktif',
-                            y: 70
-                        }, // Replace with dynamic data
-                        {
-                            name: 'Expired',
-                            y: 30
-                        }
-                    ]
+                    data: lowonganAktifChartData
                 }]
             });
-
-
         });
     </script>
 @endpush
