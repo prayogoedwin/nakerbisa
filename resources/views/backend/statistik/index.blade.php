@@ -79,6 +79,7 @@
             var generationChartData = @json($generationChartData);
             var sectorChartData = @json($sectorCounts);
             var cityChartData = @json($cityCounts);
+            var educationChartData = @json($educationCounts);
 
             Highcharts.chart('genderChart', {
                 chart: {
@@ -165,35 +166,7 @@
                 series: [{
                     name: 'Jumlah',
                     colorByPoint: true,
-                    data: [{
-                            name: 'SD',
-                            y: 5
-                        }, // Replace with dynamic data
-                        {
-                            name: 'SMP',
-                            y: 10
-                        },
-                        {
-                            name: 'SMA',
-                            y: 35
-                        },
-                        {
-                            name: 'D3',
-                            y: 25
-                        },
-                        {
-                            name: 'S1',
-                            y: 15
-                        },
-                        {
-                            name: 'S2',
-                            y: 7
-                        },
-                        {
-                            name: 'S3',
-                            y: 3
-                        }
-                    ]
+                    data: educationChartData
                 }]
             });
 

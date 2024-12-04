@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Lowongan;
 use App\Models\UserPencari;
 use App\Models\UserPenyedia;
 use Illuminate\Http\Request;
@@ -111,7 +112,25 @@ class BackController extends Controller
                 ];
             });
 
-        return view('backend.statistik.index', compact('genderChartData', 'educationChartData', 'generationChartData', 'sectorCounts', 'cityCounts'));
+        $educationCounts = Lowongan::select('pendidikan_id', DB::raw('count(*) as total'))
+            ->groupBy('pendidikan_id')
+            ->get()
+            ->map(function ($item) {
+                $educationNames = [
+                    1 => 'SD',
+                    2 => 'SMP',
+                    3 => 'SMA',
+                    4 => 'D3',
+                    5 => 'S1',
+                    6 => 'S2',
+                ];
+                return [
+                    'name' => $educationNames[$item->pendidikan_id] ?? 'Tidak Diketahui',
+                    'y' => $item->total
+                ];
+            });
+
+        return view('backend.statistik.index', compact('genderChartData', 'educationChartData', 'generationChartData', 'sectorCounts', 'cityCounts', 'educationCounts'));
     }
 
 
