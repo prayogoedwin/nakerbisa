@@ -460,4 +460,121 @@ class DataController extends Controller
         // Redirect ke halaman profil setelah berhasil update
         return redirect()->route('data.penyedia')->with('success', 'Profil berhasil diperbarui.');
     }
+
+    public function exportPenyedia(Request $request)
+    {
+        $query = UserPenyedia::select([
+            'id',
+            'name',
+            'nib',
+            'jenis_perusahaan',
+            'id_sektor',
+            'alamat',
+            'kodepos',
+            'telpon',
+            'jabatan',
+            'website',
+            'id_kota',
+            'id_kecamatan',
+            'id_desa',
+            'luar_negri',
+            'deskripsi',
+        ]);
+
+        // Terapkan filter pencarian dari DataTables
+        if ($request->has('search') && $request->search !== '') {
+            $search = $request->search;
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('nib', 'like', "%{$search}%")
+                ->orWhere('jenis_perusahaan', 'like', "%{$search}%")
+                ->orWhere('alamat', 'like', "%{$search}%")
+                ->orWhere('kodepos', 'like', "%{$search}%")
+                ->orWhere('telpon', 'like', "%{$search}%")
+                ->orWhere('jabatan', 'like', "%{$search}%")
+                ->orWhere('website', 'like', "%{$search}%")
+                ->orWhere('deskripsi', 'like', "%{$search}%")
+                ->orWhere('luar_negri', 'like', "%{$search}%");
+        }
+
+        // Ambil data setelah difilter
+        $penyediaData = $query->get();
+
+
+        $fileName = 'data_penyedia.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"$fileName\"",
+        ];
+
+        // Kolom-kolom yang akan diekspor ke CSV
+        $columns = [
+            'ID',
+            'Nama Perusahaan',
+            'NIB',
+            'Jenis Perusahaan',
+            'Sektor',
+            'Alamat',
+            'Kodepos',
+            'Telpon',
+            'Jabatan',
+            'Website',
+            'Kota',
+            'Kecamatan',
+            'Desa',
+            'Penyedia Luar Negeri',
+            'Deskripsi',
+        ];
+
+        // Callback untuk menulis data ke CSV
+        $callback = function () use ($penyediaData, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns); // Tulis header CSV
+
+            foreach ($penyediaData as $data) {
+                // Ambil nama wilayah untuk setiap kolom
+                $kota = DB::table('naker_kabkota')->where('id', $data->id_kota)->value('name');
+                $kecamatan = DB::table('naker_kecamatan')->where('id', $data->id_kecamatan)->value('name');
+                $desa = DB::table('naker_desa')->where('id', $data->id_desa)->value('name');
+                $sektor = DB::table('naker_sektor')->where('id', $data->id_sektor)->value('name');
+                $jenisPerusahaanMapping = [
+                    'bumd' => 'Badan Usaha Milik Daerah',
+                    'bumn' => 'Badan Usaha Milik Negara',
+                    'cv' => 'Comanditer Venotschaap',
+                    'firma' => 'Firma',
+                    'instansi' => 'Instansi',
+                    'kp' => 'Koperasi',
+                    'pt' => 'Perseroan Terbatas',
+                    'pp' => 'Perusahaan Perorangan',
+                    'po' => 'PO*',
+                    'yayasan' => 'Yayasan',
+                ];
+                $jenisPerusahaan = $jenisPerusahaanMapping[$data->jenis_perusahaan] ?? 'Tidak Diketahui';
+                $luarNegri = $data->luar_negri == '1' ? 'Ya' : 'Tidak';
+
+                // Tulis data ke CSV dengan nama wilayah dan sektor
+                fputcsv($file, [
+                    $data->id,
+                    $data->name,
+                    $data->nib,
+                    $jenisPerusahaan,
+                    $sektor,
+                    $data->alamat,
+                    $data->kodepos,
+                    $data->telpon,
+                    $data->jabatan,
+                    $data->website,
+                    $kota,
+                    $kecamatan,
+                    $desa,
+                    $luarNegri,
+                    $data->deskripsi,
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        // Mengirimkan file CSV ke browser
+        return response()->stream($callback, 200, $headers);
+    }
 }

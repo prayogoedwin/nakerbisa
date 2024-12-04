@@ -187,7 +187,7 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::put('/pencari/edit/{id}', [DataController::class, 'updateDataPencari'])->name('data.pencari.update');
 
         Route::get('penyedia', [DataController::class, 'penyedia'])->name('data.penyedia');
-        Route::get('penyedia/export', [DataController::class, 'export'])->name('data.penyedia.export');
+        Route::get('penyedia/export', [DataController::class, 'exportPenyedia'])->name('data.penyedia.export');
         Route::get('/penyedia/edit/{id}', [DataController::class, 'editPenyedia'])->name('data.penyedia.edit');
         Route::put('/penyedia/edit/{id}', [DataController::class, 'updateDataPenyedia'])->name('data.penyedia.update');
     });
