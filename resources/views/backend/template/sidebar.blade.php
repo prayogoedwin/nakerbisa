@@ -130,15 +130,15 @@
 
 
         <!-- Layouts -->
-        <li class="menu-item">
+        <li class="menu-item {{ request()->routeIs('lowongan.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-table"></i>
                 <div data-i18n="Layouts">Lowongan Kerja</div>
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('lowongan.index') ? 'active' : '' }}">
+                    <a href="{{ route('lowongan.index') }}" class="menu-link">
                         <div data-i18n="Without menu">Lowongan Kerja</div>
                     </a>
                 </li>
