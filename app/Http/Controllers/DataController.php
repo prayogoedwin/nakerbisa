@@ -359,6 +359,21 @@ class DataController extends Controller
             ]);
 
             return DataTables::eloquent($query)
+                ->addColumn('jenis_perusahaan', function ($data) {
+                    $jenis = [
+                        'bumd' => 'Badan Usaha Milik Daerah',
+                        'bumn' => 'Badan Usaha Milik Negara',
+                        'cv' => 'Comanditer Venotschaap',
+                        'firma' => 'Firma',
+                        'instansi' => 'Instansi',
+                        'kp' => 'Koperasi',
+                        'pt' => 'Perseroan Terbatas',
+                        'pp' => 'Perusahaan Perorangan',
+                        'po' => 'PO*',
+                        'yayasan' => 'Yayasan'
+                    ];
+                    return $jenis[$data->jenis_perusahaan] ?? 'Tidak Diketahui';
+                })
                 ->addColumn('luar_negri', function ($data) {
                     return $data->luar_negri == 1 ? 'Ya' : 'Tidak';
                 })
@@ -391,5 +406,58 @@ class DataController extends Controller
         }
 
         return view('backend.data-penyedia.penyedia');
+    }
+
+    public function editPenyedia($id)
+    {
+        $penyedia = UserPenyedia::findOrFail($id);
+        return view('backend.data-penyedia.edit', compact('penyedia'));
+    }
+
+    public function updateDataPenyedia(Request $request, $id)
+    {
+        // Validasi input dari pengguna
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'luar_negri' => 'required|in:0,1',
+            'jenis_perusahaan' => 'required|in:bumd,bumn,cv,firma,instansi,kp,pt,pp,po,yayasan',
+            'deskripsi' => 'nullable|string|max:500',
+            'nib' => 'nullable|string|max:30',
+            'id_sektor' => 'nullable|integer',
+            'id_provinsi' => '64',
+            'kabkota_id' => 'required|integer',
+            'kecamatan_id' => 'required|integer',
+            'desa_id' => 'required|string|max:10',
+            'alamat' => 'required|string|max:200',
+            'kodepos' => 'required|string|max:5',
+            'telpon' => 'required|string|max:15',
+            'jabatan' => 'nullable|string|max:50',
+            'website' => 'nullable|string|max:100',
+        ]);
+
+        // Mengambil data UserPenyedia berdasarkan ID
+        $penyedia = UserPenyedia::findOrFail($id);
+
+        // Update data UserPenyedia
+        $penyedia->update([
+            'name' => $request->name,
+            'luar_negri' => $request->luar_negri,
+            'jenis_perusahaan' => $request->jenis_perusahaan,
+            'deskripsi' => $request->deskripsi,
+            'nib' => $request->nib,
+            'id_sektor' => $request->id_sektor,
+            'id_provinsi' => '64',
+            'id_kota' => $request->kabkota_id,
+            'id_kecamatan' => $request->kecamatan_id,
+            'id_desa' => $request->desa_id,
+            'alamat' => $request->alamat,
+            'kodepos' => $request->kodepos,
+            'telpon' => $request->telpon,
+            'jabatan' => $request->jabatan,
+            'website' => $request->website,
+        ]);
+
+        // Redirect ke halaman profil setelah berhasil update
+        return redirect()->route('data.penyedia')->with('success', 'Profil berhasil diperbarui.');
     }
 }

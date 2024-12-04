@@ -35,7 +35,7 @@
                                             <button class="accordion-button collapsed" type="button"
                                                 data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
                                                 aria-expanded="false" aria-controls="flush-collapseOne">
-                                                <h4 class="card-title">Edit Data Pencari Kerja</h4>
+                                                <h4 class="card-title">Edit Data Penyedia Kerja</h4>
                                             </button>
                                         </h2>
                                         <div id="flush-collapseOne" class="accordion-collapse collapse show"
@@ -44,62 +44,105 @@
                                             <div class="accordion-body">
                                                 <?php
                                                 $kabkotas = getKabkota();
-                                                $pendidikans = getPendidikan();
-                                                $maritals = getMarital();
-                                                $agamas = getAgama();
                                                 $sektors = getSektor();
-                                                $statusKerjas = getStatusKerja();
                                                 ?>
                                                 <form class="form form-vertical"
-                                                    action="{{ route('data.pencari.update', $pencari->id) }}" method="POST"
-                                                    enctype="multipart/form-data">
+                                                    action="{{ route('data.penyedia.update', $penyedia->id) }}"
+                                                    method="POST" enctype="multipart/form-data">
                                                     @csrf
                                                     @method('PUT')
                                                     <div class="form-body">
                                                         <div class="row">
                                                             <div class="col-6">
                                                                 <div class="form-group">
-                                                                    <label for="name">Nama</label>
+                                                                    <label for="name">Nama Perusahaan</label>
                                                                     <input type="text" id="name"
                                                                         class="form-control" name="name"
-                                                                        value="{{ $pencari->name }}">
+                                                                        value="{{ $penyedia->name }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="form-group">
-                                                                    <label for="ktp">KTP</label>
-                                                                    <input type="text" id="ktp"
-                                                                        class="form-control" name="ktp"
-                                                                        value="{{ $pencari->ktp }}">
+                                                                    <label for="loker">Penyedia Kerja Luar Negeri</label>
+                                                                    <select id="loker" class="form-control"
+                                                                        name="luar_negri">
+                                                                        <option value="0"
+                                                                            {{ $penyedia->luar_negri == '0' ? 'selected' : '' }}>
+                                                                            Tidak</option>
+                                                                        <option value="1"
+                                                                            {{ $penyedia->luar_negri == '1' ? 'selected' : '' }}>
+                                                                            Ya</option>
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="form-group">
-                                                                    <label for="tempat_lahir">Tempat Lahir</label>
-                                                                    <input type="text" id="tempat_lahir"
-                                                                        class="form-control" name="tempat_lahir"
-                                                                        value="{{ $pencari->tempat_lahir }}">
+                                                                    <label for="jenis_perusahaan" class="form-label">Jenis
+                                                                        Perusahaan</label>
+                                                                    <select class="form-select" id="jenis_perusahaan"
+                                                                        name="jenis_perusahaan" required>
+                                                                        <option selected disabled>Pilih Jenis</option>
+                                                                        <option value="bumd"
+                                                                            {{ $penyedia->jenis_perusahaan == 'bumd' ? 'selected' : '' }}>
+                                                                            Badan Usaha Milik Daerah</option>
+                                                                        <option value="bumn"
+                                                                            {{ $penyedia->jenis_perusahaan == 'bumn' ? 'selected' : '' }}>
+                                                                            Badan Usaha Milik Negara</option>
+                                                                        <option value="cv"
+                                                                            {{ $penyedia->jenis_perusahaan == 'cv' ? 'selected' : '' }}>
+                                                                            Comanditer Venotschaap</option>
+                                                                        <option value="firma"
+                                                                            {{ $penyedia->jenis_perusahaan == 'firma' ? 'selected' : '' }}>
+                                                                            Firma</option>
+                                                                        <option value="instansi"
+                                                                            {{ $penyedia->jenis_perusahaan == 'instansi' ? 'selected' : '' }}>
+                                                                            Instansi</option>
+                                                                        <option value="kp"
+                                                                            {{ $penyedia->jenis_perusahaan == 'kp' ? 'selected' : '' }}>
+                                                                            Koperasi</option>
+                                                                        <option value="pt"
+                                                                            {{ $penyedia->jenis_perusahaan == 'pt' ? 'selected' : '' }}>
+                                                                            Perseroan Terbatas</option>
+                                                                        <option value="pp"
+                                                                            {{ $penyedia->jenis_perusahaan == 'pp' ? 'selected' : '' }}>
+                                                                            Perusahaan Perorangan</option>
+                                                                        <option value="po"
+                                                                            {{ $penyedia->jenis_perusahaan == 'po' ? 'selected' : '' }}>
+                                                                            PO*</option>
+                                                                        <option value="yayasan"
+                                                                            {{ $penyedia->jenis_perusahaan == 'yayasan' ? 'selected' : '' }}>
+                                                                            Yayasan</option>
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="form-group">
-                                                                    <label for="tanggal_lahir">Tanggal Lahir</label>
-                                                                    <input type="date" id="tanggal_lahir"
-                                                                        class="form-control" name="tanggal_lahir"
-                                                                        value="{{ $pencari->tanggal_lahir }}">
+                                                                    <label for="deskripsi"
+                                                                        class="form-label">Deskripsi</label>
+                                                                    <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3">{{ $penyedia->deskripsi }}</textarea>
                                                                 </div>
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="form-group">
-                                                                    <label for="gender">Jenis Kelamin</label>
-                                                                    <select id="gender" class="form-control"
-                                                                        name="gender">
-                                                                        <option value="L"
-                                                                            {{ $pencari->gender == 'L' ? 'selected' : '' }}>
-                                                                            Laki-laki</option>
-                                                                        <option value="P"
-                                                                            {{ $pencari->gender == 'P' ? 'selected' : '' }}>
-                                                                            Perempuan</option>
+                                                                    <label for="nib">Nomor Induk Berusaha (NIB)</label>
+                                                                    <input type="text" id="nib"
+                                                                        class="form-control" name="nib"
+                                                                        value="{{ $penyedia->nib }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="id_sektor" class="form-label">Sektor</label>
+                                                                    <select class="form-select" id="id_sektor"
+                                                                        name="id_sektor">
+                                                                        <option selected disabled>Pilih Sektor Pekerjaan
+                                                                        </option>
+                                                                        @foreach ($sektors as $sektor)
+                                                                            <option value="{{ $sektor->id }}"
+                                                                                {{ $penyedia->id_sektor == $sektor->id ? 'selected' : '' }}>
+                                                                                {{ $sektor->name }}
+                                                                            </option>
+                                                                        @endforeach
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -112,7 +155,7 @@
                                                                         <option disabled>Pilih Kabupaten/Kota</option>
                                                                         @foreach ($kabkotas as $kabkot)
                                                                             <option value="{{ $kabkot->id }}"
-                                                                                {{ $pencari->id_kota == $kabkot->id ? 'selected' : '' }}>
+                                                                                {{ $penyedia->id_kota == $kabkot->id ? 'selected' : '' }}>
                                                                                 {{ $kabkot->name }}
                                                                             </option>
                                                                         @endforeach
@@ -147,7 +190,7 @@
                                                                     <label for="alamat">Alamat</label>
                                                                     <input type="text" id="alamat"
                                                                         class="form-control" name="alamat"
-                                                                        value="{{ $pencari->alamat }}">
+                                                                        value="{{ $penyedia->alamat }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-6">
@@ -155,151 +198,33 @@
                                                                     <label for="kodepos">Kode Pos</label>
                                                                     <input type="text" id="kodepos"
                                                                         class="form-control" name="kodepos"
-                                                                        value="{{ $pencari->kodepos }}">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-6">
-                                                                <div class="form-group">
-                                                                    <label for="pendidikan_id">Pendidikan</label>
-                                                                    <select class="form-control" id="pendidikan_id"
-                                                                        name="pendidikan_id" required>
-                                                                        <option selected disabled>Pilih Pendidikan</option>
-                                                                        @foreach ($pendidikans as $pend)
-                                                                            <option value="{{ $pend->id }}"
-                                                                                {{ $pencari->id_pendidikan == $pend->id ? 'selected' : '' }}>
-                                                                                {{ $pend->name }}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-sm-6">
-                                                                <div class="form-group">
-                                                                    <label for="jurusan_id">Jurusan</label>
-                                                                    <select class="form-control" id="jurusan_id"
-                                                                        name="jurusan_id" required>
-                                                                        <option selected disabled>Pilih Jurusan</option>
-                                                                    </select>
+                                                                        value="{{ $penyedia->kodepos }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="form-group">
-                                                                    <label for="tahun_lulus">Tahun Lulus</label>
-                                                                    <input type="text" id="tahun_lulus"
-                                                                        class="form-control" name="tahun_lulus"
-                                                                        value="{{ $pencari->tahun_lulus }}">
+                                                                    <label for="telpon">Telpon</label>
+                                                                    <input type="number" id="telpon"
+                                                                        class="form-control" name="telpon"
+                                                                        value="{{ $penyedia->telpon }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="form-group">
-                                                                    <label for="stsperkawinan" class="form-label">Status
-                                                                        Perkawinan</label>
-                                                                    <select class="form-select" id="status_perkawinan_id"
-                                                                        name="status_perkawinan_id" required>
-                                                                        <option selected disabled>Pilih Status</option>
-                                                                        @foreach ($maritals as $marit)
-                                                                            <option value="{{ $marit->id }}"
-                                                                                {{ $pencari->id_status_perkawinan == $marit->id ? 'selected' : '' }}>
-                                                                                {{ $marit->name }}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
+                                                                    <label for="jabatan">Jabatan</label>
+                                                                    <input type="text" id="jabatan"
+                                                                        class="form-control" name="jabatan"
+                                                                        value="{{ $penyedia->jabatan }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="form-group">
-                                                                    <label for="agama" class="form-label">Agama</label>
-                                                                    <select class="form-select" id="agama_id"
-                                                                        name="agama_id" required>
-                                                                        <option selected disabled>Pilih Agama</option>
-                                                                        @foreach ($agamas as $ag)
-                                                                            <option value="{{ $ag->id }}"
-                                                                                {{ $pencari->id_agama == $ag->id ? 'selected' : '' }}>
-                                                                                {{ $ag->name }}</option>
-                                                                        @endforeach
-                                                                    </select>
+                                                                    <label for="website">Website</label>
+                                                                    <input type="text" id="website"
+                                                                        class="form-control" name="website"
+                                                                        value="{{ $penyedia->website }}">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-6">
-                                                                <div class="form-group">
-                                                                    <label for="medsos">medsos</label>
-                                                                    <input type="text" id="medsos"
-                                                                        class="form-control" name="medsos"
-                                                                        value="{{ $pencari->medsos }}">
-                                                                </div>
-                                                            </div>
-                                                            <div class="mb-3">
-                                                                <label for="statusKerja" class="form-label">Status
-                                                                    Kerja</label>
-                                                                <select class="form-select" id="status_kerja_id"
-                                                                    name="status_kerja_id" required
-                                                                    onchange="togglePekerjaanFields(this.value)">
-                                                                    <option selected disabled>Pilih Status Kerja</option>
-                                                                    @foreach ($statusKerjas as $kerja)
-                                                                        <option value="{{ $kerja->id }}"
-                                                                            {{ $pencari->status_saat_ini == $kerja->id ? 'selected' : '' }}>
-                                                                            {{ $kerja->status }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-
-                                                            <!-- Bidang pekerjaan yang tersembunyi saat status kerja bukan '1' -->
-                                                            <div id="pekerjaan-fields"
-                                                                style="display: {{ $pencari->status_saat_ini == 1 ? 'block' : 'none' }};">
-                                                                <div class="mb-3">
-                                                                    <label for="sektor_pekerjaan_saat_ini"
-                                                                        class="form-label">Sektor Pekerjaan Saat
-                                                                        Ini</label>
-                                                                    <select class="form-select"
-                                                                        id="sektor_pekerjaan_saat_ini"
-                                                                        name="sektor_pekerjaan_saat_ini">
-                                                                        <option selected disabled>Pilih Sektor Pekerjaan
-                                                                        </option>
-                                                                        @foreach ($sektors as $sektor)
-                                                                            <option value="{{ $sektor->id }}"
-                                                                                {{ $pencari->sektor_pekerjaan_saat_ini == $sektor->id ? 'selected' : '' }}>
-                                                                                {{ $sektor->name }}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-
-                                                                <div class="mb-3">
-                                                                    <label for="jam_kerja" class="form-label">Jam Kerja
-                                                                        (per hari)</label>
-                                                                    <input type="number" class="form-control"
-                                                                        id="jam_kerja" name="jam_kerja"
-                                                                        value="{{ $pencari->jam_kerja }}">
-                                                                </div>
-
-                                                                <div class="mb-3">
-                                                                    <label for="gaji" class="form-label">Gaji (per
-                                                                        hari)</label>
-                                                                    <input type="number" step="0.01"
-                                                                        class="form-control" id="gaji"
-                                                                        name="gaji" value="{{ $pencari->gaji }}">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <div class="form-group">
-                                                                    <label for="foto">Upload Foto Formal</label>
-                                                                    <input type="file" id="foto"
-                                                                        class="form-control" name="foto">
-                                                                    @if ($pencari->foto)
-                                                                        <img src="{{ asset('storage/' . $pencari->foto) }}"
-                                                                            alt="Foto Profil" class="img-thumbnail mt-2"
-                                                                            width="150">
-                                                                    @else
-                                                                        <!-- Tampilkan keterangan hanya jika foto belum ada -->
-                                                                        <small class="text-danger">Foto Formal Wajib
-                                                                            Diupload!</small>
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                            <!-- Tambahkan input lainnya sesuai kebutuhan -->
-
                                                             <div class="col-12 d-flex justify-content-end">
                                                                 <button type="submit"
                                                                     class="btn btn-primary me-1 mb-1 mt-3">Update</button>
@@ -307,215 +232,6 @@
                                                         </div>
                                                     </div>
                                                 </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-
-
-                        <!-- Section Dropdown (Update Pendidikan) -->
-                        <section class="section mt-3">
-                            <div class="card">
-                                <div class="accordion accordion-flush" id="accordionFlushPendidikan">
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="flush-headingPendidikan">
-                                            <button class="accordion-button collapsed" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#flush-collapsePendidikan"
-                                                aria-expanded="false" aria-controls="flush-collapsePendidikan">
-                                                <h4 class="card-title">Pendidikan</h4>
-                                            </button>
-                                        </h2>
-                                        <div id="flush-collapsePendidikan" class="accordion-collapse collapse show"
-                                            aria-labelledby="flush-headingPendidikan"
-                                            data-bs-parent="#accordionFlushPendidikan">
-                                            <div class="accordion-body">
-                                                <!-- Tampilkan Data Pendidikan -->
-                                                @if ($pendidikan->isNotEmpty())
-                                                    <div class="list-group">
-                                                        @foreach ($pendidikan as $item)
-                                                            <div class="list-group-item">
-                                                                <h5 class="mb-3"><strong>Nama Sekolah:</strong>
-                                                                    {{ $item->nama_sekolah }}</h5>
-                                                                <p><strong>Alamat Sekolah:</strong>
-                                                                    {{ $item->alamat_sekolah }}</p>
-                                                                <p><strong>Pendidikan:</strong>
-                                                                    {{ $item->pendidikan_name }}
-                                                                </p>
-                                                                <p><strong>Jurusan:</strong>
-                                                                    {{ $item->jurusan_name ?? 'Tidak Ada Jurusan' }}</p>
-                                                                <p><strong>Tahun Lulus:</strong> {{ $item->lulus }}</p>
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                @else
-                                                    <div class="alert alert-warning" role="alert">
-                                                        Data pendidikan belum tersedia.
-                                                    </div>
-                                                @endif
-
-                                                <!-- Button Tambah Data Pendidikan -->
-                                                <div class="d-flex justify-content-end mt-4">
-                                                    {{-- <a href="{{ route('pendidikan.index') }}"
-                                                        class="btn btn-success btn-sm btn-round has-ripple">
-                                                        <i class="feather icon-plus"></i> Update Data
-                                                    </a> --}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                        <!-- Section Dropdown (Update Pengalaman Kerja) -->
-                        <section class="section mt-3">
-                            <div class="card">
-                                <div class="accordion accordion-flush" id="accordionFlushPengalaman">
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="flush-headingPengalaman">
-                                            <button class="accordion-button collapsed" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#flush-collapsePengalaman"
-                                                aria-expanded="false" aria-controls="flush-collapsePengalaman">
-                                                <h4 class="card-title">Pengalaman Kerja</h4>
-                                            </button>
-                                        </h2>
-                                        <div id="flush-collapsePengalaman" class="accordion-collapse collapse show"
-                                            aria-labelledby="flush-headingPengalaman"
-                                            data-bs-parent="#accordionFlushPengalaman">
-                                            <div class="accordion-body">
-                                                <!-- Tampilkan Data Pengalaman Kerja -->
-                                                @if ($pengalaman->isNotEmpty())
-                                                    <div class="list-group">
-                                                        @foreach ($pengalaman as $item)
-                                                            <div class="list-group-item">
-                                                                <h5 class="mb-3"><strong>Nama Perusahaan:</strong>
-                                                                    {{ $item->nama_perusahaan }}</h5>
-                                                                <p><strong>Alamat Perusahaan:</strong>
-                                                                    {{ $item->alamat_perusahaan }}</p>
-                                                                <p><strong>Jabatan:</strong> {{ $item->jabatan }}</p>
-                                                                <p><strong>Mulai Tahun:</strong> {{ $item->mulai_tahun }}
-                                                                </p>
-                                                                <p><strong>Berhenti Tahun:</strong>
-                                                                    {{ $item->berhenti_tahun }}</p>
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                @else
-                                                    <div class="alert alert-warning" role="alert">
-                                                        Data pengalaman kerja belum tersedia.
-                                                    </div>
-                                                @endif
-
-                                                <!-- Button Tambah Data Pengalaman Kerja -->
-                                                <div class="d-flex justify-content-end mt-4">
-                                                    {{-- <a href="{{ route('pengalaman.index') }}"
-                                                        class="btn btn-success btn-sm btn-round has-ripple">
-                                                        <i class="feather icon-plus"></i> Update Data
-                                                    </a> --}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-
-
-                        <!-- Section Dropdown (Update Keterampilan) -->
-                        <section class="section mt-3">
-                            <div class="card">
-                                <div class="accordion accordion-flush" id="accordionFlushKeterampilan">
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="flush-headingKeterampilan">
-                                            <button class="accordion-button collapsed" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#flush-collapseKeterampilan"
-                                                aria-expanded="false" aria-controls="flush-collapseKeterampilan">
-                                                <h4 class="card-title">Sertifikasi</h4>
-                                            </button>
-                                        </h2>
-                                        <div id="flush-collapseKeterampilan" class="accordion-collapse collapse show"
-                                            aria-labelledby="flush-headingKeterampilan"
-                                            data-bs-parent="#accordionFlushKeterampilan">
-                                            <div class="accordion-body">
-                                                <!-- Tampilkan Data Keterampilan -->
-                                                @if ($keterampilan->isNotEmpty())
-                                                    <div class="list-group">
-                                                        @foreach ($keterampilan as $item)
-                                                            <div class="list-group-item">
-                                                                <h5 class="mb-3"><strong>Lembaga Penyelenggara:</strong>
-                                                                    {{ $item->lembaga_penyelenggara }}</h5>
-                                                                <p><strong>Alamat Penyelenggara:</strong>
-                                                                    {{ $item->alamat_penyelenggara }}</p>
-                                                                <p><strong>Tahun Lulus:</strong> {{ $item->lulus_tahun }}
-                                                                </p>
-                                                                <p><strong>Nomor Sertifikat:</strong>
-                                                                    {{ $item->no_sertifikat }}</p>
-                                                                <p><strong>Lembaga Penguji:</strong>
-                                                                    {{ $item->lembaga_penguji }}</p>
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                @else
-                                                    <div class="alert alert-warning" role="alert">
-                                                        Data sertifikasi belum tersedia.
-                                                    </div>
-                                                @endif
-
-                                                <!-- Button Tambah Data Keterampilan -->
-                                                <div class="d-flex justify-content-end mt-4">
-                                                    {{-- <a href="{{ route('keterampilan.index') }}"
-                                                        class="btn btn-success btn-sm btn-round has-ripple">
-                                                        <i class="feather icon-plus"></i> Update Data
-                                                    </a> --}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-
-                        <!-- Section Dropdown (Update Keterampilan) -->
-                        <section class="section mt-3">
-                            <div class="card">
-                                <div class="accordion accordion-flush" id="accordionFlushKeterampilan">
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="flush-headingKeterampilan">
-                                            <button class="accordion-button collapsed" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#flush-collapseKeterampilan"
-                                                aria-expanded="false" aria-controls="flush-collapseKeterampilan">
-                                                <h4 class="card-title">Keahlian & Keterampilan</h4>
-                                            </button>
-                                        </h2>
-                                        <div id="flush-collapseKeterampilan" class="accordion-collapse collapse show"
-                                            aria-labelledby="flush-headingKeterampilan"
-                                            data-bs-parent="#accordionFlushKeterampilan">
-                                            <div class="accordion-body">
-                                                <!-- Tampilkan Data Keterampilan -->
-                                                @if ($keahlian->isNotEmpty())
-                                                    <div class="list-group">
-                                                        <ul>
-                                                            @foreach ($keahlian as $item)
-                                                                <li>
-                                                                    {{ $item->keahlian ?? '-' }}
-                                                                </li>
-                                                            @endforeach
-                                                        </ul>
-                                                    </div>
-                                                @else
-                                                    <div class="alert alert-warning" role="alert">
-                                                        Data sertifikasi belum tersedia.
-                                                    </div>
-                                                @endif
-
-                                                <!-- Button Tambah Data Keterampilan -->
-                                                <div class="d-flex justify-content-end mt-4">
-                                                    {{-- <a href="{{ route('keterampilan.index') }}"
-                                                        class="btn btn-success btn-sm btn-round has-ripple">
-                                                        <i class="feather icon-plus"></i> Update Data
-                                                    </a> --}}
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -537,33 +253,9 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            $("#show-password").change(function() {
-                $(this).prop("checked") ? $("#password").prop("type", "text") : $("#password").prop("type",
-                    "password");
-            });
-        });
-    </script>
-
-    <script>
-        // Fungsi untuk menampilkan atau menyembunyikan bidang pekerjaan
-        function togglePekerjaanFields(status) {
-            const pekerjaanFields = document.getElementById('pekerjaan-fields');
-            pekerjaanFields.style.display = (status === '1') ? 'block' : 'none';
-        }
-
-        // Periksa status saat ini setelah halaman dimuat
-        window.onload = function() {
-            const statusKerjaSelect = document.getElementById('status_kerja_id');
-            togglePekerjaanFields(statusKerjaSelect.value); // Periksa nilai awal pada halaman load
-        };
-    </script>
-
-
-    <script>
-        $(document).ready(function() {
-            var kabkotaId = "{{ $pencari->id_kota }}";
-            var kecamatanId = "{{ $pencari->id_kecamatan }}";
-            var desaId = "{{ $pencari->id_desa }}";
+            var kabkotaId = "{{ $penyedia->id_kota }}";
+            var kecamatanId = "{{ $penyedia->id_kecamatan }}";
+            var desaId = "{{ $penyedia->id_desa }}";
 
             // Muat data kecamatan jika ada kabkota terpilih
             if (kabkotaId) {
@@ -682,33 +374,6 @@
                 }
             });
         });
-
-        $('#pendidikan_id').on('change', function() {
-            // console.log(this.value);
-            var kd = this.value
-
-            // Panggil API untuk mendapatkan kecamatan berdasarkan kabkota_id
-            $.ajax({
-                url: "{{ route('get-jurusan-bypendidikan', ':id') }}".replace(':id', kd), // Panggil API
-                type: 'GET',
-                success: function(response) {
-                    // Kosongkan dropdown kecamatan sebelumnya
-                    $('#jurusan_id').empty();
-
-                    // Tambahkan opsi default
-                    $('#jurusan_id').append('<option selected disabled>Pilih Jurusan</option>');
-
-                    // Loop data kecamatan dan tambahkan ke dropdown
-                    $.each(response, function(index, jurusan) {
-                        $('#jurusan_id').append('<option value="' + jurusan.id + '">' +
-                            jurusan.nama + '</option>');
-                    });
-                },
-                error: function(xhr) {
-                    console.error(xhr);
-                }
-            });
-        });
     </script>
 
     <script>
@@ -737,44 +402,6 @@
                     console.error(xhr);
                 }
             });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            var pendidikanId = "{{ $pencari->id_pendidikan }}";
-            var jurusanId = "{{ $pencari->id_jurusan }}";
-
-            // Jika ada pendidikan terpilih, muat jurusan terkait
-            if (pendidikanId) {
-                loadJurusan(pendidikanId, jurusanId);
-            }
-
-            $('#pendidikan_id').on('change', function() {
-                var pendidikanId = $(this).val();
-                $('#jurusan_id').empty().append('<option selected disabled>Pilih Jurusan</option>');
-
-                if (pendidikanId) {
-                    loadJurusan(pendidikanId);
-                }
-            });
-
-            function loadJurusan(pendidikanId, selectedId = null) {
-                $.ajax({
-                    url: "{{ route('get-jurusan-bypendidikan', ':id') }}".replace(':id', pendidikanId),
-                    type: 'GET',
-                    success: function(response) {
-                        $.each(response, function(index, jurusan) {
-                            $('#jurusan_id').append('<option value="' + jurusan.id + '"' +
-                                (jurusan.id == selectedId ? ' selected' : '') + '>' +
-                                jurusan.nama + '</option>');
-                        });
-                    },
-                    error: function(xhr) {
-                        console.error(xhr);
-                    }
-                });
-            }
         });
     </script>
 @endpush
