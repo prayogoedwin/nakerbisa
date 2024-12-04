@@ -96,7 +96,22 @@ class BackController extends Controller
                 ];
             });
 
-        return view('backend.statistik.index', compact('genderChartData', 'educationChartData', 'generationChartData', 'sectorCounts'));
+        $cityCounts = UserPenyedia::select(DB::raw('
+            CASE 
+                WHEN id_kota = 3317 THEN "Rembang"
+                ELSE "Luar Rembang"
+            END as city_category
+        '), DB::raw('count(*) as total'))
+            ->groupBy('city_category')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'name' => $item->city_category,
+                    'y' => $item->total
+                ];
+            });
+
+        return view('backend.statistik.index', compact('genderChartData', 'educationChartData', 'generationChartData', 'sectorCounts', 'cityCounts'));
     }
 
 
