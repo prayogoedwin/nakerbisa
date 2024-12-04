@@ -183,10 +183,13 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
     Route::prefix('data')->group(function () {
         Route::get('pencari', [DataController::class, 'pencari'])->name('data.pencari');
         Route::get('pencari/export', [DataController::class, 'export'])->name('data.pencari.export');
-        Route::get('penyedia', [DataController::class, 'penyedia'])->name('data.penyedia');
-
         Route::get('/pencari/edit/{id}', [DataController::class, 'edit'])->name('data.pencari.edit');
         Route::put('/pencari/edit/{id}', [DataController::class, 'updateDataPencari'])->name('data.pencari.update');
+
+        Route::get('penyedia', [DataController::class, 'penyedia'])->name('data.penyedia');
+        Route::get('penyedia/export', [DataController::class, 'export'])->name('data.penyedia.export');
+        Route::get('/penyedia/edit/{id}', [DataController::class, 'edit'])->name('data.penyedia.edit');
+        Route::put('/penyedia/edit/{id}', [DataController::class, 'updateDataPenyedia'])->name('data.penyedia.update');
     });
 
     Route::get('/lowongan', [LowonganController::class, 'index'])->name('lowongan.index');

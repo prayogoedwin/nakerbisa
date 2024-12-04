@@ -318,9 +318,9 @@ class DataController extends Controller
                     $agama,
                     $pendidikan,
                     $jurusan,
-                    $kota,     
-                    $kecamatan, 
-                    $desa,     
+                    $kota,
+                    $kecamatan,
+                    $desa,
                     $status,
                     $sektor,
                     $data->jam_kerja,
@@ -339,10 +339,57 @@ class DataController extends Controller
     public function penyedia(Request $request)
     {
         if ($request->ajax()) {
-            $query = UserPenyedia::select('*');
-            return DataTables::eloquent($query)->make(true);
+            // Ambil data users_penyedia beserta nama wilayah
+            $query = UserPenyedia::select([
+                'users_penyedia.id',
+                'users_penyedia.name',
+                'users_penyedia.luar_negri',
+                'users_penyedia.deskripsi',
+                'users_penyedia.jenis_perusahaan',
+                'users_penyedia.nib',
+                'users_penyedia.id_sektor',
+                'users_penyedia.id_kota',
+                'users_penyedia.id_kecamatan',
+                'users_penyedia.id_desa',
+                'users_penyedia.alamat',
+                'users_penyedia.kodepos',
+                'users_penyedia.telpon',
+                'users_penyedia.jabatan',
+                'users_penyedia.website'
+            ]);
+
+            return DataTables::eloquent($query)
+                ->addColumn('luar_negri', function ($data) {
+                    return $data->luar_negri == 1 ? 'Ya' : 'Tidak';
+                })
+                ->addColumn('kota', function ($data) {
+                    // Ambil nama kota berdasarkan id_kota
+                    $kota = DB::table('naker_kabkota')->where('id', $data->id_kota)->value('name');
+                    return $kota ?? 'Tidak Ditemukan';
+                })
+                ->addColumn('kecamatan', function ($data) {
+                    // Ambil nama kecamatan berdasarkan id_kecamatan
+                    $kecamatan = DB::table('naker_kecamatan')->where('id', $data->id_kecamatan)->value('name');
+                    return $kecamatan ?? 'Tidak Ditemukan';
+                })
+                ->addColumn('desa', function ($data) {
+                    // Ambil nama desa berdasarkan id_desa
+                    $desa = DB::table('naker_desa')->where('id', $data->id_desa)->value('name');
+                    return $desa ?? 'Tidak Ditemukan';
+                })
+                ->addColumn('sektor', function ($data) {
+                    // Ambil nama sektor berdasarkan id_sektor
+                    $sektor = DB::table('naker_sektor')->where('id', $data->id_sektor)->value('name');
+                    return $sektor ?? '-';
+                })
+                ->addIndexColumn()
+                ->addColumn('options', function ($data) {
+                    return '<a href="' . route('data.penyedia.edit', $data->id) . '" class="btn btn-primary btn-sm">Edit</a>';
+                })
+                ->rawColumns(['options'])
+                ->make(true);
         }
 
-        return view('backend.data.penyedia');
+        return view('backend.data-penyedia.penyedia');
     }
 }
