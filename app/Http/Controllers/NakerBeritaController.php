@@ -149,7 +149,7 @@ class NakerBeritaController extends Controller
             'updated_by' => auth()->id(),
         ]);
 
-        return redirect()->route('berita.index');
+        return redirect()->route('berita.index')->with('success', 'Berita berhasil diperbarui.');
     }
 
 
