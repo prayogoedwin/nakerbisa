@@ -200,7 +200,7 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
     Route::post('/lowongan/add', [LowonganController::class, 'store'])->name('lowongan.add');
     Route::delete('/lowongan/delete/{id}', [LowonganController::class, 'softdelete'])->name('lowongan.softdelete');
     Route::get('/penempatan', [LowonganController::class, 'penempatan'])->name('penempatan');
-
+    Route::get('history-loker', [LowonganController::class, 'historyLoker'])->name('lowongan.history');
 });
 
 

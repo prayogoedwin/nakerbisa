@@ -143,8 +143,8 @@
                     </a>
                 </li>
 
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('lowongan.history') ? 'active' : '' }}">
+                    <a href="{{ route('lowongan.history') }}" class="menu-link">
                         <div data-i18n="Without navbar">History Loker</div>
                     </a>
                 </li>

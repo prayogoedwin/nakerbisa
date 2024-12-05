@@ -325,9 +325,9 @@ class LowonganController extends Controller
 
         if ($request->ajax()) {
             $query = DB::table('naker_lamarans')
-                ->join('naker_progres', 'naker_lamarans.progres_id', '=', 'naker_progres.id') 
-                ->join('users', 'naker_lamarans.pencari_id', '=', 'users.id') 
-                ->join('naker_lowongan', 'naker_lamarans.lowongan_id', '=', 'naker_lowongan.id') 
+                ->join('naker_progres', 'naker_lamarans.progres_id', '=', 'naker_progres.id')
+                ->join('users', 'naker_lamarans.pencari_id', '=', 'users.id')
+                ->join('naker_lowongan', 'naker_lamarans.lowongan_id', '=', 'naker_lowongan.id')
                 ->select(
                     'naker_progres.name as status_name',
                     'users.name as pencari_name',
@@ -351,10 +351,22 @@ class LowonganController extends Controller
         return view('backend.penempatan.index');
     }
 
+    public function historyLoker(Request $request)
+    {
+        if ($request->ajax()) {
+            // Ambil lowongan yang sudah expired
+            $expiredLowongan = DB::table('naker_lowongan')
+                ->where('tanggal_end', '<', now()) // Mengambil lowongan yang expired
+                ->select('id', 'judul_lowongan', 'tanggal_start', 'tanggal_end')
+                ->get(); // Mendapatkan data expired lowongan
 
+            return DataTables::of($expiredLowongan)
+                ->addIndexColumn()
+                ->make(true);
+        }
 
-
-
+        return view('backend.history.index');
+    }
 
     /**
      * Show the form for editing the specified resource.
