@@ -199,6 +199,8 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
     Route::get('/lowongan/pelamar/{id}', [LowonganController::class, 'pelamar'])->name('lowongan.pelamar');
     Route::post('/lowongan/add', [LowonganController::class, 'store'])->name('lowongan.add');
     Route::delete('/lowongan/delete/{id}', [LowonganController::class, 'softdelete'])->name('lowongan.softdelete');
+    Route::get('/penempatan', [LowonganController::class, 'penempatan'])->name('penempatan')->middleware('auth');
+
 });
 
 

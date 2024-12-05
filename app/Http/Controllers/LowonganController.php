@@ -21,8 +21,8 @@ class LowonganController extends Controller
         $userId = auth()->user()->id;
         $userRole = auth()->user()->roles->first()->name;
         if ($request->ajax()) {
-  
-            if ($userRole == 'tenaga-kerja' ) {
+
+            if ($userRole == 'tenaga-kerja') {
                 //pencari kerja
                 $lokers = Lowongan::select(
                     'naker_lowongan.id',
@@ -32,22 +32,21 @@ class LowonganController extends Controller
                     'naker_lowongan.deskripsi',
                     'naker_progres.name as progres_name' // Menambahkan kolom 'name' dari tabel naker_progres
                 )
-                ->join('naker_progres', 'naker_lowongan.status_id', '=', 'naker_progres.kode') // Join tabel
-                ->where('naker_progres.modul', 'lowongan') // Kondisi where
-                ->where('naker_lowongan.status_id', 1) // Kondisi where
-                ->whereNull('naker_lowongan.deleted_at'); // Memastikan data tidak terhapus
+                    ->join('naker_progres', 'naker_lowongan.status_id', '=', 'naker_progres.kode') // Join tabel
+                    ->where('naker_progres.modul', 'lowongan') // Kondisi where
+                    ->where('naker_lowongan.status_id', 1) // Kondisi where
+                    ->whereNull('naker_lowongan.deleted_at'); // Memastikan data tidak terhapus
 
                 return DataTables::of($lokers)
-                ->addIndexColumn()
-                ->addColumn('options', function ($loker) {
-                    return '
+                    ->addIndexColumn()
+                    ->addColumn('options', function ($loker) {
+                        return '
                         <button class="btn btn-primary btn-sm" onclick="showDetailModal(' . $loker->id . ')">Lamar</button>
                     ';
-                })
-                ->rawColumns(['options'])  // Pastikan menambahkan ini untuk kolom options
-                ->make(true);
-
-            } else if ($userRole == 'penyedia-kerja' ) {
+                    })
+                    ->rawColumns(['options'])  // Pastikan menambahkan ini untuk kolom options
+                    ->make(true);
+            } else if ($userRole == 'penyedia-kerja') {
                 //pencari kerja
                 $lokers = Lowongan::select(
                     'naker_lowongan.id',
@@ -57,24 +56,23 @@ class LowonganController extends Controller
                     'naker_lowongan.deskripsi',
                     'naker_progres.name as progres_name' // Menambahkan kolom 'name' dari tabel naker_progres
                 )
-                ->join('naker_progres', 'naker_lowongan.status_id', '=', 'naker_progres.kode') // Join tabel
-                ->where('naker_progres.modul', 'lowongan') // Kondisi where
-                ->where('naker_lowongan.posted_by', $userId) // Kondisi where
-                ->whereNull('naker_lowongan.deleted_at'); // Memastikan data tidak terhapus
+                    ->join('naker_progres', 'naker_lowongan.status_id', '=', 'naker_progres.kode') // Join tabel
+                    ->where('naker_progres.modul', 'lowongan') // Kondisi where
+                    ->where('naker_lowongan.posted_by', $userId) // Kondisi where
+                    ->whereNull('naker_lowongan.deleted_at'); // Memastikan data tidak terhapus
 
                 return DataTables::of($lokers)
-                ->addIndexColumn()
-                ->addColumn('options', function ($loker) {
-                    return '
+                    ->addIndexColumn()
+                    ->addColumn('options', function ($loker) {
+                        return '
                         <a href="' . route('lowongan.pelamar', $loker->id) . '" class="btn btn-success btn-sm">Lihat Pelamar</a>
                         <button class="btn btn-primary btn-sm" onclick="showEditModal(' . $loker->id . ')">Edit</button>
                         <button class="btn btn-danger btn-sm" onclick="confirmDelete(' . $loker->id . ')">Hapus</button>
                     ';
-                })
-                ->rawColumns(['options'])  // Pastikan menambahkan ini untuk kolom options
-                ->make(true);
-
-            }else{
+                    })
+                    ->rawColumns(['options'])  // Pastikan menambahkan ini untuk kolom options
+                    ->make(true);
+            } else {
 
                 //lainnya
                 $lokers = Lowongan::select(
@@ -85,30 +83,25 @@ class LowonganController extends Controller
                     'naker_lowongan.deskripsi',
                     'naker_progres.name as progres_name' // Menambahkan kolom 'name' dari tabel naker_progres
                 )
-                ->join('naker_progres', 'naker_lowongan.status_id', '=', 'naker_progres.kode') // Join tabel
-                ->where('naker_progres.modul', 'lowongan') // Kondisi where
-                ->whereNull('naker_lowongan.deleted_at'); // Memastikan data tidak terhapus
+                    ->join('naker_progres', 'naker_lowongan.status_id', '=', 'naker_progres.kode') // Join tabel
+                    ->where('naker_progres.modul', 'lowongan') // Kondisi where
+                    ->whereNull('naker_lowongan.deleted_at'); // Memastikan data tidak terhapus
 
                 return DataTables::of($lokers)
-                ->addIndexColumn()
-                ->addColumn('options', function ($loker) {
-                    return '
+                    ->addIndexColumn()
+                    ->addColumn('options', function ($loker) {
+                        return '
                         <a href="' . route('lowongan.pelamar', $loker->id) . '" class="btn btn-success btn-sm">Lihat Pelamar</a>
                         <button class="btn btn-primary btn-sm" onclick="showEditModal(' . $loker->id . ')">Edit</button>
                         <button class="btn btn-danger btn-sm" onclick="confirmDelete(' . $loker->id . ')">Hapus</button>
                     ';
-                })
-                
-                ->rawColumns(['options'])  // Pastikan menambahkan ini untuk kolom options
-                ->make(true);
+                    })
 
+                    ->rawColumns(['options'])  // Pastikan menambahkan ini untuk kolom options
+                    ->make(true);
             }
-    
-           
-    
-           
         }
-    
+
         // Data untuk form di view
         $data['jabatans'] = getJabatan();
         $data['sektors'] = getSektor();
@@ -116,7 +109,7 @@ class LowonganController extends Controller
         $data['pendidikans'] = getPendidikan();
         $data['maritals'] = getMarital();
         $data['progresloker'] = getProgresLoker();
-    
+
         return view('backend.lowongan.index', $data);
     }
 
@@ -200,7 +193,7 @@ class LowonganController extends Controller
     {
         try {
             $userId = auth()->user()->id;
-            $userRole = auth()->user()->role; 
+            $userRole = auth()->user()->role;
 
             // Validasi input
             $validatedData = $request->validate([
@@ -219,7 +212,7 @@ class LowonganController extends Controller
             // Cari admin berdasarkan ID
             $data = Lowongan::findOrFail($id);
 
-            
+
             // Data yang akan diupdate
             $updateData = [
                 'jabatan_id' => $request->jabatan_id,
@@ -239,7 +232,7 @@ class LowonganController extends Controller
                 'updated_by' => $userId,
             ];
 
-             // Cek jika user adalah super-admin
+            // Cek jika user adalah super-admin
             if ($userRole == 'super-admin') {
                 // Jika super-admin, izinkan mengupdate status_id
                 $updateData['status_id'] = $request->status_id;
@@ -260,10 +253,10 @@ class LowonganController extends Controller
             // Get the authenticated user's ID and role
             $userId = auth()->user()->id;
             $userRole = auth()->user()->role;
-    
+
             // Find the job (lowongan) by its ID
             $lowongan = Lowongan::findOrFail($id);
-    
+
             // Create a new lamaran record
             $lamaran = Lamaran::create([
                 'pencari_id' => $userId, // The ID of the user applying
@@ -272,7 +265,7 @@ class LowonganController extends Controller
                 'created_at' => now(), // Current timestamp
                 'updated_at' => now(), // Current timestamp
             ]);
-    
+
             return response()->json(['success' => true, 'message' => 'Lamaran berhasil dibuat', 'lamaran' => $lamaran]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
@@ -283,18 +276,18 @@ class LowonganController extends Controller
     {
         if ($request->ajax()) {
             $pelamars = Lamaran::select(
-                    'naker_lamarans.id',
-                    'users.email',
-                    'users.whatsapp',
-                    'users_pencari.name', // Select name from users_pencari
-                    'naker_lamarans.keterangan',
-                    'naker_lamarans.created_at'
-                )
+                'naker_lamarans.id',
+                'users.email',
+                'users.whatsapp',
+                'users_pencari.name', // Select name from users_pencari
+                'naker_lamarans.keterangan',
+                'naker_lamarans.created_at'
+            )
                 ->join('users', 'naker_lamarans.pencari_id', '=', 'users.id') // Join with users table
                 ->join('users_pencari', 'users.id', '=', 'users_pencari.user_id') // Join with users_pencari table
                 ->where('naker_lamarans.lowongan_id', $id)
                 ->whereNull('naker_lamarans.deleted_at'); // Ensure data is not deleted
-    
+
             return DataTables::of($pelamars)
                 ->addIndexColumn()
                 ->addColumn('options', function ($pelamar) {
@@ -305,7 +298,7 @@ class LowonganController extends Controller
                 ->rawColumns(['options'])
                 ->make(true);
         }
-    
+
         return view('backend.lowongan.lamaran', ['lowongan_id' => $id]);
     }
 
@@ -321,7 +314,30 @@ class LowonganController extends Controller
         }
     }
 
-   
+    public function penempatan(Request $request)
+    {
+        // Ambil id dari progres dengan kode 3 dan modul 'lamaran'
+        $progressId = DB::table('naker_progres')
+            ->where('kode', 3)
+            ->where('modul', 'lamaran')
+            ->value('id');
+
+        if ($request->ajax()) {
+            $penempatanData = DB::table('naker_lamarans')
+                ->join('naker_progres', 'naker_lamarans.progres_id', '=', 'naker_progres.id') // Join dengan naker_progres
+                ->select('naker_progres.name as status_name') // Hanya mengambil name dari naker_progres
+                ->where('naker_lamarans.progres_id', $progressId)
+                ->get(); // Mendapatkan data dengan status diterima
+
+            return DataTables::of($penempatanData)
+                ->addIndexColumn()
+                ->make(true);
+        }
+
+        return view('backend.penempatan.index');
+    }
+
+
 
     /**
      * Show the form for editing the specified resource.
