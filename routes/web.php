@@ -37,6 +37,7 @@ Route::get('/depan/login', [DepanController::class, 'login']);
 Route::get('/depan/register', [DepanController::class, 'register']);
 Route::get('/depan/galeri', [DepanController::class, 'galeri'])->name('galeri');
 Route::get('depan/lowongan-kerja', [DepanController::class, 'lowongan_kerja'])->name('depan.lowongan-kerja');
+Route::get('/lowongan-kerja/{id}', [DepanController::class, 'showLowongan'])->name('lowongan.show');
 Route::get('/depan/lowongan-kerja-disabilitas', [DepanController::class, 'lowongan_kerja_disabilitas'])->name('lowongan-kerja-disabilitas');
 Route::get('/depan/lowongan-kerja-ema', [DepanController::class, 'lowongan_kerja_ema']);
 Route::get('/depan/lowongan-kerja-krr', [DepanController::class, 'lowongan_kerja_krr']);

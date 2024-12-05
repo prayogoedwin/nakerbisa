@@ -150,13 +150,29 @@ class DepanController extends Controller
                 return $query->where('kabkota_id', $lokasiId);
             })
             ->orderBy('tanggal_start', 'desc')
-            ->get();
+            ->paginate(10);
 
         // Kirim data hasil pencarian ke view
         return view('depan.depan_lowongan_kerja', compact('lowonganDisetujui'));
     }
 
+    public function showLowongan($id)
+    {
+        // Ambil detail lowongan berdasarkan ID
+        $lowongan = Lowongan::findOrFail($id);
 
+        $kabkota = DB::table('naker_kabkota')
+            ->where('id', $lowongan->kabkota_id)
+            ->first(); 
+        $jabatan = DB::table('naker_jabatan')
+            ->where('id', $lowongan->jabatan_id)
+            ->first(); 
+        $sektor = DB::table('naker_sektor')
+            ->where('id', $lowongan->sektor_id)
+            ->first(); 
+
+        return view('depan.depan_lowongan_detail', compact('lowongan', 'sektor', 'jabatan', 'kabkota'));
+    }
 
     public function lowongan_kerja_disabilitas()
     {
