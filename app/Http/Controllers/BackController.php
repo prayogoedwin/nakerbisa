@@ -22,7 +22,7 @@ class BackController extends Controller
                 ->where('tanggal_end', '>=', now())
                 ->count();
             $progresIdDalamProses = DB::table('naker_progres')
-                ->where('kode', 2) 
+                ->where('kode', 2)
                 ->value('id');
 
             $lamaranDalamProsesCount = DB::table('naker_lamarans')
@@ -32,7 +32,20 @@ class BackController extends Controller
         }
 
         if (Auth::user()->roles[0]['name'] == 'tenaga-kerja') {
-            return view('backend.dashboard.index_pencari');
+            $userId = Auth::id();
+            $lamaranAndaCount = DB::table('naker_lamarans')
+                ->where('pencari_id', $userId)
+                ->count();
+            $lamaranDalamProsesCount = DB::table('naker_lamarans')
+                ->join('naker_progres', 'naker_lamarans.progres_id', '=', 'naker_progres.id')
+                ->where('naker_lamarans.pencari_id', $userId)
+                ->where('naker_progres.kode', 2)
+                ->count();
+            $lowonganAktifCount = DB::table('naker_lowongan')
+                ->where('tanggal_start', '<=', now())
+                ->where('tanggal_end', '>=', now())
+                ->count();
+            return view('backend.dashboard.index_pencari', compact('lamaranAndaCount', 'lamaranDalamProsesCount', 'lowonganAktifCount'));
         }
 
         if (Auth::user()->roles[0]['name'] == 'penyedia-kerja') {
