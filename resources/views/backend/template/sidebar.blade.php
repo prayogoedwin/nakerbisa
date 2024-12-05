@@ -130,7 +130,7 @@
 
 
         <!-- Layouts -->
-        <li class="menu-item {{ request()->routeIs('lowongan.*') ? 'active open' : '' }}">
+        <li class="menu-item {{ request()->routeIs('lowongan.*') || request()->routeIs('penempatan') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-table"></i>
                 <div data-i18n="Layouts">Lowongan Kerja</div>
@@ -148,8 +148,8 @@
                         <div data-i18n="Without navbar">History Loker</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('penempatan') ? 'active' : '' }}">
+                    <a href="{{ route('penempatan') }}" class="menu-link">
                         <div data-i18n="Without navbar">Penempatan</div>
                     </a>
                 </li>

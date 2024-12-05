@@ -22,7 +22,8 @@
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
-                                                        <th>Nama Pencari</th>
+                                                        <th>Nama Tenaga Kerja</th>
+                                                        <th>Judul Lowongan</th>
                                                         <th>Status</th>
                                                     </tr>
                                                 </thead>
@@ -55,9 +56,12 @@
                         data: 'DT_RowIndex',
                         orderable: false,
                         searchable: false
-                    }, 
+                    },
                     {
                         data: 'pencari_name'
+                    },
+                    {
+                        data: 'lowongan_title'
                     },
                     {
                         data: 'status_name'

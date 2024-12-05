@@ -326,7 +326,12 @@ class LowonganController extends Controller
             $penempatanData = DB::table('naker_lamarans')
                 ->join('naker_progres', 'naker_lamarans.progres_id', '=', 'naker_progres.id') // Join dengan naker_progres
                 ->join('users_pencari', 'naker_lamarans.pencari_id', '=', 'users_pencari.id') // Join dengan users_pencari
-                ->select('naker_progres.name as status_name', 'users_pencari.name as pencari_name') // Ambil status dan nama pencari
+                ->join('naker_lowongan', 'naker_lamarans.lowongan_id', '=', 'naker_lowongan.id') // Join dengan naker_lowongan
+                ->select(
+                    'naker_progres.name as status_name',
+                    'users_pencari.name as pencari_name',
+                    'naker_lowongan.judul_lowongan as lowongan_title'
+                ) // Ambil judul lowongan
                 ->where('naker_lamarans.progres_id', $progressId)
                 ->get(); // Mendapatkan data dengan status diterima
 
@@ -337,6 +342,7 @@ class LowonganController extends Controller
 
         return view('backend.penempatan.index');
     }
+
 
 
 
