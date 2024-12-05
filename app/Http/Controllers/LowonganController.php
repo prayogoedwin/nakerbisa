@@ -316,7 +316,6 @@ class LowonganController extends Controller
 
     public function penempatan(Request $request)
     {
-        // Ambil id dari progres dengan kode 3 dan modul 'lamaran'
         $progressId = DB::table('naker_progres')
             ->where('kode', 3)
             ->where('modul', 'lamaran')
@@ -325,11 +324,10 @@ class LowonganController extends Controller
         $user = auth()->user();
 
         if ($request->ajax()) {
-            // Query untuk data penempatan
             $query = DB::table('naker_lamarans')
-                ->join('naker_progres', 'naker_lamarans.progres_id', '=', 'naker_progres.id') // Join dengan naker_progres
-                ->join('users', 'naker_lamarans.pencari_id', '=', 'users.id') // Join dengan users_pencari
-                ->join('naker_lowongan', 'naker_lamarans.lowongan_id', '=', 'naker_lowongan.id') // Join dengan naker_lowongan
+                ->join('naker_progres', 'naker_lamarans.progres_id', '=', 'naker_progres.id') 
+                ->join('users', 'naker_lamarans.pencari_id', '=', 'users.id') 
+                ->join('naker_lowongan', 'naker_lamarans.lowongan_id', '=', 'naker_lowongan.id') 
                 ->select(
                     'naker_progres.name as status_name',
                     'users.name as pencari_name',
@@ -337,9 +335,7 @@ class LowonganController extends Controller
                 )
                 ->where('naker_lamarans.progres_id', $progressId);
 
-            // Admin: tampilkan semua data, Penyedia: tampilkan data hanya miliknya
             if ($user->hasRole('penyedia-kerja')) {
-                // Jika penyedia-kerja, tampilkan data yang hanya diposting oleh penyedia ini
                 $query->where('naker_lowongan.posted_by', $user->id);
             }
 
