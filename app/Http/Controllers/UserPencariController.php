@@ -17,7 +17,7 @@ class UserPencariController extends Controller
         if ($request->ajax()) {
             $pencaris = UserPencari::with([
                 'user:id,name,email,whatsapp',
-                'user.roles:id,name'// Ambil data role terkait dengan kolom tertentu
+                'user.roles:id,name' // Ambil data role terkait dengan kolom tertentu
             ]) // Ambil data admin dengan user terkait
                 ->select('id', 'user_id');
 
@@ -59,47 +59,42 @@ class UserPencariController extends Controller
 
 
     public function softdelete($id)
-        {
-            try {
-                // Cari admin berdasarkan ID
-                $admin = UserPencari::findOrFail($id);
-                $admin->delete();
-    
-                // Soft delete juga user yang terkait dengan admin ini (misalnya, jika memiliki relasi)
-                $user = User::where('id', $admin->user_id)->first();  // Sesuaikan relasi dengan tabel User jika ada
-                if ($user) {
-                    // Set is_deleted = 1 untuk soft delete user
-                    $user->is_deleted = 1;
-                    $user->save();  // Simpan perubahan
-                    $user->delete(); 
-                }
-    
-                return response()->json(['success' => true, 'message' => 'Hapus data berhasil']);
-            } catch (\Exception $e) {
-                return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+    {
+        try {
+            // Cari admin berdasarkan ID
+            $admin = UserPencari::findOrFail($id);
+            $admin->delete();
+
+            // Soft delete juga user yang terkait dengan admin ini (misalnya, jika memiliki relasi)
+            $user = User::where('id', $admin->user_id)->first();  // Sesuaikan relasi dengan tabel User jika ada
+            if ($user) {
+                // Set is_deleted = 1 untuk soft delete user
+                $user->is_deleted = 1;
+                $user->save();  // Simpan perubahan
+                $user->delete();
             }
+
+            return response()->json(['success' => true, 'message' => 'Hapus data berhasil']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
         }
+    }
 
 
-        public function reset($id)
-        {
-            try {
-                $admin = UserPencari::findOrFail($id);
-                $user = User::findOrFail($admin->user_id);
+    public function reset($id)
+    {
+        try {
+            $admin = UserPencari::findOrFail($id);
+            $user = User::findOrFail($admin->user_id);
 
-                $user = $admin->user;  // Ambil user yang terkait dengan admin ini
-                $user->update([
-                    'password' => bcrypt($user->email),
-                ]);
+            $user = $admin->user;  // Ambil user yang terkait dengan admin ini
+            $user->update([
+                'password' => bcrypt($user->email),
+            ]);
 
-                return response()->json(['success' => true, 'message' => 'Reset data berhasil']);
-            } catch (\Exception $e) {
-                return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
-            }
+            return response()->json(['success' => true, 'message' => 'Reset data berhasil']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
         }
-
-
-    
-
+    }
 }
-?>

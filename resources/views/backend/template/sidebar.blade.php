@@ -73,7 +73,7 @@
         </li>
 
         <!-- Layouts -->
-        <li class="menu-item {{ request()->routeIs('admin.*') || request()->routeIs('userpencari.*') ? 'active open' : '' }}">
+        <li class="menu-item {{ request()->routeIs('admin.*') || request()->routeIs('userpencari.*') || request()->routeIs('userpenyedia.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
                 <div data-i18n="Layouts">Users</div>
@@ -89,8 +89,8 @@
                         <div data-i18n="Without navbar">Officers</div>
                     </a>
                 </li> --}}
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('userpenyedia.index') ? 'active' : '' }}">
+                    <a href="{{ route('userpenyedia.index') }}" class="menu-link" class="menu-link">
                         <div data-i18n="Without navbar">Perusahaan</div>
                     </a>
                 </li>
