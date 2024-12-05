@@ -322,18 +322,29 @@ class LowonganController extends Controller
             ->where('modul', 'lamaran')
             ->value('id');
 
+        $user = auth()->user();
+
         if ($request->ajax()) {
-            $penempatanData = DB::table('naker_lamarans')
+            // Query untuk data penempatan
+            $query = DB::table('naker_lamarans')
                 ->join('naker_progres', 'naker_lamarans.progres_id', '=', 'naker_progres.id') // Join dengan naker_progres
-                ->join('users_pencari', 'naker_lamarans.pencari_id', '=', 'users_pencari.id') // Join dengan users_pencari
+                ->join('users', 'naker_lamarans.pencari_id', '=', 'users.id') // Join dengan users_pencari
                 ->join('naker_lowongan', 'naker_lamarans.lowongan_id', '=', 'naker_lowongan.id') // Join dengan naker_lowongan
                 ->select(
                     'naker_progres.name as status_name',
-                    'users_pencari.name as pencari_name',
+                    'users.name as pencari_name',
                     'naker_lowongan.judul_lowongan as lowongan_title'
-                ) // Ambil judul lowongan
-                ->where('naker_lamarans.progres_id', $progressId)
-                ->get(); // Mendapatkan data dengan status diterima
+                )
+                ->where('naker_lamarans.progres_id', $progressId);
+
+            // Admin: tampilkan semua data, Penyedia: tampilkan data hanya miliknya
+            if ($user->hasRole('penyedia-kerja')) {
+                // Jika penyedia-kerja, tampilkan data yang hanya diposting oleh penyedia ini
+                $query->where('naker_lowongan.posted_by', $user->id);
+            }
+
+            // Ambil data penempatan
+            $penempatanData = $query->get();
 
             return DataTables::of($penempatanData)
                 ->addIndexColumn()
@@ -342,6 +353,7 @@ class LowonganController extends Controller
 
         return view('backend.penempatan.index');
     }
+
 
 
 
