@@ -325,7 +325,8 @@ class LowonganController extends Controller
         if ($request->ajax()) {
             $penempatanData = DB::table('naker_lamarans')
                 ->join('naker_progres', 'naker_lamarans.progres_id', '=', 'naker_progres.id') // Join dengan naker_progres
-                ->select('naker_progres.name as status_name') // Hanya mengambil name dari naker_progres
+                ->join('users_pencari', 'naker_lamarans.pencari_id', '=', 'users_pencari.id') // Join dengan users_pencari
+                ->select('naker_progres.name as status_name', 'users_pencari.name as pencari_name') // Ambil status dan nama pencari
                 ->where('naker_lamarans.progres_id', $progressId)
                 ->get(); // Mendapatkan data dengan status diterima
 
@@ -336,6 +337,7 @@ class LowonganController extends Controller
 
         return view('backend.penempatan.index');
     }
+
 
 
 

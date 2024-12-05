@@ -22,7 +22,8 @@
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
-                                                        <th>Status</th> <!-- Ganti Progres ID dengan Status -->
+                                                        <th>Nama Pencari</th>
+                                                        <th>Status</th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -54,6 +55,9 @@
                         data: 'DT_RowIndex',
                         orderable: false,
                         searchable: false
+                    }, 
+                    {
+                        data: 'pencari_name'
                     },
                     {
                         data: 'status_name'
