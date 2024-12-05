@@ -346,6 +346,18 @@
                                                                 <p><strong>Jurusan:</strong>
                                                                     {{ $item->jurusan_name ?? 'Tidak Ada Jurusan' }}</p>
                                                                 <p><strong>Tahun Lulus:</strong> {{ $item->lulus }}</p>
+
+                                                                <!-- Tombol Delete -->
+                                                                <form
+                                                                    action="{{ route('data.pendidikan.softDelete', $item->id) }}"
+                                                                    method="POST" class="d-inline">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="btn btn-danger btn-sm"
+                                                                        onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                                                        Hapus
+                                                                    </button>
+                                                                </form>
                                                             </div>
                                                         @endforeach
                                                     </div>
@@ -368,6 +380,7 @@
                                 </div>
                             </div>
                         </section>
+
                         <!-- Section Dropdown (Update Pengalaman Kerja) -->
                         <section class="section mt-3">
                             <div class="card">
@@ -398,6 +411,17 @@
                                                                 </p>
                                                                 <p><strong>Berhenti Tahun:</strong>
                                                                     {{ $item->berhenti_tahun }}</p>
+                                                                <!-- Tombol Delete -->
+                                                                <form
+                                                                    action="{{ route('data.pengalaman.softDelete', $item->id) }}"
+                                                                    method="POST" class="d-inline">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="btn btn-danger btn-sm"
+                                                                        onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                                                        Hapus
+                                                                    </button>
+                                                                </form>
                                                             </div>
                                                         @endforeach
                                                     </div>
@@ -453,6 +477,16 @@
                                                                     {{ $item->no_sertifikat }}</p>
                                                                 <p><strong>Lembaga Penguji:</strong>
                                                                     {{ $item->lembaga_penguji }}</p>
+                                                                    <form
+                                                                    action="{{ route('data.sertifikasi.softDelete', $item->id) }}"
+                                                                    method="POST" class="d-inline">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="btn btn-danger btn-sm"
+                                                                        onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                                                        Hapus
+                                                                    </button>
+                                                                </form>
                                                             </div>
                                                         @endforeach
                                                     </div>

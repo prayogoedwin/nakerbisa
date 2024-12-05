@@ -188,6 +188,10 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('pencari/export', [DataController::class, 'export'])->name('data.pencari.export');
         Route::get('/pencari/edit/{id}', [DataController::class, 'edit'])->name('data.pencari.edit');
         Route::put('/pencari/edit/{id}', [DataController::class, 'updateDataPencari'])->name('data.pencari.update');
+        Route::delete('/pendidikan/{id}/soft-delete', [DataController::class, 'softDeletePendidikan'])->name('data.pendidikan.softDelete');
+        Route::delete('/pengalaman/{id}/soft-delete', [DataController::class, 'softDeletePengalaman'])->name('data.pengalaman.softDelete');
+        Route::delete('/sertifikasi/{id}/soft-delete', [DataController::class, 'softDeleteSertifikasi'])->name('data.sertifikasi.softDelete');
+
 
         Route::get('penyedia', [DataController::class, 'penyedia'])->name('data.penyedia');
         Route::get('penyedia/export', [DataController::class, 'exportPenyedia'])->name('data.penyedia.export');

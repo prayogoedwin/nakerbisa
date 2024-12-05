@@ -128,6 +128,27 @@ class DataController extends Controller
         return view('backend.data-pencari.edit', compact('pencari', 'pendidikan', 'keterampilan', 'pengalaman', 'keahlian'));
     }
 
+    public function softDeletePendidikan($id)
+    {
+        $pendidikan = NakerPencariPendidikan::findOrFail($id);
+        $pendidikan->delete(); // Menggunakan Soft Delete
+        return redirect()->back()->with('success', 'Data pendidikan berhasil dihapus.');
+    }
+    
+    public function softDeletePengalaman($id)
+    {
+        $pengalaman = NakerPencariPengalaman::findOrFail($id);
+        $pengalaman->delete(); // Menggunakan Soft Delete
+        return redirect()->back()->with('success', 'Data pengalaman berhasil dihapus.');
+    }
+
+    public function softDeleteSertifikasi($id)
+    {
+        $keterampilan = NakerPencariKeterampilan::findOrFail($id);
+        $keterampilan->delete(); // Menggunakan Soft Delete
+        return redirect()->back()->with('success', 'Data keterampilan berhasil dihapus.');
+    }
+
     public function updateDataPencari(Request $request, $id)
     {
         // Validasi input dari pengguna
