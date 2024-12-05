@@ -353,12 +353,26 @@ class LowonganController extends Controller
 
     public function historyLoker(Request $request)
     {
+        // Pengecekan apakah user adalah admin atau perusahaan
+        $user = auth()->user();
+
+        // Ambil id dari progres dengan kode 3 dan modul 'lamaran'
+        $progressId = DB::table('naker_progres')
+            ->where('kode', 3)
+            ->where('modul', 'lamaran')
+            ->value('id');
+
+        // Jika request menggunakan ajax
         if ($request->ajax()) {
-            // Ambil lowongan yang sudah expired
-            $expiredLowongan = DB::table('naker_lowongan')
-                ->where('tanggal_end', '<', now()) // Mengambil lowongan yang expired
-                ->select('id', 'judul_lowongan', 'tanggal_start', 'tanggal_end')
-                ->get(); // Mendapatkan data expired lowongan
+            $query = DB::table('naker_lowongan')
+                ->where('tanggal_end', '<', now()) 
+                ->select('id', 'judul_lowongan', 'tanggal_start', 'tanggal_end', 'posted_by');
+
+            if ($user->roles[0]['name'] != 'super-admin') {
+                $query->where('posted_by', $user->id); 
+            }
+
+            $expiredLowongan = $query->get(); 
 
             return DataTables::of($expiredLowongan)
                 ->addIndexColumn()
