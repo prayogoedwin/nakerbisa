@@ -356,12 +356,6 @@ class LowonganController extends Controller
         // Pengecekan apakah user adalah admin atau perusahaan
         $user = auth()->user();
 
-        // Ambil id dari progres dengan kode 3 dan modul 'lamaran'
-        $progressId = DB::table('naker_progres')
-            ->where('kode', 3)
-            ->where('modul', 'lamaran')
-            ->value('id');
-
         // Jika request menggunakan ajax
         if ($request->ajax()) {
             $query = DB::table('naker_lowongan')
