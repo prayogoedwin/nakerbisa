@@ -15,7 +15,20 @@ class BackController extends Controller
     public function index()
     {
         if (Auth::user()->roles[0]['name'] == 'super-admin') {
-            return view('backend.dashboard.index');
+            $pencariKerjaCount = DB::table('users_pencari')->count();
+            $penyediaKerjaCount = DB::table('users_penyedia')->count();
+            $lowonganAktifCount = DB::table('naker_lowongan')
+                ->where('tanggal_start', '<=', now())
+                ->where('tanggal_end', '>=', now())
+                ->count();
+            $progresIdDalamProses = DB::table('naker_progres')
+                ->where('kode', 2) 
+                ->value('id');
+
+            $lamaranDalamProsesCount = DB::table('naker_lamarans')
+                ->where('progres_id', $progresIdDalamProses)
+                ->count();
+            return view('backend.dashboard.index', compact('pencariKerjaCount', 'penyediaKerjaCount', 'lowonganAktifCount', 'lamaranDalamProsesCount'));
         }
 
         if (Auth::user()->roles[0]['name'] == 'tenaga-kerja') {

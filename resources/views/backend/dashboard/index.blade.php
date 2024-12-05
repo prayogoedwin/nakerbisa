@@ -30,12 +30,12 @@
                                         <div class="col-sm-5 text-center text-sm-left">
                                             <div class="card-body pb-0 px-0 px-md-4">
                                                 <!-- <img
-                                      src="../assets/img/illustrations/man-with-laptop-light.png"
-                                      height="140"
-                                      alt="View Badge User"
-                                      data-app-dark-img="illustrations/man-with-laptop-dark.png"
-                                      data-app-light-img="illustrations/man-with-laptop-light.png"
-                                    /> -->
+                                                                      src="../assets/img/illustrations/man-with-laptop-light.png"
+                                                                      height="140"
+                                                                      alt="View Badge User"
+                                                                      data-app-dark-img="illustrations/man-with-laptop-dark.png"
+                                                                      data-app-light-img="illustrations/man-with-laptop-light.png"
+                                                                    /> -->
                                             </div>
                                         </div>
                                     </div>
@@ -53,10 +53,9 @@
                                                         <img src="{{ asset('assets/nakerbisa_be/img/icons/unicons/chart-success.png') }}"
                                                             alt="chart success" class="rounded" />
                                                     </div>
-
                                                 </div>
-                                                <span class="fw-semibold d-block mb-1">Pencari Kerja</span>
-                                                <h3 class="card-title mb-2">100</h3>
+                                                <span class="fw-semibold d-block mb-1">Tenaga Kerja</span>
+                                                <h3 class="card-title mb-2">{{ $pencariKerjaCount }}</h3>
                                                 <!-- <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small> -->
                                             </div>
                                         </div>
@@ -70,10 +69,9 @@
                                                         <img src="{{ asset('assets/nakerbisa_be/img/icons/unicons/chart-success.png') }}"
                                                             alt="chart success" class="rounded" />
                                                     </div>
-
                                                 </div>
                                                 <span class="fw-semibold d-block mb-1">Penyedia Kerja</span>
-                                                <h3 class="card-title mb-2">18</h3>
+                                                <h3 class="card-title mb-2">{{ $penyediaKerjaCount }}</h3>
                                                 <!-- <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small> -->
                                             </div>
                                         </div>
@@ -87,10 +85,9 @@
                                                         <img src="{{ asset('assets/nakerbisa_be/img/icons/unicons/chart-success.png') }}"
                                                             alt="chart success" class="rounded" />
                                                     </div>
-
                                                 </div>
-                                                <span class="fw-semibold d-block mb-1">Lowongan AKtif</span>
-                                                <h3 class="card-title mb-2">27</h3>
+                                                <span class="fw-semibold d-block mb-1">Lowongan Aktif</span>
+                                                <h3 class="card-title mb-2">{{ $lowonganAktifCount }}</h3>
                                                 <!-- <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small> -->
                                             </div>
                                         </div>
@@ -104,10 +101,9 @@
                                                         <img src="{{ asset('assets/nakerbisa_be/img/icons/unicons/chart-success.png') }}"
                                                             alt="chart success" class="rounded" />
                                                     </div>
-
                                                 </div>
                                                 <span class="fw-semibold d-block mb-1">Lamaran Dalam Proses</span>
-                                                <h3 class="card-title mb-2">150</h3>
+                                                <h3 class="card-title mb-2">{{ $lamaranDalamProsesCount }}</h3>
                                                 <!-- <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small> -->
                                             </div>
                                         </div>
