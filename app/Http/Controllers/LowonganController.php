@@ -331,7 +331,8 @@ class LowonganController extends Controller
                 ->select(
                     'naker_progres.name as status_name',
                     'users.name as pencari_name',
-                    'naker_lowongan.judul_lowongan as lowongan_title'
+                    'naker_lowongan.judul_lowongan as lowongan_title',
+                    'naker_lowongan.lokasi_penempatan_text as lokasi_penempatan'
                 )
                 ->where('naker_lamarans.progres_id', $progressId);
 

@@ -24,6 +24,7 @@
                                                         <th>No</th>
                                                         <th>Nama Tenaga Kerja</th>
                                                         <th>Judul Lowongan</th>
+                                                        <th>Lokasi Penempatan</th>
                                                         <th>Status</th>
                                                     </tr>
                                                 </thead>
@@ -62,6 +63,9 @@
                     },
                     {
                         data: 'lowongan_title'
+                    },
+                    {
+                        data: 'lokasi_penempatan'
                     },
                     {
                         data: 'status_name'
