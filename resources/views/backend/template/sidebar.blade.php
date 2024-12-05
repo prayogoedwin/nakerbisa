@@ -73,7 +73,7 @@
         </li>
 
         <!-- Layouts -->
-        <li class="menu-item {{ request()->routeIs('admin.*') ? 'active open' : '' }}">
+        <li class="menu-item {{ request()->routeIs('admin.*') || request()->routeIs('userpencari.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
                 <div data-i18n="Layouts">Users</div>
