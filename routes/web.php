@@ -139,8 +139,10 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::put('/pendidikan/update/{id}', [PencariPendidikanController::class, 'update'])->name('pendidikan.update');
 
         Route::get('/pengalaman', [PencariPengalamanController::class, 'index'])->name('pengalaman.index');
+        Route::get('/pengalaman/{id?}', [PencariPengalamanController::class, 'index'])->name('pengalaman.index');
+
         Route::post('/pengalaman/add', [PencariPengalamanController::class, 'store'])->name('pengalaman.add');
-        Route::get('/pengalaman/{id}', [PencariPengalamanController::class, 'show'])->name('pengalaman.detail');
+        Route::get('/pengalaman/get/{id}', [PencariPengalamanController::class, 'show'])->name('pengalaman.detail');
         Route::put('/pengalaman/update/{id}', [PencariPengalamanController::class, 'update'])->name('pengalaman.update');
         Route::delete('/pengalaman/delete/{id}', [PencariPengalamanController::class, 'softdelete'])->name('pengalaman.softdelete');
 

@@ -12,8 +12,10 @@
                         <!-- Breadcrumb -->
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ route('profil.index') }}">Profil</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Tambah Data Pengalaman</li>
+                                @if (auth()->user()->roles[0]['name'] != 'super-admin')
+                                    <li class="breadcrumb-item"><a href="{{ route('profil.index') }}">Profil</a></li>
+                                @endif
+                                <li class="breadcrumb-item active" aria-current="page">Tambah Data Pendidikan</li>
                             </ol>
                         </nav>
                         <div class="row">
@@ -180,10 +182,12 @@
 @push('js')
     <script>
         $(document).ready(function() {
+            var url = window.location.href; // Ambil URL saat ini
+            var id = url.split('/').pop(); // Ambil id dari URL
             $('#simpletable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('pengalaman.index') }}',
+                ajax: '{{ url('dapur/profil/pengalaman') }}/' + id, // Kirim id dari URL ke server
                 autoWidth: false,
                 columns: [{
                         data: 'DT_RowIndex',

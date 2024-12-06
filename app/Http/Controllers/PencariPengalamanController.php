@@ -10,20 +10,28 @@ use Illuminate\Support\Facades\Validator;
 class PencariPengalamanController extends Controller
 {
     //
-    public function index(Request $request)
+    public function index(Request $request, $id = null)
     {
-        // Get the current authenticated user
+        // Mendapatkan user yang sedang login
         $userId = auth()->user()->id;
+        $isSuperAdmin = auth()->user()->roles[0]['name'] == 'super-admin'; // Mengecek apakah user adalah super-admin
 
         if ($request->ajax()) {
             $datas = NakerPencariPengalaman::select(
-                'id',
-                'nama_perusahaan',
-                'alamat_perusahaan',
-                'mulai_tahun',
-                'berhenti_tahun',
-                'jabatan'
-            )->where('naker_pencari_pengalaman.user_id', $userId); // Filter berdasarkan user_id yang login;
+                'naker_pencari_pengalaman.id',     // Nama Jurusan
+                'naker_pencari_pengalaman.nama_perusahaan',
+                'naker_pencari_pengalaman.alamat_perusahaan',
+                'naker_pencari_pengalaman.mulai_tahun',
+                'naker_pencari_pengalaman.berhenti_tahun',
+                'naker_pencari_pengalaman.jabatan',
+            ); 
+            // Jika user adalah super-admin, filter berdasarkan user_id dari URL
+            if ($isSuperAdmin && $id) {
+                $datas->where('naker_pencari_pengalaman.user_id', $id); // Filter berdasarkan user_id yang ada di URL
+            } elseif (!$isSuperAdmin) {
+                // Jika bukan super-admin, filter berdasarkan user_id yang login
+                $datas->where('naker_pencari_pengalaman.user_id', $userId); // Filter berdasarkan user_id yang login
+            }
 
             return DataTables::of($datas)
                 ->addIndexColumn()
