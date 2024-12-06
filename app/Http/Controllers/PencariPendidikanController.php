@@ -58,20 +58,28 @@ class PencariPendidikanController extends Controller
     // Method untuk menyimpan data user baru
     public function store(Request $request)
     {
-        $userId = auth()->user()->id;
+        // Cek apakah user adalah super-admin
+        $isSuperAdmin = auth()->user()->roles[0]['name'] == 'super-admin';
 
+        // Jika super-admin, ambil user_id dari request
+        $userId = $isSuperAdmin ? $request->user_id : auth()->user()->id;
+
+        // Validasi data
         $validator = Validator::make($request->all(), [
             'pendidikan_id' => 'required|integer',
             'jurusan_id' => 'required|integer',
             'nama_sekolah' => 'required|string|max:255',
             'alamat_sekolah' => 'required|string|max:255',
-            'lulus' => 'required|integer|min:1900|max:' . date('Y')
+            'lulus' => 'required|integer|min:1900|max:' . date('Y'),
+            'user_id' => $isSuperAdmin ? 'required|integer' : 'nullable'  // Validasi user_id hanya jika super-admin
         ]);
 
+        // Jika validasi gagal
         if ($validator->fails()) {
             return response()->json(['success' => false, 'errors' => $validator->errors()]);
         }
 
+        // Menyimpan data ke database
         NakerPencariPendidikan::create([
             'user_id' => $userId,
             'pendidikan_id' => $request->pendidikan_id,
@@ -83,6 +91,7 @@ class PencariPendidikanController extends Controller
 
         return response()->json(['success' => true]);
     }
+
 
 
     public function getData($id)
