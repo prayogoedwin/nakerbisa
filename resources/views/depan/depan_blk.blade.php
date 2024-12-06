@@ -38,6 +38,7 @@
                                             <th>No</th>
                                             <th>Nama BLK</th>
                                             <th>Alamat</th>
+                                            <th>Kodepos</th>
                                             <th>Kabupaten/Kota</th>
                                             <th>Kecamatan</th>
                                             <th>Desa</th>
@@ -53,6 +54,7 @@
                                                 <td>{{ $blkList->firstItem() + $index }}</td>
                                                 <td>{{ $blk->name }}</td>
                                                 <td>{{ $blk->alamat }}</td>
+                                                <td>{{ $blk->kodepos }}</td>
                                                 <td>{{ $blk->kabkota_name }}</td>
                                                 <td>{{ $blk->kec_name }}</td>
                                                 <td>{{ $blk->desa_name }}</td>

@@ -56,6 +56,7 @@
                                             <th>Jenis BKK</th>
                                             <th>NIB</th>
                                             <th>Alamat</th>
+                                            <th>Kodepos</th>
                                             <th>Sektor</th>
                                             <th>Kabupaten/Kota</th>
                                             <th>Kecamatan</th>
@@ -74,6 +75,7 @@
                                                 <td>{{ $jenisBkkMapping[$bkk->jenis_bkk] ?? 'Tidak Diketahui' }}</td>
                                                 <td>{{ $bkk->nib }}</td>
                                                 <td>{{ $bkk->alamat }}</td>
+                                                <td>{{ $bkk->kodepos }}</td>
                                                 <td>{{ $bkk->sektor_name }}</td>
                                                 <td>{{ $bkk->kabkota_name }}</td>
                                                 <td>{{ $bkk->kec_name }}</td>
