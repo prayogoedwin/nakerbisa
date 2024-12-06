@@ -26,47 +26,59 @@
     <div class="container">
         <div class="services-details-items">
             <div class="row">
-
-
-
                 <div class="col-xl-12 col-lg-5 mt-md-120 mt-xs-50 services-sidebar">
                     <!-- Single Widget -->
                     <div class="single-widget services-list-widget">
-                        <h4 class="widget-title">Daftar BKK Terfadaftar Seluruh Provinsi Kalimantan Timur</h4>
+                        <h4 class="widget-title">Daftar BKK Terdaftar Seluruh Provinsi Kalimantan Timur</h4>
                         <div class="content">
+                            @php
+                                $jenisBkkMapping = [
+                                    'bumd' => 'Badan Usaha Milik Daerah',
+                                    'bumn' => 'Badan Usaha Milik Negara',
+                                    'cv' => 'Comanditer Venotschaap',
+                                    'firma' => 'Firma',
+                                    'instansi' => 'Instansi',
+                                    'kp' => 'Koperasi',
+                                    'pt' => 'Perseroan Terbatas',
+                                    'pp' => 'Perusahaan Perorangan',
+                                    'po' => 'PO*',
+                                    'yayasan' => 'Yayasan',
+                                ];
+                            @endphp
                             <table class="table">
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama BKK</th>
-                                    <th>Alamat</th>
-                                    <th>Jurusan</th>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>BKK SMK 1 BERAU</td>
-                                    <td>Jl. Permai 11 Kabupaten Berap </td>
-                                    <td>Teknik Mesin, Teknik Otomotif, Tekniik Kendaraan Ringan</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>BKK SMK 1 SAMARINDA</td>
-                                    <td>Jl. Elok 20 Kota Samarinda </td>
-                                    <td>Teknik Komputer Jaringan, Rekayasa Perangkat Lunak</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>BKK SMK 1 BALIKPAPAN</td>
-                                    <td>Jl. Pahlawan 7 Kota Balikpapan </td>
-                                    <td>Desai Grafis</td>
-                                </tr>
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama BKK</th>
+                                        <th>Penyedia Loker Luar Negeri</th>
+                                        <th>Deskripsi</th>
+                                        <th>Jenis BKK</th>
+                                        <th>Alamat</th>
+                                        <th>Sektor</th>
+                                        <th>Kabupaten/Kota</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($bkkList as $index => $bkk)
+                                        <tr>
+                                            <td>{{ $index + 1 }}</td>
+                                            <td>{{ $bkk->name }}</td>
+                                            <td>{{ $bkk->luar_negri == 1 ? 'Ya' : 'Tidak' }}</td>
+                                            <td>{{ $bkk->deskripsi }}</td>
+                                            <td>{{ $jenisBkkMapping[$bkk->jenis_bkk] ?? 'Tidak Diketahui' }}</td>
+                                            <td>{{ $bkk->alamat }}</td>
+                                            <td>{{ $bkk->sektor_name }}</td>
+                                            <td>{{ $bkk->kabkota_name }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
                             </table>
                         </div>
                     </div>
                     <!-- End Single Widget -->
-
                 </div>
-
             </div>
+
         </div>
     </div>
 </div>

@@ -52,8 +52,19 @@ class DepanController extends Controller
 
     public function bkk()
     {
-        return view('depan.depan_bkk');
+        $bkkList = DB::table('users_bkk')
+            ->leftJoin('naker_sektor', 'users_bkk.id_sektor', '=', 'naker_sektor.id')
+            ->leftJoin('naker_kabkota', 'users_bkk.id_kota', '=', 'naker_kabkota.id') // Perbaikan di sini
+            ->select(
+                'users_bkk.*',
+                'naker_sektor.name as sektor_name',
+                'naker_kabkota.name as kabkota_name' // Mengambil nama kabupaten/kota
+            )
+            ->get();
+
+        return view('depan.depan_bkk', compact('bkkList'));
     }
+
 
     public function blk()
     {
@@ -163,13 +174,13 @@ class DepanController extends Controller
 
         $kabkota = DB::table('naker_kabkota')
             ->where('id', $lowongan->kabkota_id)
-            ->first(); 
+            ->first();
         $jabatan = DB::table('naker_jabatan')
             ->where('id', $lowongan->jabatan_id)
-            ->first(); 
+            ->first();
         $sektor = DB::table('naker_sektor')
             ->where('id', $lowongan->sektor_id)
-            ->first(); 
+            ->first();
 
         return view('depan.depan_lowongan_detail', compact('lowongan', 'sektor', 'jabatan', 'kabkota'));
     }

@@ -27,7 +27,7 @@ use App\Http\Controllers\UserPenyediaController;
 
 // Menggunakan controller DepanController untuk mengambil data FAQ
 Route::get('/', [DepanController::class, 'index'])->name('beranda');
-Route::get('/depan/bkk', [DepanController::class, 'bkk']);
+Route::get('/depan/bkk', [DepanController::class, 'bkk'])->name('bkk');
 Route::get('/depan/blk', [DepanController::class, 'blk']);
 Route::get('/depan/talent-ketrampilan', [DepanController::class, 'talent_ketrampilan']);
 Route::get('/depan/talent-pendidikan', [DepanController::class, 'talent_pendidikan']);
