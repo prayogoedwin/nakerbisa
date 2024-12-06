@@ -143,7 +143,7 @@
                                 <li><li><a href="software-landing.html">Software Landing</a></li>
                             </ul>
                         </li> -->
-                        @if (!Route::is('lowongan-kerja-disabilitas'))
+                        {{-- @if (!Route::is('lowongan-kerja-disabilitas'))
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Lowongan</a>
                                 <ul class="dropdown-menu">
@@ -152,7 +152,7 @@
                                     <li><a href="{{ url('/depan/lowongan-kerja-krr') }}">Lowongan Karirhub</a></li>
                                 </ul>
                             </li>
-                        @endif
+                        @endif --}}
 
                         
                         <li class="dropdown">
@@ -168,7 +168,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Talent</a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ url('/depan/talent-wilayah') }}">Wilayah</a></li>
-                                <li><a href="{{ url('/depan/blk') }}">Tempat Kerja</a></li>
+                                <li><a href="{{ url('/depan/talent-tempat-kerja') }}">Tempat Kerja</a></li>
                                 <li><a href="{{ url('/depan/talent-pendidikan') }}">Pendidikan</a></li>
                                 <li><a href="{{ url('/depan/talent-ketrampilan') }}">Ketrampilan</a></li>
                                 

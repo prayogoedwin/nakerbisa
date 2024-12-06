@@ -64,19 +64,19 @@
                         <h4 class="widget-title">Link Terkait</h4>
                         <ul>
                             <li>
-                                <a href="about-us.html">DINPERINAKER KAB. REMBANG</a>
+                                <a href="https://dinperinnaker.rembangkab.go.id/">DINPERINAKER KAB. REMBANG</a>
                             </li>
                             <li>
-                                <a href="faq.html">DISNAKERTRANS PROV JATENG</a>
+                                <a href="https://disnakertrans.jatengprov.go.id/">DISNAKERTRANS PROV JATENG</a>
                             </li>
                             <li>
-                                <a href="about-us.html">EMAKARYO JATENG</a>
+                                <a href="https://bursakerja.jatengprov.go.id/">EMAKARYO JATENG</a>
                             </li>
                             <li>
-                                <a href="faq.html">KEMNAKER RI</a>
+                                <a href="https://kemnaker.go.id/">KEMNAKER RI</a>
                             </li>
                             <li>
-                                <a href="about-us.html">KARIRHUB KEMNAKER</a>
+                                <a href="https://karirhub.kemnaker.go.id/">KARIRHUB KEMNAKER</a>
                             </li>
                             <!-- <li>
                                 <a href="pricing.html">Plans & Pricing</a>
@@ -198,7 +198,7 @@
                             <option value="tenaga-kerja">Tenaga Kerja</option>
                             <option value="penyedia-kerja">Penyedia Kerja</option>
                             <option value="admin-bkk">BKK</option>
-                            <option value="admin-blk">BLK/BLKK/LPKS</option>
+                            <option value="admin-blk">BLK/BLKK/LPK/LPKS</option>
                         </select>
                     </div>
                 </div>
