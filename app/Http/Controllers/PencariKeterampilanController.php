@@ -10,20 +10,29 @@ use Illuminate\Support\Facades\Validator;
 class PencariKeterampilanController extends Controller
 {
     //
-    public function index(Request $request)
+    public function index(Request $request, $id = null)
     {
-        // Get the current authenticated user
+        // Mendapatkan user yang sedang login
         $userId = auth()->user()->id;
+        $isSuperAdmin = auth()->user()->roles[0]['name'] == 'super-admin'; // Mengecek apakah user adalah super-admin 
 
         if ($request->ajax()) {
             $datas = NakerPencariKeterampilan::select(
-                'id',
-                'lembaga_penyelenggara',
-                'alamat_penyelenggara',
-                'lulus_tahun',
-                'no_sertifikat',
-                'lembaga_penguji'
-            )->where('naker_pencari_keterampilan.user_id', $userId);
+                'naker_pencari_keterampilan.id',    
+                'naker_pencari_keterampilan.lembaga_penyelenggara',
+                'naker_pencari_keterampilan.alamat_penyelenggara',
+                'naker_pencari_keterampilan.lulus_tahun',
+                'naker_pencari_keterampilan.no_sertifikat',
+                'naker_pencari_keterampilan.lembaga_penguji',
+            );
+
+            // Jika user adalah super-admin, filter berdasarkan user_id dari URL
+            if ($isSuperAdmin && $id) {
+                $datas->where('naker_pencari_keterampilan.user_id', $id); // Filter berdasarkan user_id yang ada di URL
+            } elseif (!$isSuperAdmin) {
+                // Jika bukan super-admin, filter berdasarkan user_id yang login
+                $datas->where('naker_pencari_keterampilan.user_id', $userId); // Filter berdasarkan user_id yang login
+            }
 
             return DataTables::of($datas)
                 ->addIndexColumn()
@@ -43,7 +52,11 @@ class PencariKeterampilanController extends Controller
     // Method untuk menyimpan data user baru
     public function store(Request $request)
     {
-        $userId = auth()->user()->id;
+        // Cek apakah user adalah super-admin
+        $isSuperAdmin = auth()->user()->roles[0]['name'] == 'super-admin';
+
+        // Jika super-admin, ambil user_id dari request
+        $userId = $isSuperAdmin ? $request->user_id : auth()->user()->id;
         // Validasi input
         $validator = Validator::make($request->all(), [
             'lembaga_penyelenggara' => 'required|string',
@@ -51,6 +64,7 @@ class PencariKeterampilanController extends Controller
             'lulus_tahun' => 'required|numeric|min:1900|max:' . date('Y'),
             'no_sertifikat' => 'required|numeric',
             'lembaga_penguji' => 'required|string',
+            'user_id' => $isSuperAdmin ? 'required|integer' : 'nullable'
         ]);
 
         if ($validator->fails()) {
@@ -59,7 +73,7 @@ class PencariKeterampilanController extends Controller
 
 
         // Menyimpan data ke tabel users
-        $user = NakerPencariKeterampilan::create([
+        NakerPencariKeterampilan::create([
             'user_id' => $userId,
             'lembaga_penyelenggara' => $request->lembaga_penyelenggara,
             'alamat_penyelenggara' => $request->alamat_penyelenggara,

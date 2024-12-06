@@ -146,11 +146,13 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::put('/pengalaman/update/{id}', [PencariPengalamanController::class, 'update'])->name('pengalaman.update');
         Route::delete('/pengalaman/delete/{id}', [PencariPengalamanController::class, 'softdelete'])->name('pengalaman.softdelete');
 
-        Route::get('/keterampilan', [PencariKeterampilanController::class, 'index'])->name('keterampilan.index');
-        Route::post('/keterampilan/add', [PencariKeterampilanController::class, 'store'])->name('keterampilan.add');
-        Route::get('/keterampilan/{id}', [PencariKeterampilanController::class, 'show'])->name('keterampilan.detail');
-        Route::put('/keterampilan/update/{id}', [PencariKeterampilanController::class, 'update'])->name('keterampilan.update');
-        Route::delete('/keterampilan/delete/{id}', [PencariKeterampilanController::class, 'softdelete'])->name('keterampilan.softdelete');
+        Route::get('/sertifikasi', [PencariKeterampilanController::class, 'index'])->name('keterampilan.index');
+        Route::get('/sertifikasi/{id?}', [PencariKeterampilanController::class, 'index'])->name('keterampilan.index');
+
+        Route::post('/sertifikasi/add', [PencariKeterampilanController::class, 'store'])->name('keterampilan.add');
+        Route::get('/sertifikasi/get/{id}', [PencariKeterampilanController::class, 'show'])->name('keterampilan.detail');
+        Route::put('/sertifikasi/update/{id}', [PencariKeterampilanController::class, 'update'])->name('keterampilan.update');
+        Route::delete('/sertifikasi/delete/{id}', [PencariKeterampilanController::class, 'softdelete'])->name('keterampilan.softdelete');
 
         Route::get('/keahlian-keterampilan', [PencariKeahlianKeterampilanController::class, 'index'])->name('keahlian-keterampilan.index');
         Route::post('/keahlian-keterampilan/add', [PencariKeahlianKeterampilanController::class, 'store'])->name('keahlian-keterampilan.add');
