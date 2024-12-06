@@ -51,7 +51,11 @@ class PencariPengalamanController extends Controller
     // Method untuk menyimpan data user baru
     public function store(Request $request)
     {
-        $userId = auth()->user()->id;
+         // Cek apakah user adalah super-admin
+         $isSuperAdmin = auth()->user()->roles[0]['name'] == 'super-admin';
+
+         // Jika super-admin, ambil user_id dari request
+         $userId = $isSuperAdmin ? $request->user_id : auth()->user()->id;
         // Validasi input
         $validator = Validator::make($request->all(), [
             'nama_perusahaan' => 'required|string',
@@ -59,6 +63,7 @@ class PencariPengalamanController extends Controller
             'mulai_tahun' => 'required|numeric|min:1900|max:' . date('Y'),
             'berhenti_tahun' => 'nullable|numeric|min:1900|max:' . date('Y'),
             'jabatan' => 'required|string',
+            'user_id' => $isSuperAdmin ? 'required|integer' : 'nullable'
         ]);
 
         if ($validator->fails()) {
@@ -67,7 +72,7 @@ class PencariPengalamanController extends Controller
 
 
         // Menyimpan data ke tabel users
-        $user = NakerPencariPengalaman::create([
+        NakerPencariPengalaman::create([
             'user_id' => $userId,
             'nama_perusahaan' => $request->nama_perusahaan,
             'alamat_perusahaan' => $request->alamat_perusahaan,

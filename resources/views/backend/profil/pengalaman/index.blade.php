@@ -72,6 +72,12 @@
                 <div class="modal-body">
                     <form id="registerForm">
                         <div class="row">
+                            <!-- Cek jika super-admin, tampilkan user_id -->
+                            @if (auth()->user()->roles[0]['name'] == 'super-admin')
+                                <input type="hidden" id="user_id" name="user_id" value="{{ request()->route('id') }}">
+                            @else
+                                <input type="hidden" id="user_id" name="user_id" value="{{ auth()->user()->id }}">
+                            @endif
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label class="floating-label" for="nama_perusahaan">Nama Perusahaan</label>
@@ -224,13 +230,16 @@
         // Handle add form submission
         $('#registerForm').submit(function(e) {
             e.preventDefault();
+            // Clear error messages
+            $('#errorMessages').html('').addClass('d-none');
             var formData = {
                 nama_perusahaan: $('#nama_perusahaan').val(),
                 alamat_perusahaan: $('#alamat_perusahaan').val(),
                 mulai_tahun: $('#mulai_tahun').val(),
                 berhenti_tahun: $('#berhenti_tahun').val(),
                 jabatan: $('#jabatan').val(),
-                _token: '{{ csrf_token() }}'
+                _token: '{{ csrf_token() }}',
+                user_id: $('#user_id').val() // Ambil nilai user_id dari input tersembunyi
             };
 
             $.ajax({
