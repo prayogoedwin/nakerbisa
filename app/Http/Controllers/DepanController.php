@@ -49,22 +49,24 @@ class DepanController extends Controller
         return view('depan.depan_index', compact('faq', 'beritaTerbaru', 'lowonganTerbaruCount', 'lowonganAktifCount'));
     }
 
-
     public function bkk()
     {
         $bkkList = DB::table('users_bkk')
             ->leftJoin('naker_sektor', 'users_bkk.id_sektor', '=', 'naker_sektor.id')
-            ->leftJoin('naker_kabkota', 'users_bkk.id_kota', '=', 'naker_kabkota.id') // Perbaikan di sini
+            ->leftJoin('naker_kabkota', 'users_bkk.id_kota', '=', 'naker_kabkota.id') 
+            ->leftJoin('naker_kecamatan', 'users_bkk.id_kecamatan', '=', 'naker_kecamatan.id') 
+            ->leftJoin('naker_desa', 'users_bkk.id_desa', '=', 'naker_desa.id') 
             ->select(
                 'users_bkk.*',
                 'naker_sektor.name as sektor_name',
-                'naker_kabkota.name as kabkota_name' // Mengambil nama kabupaten/kota
+                'naker_kabkota.name as kabkota_name', 
+                'naker_kecamatan.name as kec_name', 
+                'naker_desa.name as desa_name' 
             )
-            ->get();
+            ->paginate(10);
 
         return view('depan.depan_bkk', compact('bkkList'));
     }
-
 
     public function blk()
     {

@@ -45,40 +45,56 @@
                                     'yayasan' => 'Yayasan',
                                 ];
                             @endphp
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama BKK</th>
-                                        <th>Penyedia Loker Luar Negeri</th>
-                                        <th>Deskripsi</th>
-                                        <th>Jenis BKK</th>
-                                        <th>Alamat</th>
-                                        <th>Sektor</th>
-                                        <th>Kabupaten/Kota</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($bkkList as $index => $bkk)
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
                                         <tr>
-                                            <td>{{ $index + 1 }}</td>
-                                            <td>{{ $bkk->name }}</td>
-                                            <td>{{ $bkk->luar_negri == 1 ? 'Ya' : 'Tidak' }}</td>
-                                            <td>{{ $bkk->deskripsi }}</td>
-                                            <td>{{ $jenisBkkMapping[$bkk->jenis_bkk] ?? 'Tidak Diketahui' }}</td>
-                                            <td>{{ $bkk->alamat }}</td>
-                                            <td>{{ $bkk->sektor_name }}</td>
-                                            <td>{{ $bkk->kabkota_name }}</td>
+                                            <th>No</th>
+                                            <th>Nama BKK</th>
+                                            <th>Penyedia Loker Luar Negeri</th>
+                                            <th>Deskripsi</th>
+                                            <th>Jenis BKK</th>
+                                            <th>NIB</th>
+                                            <th>Alamat</th>
+                                            <th>Sektor</th>
+                                            <th>Kabupaten/Kota</th>
+                                            <th>Kecamatan</th>
+                                            <th>Desa</th>
+                                            <th>Website</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($bkkList as $index => $bkk)
+                                            <tr>
+                                                <td>{{ $bkkList->firstItem() + $index }}</td>
+                                                <td>{{ $bkk->name }}</td>
+                                                <td>{{ $bkk->luar_negri == 1 ? 'Ya' : 'Tidak' }}</td>
+                                                <td>{{ $bkk->deskripsi }}</td>
+                                                <td>{{ $jenisBkkMapping[$bkk->jenis_bkk] ?? 'Tidak Diketahui' }}</td>
+                                                <td>{{ $bkk->nib }}</td>
+                                                <td>{{ $bkk->alamat }}</td>
+                                                <td>{{ $bkk->sektor_name }}</td>
+                                                <td>{{ $bkk->kabkota_name }}</td>
+                                                <td>{{ $bkk->kec_name }}</td>
+                                                <td>{{ $bkk->desa_name }}</td>
+                                                <td>{{ $bkk->website }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="2" class="text-center">Data tidak tersedia</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mt-3">
+                                {{ $bkkList->links('pagination::bootstrap-5') }}
+                            </div>
                         </div>
                     </div>
                     <!-- End Single Widget -->
                 </div>
             </div>
-
         </div>
     </div>
 </div>
