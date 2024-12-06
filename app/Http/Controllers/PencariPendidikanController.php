@@ -10,13 +10,14 @@ use Illuminate\Support\Facades\Validator;
 class PencariPendidikanController extends Controller
 {
     //
-    public function index(Request $request)
+    public function index(Request $request, $id = null)
     {
-        // Get the current authenticated user
+        // Mendapatkan user yang sedang login
         $userId = auth()->user()->id;
+        $isSuperAdmin = auth()->user()->roles[0]['name'] == 'super-admin'; // Mengecek apakah user adalah super-admin
 
         if ($request->ajax()) {
-            // Fetch the data filtered by the logged-in user's user_id
+            // Mengambil data, jika super-admin, ambil user_id dari URL
             $datas = NakerPencariPendidikan::select(
                 'naker_pencari_pendidikan.id',
                 'naker_pendidikan.name as pendidikan_name', // Nama Pendidikan
@@ -26,10 +27,17 @@ class PencariPendidikanController extends Controller
                 'naker_pencari_pendidikan.lulus'
             )
                 ->join('naker_pendidikan', 'naker_pencari_pendidikan.pendidikan_id', '=', 'naker_pendidikan.id') // Join tabel pendidikan
-                ->leftJoin('naker_jurusan', 'naker_pencari_pendidikan.jurusan_id', '=', 'naker_jurusan.id')      // Left join tabel jurusan (opsional)
-                ->where('naker_pencari_pendidikan.user_id', $userId); // Filter berdasarkan user_id yang login
+                ->leftJoin('naker_jurusan', 'naker_pencari_pendidikan.jurusan_id', '=', 'naker_jurusan.id');      // Left join tabel jurusan (opsional)
 
-            // Return the data as JSON for DataTables
+            // Jika user adalah super-admin, filter berdasarkan user_id dari URL
+            if ($isSuperAdmin && $id) {
+                $datas->where('naker_pencari_pendidikan.user_id', $id); // Filter berdasarkan user_id yang ada di URL
+            } elseif (!$isSuperAdmin) {
+                // Jika bukan super-admin, filter berdasarkan user_id yang login
+                $datas->where('naker_pencari_pendidikan.user_id', $userId); // Filter berdasarkan user_id yang login
+            }
+
+            // Mengembalikan data sebagai JSON untuk DataTables
             return DataTables::of($datas)
                 ->addIndexColumn()
                 ->addColumn('options', function ($data) {
@@ -44,6 +52,7 @@ class PencariPendidikanController extends Controller
 
         return view('backend.profil.pendidikan.index');
     }
+
 
 
     // Method untuk menyimpan data user baru

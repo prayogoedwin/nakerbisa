@@ -15,7 +15,9 @@
                         <!-- Breadcrumb -->
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ route('profil.index') }}">Profil</a></li>
+                                @if (auth()->user()->roles[0]['name'] != 'super-admin')
+                                    <li class="breadcrumb-item"><a href="{{ route('profil.index') }}">Profil</a></li>
+                                @endif
                                 <li class="breadcrumb-item active" aria-current="page">Tambah Data Pendidikan</li>
                             </ol>
                         </nav>
@@ -205,37 +207,42 @@
 
 @push('js')
     <script>
-        $('#simpletable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: '{{ route('pendidikan.index') }}',
-            autoWidth: false,
-            columns: [{
-                    data: 'DT_RowIndex',
-                    orderable: false,
-                    searchable: false
-                }, // No
-                {
-                    data: 'pendidikan_name'
-                }, // Nama Pendidikan
-                {
-                    data: 'jurusan_name'
-                }, // Nama Jurusan
-                {
-                    data: 'nama_sekolah'
-                }, // Nama Sekolah
-                {
-                    data: 'alamat_sekolah'
-                }, // Alamat Sekolah
-                {
-                    data: 'lulus'
-                }, // Tahun Lulus
-                {
-                    data: 'options',
-                    orderable: false,
-                    searchable: false
-                } // Tombol aksi
-            ]
+        $(document).ready(function() {
+            var url = window.location.href; // Ambil URL saat ini
+            var id = url.split('/').pop(); // Ambil id dari URL
+
+            $('#simpletable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{ url('dapur/profil/pendidikan') }}/' + id, // Kirim id dari URL ke server
+                autoWidth: false,
+                columns: [{
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    }, // No
+                    {
+                        data: 'pendidikan_name'
+                    }, // Nama Pendidikan
+                    {
+                        data: 'jurusan_name'
+                    }, // Nama Jurusan
+                    {
+                        data: 'nama_sekolah'
+                    }, // Nama Sekolah
+                    {
+                        data: 'alamat_sekolah'
+                    }, // Alamat Sekolah
+                    {
+                        data: 'lulus'
+                    }, // Tahun Lulus
+                    {
+                        data: 'options',
+                        orderable: false,
+                        searchable: false
+                    } // Tombol aksi
+                ]
+            });
         });
     </script>
 
@@ -299,7 +306,7 @@
                         let dt = response.data;
                         $('#editId').val(dt.id);
                         $('#editPendidikanId').val(dt.pendidikan_id).trigger(
-                        'change'); // Trigger change untuk load jurusan
+                            'change'); // Trigger change untuk load jurusan
                         setTimeout(() => {
                             $('#editJurusanId').val(dt.jurusan_id); // Set jurusan setelah load
                         }, 500); // Beri waktu untuk load data

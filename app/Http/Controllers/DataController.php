@@ -125,7 +125,7 @@ class DataController extends Controller
         // Ambil data pengalaman kerja berdasarkan user_id dari $pencari
         $pengalaman = NakerPencariPengalaman::where('user_id', $pencari->user_id)->get();
 
-        return view('backend.data-pencari.edit', compact('pencari', 'pendidikan', 'keterampilan', 'pengalaman', 'keahlian'));
+        return view('backend.data-pencari.edit', compact('id', 'pencari', 'pendidikan', 'keterampilan', 'pengalaman', 'keahlian'));
     }
 
     public function softDeletePendidikan($id)

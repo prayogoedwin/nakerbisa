@@ -369,10 +369,10 @@
 
                                                 <!-- Button Tambah Data Pendidikan -->
                                                 <div class="d-flex justify-content-end mt-4">
-                                                    {{-- <a href="{{ route('pendidikan.index') }}"
+                                                    <a href="{{ route('pendidikan.index', ['id' => $pencari->user_id]) }}"
                                                         class="btn btn-success btn-sm btn-round has-ripple">
                                                         <i class="feather icon-plus"></i> Update Data
-                                                    </a> --}}
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -477,7 +477,7 @@
                                                                     {{ $item->no_sertifikat }}</p>
                                                                 <p><strong>Lembaga Penguji:</strong>
                                                                     {{ $item->lembaga_penguji }}</p>
-                                                                    <form
+                                                                <form
                                                                     action="{{ route('data.sertifikasi.softDelete', $item->id) }}"
                                                                     method="POST" class="d-inline">
                                                                     @csrf
