@@ -15,7 +15,7 @@
                                 @if (auth()->user()->roles[0]['name'] != 'super-admin')
                                     <li class="breadcrumb-item"><a href="{{ route('profil.index') }}">Profil</a></li>
                                 @endif
-                                <li class="breadcrumb-item active" aria-current="page">Tambah Data Pendidikan</li>
+                                <li class="breadcrumb-item active" aria-current="page">Tambah Data Pengalaman</li>
                             </ol>
                         </nav>
                         <div class="row">
