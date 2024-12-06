@@ -23,7 +23,7 @@
                                                     kepada kami.
                                                 </p>
 
-                                                <a href="javascript:;" class="btn btn-sm btn-outline-primary">Verifikasi
+                                                <a href="{{ route('lowongan.index') }}" class="btn btn-sm btn-outline-primary">Update Lamaran Kerja
                                                     Sekarang</a>
                                             </div>
                                         </div>
