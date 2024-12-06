@@ -56,6 +56,7 @@ class DepanController extends Controller
             ->leftJoin('naker_kabkota', 'users_bkk.id_kota', '=', 'naker_kabkota.id')
             ->leftJoin('naker_kecamatan', 'users_bkk.id_kecamatan', '=', 'naker_kecamatan.id')
             ->leftJoin('naker_desa', 'users_bkk.id_desa', '=', 'naker_desa.id')
+            ->whereNull('users_bkk.deleted_at')
             ->select(
                 'users_bkk.*',
                 'naker_sektor.name as sektor_name',
@@ -74,6 +75,7 @@ class DepanController extends Controller
             ->leftJoin('naker_kabkota', 'users_blk.id_kota', '=', 'naker_kabkota.id')
             ->leftJoin('naker_kecamatan', 'users_blk.id_kecamatan', '=', 'naker_kecamatan.id')
             ->leftJoin('naker_desa', 'users_blk.id_desa', '=', 'naker_desa.id')
+            ->whereNull('users_blk.deleted_at')
             ->select(
                 'users_blk.*',
                 'naker_kabkota.name as kabkota_name',
