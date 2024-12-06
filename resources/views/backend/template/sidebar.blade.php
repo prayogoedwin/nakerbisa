@@ -195,12 +195,12 @@
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="#" class="menu-link">
-                        <div data-i18n="Without menu">Pencari Kerja</div>
+                        <div data-i18n="Without menu">Tenaga Kerja</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="#" class="menu-link">
-                        <div data-i18n="Without navbar">Perusahaan</div>
+                        <div data-i18n="Without navbar">Penyedia</div>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -213,11 +213,7 @@
                         <div data-i18n="Without navbar">Penempatan</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
-                        <div data-i18n="Without navbar">BKK</div>
-                    </a>
-                </li>
+                
             </ul>
         </li>
     </ul>

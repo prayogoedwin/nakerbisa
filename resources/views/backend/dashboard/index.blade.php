@@ -23,7 +23,7 @@
                                                     terlihat disisi pencari kerja.
                                                 </p>
 
-                                                <a href="javascript:;" class="btn btn-sm btn-outline-primary">Verifikasi
+                                                <a href="{{ route('lowongan.index') }}" class="btn btn-sm btn-outline-primary">Verifikasi
                                                     Sekarang</a>
                                             </div>
                                         </div>

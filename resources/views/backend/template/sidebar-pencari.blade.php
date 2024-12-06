@@ -53,7 +53,7 @@
 
             <ul class="menu-sub">
                 <li class="menu-item {{ request()->routeIs('ak1.printTk') ? 'active' : '' }}">
-                    <a href="{{ route('ak1.printTk', auth()->user()->id) }}" class="menu-link">
+                    <a href="{{ route('ak1.printTk', encode_url(auth()->user()->id)) }}" class="menu-link">
                         <div data-i18n="Without menu">Cetak AK1</div>
                     </a>
                 </li>
