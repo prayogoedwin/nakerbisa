@@ -65,7 +65,7 @@ class LowonganController extends Controller
                     ->addIndexColumn()
                     ->addColumn('options', function ($loker) {
                         return '
-                        <a href="' . route('lowongan.pelamar', $loker->id) . '" class="btn btn-success btn-sm">Lihat Pelamar</a>
+                        <a href="' . route('lowongan.pelamar', encode_url($loker->id)) . '" class="btn btn-success btn-sm">Lihat Pelamar</a>
                         <button class="btn btn-primary btn-sm" onclick="showEditModal(' . $loker->id . ')">Edit</button>
                         <button class="btn btn-danger btn-sm" onclick="confirmDelete(' . $loker->id . ')">Hapus</button>
                     ';
@@ -91,7 +91,7 @@ class LowonganController extends Controller
                     ->addIndexColumn()
                     ->addColumn('options', function ($loker) {
                         return '
-                        <a href="' . route('lowongan.pelamar', $loker->id) . '" class="btn btn-success btn-sm">Lihat Pelamar</a>
+                        <a href="' . route('lowongan.pelamar', encode_url($loker->id)) . '" class="btn btn-success btn-sm">Lihat Pelamar</a>
                         <button class="btn btn-primary btn-sm" onclick="showEditModal(' . $loker->id . ')">Edit</button>
                         <button class="btn btn-danger btn-sm" onclick="confirmDelete(' . $loker->id . ')">Hapus</button>
                     ';
@@ -178,9 +178,10 @@ class LowonganController extends Controller
         // return response()->json($lowongan, 201); // Kode 201 untuk Created
     }
 
-    public function show($id)
+    public function show($ids)
     {
         try {
+            $id = decode_url($ids);
             $data = Lowongan::select('*')->findOrFail($id);
             return response()->json(['success' => true, 'data' => $data]);
         } catch (\Exception $e) {
