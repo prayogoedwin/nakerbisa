@@ -44,7 +44,7 @@
                                 </div>
                                 <h4>
                                     <!-- Link ke halaman detail berita -->
-                                    <a href="{{ route('berita.show', $item->id) }}">{{ $item->name }}</a>
+                                    <a href="{{ route('berita.show', encode_url($item->id)) }}">{{ $item->name }}</a>
                                 </h4>
                             </div>
                         </div>

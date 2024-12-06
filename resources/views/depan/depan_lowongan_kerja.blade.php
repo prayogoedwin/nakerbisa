@@ -104,9 +104,9 @@
                                     </ul>
                                 </div>
                                 <h3>
-                                    <a href="{{ route('lowongan.show', $lowongan->id) }}">{{ $lowongan->judul_lowongan }}</a>
+                                    <a href="{{ route('lowongan.show', encode_url($lowongan->id)) }}">{{ $lowongan->judul_lowongan }}</a>
                                 </h3>
-                                <a href="{{ route('lowongan.show', $lowongan->id) }}" class="btn-simple"><i class="fas fa-angle-right"></i> Read more</a>
+                                {{-- <a href="{{ route('lowongan.show', $lowongan->id) }}" class="btn-simple"><i class="fas fa-angle-right"></i> Read more</a> --}}
                             </div>
                         </div>
                     </div>

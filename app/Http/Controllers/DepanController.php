@@ -182,8 +182,9 @@ class DepanController extends Controller
         return view('depan.depan_lowongan_kerja', compact('lowonganDisetujui'));
     }
 
-    public function showLowongan($id)
+    public function showLowongan($ids)
     {
+        $id = decode_url($ids);
         // Ambil detail lowongan berdasarkan ID
         $lowongan = Lowongan::findOrFail($id);
 
@@ -261,8 +262,9 @@ class DepanController extends Controller
         return view('depan.depan_berita', compact('berita'));
     }
 
-    public function show($id)
+    public function show($ids)
     {
+        $id = decode_url($ids);
         $berita = NakerBerita::findOrFail($id);
 
         return view('depan.depan_berita_detail', compact('berita'));

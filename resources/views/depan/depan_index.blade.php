@@ -269,7 +269,7 @@
             <div class="col-lg-12 text-center">
                 <div class="load-more-info secondary text-center mt-60">
                     <p>
-                        Lihat lowongan kerja lebih banyak lagi? <a href="#">Klik disini</a>
+                        Lihat lowongan kerja lebih banyak lagi? <a href="{{ route('depan.lowongan-kerja') }}">Klik disini</a>
                     </p>
                 </div>
             </div>
@@ -515,12 +515,12 @@
                 <div class="blog-style-one solid">
                     <div class="thumb">
                         <img src="{{ asset('storage/' . $beritaTerbaru->cover) }}" alt="Image Not Found">
-                        <a href="{{ route('berita.show', ['id' => $beritaTerbaru->id]) }}">Berita</a>
+                        <a href="{{ route('berita.show', ['id' => encode_url($beritaTerbaru->id)]) }}">Berita</a>
                         <div class="info">
                             <div class="blog-meta">
                                 <ul>
                                     <li>
-                                        <a href="{{ route('berita.show', ['id' => $beritaTerbaru->id]) }}"><i class="fas fa-user"></i> ADMIN NAKERBISA</a>
+                                        <a href="{{ route('berita.show', ['id' => encode_url($beritaTerbaru->id)]) }}"><i class="fas fa-user"></i> ADMIN NAKERBISA</a>
                                     </li>
                                     <li>
                                         {{ date('d F, Y', strtotime($beritaTerbaru->created_at)) }}
@@ -528,7 +528,7 @@
                                 </ul>
                             </div>
                             <h4>
-                                <a href="{{ route('berita.show', ['id' => $beritaTerbaru->id]) }}">{{ $beritaTerbaru->name }}</a>
+                                <a href="{{ route('berita.show', ['id' => encode_url($beritaTerbaru->id)]) }}">{{ $beritaTerbaru->name }}</a>
                             </h4>
                         </div>
                     </div>
