@@ -18,7 +18,7 @@ class PencariPengalamanController extends Controller
 
         if ($request->ajax()) {
             $datas = NakerPencariPengalaman::select(
-                'naker_pencari_pengalaman.id',     // Nama Jurusan
+                'naker_pencari_pengalaman.id', 
                 'naker_pencari_pengalaman.nama_perusahaan',
                 'naker_pencari_pengalaman.alamat_perusahaan',
                 'naker_pencari_pengalaman.mulai_tahun',

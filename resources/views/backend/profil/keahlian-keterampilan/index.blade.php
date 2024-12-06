@@ -12,8 +12,11 @@
                         <!-- Breadcrumb -->
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ route('profil.index') }}">Profil</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Tambah Data Keahlian & Keterampilan</li>
+                                @if (auth()->user()->roles[0]['name'] != 'super-admin')
+                                    <li class="breadcrumb-item"><a href="{{ route('profil.index') }}">Profil</a></li>
+                                @endif
+                                <li class="breadcrumb-item active" aria-current="page">Tambah Data Keahlian & Keterampilan
+                                </li>
                             </ol>
                         </nav>
                         <div class="row">
@@ -66,11 +69,16 @@
                 <div class="modal-body">
                     <form id="registerForm">
                         <div class="row">
+                            <!-- Cek jika super-admin, tampilkan user_id -->
+                            @if (auth()->user()->roles[0]['name'] == 'super-admin')
+                                <input type="hidden" id="user_id" name="user_id" value="{{ request()->route('id') }}">
+                            @else
+                                <input type="hidden" id="user_id" name="user_id" value="{{ auth()->user()->id }}">
+                            @endif
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label class="floating-label" for="keahlian">Keahlian</label>
-                                    <input type="text" class="form-control" id="keahlian"
-                                        name="keahlian">
+                                    <input type="text" class="form-control" id="keahlian" name="keahlian">
                                 </div>
                             </div>
                             <div class="col-sm-12 text-end">
@@ -98,8 +106,7 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label class="floating-label" for="edtiKeahlian">Keahlian</label>
-                                <input type="text" class="form-control" id="edtiKeahlian"
-                                    name="keahlian">
+                                <input type="text" class="form-control" id="edtiKeahlian" name="keahlian">
                             </div>
                         </div>
                         <div class="col-sm-12 text-end">
@@ -117,10 +124,12 @@
 @push('js')
     <script>
         $(document).ready(function() {
+            var url = window.location.href; // Ambil URL saat ini
+            var id = url.split('/').pop(); // Ambil id dari URL
             $('#simpletable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('keahlian-keterampilan.index') }}',
+                ajax: '{{ url('dapur/profil/keahlian-keterampilan') }}/' + id, // Kirim id dari URL ke server
                 autoWidth: false,
                 columns: [{
                         data: 'DT_RowIndex',
@@ -147,7 +156,8 @@
             e.preventDefault();
             var formData = {
                 keahlian: $('#keahlian').val(),
-                _token: '{{ csrf_token() }}'
+                _token: '{{ csrf_token() }}',
+                user_id: $('#user_id').val() // Ambil nilai user_id dari input tersembunyi
             };
 
             $.ajax({
@@ -156,7 +166,7 @@
                 data: formData,
                 success: function(response) {
                     if (response.success) {
-                        alert('Berhasil menambahkan data keterampilan');
+                        alert('Berhasil menambahkan data keahlian & keterampilan');
                         $('#modal-report').modal('hide');
                         location.reload();
                     } else {

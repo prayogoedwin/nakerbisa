@@ -549,10 +549,10 @@
 
                                                 <!-- Button Tambah Data Keterampilan -->
                                                 <div class="d-flex justify-content-end mt-4">
-                                                    {{-- <a href="{{ route('keterampilan.index') }}"
+                                                    <a href="{{ route('keahlian-keterampilan.index', ['id' => $pencari->user_id]) }}"
                                                         class="btn btn-success btn-sm btn-round has-ripple">
                                                         <i class="feather icon-plus"></i> Update Data
-                                                    </a> --}}
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>

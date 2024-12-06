@@ -10,16 +10,25 @@ use Illuminate\Support\Facades\Validator;
 class PencariKeahlianKeterampilanController extends Controller
 {
     //
-    public function index(Request $request)
+    public function index(Request $request, $id = null)
     {
-        // Get the current authenticated user
+        // Mendapatkan user yang sedang login
         $userId = auth()->user()->id;
+        $isSuperAdmin = auth()->user()->roles[0]['name'] == 'super-admin'; // Mengecek apakah user adalah super-admin
 
         if ($request->ajax()) {
             $datas = NakerPencariKeahlianKeterampilan::select(
-                'id',
-                'keahlian'
-            )->where('naker_pencari_keahlian_keterampilan.user_id', $userId);
+                'naker_pencari_keahlian_keterampilan.id',
+                'naker_pencari_keahlian_keterampilan.keahlian',
+            );
+
+            // Jika user adalah super-admin, filter berdasarkan user_id dari URL
+            if ($isSuperAdmin && $id) {
+                $datas->where('naker_pencari_keahlian_keterampilan.user_id', $id); // Filter berdasarkan user_id yang ada di URL
+            } elseif (!$isSuperAdmin) {
+                // Jika bukan super-admin, filter berdasarkan user_id yang login
+                $datas->where('naker_pencari_keahlian_keterampilan.user_id', $userId); // Filter berdasarkan user_id yang login
+            }
 
             return DataTables::of($datas)
                 ->addIndexColumn()
@@ -39,10 +48,15 @@ class PencariKeahlianKeterampilanController extends Controller
     // Method untuk menyimpan data user baru
     public function store(Request $request)
     {
-        $userId = auth()->user()->id;
+        // Cek apakah user adalah super-admin
+        $isSuperAdmin = auth()->user()->roles[0]['name'] == 'super-admin';
+
+        // Jika super-admin, ambil user_id dari request
+        $userId = $isSuperAdmin ? $request->user_id : auth()->user()->id;
         // Validasi input
         $validator = Validator::make($request->all(), [
             'keahlian' => 'required|string',
+            'user_id' => $isSuperAdmin ? 'required|integer' : 'nullable'
         ]);
 
         if ($validator->fails()) {
@@ -51,7 +65,7 @@ class PencariKeahlianKeterampilanController extends Controller
 
 
         // Menyimpan data ke tabel users
-        $user = NakerPencariKeahlianKeterampilan::create([
+        NakerPencariKeahlianKeterampilan::create([
             'user_id' => $userId,
             'keahlian' => $request->keahlian,
         ]);

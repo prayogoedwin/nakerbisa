@@ -155,8 +155,10 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::delete('/sertifikasi/delete/{id}', [PencariKeterampilanController::class, 'softdelete'])->name('keterampilan.softdelete');
 
         Route::get('/keahlian-keterampilan', [PencariKeahlianKeterampilanController::class, 'index'])->name('keahlian-keterampilan.index');
+        Route::get('/keahlian-keterampilan/{id?}', [PencariKeahlianKeterampilanController::class, 'index'])->name('keahlian-keterampilan.index');
+
         Route::post('/keahlian-keterampilan/add', [PencariKeahlianKeterampilanController::class, 'store'])->name('keahlian-keterampilan.add');
-        Route::get('/keahlian-keterampilan/{id}', [PencariKeahlianKeterampilanController::class, 'show'])->name('keahlian-keterampilan.detail');
+        Route::get('/keahlian-keterampilan/get/{id}', [PencariKeahlianKeterampilanController::class, 'show'])->name('keahlian-keterampilan.detail');
         Route::put('/keahlian-keterampilan/update/{id}', [PencariKeahlianKeterampilanController::class, 'update'])->name('keahlian-keterampilan.update');
         Route::delete('/keahlian-keterampilan/delete/{id}', [PencariKeahlianKeterampilanController::class, 'softdelete'])->name('keahlian-keterampilan.softdelete');
     });
