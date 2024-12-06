@@ -336,8 +336,9 @@
                     <div class="__right">
                         <h6 class="text-center">PETUGAS ANTAR KERJA</h6>
                         <p><br /><br /><br /></p>
-                        <p class="text-center" style="margin-bottom: 0px;"><span class="text-underline">SHEYLLA APRISCA
-                                WINDIYANI, SH</span> <br />NIP. 199304082020122017</p>
+                        <p class="text-center" style="margin-bottom: 0px;">
+                            <span class="text-underline">_____________________________</span> 
+                            <br />NIP. ________________________</p>
                     </div>
                 </div>
             </div>
@@ -363,7 +364,14 @@
 
                             <em class="empty"></em>
 
-                            <em>1</em><em>9</em><em>7</em><em>0</em><em>0</em><em>1</em><em>0</em><em>1</em>
+                            {{-- <em>1</em><em>9</em><em>7</em><em>0</em><em>0</em><em>1</em><em>0</em><em>1</em> --}}
+                            @if (!empty($user->pencari->ktp))
+                                @foreach (str_split($user->pencari->id) as $digit)
+                                    <em>{{ $digit }}</em>
+                                @endforeach
+                            @else
+                                <em>-</em>
+                            @endif
                         </span></p>
 
 

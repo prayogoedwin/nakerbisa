@@ -362,8 +362,9 @@ class Ak1Controller extends Controller
         return view('backend.ak1.print', compact('user', 'statusKerjas', 'pendidikan', 'keterampilan', 'pengalaman', 'nakerAk1'));
     }
 
-    public function printAk1TenagaKerja($id)
+    public function printAk1TenagaKerja($ids)
     {
+        $id  = decode_url($ids);
         // Ambil data user dan relasinya
         $user = User::with('pencari')->findOrFail($id);
 
