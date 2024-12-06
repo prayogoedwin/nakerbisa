@@ -437,6 +437,12 @@
                                                         class="btn btn-success btn-sm btn-round has-ripple">
                                                         <i class="feather icon-plus"></i> Update Data
                                                     </a> --}}
+                                                    <div class="d-flex justify-content-end mt-4">
+                                                        <a href="{{ route('pengalaman.index', ['id' => $pencari->user_id]) }}"
+                                                            class="btn btn-success btn-sm btn-round has-ripple">
+                                                            <i class="feather icon-plus"></i> Update Data
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
