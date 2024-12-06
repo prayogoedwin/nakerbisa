@@ -31,32 +31,47 @@
                     <div class="single-widget services-list-widget">
                         <h4 class="widget-title">Daftar BLK Terfadaftar Seluruh Provinsi Kalimantan Timur</h4>
                         <div class="content">
-                            <table class="table">
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama BLK</th>
-                                    <th>Alamat</th>
-                                    <th>Jurusan</th>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>BLK SMK 1 BERAU</td>
-                                    <td>Jl. Permai 11 Kabupaten Berap </td>
-                                    <td>Teknik Mesin, Teknik Otomotif, Tekniik Kendaraan Ringan</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>BLK SMK 1 SAMARINDA</td>
-                                    <td>Jl. Elok 20 Kota Samarinda </td>
-                                    <td>Teknik Komputer Jaringan, Rekayasa Perangkat Lunak</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>BLK SMK 1 BALIKPAPAN</td>
-                                    <td>Jl. Pahlawan 7 Kota Balikpapan </td>
-                                    <td>Desai Grafis</td>
-                                </tr>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama BLK</th>
+                                            <th>Alamat</th>
+                                            <th>Kabupaten/Kota</th>
+                                            <th>Kecamatan</th>
+                                            <th>Desa</th>
+                                            <th>No.Telpon</th>
+                                            <th>PIC</th>
+                                            <th>Jabatan</th>
+                                            <th>Website</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($blkList as $index => $blk)
+                                            <tr>
+                                                <td>{{ $blkList->firstItem() + $index }}</td>
+                                                <td>{{ $blk->name }}</td>
+                                                <td>{{ $blk->alamat }}</td>
+                                                <td>{{ $blk->kabkota_name }}</td>
+                                                <td>{{ $blk->kec_name }}</td>
+                                                <td>{{ $blk->desa_name }}</td>
+                                                <td>{{ $blk->telpon }}</td>
+                                                <td>{{ $blk->pic }}</td>
+                                                <td>{{ $blk->jabatan }}</td>
+                                                <td>{{ $blk->website }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="2" class="text-center">Data tidak tersedia</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mt-3">
+                                {{ $blkList->links('pagination::bootstrap-5') }}
+                            </div>
                         </div>
                     </div>
                     <!-- End Single Widget -->

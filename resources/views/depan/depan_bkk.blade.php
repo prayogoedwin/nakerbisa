@@ -60,6 +60,7 @@
                                             <th>Kabupaten/Kota</th>
                                             <th>Kecamatan</th>
                                             <th>Desa</th>
+                                            <th>Jabatan</th>
                                             <th>Website</th>
                                         </tr>
                                     </thead>
@@ -77,6 +78,7 @@
                                                 <td>{{ $bkk->kabkota_name }}</td>
                                                 <td>{{ $bkk->kec_name }}</td>
                                                 <td>{{ $bkk->desa_name }}</td>
+                                                <td>{{ $bkk->jabatan }}</td>
                                                 <td>{{ $bkk->website }}</td>
                                             </tr>
                                         @empty

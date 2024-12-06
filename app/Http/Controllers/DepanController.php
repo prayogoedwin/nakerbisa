@@ -53,15 +53,15 @@ class DepanController extends Controller
     {
         $bkkList = DB::table('users_bkk')
             ->leftJoin('naker_sektor', 'users_bkk.id_sektor', '=', 'naker_sektor.id')
-            ->leftJoin('naker_kabkota', 'users_bkk.id_kota', '=', 'naker_kabkota.id') 
-            ->leftJoin('naker_kecamatan', 'users_bkk.id_kecamatan', '=', 'naker_kecamatan.id') 
-            ->leftJoin('naker_desa', 'users_bkk.id_desa', '=', 'naker_desa.id') 
+            ->leftJoin('naker_kabkota', 'users_bkk.id_kota', '=', 'naker_kabkota.id')
+            ->leftJoin('naker_kecamatan', 'users_bkk.id_kecamatan', '=', 'naker_kecamatan.id')
+            ->leftJoin('naker_desa', 'users_bkk.id_desa', '=', 'naker_desa.id')
             ->select(
                 'users_bkk.*',
                 'naker_sektor.name as sektor_name',
-                'naker_kabkota.name as kabkota_name', 
-                'naker_kecamatan.name as kec_name', 
-                'naker_desa.name as desa_name' 
+                'naker_kabkota.name as kabkota_name',
+                'naker_kecamatan.name as kec_name',
+                'naker_desa.name as desa_name'
             )
             ->paginate(10);
 
@@ -70,7 +70,18 @@ class DepanController extends Controller
 
     public function blk()
     {
-        return view('depan.depan_blk');
+        $blkList = DB::table('users_blk')
+            ->leftJoin('naker_kabkota', 'users_blk.id_kota', '=', 'naker_kabkota.id')
+            ->leftJoin('naker_kecamatan', 'users_blk.id_kecamatan', '=', 'naker_kecamatan.id')
+            ->leftJoin('naker_desa', 'users_blk.id_desa', '=', 'naker_desa.id')
+            ->select(
+                'users_blk.*',
+                'naker_kabkota.name as kabkota_name',
+                'naker_kecamatan.name as kec_name',
+                'naker_desa.name as desa_name'
+            )
+            ->paginate(10);
+        return view('depan.depan_blk', compact('blkList'));
     }
 
     public function talent_ketrampilan()
