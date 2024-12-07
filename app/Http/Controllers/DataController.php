@@ -7,6 +7,7 @@ use App\Models\NakerPencariKeterampilan;
 use App\Models\NakerPencariPendidikan;
 use App\Models\NakerPencariPengalaman;
 use App\Models\UserBkk;
+use App\Models\UserBlk;
 use App\Models\UserPencari;
 use App\Models\UserPenyedia;
 use Illuminate\Http\Request;
@@ -219,7 +220,7 @@ class DataController extends Controller
         ]);
 
         // Redirect ke halaman profil setelah berhasil update
-        return redirect()->route('data.pencari')->with('success', 'Profil berhasil diperbarui.');
+        return redirect()->route('data.pencari')->with('success', 'Data Pencari Kerja berhasil diperbarui.');
     }
 
     public function export(Request $request)
@@ -480,7 +481,7 @@ class DataController extends Controller
         ]);
 
         // Redirect ke halaman profil setelah berhasil update
-        return redirect()->route('data.penyedia')->with('success', 'Profil berhasil diperbarui.');
+        return redirect()->route('data.penyedia')->with('success', 'Data penyedia berhasil diperbarui.');
     }
 
     public function exportPenyedia(Request $request)
@@ -723,7 +724,7 @@ class DataController extends Controller
         ]);
 
         // Redirect ke halaman profil setelah berhasil update
-        return redirect()->route('data.bkk')->with('success', 'Profil berhasil diperbarui.');
+        return redirect()->route('data.bkk')->with('success', 'Data Bkk berhasil diperbarui.');
     }
 
     public function exportBkk(Request $request)
@@ -833,6 +834,183 @@ class DataController extends Controller
                     $desa,
                     $luarNegri,
                     $data->deskripsi,
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        // Mengirimkan file CSV ke browser
+        return response()->stream($callback, 200, $headers);
+    }
+
+    public function blk(Request $request)
+    {
+        if ($request->ajax()) {
+            // Ambil data users_blk beserta nama wilayah
+            $query = UserBlk::select([
+                'users_blk.id',
+                'users_blk.name',
+                'users_blk.id_kota',
+                'users_blk.id_kecamatan',
+                'users_blk.id_desa',
+                'users_blk.alamat',
+                'users_blk.kodepos',
+                'users_blk.telpon',
+                'users_blk.pic',
+                'users_blk.jabatan',
+                'users_blk.website'
+            ]);
+
+            return DataTables::eloquent($query)
+                ->addColumn('kota', function ($data) {
+                    // Ambil nama kota berdasarkan id_kota
+                    $kota = DB::table('naker_kabkota')->where('id', $data->id_kota)->value('name');
+                    return $kota ?? 'Tidak Ditemukan';
+                })
+                ->addColumn('kecamatan', function ($data) {
+                    // Ambil nama kecamatan berdasarkan id_kecamatan
+                    $kecamatan = DB::table('naker_kecamatan')->where('id', $data->id_kecamatan)->value('name');
+                    return $kecamatan ?? 'Tidak Ditemukan';
+                })
+                ->addColumn('desa', function ($data) {
+                    // Ambil nama desa berdasarkan id_desa
+                    $desa = DB::table('naker_desa')->where('id', $data->id_desa)->value('name');
+                    return $desa ?? 'Tidak Ditemukan';
+                })
+                ->addIndexColumn()
+                ->addColumn('options', function ($data) {
+                    return '<a href="' . route('data.blk.edit', $data->id) . '" class="btn btn-primary btn-sm">Edit</a>';
+                })
+                ->rawColumns(['options'])
+                ->make(true);
+        }
+
+        return view('backend.data-blk.blk');
+    }
+
+    public function editBlk($id)
+    {
+        $blk = UserBlk::findOrFail($id);
+        return view('backend.data-blk.edit', compact('blk'));
+    }
+
+    public function updateDataBlk(Request $request, $id)
+    {
+        // Validasi input dari pengguna
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'id_provinsi' => '64',
+            'kabkota_id' => 'required|integer',
+            'kecamatan_id' => 'required|integer',
+            'desa_id' => 'required|string|max:10',
+            'alamat' => 'required|string|max:200',
+            'kodepos' => 'required|string|max:5',
+            'telpon' => 'required|string|max:15',
+            'pic' => 'required|string|max:50',
+            'jabatan' => 'nullable|string|max:50',
+            'website' => 'nullable|string|max:100',
+        ]);
+
+        // Mengambil data UserBlk berdasarkan ID
+        $blk = UserBlk::findOrFail($id);
+
+        // Update data UserBlk
+        $blk->update([
+            'name' => $request->name,
+            'id_provinsi' => '64',
+            'id_kota' => $request->kabkota_id,
+            'id_kecamatan' => $request->kecamatan_id,
+            'id_desa' => $request->desa_id,
+            'alamat' => $request->alamat,
+            'kodepos' => $request->kodepos,
+            'telpon' => $request->telpon,
+            'pic' => $request->pic,
+            'jabatan' => $request->jabatan,
+            'website' => $request->website,
+        ]);
+
+        // Redirect ke halaman profil setelah berhasil update
+        return redirect()->route('data.blk')->with('success', 'Data Blk berhasil diperbarui.');
+    }
+
+    public function exportBlk(Request $request)
+    {
+        $query = UserBlk::select([
+            'id',
+            'name',
+            'alamat',
+            'kodepos',
+            'telpon',
+            'pic',
+            'jabatan',
+            'website',
+            'id_kota',
+            'id_kecamatan',
+            'id_desa',
+        ]);
+
+        // Terapkan filter pencarian dari DataTables
+        if ($request->has('search') && $request->search !== '') {
+            $search = $request->search;
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('alamat', 'like', "%{$search}%")
+                ->orWhere('kodepos', 'like', "%{$search}%")
+                ->orWhere('telpon', 'like', "%{$search}%")
+                ->orWhere('pic', 'like', "%{$search}%")
+                ->orWhere('jabatan', 'like', "%{$search}%")
+                ->orWhere('website', 'like', "%{$search}%");
+        }
+
+        // Ambil data setelah difilter
+        $blkData = $query->get();
+
+
+        $fileName = 'data_blk.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"$fileName\"",
+        ];
+
+        // Kolom-kolom yang akan diekspor ke CSV
+        $columns = [
+            'ID',
+            'Nama Blk',
+            'Alamat',
+            'Kodepos',
+            'Telpon',
+            'Pic',
+            'Jabatan',
+            'Website',
+            'Kota',
+            'Kecamatan',
+            'Desa',
+        ];
+
+        // Callback untuk menulis data ke CSV
+        $callback = function () use ($blkData, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns); // Tulis header CSV
+
+            foreach ($blkData as $data) {
+                // Ambil nama wilayah untuk setiap kolom
+                $kota = DB::table('naker_kabkota')->where('id', $data->id_kota)->value('name');
+                $kecamatan = DB::table('naker_kecamatan')->where('id', $data->id_kecamatan)->value('name');
+                $desa = DB::table('naker_desa')->where('id', $data->id_desa)->value('name');
+        
+                // Tulis data ke CSV dengan nama wilayah dan sektor
+                fputcsv($file, [
+                    $data->id,
+                    $data->name,
+                    $data->alamat,
+                    $data->kodepos,
+                    $data->telpon,
+                    $data->pic,
+                    $data->jabatan,
+                    $data->website,
+                    $kota,
+                    $kecamatan,
+                    $desa,
                 ]);
             }
 

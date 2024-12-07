@@ -137,7 +137,12 @@
                 </li>
                 <li class="menu-item {{ request()->routeIs('data.bkk') ? 'active' : '' }}">
                     <a href="{{ route('data.bkk') }}" class="menu-link">
-                        <div data-i18n="Without menu">Bkk</div>
+                        <div data-i18n="Without menu">BKK</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('data.blk') ? 'active' : '' }}">
+                    <a href="{{ route('data.blk') }}" class="menu-link">
+                        <div data-i18n="Without menu">BLK/BLKK/LPK/LPKS</div>
                     </a>
                 </li>
             </ul>

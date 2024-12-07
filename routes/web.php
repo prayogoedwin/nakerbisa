@@ -220,6 +220,11 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('bkk/export', [DataController::class, 'exportBkk'])->name('data.bkk.export');
         Route::get('/bkk/edit/{id}', [DataController::class, 'editBkk'])->name('data.bkk.edit');
         Route::put('/bkk/edit/{id}', [DataController::class, 'updateDataBkk'])->name('data.bkk.update');
+
+        Route::get('blk', [DataController::class, 'blk'])->name('data.blk');
+        Route::get('blk/export', [DataController::class, 'exportBlk'])->name('data.blk.export');
+        Route::get('/blk/edit/{id}', [DataController::class, 'editBlk'])->name('data.blk.edit');
+        Route::put('/blk/edit/{id}', [DataController::class, 'updateDataBlk'])->name('data.blk.update');
     });
 
     Route::get('/lowongan', [LowonganController::class, 'index'])->name('lowongan.index');
