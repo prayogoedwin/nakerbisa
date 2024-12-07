@@ -120,7 +120,7 @@
                             </section>
                         @endauth
 
-                        @if (Auth::user()->roles[0]['name'] != 'super-admin')
+                        @if (Auth::user()->roles[0]['name'] != 'super-admin' && Auth::user()->roles[0]['name'] != 'penyedia-kerja')
                             <!-- Section Dropdown (Update Profil) -->
                             <section class="section mt-3">
                                 <div class="card">
@@ -666,7 +666,7 @@
         };
     </script>
 
-    @if (Auth::user()->roles[0]['name'] != 'super-admin')
+    @if (Auth::user()->roles[0]['name'] != 'super-admin' && Auth::user()->roles[0]['name'] != 'penyedia-kerja')
         <script>
             $(document).ready(function() {
                 var kabkotaId = "{{ $profil->id_kota }}";
