@@ -187,7 +187,7 @@ class DepanController extends Controller
                 return $query->where('kabkota_id', $lokasiId);
             })
             ->orderBy('tanggal_start', 'desc')
-            ->paginate(10);
+            ->paginate(9);
 
         // Kirim data hasil pencarian ke view
         return view('depan.depan_lowongan_kerja', compact('lowonganDisetujui'));
