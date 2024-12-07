@@ -27,7 +27,6 @@
                                                         <th>Lowongan</th>
                                                         <th>Status Lamaran</th>
                                                         <th>Tanggal Lamar</th>
-                                                        <th>Keterangan</th>
                                                         <th>Options</th>
                                                     </tr>
                                                 </thead>
@@ -67,13 +66,10 @@
                         data: 'lowongan'
                     },
                     {
-                        data: 'status'
+                        data: 'progres_id'
                     },
                     {
                         data: 'created_at'
-                    },
-                    {
-                        data: 'keterangan'
                     },
                     {
                         data: 'options',
