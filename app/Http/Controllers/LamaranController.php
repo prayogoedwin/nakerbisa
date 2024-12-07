@@ -13,25 +13,29 @@ class LamaranController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            // Ambil data lamaran berdasarkan pencari_id yang login
-            $datas = Lamaran::with('lowongan')  // Asumsikan relasi sudah didefinisikan
-                ->where('pencari_id', auth()->user()->id)
-                ->select('id', 'lowongan_id', 'kabkota_penempatan_id', 'progres_id', 'created_at');
+            $datas = Lamaran::with('lowongan') // Relasi ke tabel lowongan
+                ->join('naker_progres', 'naker_lamarans.progres_id', '=', 'naker_progres.kode') // Join tabel
+                ->where('naker_progres.modul', 'lamaran') // Hanya modul 'lowongan'
+                ->where('naker_lamarans.pencari_id', auth()->user()->id) // Data berdasarkan pencari_id yang login
+                ->select(
+                    'naker_lamarans.id',
+                    'naker_lamarans.lowongan_id',
+                    'naker_lamarans.created_at',
+                    'naker_lamarans.progres_id',
+                    'naker_progres.name as status' // Ambil name sebagai status
+                );
 
             return DataTables::of($datas)
                 ->addIndexColumn()
                 ->addColumn('lowongan', function ($data) {
-                    return $data->lowongan->judul_lowongan ?? 'Tidak Ada';  // Ambil nama lowongan dari relasi
+                    return $data->lowongan->judul_lowongan ?? 'Tidak Ada';
                 })
                 ->addColumn('created_at', function ($data) {
                     return Carbon::parse($data->created_at)->format('d M Y'); // Format tanggal
                 })
-                ->addColumn('options', function ($data) {
-                    return '
-                        <button class="btn btn-primary btn-sm" onclick="showDetailsModal(' . $data->id . ')">Detail</button>
-                    ';
+                ->addColumn('status', function ($data) {
+                    return $data->status ?? 'Tidak Ada'; // Gunakan name dari tabel progres
                 })
-                ->rawColumns(['options'])
                 ->make(true);
         }
 
