@@ -22,6 +22,7 @@ use App\Http\Controllers\PencariPendidikanController;
 use App\Http\Controllers\PencariPengalamanController;
 use App\Http\Controllers\PencariProfilController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserBkkController;
 use App\Http\Controllers\UserPencariController;
 use App\Http\Controllers\UserPenyediaController;
 
@@ -178,6 +179,10 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('/penyedia', [UserPenyediaController::class, 'index'])->name('userpenyedia.index');
         Route::delete('/penyedia/delete/{id}', [UserPenyediaController::class, 'softdelete'])->name('userpenyedia.softdelete');
         Route::put('/penyedia/reset/{id}', [UserPenyediaController::class, 'reset'])->name('userpenyedia.reset');
+
+        Route::get('/bkk', [UserBkkController::class, 'index'])->name('userbkk.index');
+        Route::delete('/bkk/delete/{id}', [UserBkkController::class, 'softdelete'])->name('userbkk.softdelete');
+        Route::put('/bkk/reset/{id}', [UserBkkController::class, 'reset'])->name('userbkk.reset');
     });
 
     Route::prefix('ak1')->group(function () {
