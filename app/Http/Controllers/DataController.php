@@ -6,6 +6,7 @@ use App\Models\NakerPencariKeahlianKeterampilan;
 use App\Models\NakerPencariKeterampilan;
 use App\Models\NakerPencariPendidikan;
 use App\Models\NakerPencariPengalaman;
+use App\Models\UserBkk;
 use App\Models\UserPencari;
 use App\Models\UserPenyedia;
 use Illuminate\Http\Request;
@@ -134,7 +135,7 @@ class DataController extends Controller
         $pendidikan->delete(); // Menggunakan Soft Delete
         return redirect()->back()->with('success', 'Data pendidikan berhasil dihapus.');
     }
-    
+
     public function softDeletePengalaman($id)
     {
         $pengalaman = NakerPencariPengalaman::findOrFail($id);
@@ -570,6 +571,249 @@ class DataController extends Controller
                     'yayasan' => 'Yayasan',
                 ];
                 $jenisPerusahaan = $jenisPerusahaanMapping[$data->jenis_perusahaan] ?? 'Tidak Diketahui';
+                $luarNegri = $data->luar_negri == '1' ? 'Ya' : 'Tidak';
+
+                // Tulis data ke CSV dengan nama wilayah dan sektor
+                fputcsv($file, [
+                    $data->id,
+                    $data->name,
+                    $data->nib,
+                    $jenisPerusahaan,
+                    $sektor,
+                    $data->alamat,
+                    $data->kodepos,
+                    $data->telpon,
+                    $data->jabatan,
+                    $data->website,
+                    $kota,
+                    $kecamatan,
+                    $desa,
+                    $luarNegri,
+                    $data->deskripsi,
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        // Mengirimkan file CSV ke browser
+        return response()->stream($callback, 200, $headers);
+    }
+
+
+    public function bkk(Request $request)
+    {
+        if ($request->ajax()) {
+            // Ambil data users_bkk beserta nama wilayah
+            $query = UserBkk::select([
+                'users_bkk.id',
+                'users_bkk.name',
+                'users_bkk.luar_negri',
+                'users_bkk.deskripsi',
+                'users_bkk.jenis_bkk',
+                'users_bkk.nib',
+                'users_bkk.id_sektor',
+                'users_bkk.id_kota',
+                'users_bkk.id_kecamatan',
+                'users_bkk.id_desa',
+                'users_bkk.alamat',
+                'users_bkk.kodepos',
+                'users_bkk.telpon',
+                'users_bkk.jabatan',
+                'users_bkk.website'
+            ]);
+
+            return DataTables::eloquent($query)
+                ->addColumn('jenis_bkk', function ($data) {
+                    $jenis = [
+                        'bumd' => 'Badan Usaha Milik Daerah',
+                        'bumn' => 'Badan Usaha Milik Negara',
+                        'cv' => 'Comanditer Venotschaap',
+                        'firma' => 'Firma',
+                        'instansi' => 'Instansi',
+                        'kp' => 'Koperasi',
+                        'pt' => 'Perseroan Terbatas',
+                        'pp' => 'Perusahaan Perorangan',
+                        'po' => 'PO*',
+                        'yayasan' => 'Yayasan'
+                    ];
+                    return $jenis[$data->jenis_bkk] ?? 'Tidak Diketahui';
+                })
+                ->addColumn('luar_negri', function ($data) {
+                    return $data->luar_negri == 1 ? 'Ya' : 'Tidak';
+                })
+                ->addColumn('kota', function ($data) {
+                    // Ambil nama kota berdasarkan id_kota
+                    $kota = DB::table('naker_kabkota')->where('id', $data->id_kota)->value('name');
+                    return $kota ?? 'Tidak Ditemukan';
+                })
+                ->addColumn('kecamatan', function ($data) {
+                    // Ambil nama kecamatan berdasarkan id_kecamatan
+                    $kecamatan = DB::table('naker_kecamatan')->where('id', $data->id_kecamatan)->value('name');
+                    return $kecamatan ?? 'Tidak Ditemukan';
+                })
+                ->addColumn('desa', function ($data) {
+                    // Ambil nama desa berdasarkan id_desa
+                    $desa = DB::table('naker_desa')->where('id', $data->id_desa)->value('name');
+                    return $desa ?? 'Tidak Ditemukan';
+                })
+                ->addColumn('sektor', function ($data) {
+                    // Ambil nama sektor berdasarkan id_sektor
+                    $sektor = DB::table('naker_sektor')->where('id', $data->id_sektor)->value('name');
+                    return $sektor ?? '-';
+                })
+                ->addIndexColumn()
+                ->addColumn('options', function ($data) {
+                    return '<a href="' . route('data.bkk.edit', $data->id) . '" class="btn btn-primary btn-sm">Edit</a>';
+                })
+                ->rawColumns(['options'])
+                ->make(true);
+        }
+
+        return view('backend.data-bkk.bkk');
+    }
+
+    public function editBkk($id)
+    {
+        $bkk = UserBkk::findOrFail($id);
+        return view('backend.data-bkk.edit', compact('bkk'));
+    }
+
+    public function updateDataBkk(Request $request, $id)
+    {
+        // Validasi input dari pengguna
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'luar_negri' => 'required|in:0,1',
+            'jenis_bkk' => 'required|in:bumd,bumn,cv,firma,instansi,kp,pt,pp,po,yayasan',
+            'deskripsi' => 'nullable|string|max:500',
+            'nib' => 'nullable|string|max:30',
+            'id_sektor' => 'nullable|integer',
+            'id_provinsi' => '64',
+            'kabkota_id' => 'required|integer',
+            'kecamatan_id' => 'required|integer',
+            'desa_id' => 'required|string|max:10',
+            'alamat' => 'required|string|max:200',
+            'kodepos' => 'required|string|max:5',
+            'telpon' => 'required|string|max:15',
+            'jabatan' => 'nullable|string|max:50',
+            'website' => 'nullable|string|max:100',
+        ]);
+
+        // Mengambil data UserBkk berdasarkan ID
+        $bkk = UserBkk::findOrFail($id);
+
+        // Update data UserBkk
+        $bkk->update([
+            'name' => $request->name,
+            'luar_negri' => $request->luar_negri,
+            'jenis_bkk' => $request->jenis_bkk,
+            'deskripsi' => $request->deskripsi,
+            'nib' => $request->nib,
+            'id_sektor' => $request->id_sektor,
+            'id_provinsi' => '64',
+            'id_kota' => $request->kabkota_id,
+            'id_kecamatan' => $request->kecamatan_id,
+            'id_desa' => $request->desa_id,
+            'alamat' => $request->alamat,
+            'kodepos' => $request->kodepos,
+            'telpon' => $request->telpon,
+            'jabatan' => $request->jabatan,
+            'website' => $request->website,
+        ]);
+
+        // Redirect ke halaman profil setelah berhasil update
+        return redirect()->route('data.bkk')->with('success', 'Profil berhasil diperbarui.');
+    }
+
+    public function exportBkk(Request $request)
+    {
+        $query = UserBkk::select([
+            'id',
+            'name',
+            'nib',
+            'jenis_bkk',
+            'id_sektor',
+            'alamat',
+            'kodepos',
+            'telpon',
+            'jabatan',
+            'website',
+            'id_kota',
+            'id_kecamatan',
+            'id_desa',
+            'luar_negri',
+            'deskripsi',
+        ]);
+
+        // Terapkan filter pencarian dari DataTables
+        if ($request->has('search') && $request->search !== '') {
+            $search = $request->search;
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('nib', 'like', "%{$search}%")
+                ->orWhere('jenis_bkk', 'like', "%{$search}%")
+                ->orWhere('alamat', 'like', "%{$search}%")
+                ->orWhere('kodepos', 'like', "%{$search}%")
+                ->orWhere('telpon', 'like', "%{$search}%")
+                ->orWhere('jabatan', 'like', "%{$search}%")
+                ->orWhere('website', 'like', "%{$search}%")
+                ->orWhere('deskripsi', 'like', "%{$search}%")
+                ->orWhere('luar_negri', 'like', "%{$search}%");
+        }
+
+        // Ambil data setelah difilter
+        $bkkData = $query->get();
+
+
+        $fileName = 'data_bkk.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"$fileName\"",
+        ];
+
+        // Kolom-kolom yang akan diekspor ke CSV
+        $columns = [
+            'ID',
+            'Nama Bkk',
+            'NIB',
+            'Jenis Bkk',
+            'Sektor',
+            'Alamat',
+            'Kodepos',
+            'Telpon',
+            'Jabatan',
+            'Website',
+            'Kota',
+            'Kecamatan',
+            'Desa',
+            'Penyedia Luar Negeri',
+            'Deskripsi',
+        ];
+
+        // Callback untuk menulis data ke CSV
+        $callback = function () use ($bkkData, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns); // Tulis header CSV
+
+            foreach ($bkkData as $data) {
+                // Ambil nama wilayah untuk setiap kolom
+                $kota = DB::table('naker_kabkota')->where('id', $data->id_kota)->value('name');
+                $kecamatan = DB::table('naker_kecamatan')->where('id', $data->id_kecamatan)->value('name');
+                $desa = DB::table('naker_desa')->where('id', $data->id_desa)->value('name');
+                $sektor = DB::table('naker_sektor')->where('id', $data->id_sektor)->value('name');
+                $jenisPerusahaanMapping = [
+                    'bumd' => 'Badan Usaha Milik Daerah',
+                    'bumn' => 'Badan Usaha Milik Negara',
+                    'cv' => 'Comanditer Venotschaap',
+                    'firma' => 'Firma',
+                    'instansi' => 'Instansi',
+                    'kp' => 'Koperasi',
+                    'pt' => 'Perseroan Terbatas',
+                    'pp' => 'Perusahaan Perorangan',
+                    'po' => 'PO*',
+                    'yayasan' => 'Yayasan',
+                ];
+                $jenisPerusahaan = $jenisPerusahaanMapping[$data->jenis_bkk] ?? 'Tidak Diketahui';
                 $luarNegri = $data->luar_negri == '1' ? 'Ya' : 'Tidak';
 
                 // Tulis data ke CSV dengan nama wilayah dan sektor

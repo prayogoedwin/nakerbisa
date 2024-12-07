@@ -135,6 +135,11 @@
                         <div data-i18n="Without menu">Penyedia</div>
                     </a>
                 </li>
+                <li class="menu-item {{ request()->routeIs('data.bkk') ? 'active' : '' }}">
+                    <a href="{{ route('data.bkk') }}" class="menu-link">
+                        <div data-i18n="Without menu">Bkk</div>
+                    </a>
+                </li>
             </ul>
         </li>
 

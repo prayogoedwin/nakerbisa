@@ -215,6 +215,11 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('penyedia/export', [DataController::class, 'exportPenyedia'])->name('data.penyedia.export');
         Route::get('/penyedia/edit/{id}', [DataController::class, 'editPenyedia'])->name('data.penyedia.edit');
         Route::put('/penyedia/edit/{id}', [DataController::class, 'updateDataPenyedia'])->name('data.penyedia.update');
+
+        Route::get('bkk', [DataController::class, 'bkk'])->name('data.bkk');
+        Route::get('bkk/export', [DataController::class, 'exportBkk'])->name('data.bkk.export');
+        Route::get('/bkk/edit/{id}', [DataController::class, 'editBkk'])->name('data.bkk.edit');
+        Route::put('/bkk/edit/{id}', [DataController::class, 'updateDataBkk'])->name('data.bkk.update');
     });
 
     Route::get('/lowongan', [LowonganController::class, 'index'])->name('lowongan.index');

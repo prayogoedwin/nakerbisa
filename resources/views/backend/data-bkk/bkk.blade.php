@@ -26,17 +26,17 @@
                             <div class="col-xl-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h1>Data Penyedia Kerja</h1>
+                                        <h1>Data Bkk</h1>
                                         <a href="#" id="export-csv" class="btn btn-success">Export CSV</a>
                                         <div class="table-responsive">
-                                            <table id="penyedia-table" class="table table-bordered">
+                                            <table id="bkk-table" class="table table-bordered">
                                                 <thead>
                                                     <tr>
                                                         <th>ID</th>
                                                         <th>Nama</th>
                                                         <th>Penyedia Loker Luar Negeri</th>
                                                         <th>Deskripsi</th>
-                                                        <th>Jenis Perusahaan</th>
+                                                        <th>Jenis BKk</th>
                                                         <th>Nomor Induk Berusaha</th>
                                                         <th>Sektor</th>
                                                         <th>Kota</th>
@@ -73,10 +73,10 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            let table = $('#penyedia-table').DataTable({
+            let table = $('#bkk-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('data.penyedia') }}',
+                ajax: '{{ route('data.bkk') }}',
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'id'
@@ -94,8 +94,8 @@
                         name: 'deskripsi'
                     },
                     {
-                        data: 'jenis_perusahaan',
-                        name: 'jenis_perusahaan'
+                        data: 'jenis_bkk',
+                        name: 'jenis_bkk'
                     },
                     {
                         data: 'nib',
@@ -155,7 +155,7 @@
                 e.preventDefault();
                 let searchValue = table.search();
 
-                let url = '{{ route('data.penyedia.export') }}';
+                let url = '{{ route('data.bkk.export') }}';
                 url += '?search=' + encodeURIComponent(searchValue);
 
                 window.location.href = url;

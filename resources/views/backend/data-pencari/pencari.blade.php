@@ -84,7 +84,7 @@
                 serverSide: true,
                 ajax: '{{ route('data.pencari') }}',
                 columns: [{
-                        data: 'id',
+                        data: 'DT_RowIndex',
                         name: 'id'
                     },
                     {
