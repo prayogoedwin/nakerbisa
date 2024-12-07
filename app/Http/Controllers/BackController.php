@@ -27,8 +27,13 @@ class BackController extends Controller
 
             $lamaranDalamProsesCount = DB::table('naker_lamarans')
                 ->where('progres_id', $progresIdDalamProses)
+                ->whereNull('deleted_at')
                 ->count();
-            return view('backend.dashboard.index', compact('pencariKerjaCount', 'penyediaKerjaCount', 'lowonganAktifCount', 'lamaranDalamProsesCount'));
+            $lowonganBelumVerifikasiCount = DB::table('naker_lowongan')
+                ->where('status_id', 0) 
+                ->whereNull('deleted_at')
+                ->count();
+            return view('backend.dashboard.index', compact('pencariKerjaCount', 'penyediaKerjaCount', 'lowonganAktifCount', 'lamaranDalamProsesCount', 'lowonganBelumVerifikasiCount'));
         }
 
         if (Auth::user()->roles[0]['name'] == 'tenaga-kerja') {

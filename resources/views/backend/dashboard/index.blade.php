@@ -18,7 +18,7 @@
                                             <div class="card-body">
                                                 <h5 class="card-title text-primary">Selamat Datang Admin! 🎉</h5>
                                                 <p class="mb-4">
-                                                    Ada setidaknya <span class="fw-bold">72</span> lowongan baru belum di
+                                                    Ada setidaknya <span class="fw-bold">{{ $lowonganBelumVerifikasiCount }}</span> lowongan baru belum di
                                                     verifikasi hari ini. Mohon segera diverifikasi agar dapat segera
                                                     terlihat disisi pencari kerja.
                                                 </p>
