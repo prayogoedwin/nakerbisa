@@ -24,7 +24,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
-                                                        <th>Lowongan</th>
+                                                        <th>Judul Lowongan</th>
                                                         <th>Status Lamaran</th>
                                                         <th>Tanggal Lamar</th>
                                                     </tr>

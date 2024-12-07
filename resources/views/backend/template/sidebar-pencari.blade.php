@@ -36,7 +36,7 @@
                         <div data-i18n="Without menu">Lowongan Kerja</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item {{ request()->routeIs('history-lamaran') ? 'active' : '' }}">
                     <a href="{{ route('history-lamaran') }}" class="menu-link">
                         <div data-i18n="Without navbar">History Lamaran</div>
                     </a>
