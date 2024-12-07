@@ -85,7 +85,9 @@ class LowonganController extends Controller
                 )
                     ->join('naker_progres', 'naker_lowongan.status_id', '=', 'naker_progres.kode') // Join tabel
                     ->where('naker_progres.modul', 'lowongan') // Kondisi where
-                    ->whereNull('naker_lowongan.deleted_at'); // Memastikan data tidak terhapus
+                    ->whereNull('naker_lowongan.deleted_at') // Memastikan data tidak terhapus
+                    ->orderByRaw("FIELD(naker_progres.kode, 0) DESC") // Prioritaskan kode 0 ('Menunggu')
+                    ->orderBy('naker_lowongan.id', 'DESC'); // Urutkan ID secara menurun
 
                 return DataTables::of($lokers)
                     ->addIndexColumn()
