@@ -132,7 +132,8 @@
                         <li>
                             <div class="dropdown-divider"></div>
                         </li>
-                        @if (Auth::check() && Auth::user()->roles[0]['name'] == 'tenaga-kerja')
+                        @if (Auth::check() &&
+                                (Auth::user()->roles[0]['name'] == 'tenaga-kerja' || Auth::user()->roles[0]['name'] == 'super-admin'))
                             <li>
                                 <a class="dropdown-item" href="{{ route('profil.index') }}">
                                     <i class="bx bx-user me-2"></i>
@@ -140,6 +141,7 @@
                                 </a>
                             </li>
                         @endif
+
 
                         <li>
                             <a href="{{ route('logout') }}" class="dropdown-item" href="#">
