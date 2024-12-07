@@ -191,6 +191,18 @@ class LowonganController extends Controller
         }
     }
 
+    // Solve error decode url show edit
+
+    // public function show($id)
+    // {
+    //     try {
+    //         $data = Lowongan::findOrFail($id);
+
+    //         return response()->json(['success' => true, 'data' => $data]);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+    //     }
+    // }
 
     public function update(Request $request, $id)
     {
@@ -362,14 +374,14 @@ class LowonganController extends Controller
         // Jika request menggunakan ajax
         if ($request->ajax()) {
             $query = DB::table('naker_lowongan')
-                ->where('tanggal_end', '<', now()) 
+                ->where('tanggal_end', '<', now())
                 ->select('id', 'judul_lowongan', 'tanggal_start', 'tanggal_end', 'posted_by');
 
             if ($user->roles[0]['name'] != 'super-admin') {
-                $query->where('posted_by', $user->id); 
+                $query->where('posted_by', $user->id);
             }
 
-            $expiredLowongan = $query->get(); 
+            $expiredLowongan = $query->get();
 
             return DataTables::of($expiredLowongan)
                 ->addIndexColumn()
