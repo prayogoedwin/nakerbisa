@@ -147,7 +147,7 @@
         $('#simpletable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route('userbkk.index') }}',
+            ajax: '{{ route('userblk.index') }}',
             autoWidth: false, // Menonaktifkan auto-width
             columns: [{
                     data: 'DT_RowIndex',
@@ -227,7 +227,7 @@
 <script>
     function confirmDelete(id) {
         // Konfirmasi penghapusan
-        var deleteUrl = "{{ route('userbkk.softdelete', ':id') }}".replace(':id', id);
+        var deleteUrl = "{{ route('userblk.softdelete', ':id') }}".replace(':id', id);
         if (confirm("Yakin hapus data?")) {
             // Kirim request ke server untuk menghapus data
             $.ajax({
@@ -253,7 +253,7 @@
 <script>
     function confirmReset(id) {
         // Konfirmasi penghapusan
-        var deleteUrl = "{{ route('userbkk.reset', ':id') }}".replace(':id', id);
+        var deleteUrl = "{{ route('userblk.reset', ':id') }}".replace(':id', id);
         if (confirm("Yakin  Reset Password (Password akan direset sesuai nama email/username)?")) {
             // Kirim request ke server untuk menghapus data
             $.ajax({

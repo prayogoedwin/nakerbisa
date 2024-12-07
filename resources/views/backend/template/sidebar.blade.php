@@ -73,7 +73,7 @@
         </li>
 
         <!-- Layouts -->
-        <li class="menu-item {{ request()->routeIs('admin.*') || request()->routeIs('userpencari.*') || request()->routeIs('userpenyedia.*') || request()->routeIs('userbkk.*') ? 'active open' : '' }}">
+        <li class="menu-item {{ request()->routeIs('admin.*') || request()->routeIs('userpencari.*') || request()->routeIs('userpenyedia.*') || request()->routeIs('userbkk.*') || request()->routeIs('userblk.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
                 <div data-i18n="Layouts">Users</div>
@@ -103,6 +103,11 @@
                 <li class="menu-item {{ request()->routeIs('userbkk.index') ? 'active' : '' }}">
                     <a href="{{ route('userbkk.index') }}" class="menu-link" class="menu-link">
                         <div data-i18n="Without navbar">Bkk</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('userblk.index') ? 'active' : '' }}">
+                    <a href="{{ route('userblk.index') }}" class="menu-link" class="menu-link">
+                        <div data-i18n="Without navbar">Blk</div>
                     </a>
                 </li>
                 <!-- <li class="menu-item">
