@@ -24,7 +24,7 @@
         </li>
 
         <!-- Layouts -->
-        <li class="menu-item {{ request()->routeIs('lowongan.*') ? 'active open' : '' }}">
+        <li class="menu-item {{ request()->routeIs('lowongan.*') || request()->routeIs('history-lamaran') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-table"></i>
                 <div data-i18n="Layouts">Lowongan Kerja</div>
@@ -37,7 +37,7 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="#" class="menu-link">
+                    <a href="{{ route('history-lamaran') }}" class="menu-link">
                         <div data-i18n="Without navbar">History Lamaran</div>
                     </a>
                 </li>

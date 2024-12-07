@@ -30,4 +30,8 @@ class Lamaran extends Model
     // {
     //     return $this->belongsTo(User::class);
     // }
+    public function lowongan()
+    {
+        return $this->belongsTo(Lowongan::class, 'lowongan_id');
+    }
 }

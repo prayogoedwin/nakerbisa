@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Ak1Controller;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\DepanController;
+use App\Http\Controllers\LamaranController;
 use App\Http\Controllers\LowonganAdminController;
 use App\Http\Controllers\LowonganController;
 use App\Http\Controllers\LowonganPencariController;
@@ -236,6 +237,8 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
     Route::delete('/lowongan/delete/{id}', [LowonganController::class, 'softdelete'])->name('lowongan.softdelete');
     Route::get('/penempatan', [LowonganController::class, 'penempatan'])->name('penempatan');
     Route::get('history-loker', [LowonganController::class, 'historyLoker'])->name('lowongan.history');
+
+    Route::get('history-lamaran', [LamaranController::class, 'index'])->name('history-lamaran');
 });
 
 
