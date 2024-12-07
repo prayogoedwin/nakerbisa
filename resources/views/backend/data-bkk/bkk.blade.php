@@ -39,6 +39,7 @@
                                                         <th>Jenis BKk</th>
                                                         <th>Nomor Induk Berusaha</th>
                                                         <th>Sektor</th>
+                                                        <th>Provinsi</th>
                                                         <th>Kota</th>
                                                         <th>Kecamatan</th>
                                                         <th>Desa</th>
@@ -104,6 +105,10 @@
                     {
                         data: 'sektor',
                         name: 'sektor'
+                    },
+                    {
+                        data: 'provinsi',
+                        name: 'provinsi'
                     },
                     {
                         data: 'kota',

@@ -34,6 +34,7 @@
                                                     <tr>
                                                         <th>ID</th>
                                                         <th>Nama</th>
+                                                        <th>Provinsi</th>
                                                         <th>Kota</th>
                                                         <th>Kecamatan</th>
                                                         <th>Desa</th>
@@ -80,6 +81,10 @@
                     {
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data: 'provinsi',
+                        name: 'provinsi'
                     },
                     {
                         data: 'kota',

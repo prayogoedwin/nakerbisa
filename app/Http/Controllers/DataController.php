@@ -614,6 +614,7 @@ class DataController extends Controller
                 'users_bkk.jenis_bkk',
                 'users_bkk.nib',
                 'users_bkk.id_sektor',
+                'users_bkk.id_provinsi',
                 'users_bkk.id_kota',
                 'users_bkk.id_kecamatan',
                 'users_bkk.id_desa',
@@ -642,6 +643,11 @@ class DataController extends Controller
                 })
                 ->addColumn('luar_negri', function ($data) {
                     return $data->luar_negri == 1 ? 'Ya' : 'Tidak';
+                })
+                ->addColumn('provinsi', function ($data) {
+                    // Ambil nama provinsi berdasarkan id_provinsi
+                    $provinsi = DB::table('naker_provinsi')->where('id', $data->id_provinsi)->value('name');
+                    return $provinsi ?? 'Tidak Ditemukan';
                 })
                 ->addColumn('kota', function ($data) {
                     // Ambil nama kota berdasarkan id_kota
@@ -690,7 +696,7 @@ class DataController extends Controller
             'deskripsi' => 'nullable|string|max:500',
             'nib' => 'nullable|string|max:30',
             'id_sektor' => 'nullable|integer',
-            'id_provinsi' => '64',
+            'provinsi_id' => 'required|integer',
             'kabkota_id' => 'required|integer',
             'kecamatan_id' => 'required|integer',
             'desa_id' => 'required|string|max:10',
@@ -712,7 +718,7 @@ class DataController extends Controller
             'deskripsi' => $request->deskripsi,
             'nib' => $request->nib,
             'id_sektor' => $request->id_sektor,
-            'id_provinsi' => '64',
+            'id_provinsi' => $request->provinsi_id,
             'id_kota' => $request->kabkota_id,
             'id_kecamatan' => $request->kecamatan_id,
             'id_desa' => $request->desa_id,
@@ -740,6 +746,7 @@ class DataController extends Controller
             'telpon',
             'jabatan',
             'website',
+            'id_provinsi',
             'id_kota',
             'id_kecamatan',
             'id_desa',
@@ -784,6 +791,7 @@ class DataController extends Controller
             'Telpon',
             'Jabatan',
             'Website',
+            'Provinsi',
             'Kota',
             'Kecamatan',
             'Desa',
@@ -798,6 +806,7 @@ class DataController extends Controller
 
             foreach ($bkkData as $data) {
                 // Ambil nama wilayah untuk setiap kolom
+                $provinsi = DB::table('naker_provinsi')->where('id', $data->id_provinsi)->value('name');
                 $kota = DB::table('naker_kabkota')->where('id', $data->id_kota)->value('name');
                 $kecamatan = DB::table('naker_kecamatan')->where('id', $data->id_kecamatan)->value('name');
                 $desa = DB::table('naker_desa')->where('id', $data->id_desa)->value('name');
@@ -829,6 +838,7 @@ class DataController extends Controller
                     $data->telpon,
                     $data->jabatan,
                     $data->website,
+                    $provinsi,
                     $kota,
                     $kecamatan,
                     $desa,
@@ -851,6 +861,7 @@ class DataController extends Controller
             $query = UserBlk::select([
                 'users_blk.id',
                 'users_blk.name',
+                'users_blk.id_provinsi',
                 'users_blk.id_kota',
                 'users_blk.id_kecamatan',
                 'users_blk.id_desa',
@@ -863,6 +874,11 @@ class DataController extends Controller
             ]);
 
             return DataTables::eloquent($query)
+                ->addColumn('provinsi', function ($data) {
+                    // Ambil nama provinsi berdasarkan id_provinsi
+                    $provinsi = DB::table('naker_provinsi')->where('id', $data->id_provinsi)->value('name');
+                    return $provinsi ?? 'Tidak Ditemukan';
+                })
                 ->addColumn('kota', function ($data) {
                     // Ambil nama kota berdasarkan id_kota
                     $kota = DB::table('naker_kabkota')->where('id', $data->id_kota)->value('name');
@@ -900,7 +916,7 @@ class DataController extends Controller
         // Validasi input dari pengguna
         $request->validate([
             'name' => 'required|string|max:100',
-            'id_provinsi' => '64',
+            'provinsi_id' => 'required|integer',
             'kabkota_id' => 'required|integer',
             'kecamatan_id' => 'required|integer',
             'desa_id' => 'required|string|max:10',
@@ -918,7 +934,7 @@ class DataController extends Controller
         // Update data UserBlk
         $blk->update([
             'name' => $request->name,
-            'id_provinsi' => '64',
+            'id_provinsi' => $request->provinsi_id,
             'id_kota' => $request->kabkota_id,
             'id_kecamatan' => $request->kecamatan_id,
             'id_desa' => $request->desa_id,
@@ -945,6 +961,7 @@ class DataController extends Controller
             'pic',
             'jabatan',
             'website',
+            'id_provinsi',
             'id_kota',
             'id_kecamatan',
             'id_desa',
@@ -982,6 +999,7 @@ class DataController extends Controller
             'Pic',
             'Jabatan',
             'Website',
+            'Provinsi',
             'Kota',
             'Kecamatan',
             'Desa',
@@ -994,10 +1012,11 @@ class DataController extends Controller
 
             foreach ($blkData as $data) {
                 // Ambil nama wilayah untuk setiap kolom
+                $provinsi = DB::table('naker_provinsi')->where('id', $data->id_provinsi)->value('name');
                 $kota = DB::table('naker_kabkota')->where('id', $data->id_kota)->value('name');
                 $kecamatan = DB::table('naker_kecamatan')->where('id', $data->id_kecamatan)->value('name');
                 $desa = DB::table('naker_desa')->where('id', $data->id_desa)->value('name');
-        
+
                 // Tulis data ke CSV dengan nama wilayah dan sektor
                 fputcsv($file, [
                     $data->id,
@@ -1008,6 +1027,7 @@ class DataController extends Controller
                     $data->pic,
                     $data->jabatan,
                     $data->website,
+                    $provinsi,
                     $kota,
                     $kecamatan,
                     $desa,
