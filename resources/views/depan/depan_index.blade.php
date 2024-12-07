@@ -62,220 +62,46 @@
 
     <div class="container">
         <div class="row">
-
-            <!-- Single Itme -->
-            <div class="col-xl-3 col-md-6 mb-30">
-                <div class="pricing-style-one"
-                    style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
-                    <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px">
-                    <br />
-                    <br />
-                    <div class="pricing-header">
-                        <h4>Dibutuhkan Akunting</h4>
-                        <p>
-                            Dibutuhkan Akunting Berpengalaman / Fresh Graduete
-                        </p>
-                    </div>
-                    <div class="pricing-content">
-                        <ul>
-                            <li><i class="fas fa-building"></i> PT Rembang Bersatu</li>
-                            <li><i class="fas fa-map"></i> Rembang</li>
-                            <li><i class="fas fa-clock"></i> Exp: 10 Desember 2024</li>
-                        </ul>
-                        <a class="btn mt-25 btn-sm btn-dark animation" href="#">Lihat Detail</a>
-                    </div>
-                </div>
-            </div>
-            <!-- End Single Itme -->
-
-            <!-- Single Itme -->
-            <div class="col-xl-3 col-md-6 mb-30">
-                <div class="pricing-style-one"
-                    style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
-                    <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px">
-                    <br />
-                    <br />
-                    <div class="pricing-header">
-                        <h4>Dibutuhkan IT</h4>
-                        <p>
-                            Dibutuhkan IT Programmer Berpengalaman / Fresh Graduete
-                        </p>
-                    </div>
-                    <div class="pricing-content">
-                        <ul>
-                            <li><i class="fas fa-building"></i> PT Rembang Permai</li>
-                            <li><i class="fas fa-map"></i> Rembang</li>
-                            <li><i class="fas fa-clock"></i> Exp: 11 Desember 2024</li>
-                        </ul>
-                        <a class="btn mt-25 btn-sm btn-dark animation" href="#">Lihat Detail</a>
+            <!-- Loop untuk menampilkan lowongan secara dinamis -->
+            @foreach ($lowonganTerbaru as $lowongan)
+                <div class="col-xl-3 col-md-6 mb-30">
+                    <div class="pricing-style-one"
+                        style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
+                        <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px">
+                        <br />
+                        <br />
+                        <div class="pricing-header">
+                            <h4>{{ $lowongan->judul_lowongan }}</h4>
+                            <p>{{ $lowongan->deskripsi }}</p>
+                        </div>
+                        <div class="pricing-content">
+                            <ul>
+                                <li><i class="fas fa-building"></i> {{ $lowongan->perusahaan_name }}</li>
+                                <li><i class="fas fa-map"></i> {{ $lowongan->lokasi_penempatan_text }}</li>
+                                <li><i class="fas fa-clock"></i> Exp:
+                                    {{ \Carbon\Carbon::parse($lowongan->tanggal_end)->format('d F Y') }}</li>
+                            </ul>
+                            <a class="btn mt-25 btn-sm btn-dark animation"
+                                href="{{ route('lowongan.show', ['id' => encode_url($lowongan->id)]) }}">Lihat
+                                Detail</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- End Single Itme -->
-
-            <!-- Single Itme -->
-            <div class="col-xl-3 col-md-6 mb-30">
-                <div class="pricing-style-one"
-                    style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
-                    <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px">
-                    <br />
-                    <br />
-                    <div class="pricing-header">
-                        <h4>Dibutuhkan Pramusaji</h4>
-                        <p>
-                            Dibutuhkan Pramusaji Berpengalaman / Fresh Graduete
-                        </p>
-                    </div>
-                    <div class="pricing-content">
-                        <ul>
-                            <li><i class="fas fa-building"></i> PT Rembang Resto</li>
-                            <li><i class="fas fa-map"></i> Rembang</li>
-                            <li><i class="fas fa-clock"></i> Exp: 19 Desember 2024</li>
-                        </ul>
-                        <a class="btn mt-25 btn-sm btn-dark animation" href="#">Lihat Detail</a>
-                    </div>
-                </div>
-            </div>
-            <!-- End Single Itme -->
-
-            <!-- Single Itme -->
-            <div class="col-xl-3 col-md-6 mb-30">
-                <div class="pricing-style-one"
-                    style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
-                    <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px">
-                    <br />
-                    <br />
-                    <div class="pricing-header">
-                        <h4>Dibutuhkan Driver</h4>
-                        <p>
-                            Dibutuhkan Driver Berpengalaman / Fresh Graduete
-                        </p>
-                    </div>
-                    <div class="pricing-content">
-                        <ul>
-                            <li><i class="fas fa-building"></i> PT Rembang Expedisi</li>
-                            <li><i class="fas fa-map"></i> Rembang</li>
-                            <li><i class="fas fa-clock"></i> Exp: 1 Desember 2024</li>
-                        </ul>
-                        <a class="btn mt-25 btn-sm btn-dark animation" href="#">Lihat Detail</a>
-                    </div>
-                </div>
-            </div>
-            <!-- End Single Itme -->
-
-
-            <!-- Single Itme -->
-            <div class="col-xl-3 col-md-6 mb-30">
-                <div class="pricing-style-one"
-                    style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
-                    <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px">
-                    <br />
-                    <br />
-                    <div class="pricing-header">
-                        <h4>Dibutuhkan Akunting</h4>
-                        <p>
-                            Dibutuhkan Akunting Berpengalaman / Fresh Graduete
-                        </p>
-                    </div>
-                    <div class="pricing-content">
-                        <ul>
-                            <li><i class="fas fa-building"></i> PT Rembang Bersatu</li>
-                            <li><i class="fas fa-map"></i> Rembang</li>
-                            <li><i class="fas fa-clock"></i> Exp: 10 Desember 2024</li>
-                        </ul>
-                        <a class="btn mt-25 btn-sm btn-dark animation" href="#">Lihat Detail</a>
-                    </div>
-                </div>
-            </div>
-            <!-- End Single Itme -->
-
-            <!-- Single Itme -->
-            <div class="col-xl-3 col-md-6 mb-30">
-                <div class="pricing-style-one"
-                    style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
-                    <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px">
-                    <br />
-                    <br />
-                    <div class="pricing-header">
-                        <h4>Dibutuhkan IT</h4>
-                        <p>
-                            Dibutuhkan IT Programmer Berpengalaman / Fresh Graduete
-                        </p>
-                    </div>
-                    <div class="pricing-content">
-                        <ul>
-                            <li><i class="fas fa-building"></i> PT Rembang Permai</li>
-                            <li><i class="fas fa-map"></i> Rembang</li>
-                            <li><i class="fas fa-clock"></i> Exp: 11 Desember 2024</li>
-                        </ul>
-                        <a class="btn mt-25 btn-sm btn-dark animation" href="#">Lihat Detail</a>
-                    </div>
-                </div>
-            </div>
-            <!-- End Single Itme -->
-
-            <!-- Single Itme -->
-            <div class="col-xl-3 col-md-6 mb-30">
-                <div class="pricing-style-one"
-                    style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
-                    <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px">
-                    <br />
-                    <br />
-                    <div class="pricing-header">
-                        <h4>Dibutuhkan Pramusaji</h4>
-                        <p>
-                            Dibutuhkan Pramusaji Berpengalaman / Fresh Graduete
-                        </p>
-                    </div>
-                    <div class="pricing-content">
-                        <ul>
-                            <li><i class="fas fa-building"></i> PT Rembang Resto</li>
-                            <li><i class="fas fa-map"></i> Rembang</li>
-                            <li><i class="fas fa-clock"></i> Exp: 19 Desember 2024</li>
-                        </ul>
-                        <a class="btn mt-25 btn-sm btn-dark animation" href="#">Lihat Detail</a>
-                    </div>
-                </div>
-            </div>
-            <!-- End Single Itme -->
-
-            <!-- Single Itme -->
-            <div class="col-xl-3 col-md-6 mb-30">
-                <div class="pricing-style-one"
-                    style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
-                    <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px">
-                    <br />
-                    <br />
-                    <div class="pricing-header">
-                        <h4>Dibutuhkan Driver</h4>
-                        <p>
-                            Dibutuhkan Driver Berpengalaman / Fresh Graduete
-                        </p>
-                    </div>
-                    <div class="pricing-content">
-                        <ul>
-                            <li><i class="fas fa-building"></i> PT Rembang Expedisi</li>
-                            <li><i class="fas fa-map"></i> Rembang</li>
-                            <li><i class="fas fa-clock"></i> Exp: 1 Desember 2024</li>
-                        </ul>
-                        <a class="btn mt-25 btn-sm btn-dark animation" href="#">Lihat Detail</a>
-                    </div>
-                </div>
-            </div>
-            <!-- End Single Itme -->
+            @endforeach
         </div>
 
         <div class="row">
             <div class="col-lg-12 text-center">
                 <div class="load-more-info secondary text-center mt-60">
                     <p>
-                        Lihat lowongan kerja lebih banyak lagi? <a href="{{ route('depan.lowongan-kerja') }}">Klik disini</a>
+                        Lihat lowongan kerja lebih banyak lagi? <a href="{{ route('depan.lowongan-kerja') }}">Klik
+                            disini</a>
                     </p>
                 </div>
             </div>
         </div>
-
     </div>
+
 </div>
 <!-- End Pricng -->
 
@@ -358,7 +184,8 @@
                             </div>
                             <div class="fun-fact">
                                 <div class="counter">
-                                    <div class="timer" data-to="{{ $lowonganTerbaruCount ?? '-'  }}" data-speed="2000">{{ $lowonganTerbaruCount ?? '-'  }}</div>
+                                    <div class="timer" data-to="{{ $lowonganTerbaruCount ?? '-' }}"
+                                        data-speed="2000">{{ $lowonganTerbaruCount ?? '-' }}</div>
                                 </div>
                                 <span class="medium">Lowongan Terbaru</span>
                             </div>
@@ -369,13 +196,14 @@
                             </div>
                             <div class="fun-fact">
                                 <div class="counter">
-                                    <div class="timer" data-to="{{ $lowonganAktifCount ?? '-'  }}" data-speed="2000">{{ $lowonganAktifCount ?? '-'  }}</div>
+                                    <div class="timer" data-to="{{ $lowonganAktifCount ?? '-' }}"
+                                        data-speed="2000">{{ $lowonganAktifCount ?? '-' }}</div>
                                 </div>
                                 <span class="medium">Lowongan Aktif</span>
                             </div>
                         </li>
                     </ul>
-                </div>                
+                </div>
             </div>
         </div>
     </div>
@@ -507,40 +335,44 @@
     <div class="container">
         <div class="row">
             <!-- Single Item -->
-          
+
 
             @if ($beritaTerbaru->count())
-            @foreach ($beritaTerbaru as $bindex => $beritaTerbaru)
-            <div class="col-lg-6 mt-md-30 mt-xs-30">
-                <div class="blog-style-one solid">
-                    <div class="thumb">
-                        <img src="{{ asset('storage/' . $beritaTerbaru->cover) }}" alt="Image Not Found">
-                        <a href="{{ route('berita.show', ['id' => encode_url($beritaTerbaru->id)]) }}">Berita</a>
-                        <div class="info">
-                            <div class="blog-meta">
-                                <ul>
-                                    <li>
-                                        <a href="{{ route('berita.show', ['id' => encode_url($beritaTerbaru->id)]) }}"><i class="fas fa-user"></i> ADMIN NAKERBISA</a>
-                                    </li>
-                                    <li>
-                                        {{ date('d F, Y', strtotime($beritaTerbaru->created_at)) }}
-                                    </li>
-                                </ul>
+                @foreach ($beritaTerbaru as $bindex => $beritaTerbaru)
+                    <div class="col-lg-6 mt-md-30 mt-xs-30">
+                        <div class="blog-style-one solid">
+                            <div class="thumb">
+                                <img src="{{ asset('storage/' . $beritaTerbaru->cover) }}" alt="Image Not Found">
+                                <a
+                                    href="{{ route('berita.show', ['id' => encode_url($beritaTerbaru->id)]) }}">Berita</a>
+                                <div class="info">
+                                    <div class="blog-meta">
+                                        <ul>
+                                            <li>
+                                                <a
+                                                    href="{{ route('berita.show', ['id' => encode_url($beritaTerbaru->id)]) }}"><i
+                                                        class="fas fa-user"></i> ADMIN NAKERBISA</a>
+                                            </li>
+                                            <li>
+                                                {{ date('d F, Y', strtotime($beritaTerbaru->created_at)) }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <h4>
+                                        <a
+                                            href="{{ route('berita.show', ['id' => encode_url($beritaTerbaru->id)]) }}">{{ $beritaTerbaru->name }}</a>
+                                    </h4>
+                                </div>
                             </div>
-                            <h4>
-                                <a href="{{ route('berita.show', ['id' => encode_url($beritaTerbaru->id)]) }}">{{ $beritaTerbaru->name }}</a>
-                            </h4>
                         </div>
                     </div>
-                </div>
-            </div>
-            <!-- End Single Item -->
-            @endforeach
+                    <!-- End Single Item -->
+                @endforeach
             @else
                 <p>Belum ada pertanyaan yang tersedia.</p>
             @endif
 
-            
+
 
 
         </div>

@@ -39,14 +39,25 @@ class DepanController extends Controller
 
         // Menghitung jumlah lowongan terbaru (misalnya berdasarkan lowongan yang dibuat dalam 30 hari terakhir)
         $lowonganTerbaruCount = Lowongan::where('created_at', '>=', now()->subDays(30))
+            ->whereNull('deleted_at')
             ->count();
 
         // Menghitung jumlah lowongan aktif (status_id = 1, misalnya)
         $lowonganAktifCount = Lowongan::where('status_id', 1)
+            ->whereNull('deleted_at')
             ->count();
 
+        $lowonganTerbaru = Lowongan::select('naker_lowongan.*', 'users_penyedia.name as perusahaan_name')
+            ->join('users_penyedia', 'naker_lowongan.posted_by', '=', 'users_penyedia.user_id')
+            ->where('naker_lowongan.created_at', '>=', now()->subDays(30))
+            ->whereNull('naker_lowongan.deleted_at')
+            ->where('naker_lowongan.status_id', 1)
+            ->orderBy('naker_lowongan.created_at', 'desc')
+            ->limit(8)
+            ->get();
+
         // Mengirim data ke view
-        return view('depan.depan_index', compact('faq', 'beritaTerbaru', 'lowonganTerbaruCount', 'lowonganAktifCount'));
+        return view('depan.depan_index', compact('faq', 'beritaTerbaru', 'lowonganTerbaruCount', 'lowonganAktifCount', 'lowonganTerbaru'));
     }
 
     public function bkk()

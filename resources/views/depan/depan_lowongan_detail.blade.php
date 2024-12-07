@@ -37,7 +37,7 @@
                                 {{ \Carbon\Carbon::parse($lowongan->tanggal_end)->locale('id')->translatedFormat('d F Y') }}</span>
                         </p>
                         <div class="content">
-                            <p><strong>Lokasi Penempatan: </strong>{{ $lowongan->name }}</p>
+                            <p><strong>Lokasi Penempatan: </strong>{{ $lowongan->lokasi_penempatan_text }}</p>
                             <p><strong>Jabatan: </strong>{{ $jabatan->nama }}</p>
                             <p><strong>Sektor: </strong>{{ $sektor->name }}</p>
                             <p><strong>Deskripsi Pekerjaan:</strong></p>
