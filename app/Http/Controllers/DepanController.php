@@ -165,7 +165,28 @@ class DepanController extends Controller
         $dalamRembangCount = UserPencari::whereNotNull('lokasi_kerja_saat_ini_kec') // lokasi_kerja_saat_ini_kec tidak null
             ->count();
 
-        return view('depan.depan_talent-tempat-kerja', compact('luarRembangCount', 'dalamRembangCount'));
+        // Ambil rekap data untuk grafik bar berdasarkan status_saat_ini = 1 dan lokasi_kerja_saat_ini_kec
+        $rekapData = UserPencari::select('lokasi_kerja_saat_ini_kec', DB::raw('count(*) as total'))
+            ->where('status_saat_ini', 1)  // status_saat_ini = 1
+            ->groupBy('lokasi_kerja_saat_ini_kec')
+            ->get();
+
+        // Ambil data kecamatan untuk menampilkan nama kecamatan
+        $kecamatanData = DB::table('naker_kecamatan')
+            ->select('id', 'name')
+            ->where('id', 'LIKE', '3317%') // Asumsi kode wilayah Rembang
+            ->get();
+
+        // Gabungkan data kecamatan dengan jumlah tenaga kerja
+        $rekapDataTempat = $rekapData->map(function ($item) use ($kecamatanData) {
+            $kecamatan = $kecamatanData->firstWhere('id', $item->lokasi_kerja_saat_ini_kec);
+            return [
+                'name' => $kecamatan ? $kecamatan->name : 'Tidak Diketahui',
+                'total' => $item->total,
+            ];
+        });
+
+        return view('depan.depan_talent-tempat-kerja', compact('luarRembangCount', 'dalamRembangCount', 'rekapDataTempat'));
     }
 
     public function login()

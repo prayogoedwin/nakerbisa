@@ -328,6 +328,44 @@
     @endisset
 </script>
 
+<script>
+    // Bar chart untuk rekap data tempat kerja berdasarkan status bekerja
+    @isset($rekapDataTempat)
+        Highcharts.chart('bar-chart-tempat-kerja', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Rekap Tempat Kerja Berdasarkan Status Bekerja Tenaga Kerja di Nakerbisa'
+            },
+            xAxis: {
+                categories: [
+                    @foreach ($rekapDataTempat as $data)
+                        "{{ $data['name'] }}",
+                    @endforeach
+                ],
+                title: {
+                    text: 'Kecamatan'
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Jumlah Tenaga Kerja'
+                }
+            },
+            series: [{
+                name: 'Tenaga Kerja',
+                data: [
+                    @foreach ($rekapDataTempat as $data)
+                        {{ $data['total'] }},
+                    @endforeach
+                ]
+            }]
+        });
+    @endisset
+</script>
+
 </body>
 
 </html>
