@@ -40,7 +40,8 @@
                                             <table id="simpletable" class="table table-bordered table-striped mb-0">
                                                 <thead>
                                                     <tr>
-                                                        <th>Kecamatan</th>
+                                                        <th>Jumlah Tenaga Kerja / Kecamatan
+                                                        </th>
                                                         <th>Sudah Bekerja (L)</th>
                                                         <th>Sudah Bekerja (P)</th>
                                                         <th>Belum Bekerja (L)</th>
@@ -54,7 +55,8 @@
                                             </table>
                                         </div>
                                         <div class="mt-3">
-                                            <h5><strong>Keseluruhan Rembang:</strong> <span id="totalKeseluruhan">{{ $totalKeseluruhan }}</span></h5>
+                                            <h5><strong>Keseluruhan Rembang:</strong> <span
+                                                    id="totalKeseluruhan">{{ $totalKeseluruhan }}</span></h5>
                                         </div>
                                     </div>
                                 </div>

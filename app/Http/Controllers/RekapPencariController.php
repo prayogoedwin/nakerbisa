@@ -84,7 +84,7 @@ class RekapPencariController extends Controller
 
             // Menambahkan header tabel CSV
             fputcsv($handle, [
-                'Kecamatan',
+                'Jumlah Tenaga Kerja / Kecamatan',
                 'Sudah Bekerja (L)',
                 'Sudah Bekerja (P)',
                 'Belum Bekerja (L)',
