@@ -168,6 +168,7 @@ class DepanController extends Controller
         // Ambil rekap data untuk grafik bar berdasarkan status_saat_ini = 1 dan lokasi_kerja_saat_ini_kec
         $rekapData = UserPencari::select('lokasi_kerja_saat_ini_kec', DB::raw('count(*) as total'))
             ->where('status_saat_ini', 1)  // status_saat_ini = 1
+            ->whereNotNull('lokasi_kerja_saat_ini_kec')
             ->groupBy('lokasi_kerja_saat_ini_kec')
             ->get();
 
