@@ -177,7 +177,9 @@ class DepanController extends Controller
         $lokasiId = $request->input('kabkota_id');
 
         // Query pencarian berdasarkan parameter
-        $lowonganDisetujui = Lowongan::where('status_id', 1) // Lowongan yang disetujui
+        $lowonganDisetujui = Lowongan::select('naker_lowongan.*', 'users_penyedia.name as perusahaan_name', 'users_penyedia.foto as perusahaan_foto')
+            ->join('users_penyedia', 'naker_lowongan.posted_by', '=', 'users_penyedia.user_id')
+            ->where('naker_lowongan.status_id', 1) // Lowongan yang disetujui
             ->when($judulLowongan, function ($query, $judulLowongan) {
                 return $query->where('judul_lowongan', 'like', '%' . $judulLowongan . '%');
             })

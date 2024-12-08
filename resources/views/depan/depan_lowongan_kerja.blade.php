@@ -89,8 +89,11 @@
                         <div class="blog-style-one">
                             <div class="thumb">
                                 <a href="#">
-                                    <img src="{{ asset('assets/nakerbisa_fe/img/800x600.png') }}" alt="Thumb">
-
+                                    @if ($lowongan->perusahaan_foto)
+                                        <img src="{{ asset('storage/' . $lowongan->perusahaan_foto) }}" alt="Thumb">
+                                    @else
+                                        <img src="{{ asset('assets/nakerbisa_fe/img/800x600.png') }}" alt="Thumb">
+                                    @endif
                                 </a>
                             </div>
                             <div class="info">
@@ -104,7 +107,8 @@
                                     </ul>
                                 </div>
                                 <h3>
-                                    <a href="{{ route('lowongan.show', encode_url($lowongan->id)) }}">{{ $lowongan->judul_lowongan }}</a>
+                                    <a
+                                        href="{{ route('lowongan.show', encode_url($lowongan->id)) }}">{{ $lowongan->judul_lowongan }}</a>
                                 </h3>
                                 {{-- <a href="{{ route('lowongan.show', $lowongan->id) }}" class="btn-simple"><i class="fas fa-angle-right"></i> Read more</a> --}}
                             </div>
