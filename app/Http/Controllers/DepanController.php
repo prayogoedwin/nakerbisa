@@ -156,8 +156,11 @@ class DepanController extends Controller
         return view('depan.depan_talent-wilayah', compact('rekapData'));
     }
 
+    public function talent_tempat_kerja()
+    {
 
-
+        return view('depan.depan_talent-tempat-kerja');
+    }
 
     public function login()
     {
