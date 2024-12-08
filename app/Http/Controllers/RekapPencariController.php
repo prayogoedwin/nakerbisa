@@ -58,4 +58,68 @@ class RekapPencariController extends Controller
             return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
         }
     }
+
+    public function exportCsv(Request $request)
+    {
+        // Menyiapkan query untuk mengambil data yang diperlukan
+        $query = UserPencari::select(
+            'id_kecamatan',
+            DB::raw('count(case when status_saat_ini = 1 and gender = "L" then 1 end) as sudah_bekerja_laki'),
+            DB::raw('count(case when status_saat_ini = 1 and gender = "P" then 1 end) as sudah_bekerja_perempuan'),
+            DB::raw('count(case when status_saat_ini = 2 and gender = "L" then 1 end) as belum_bekerja_laki'),
+            DB::raw('count(case when status_saat_ini = 2 and gender = "P" then 1 end) as belum_bekerja_perempuan'),
+            DB::raw('count(case when status_saat_ini = 3 and gender = "L" then 1 end) as tidak_bekerja_laki'),
+            DB::raw('count(case when status_saat_ini = 3 and gender = "P" then 1 end) as tidak_bekerja_perempuan'),
+            DB::raw('count(case when gender = "L" then 1 end) as total_laki'),
+            DB::raw('count(case when gender = "P" then 1 end) as total_perempuan'),
+        )
+            ->groupBy('id_kecamatan');
+
+        if ($request->has('month') && $request->month) {
+            $query->whereMonth('created_at', $request->month);
+        }
+
+        $data = $query->get();
+
+        // Membuat callback untuk menulis data CSV
+        $callback = function () use ($data) {
+            $file = fopen('php://output', 'w');
+            // Menulis header CSV
+            fputcsv($file, [
+                'Kecamatan',
+                'Sudah Bekerja (L)',
+                'Sudah Bekerja (P)',
+                'Belum Bekerja (L)',
+                'Belum Bekerja (P)',
+                'Tidak Bekerja (L)',
+                'Tidak Bekerja (P)',
+                'Total Laki-laki',
+                'Total Perempuan'
+            ]);
+
+            // Menulis data setiap baris
+            foreach ($data as $row) {
+                $kecamatan = DB::table('naker_kecamatan')->where('id', $row->id_kecamatan)->value('name');
+                fputcsv($file, [
+                    $kecamatan ?? 'Tidak Ditemukan',
+                    $row->sudah_bekerja_laki,
+                    $row->sudah_bekerja_perempuan,
+                    $row->belum_bekerja_laki,
+                    $row->belum_bekerja_perempuan,
+                    $row->tidak_bekerja_laki,
+                    $row->tidak_bekerja_perempuan,
+                    $row->total_laki,
+                    $row->total_perempuan
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        // Mengirimkan file CSV ke browser
+        return response()->stream($callback, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="rekap_pencari.csv"',
+        ]);
+    }
 }

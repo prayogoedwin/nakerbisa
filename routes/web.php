@@ -235,6 +235,8 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
 
     Route::prefix('rekap')->group(function () {
         Route::get('/tenaga-kerja', [RekapPencariController::class, 'index'])->name('rekap.tenaga-kerja.index');
+        Route::get('/rekap-pencari/export', [RekapPencariController::class, 'exportCsv'])->name('rekap.tenaga-kerja.export');
+
         Route::get('/penyedia-kerja', [RekapPenyediaController::class, 'index'])->name('rekap.penyedia-kerja.index');
         Route::get('/lowongan-kerja', [RekapLowonganController::class, 'index'])->name('rekap.lowongan.index');
         Route::get('/penempatan', [RekapPenempatanController::class, 'index'])->name('rekap.penempatan.index');

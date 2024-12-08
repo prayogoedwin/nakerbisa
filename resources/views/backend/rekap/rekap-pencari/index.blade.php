@@ -36,6 +36,7 @@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
+                                            <button id="exportCsvBtn" class="btn btn-success">Cetak CSV</button>
                                             <table id="simpletable" class="table table-bordered table-striped mb-0">
                                                 <thead>
                                                     <tr>
@@ -114,6 +115,12 @@
             // Reload tabel saat bulan dipilih
             $('#monthFilter').on('change', function() {
                 table.ajax.reload();
+            });
+
+            // Fungsi untuk mengekspor CSV
+            $('#exportCsvBtn').click(function() {
+                let month = $('#monthFilter').val();
+                window.location.href = '{{ route('rekap.tenaga-kerja.export') }}?month=' + month;
             });
         });
     </script>
