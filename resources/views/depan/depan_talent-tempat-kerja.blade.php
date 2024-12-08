@@ -46,7 +46,7 @@
                                                                 {{ $luarRembangCount ?? 0 }}
                                                             </div>
                                                         </div>
-                                                        <span class="medium">Kerja di Luar Rembang</span>
+                                                        <span class="medium">Bekerja di Luar Rembang</span>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -60,7 +60,7 @@
                                                                 {{ $dalamRembangCount ?? 0 }}
                                                             </div>
                                                         </div>
-                                                        <span class="medium">Kerja di Rembang</span>
+                                                        <span class="medium">Bekerja di Rembang</span>
                                                     </div>
                                                 </li>
                                             </ul>
