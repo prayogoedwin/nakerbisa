@@ -219,4 +219,23 @@ class ProfileController extends Controller
 
         return view('backend.profil.cetak-cv-new', compact('user', 'pendidikan', 'pengalaman', 'keterampilan'));
     }
+
+    public function lihatCV(Request $request, $id)
+    {
+
+        $user = UserPencari::where('user_id', $id)->first();  // Sesuaikan relasi dengan tabel User jika ada
+        $pendidikan = NakerPencariPendidikan::select(
+            'naker_pencari_pendidikan.*',
+            'naker_jurusan.nama as jurusan_name',
+            'naker_pendidikan.name as pendidikan_name' // Nama tingkat pendidikan
+        )
+            ->leftJoin('naker_jurusan', 'naker_pencari_pendidikan.jurusan_id', '=', 'naker_jurusan.id')
+            ->leftJoin('naker_pendidikan', 'naker_pencari_pendidikan.pendidikan_id', '=', 'naker_pendidikan.id')
+            ->where('user_id', $id)
+            ->get();
+        $pengalaman = NakerPencariPengalaman::where('user_id', $id)->get();
+        $keterampilan = NakerPencariKeterampilan::where('user_id', $id)->get();
+
+        return view('backend.profil.cetak-cv-new-penyedia', compact('user', 'pendidikan', 'pengalaman', 'keterampilan'));
+    }
 }

@@ -138,6 +138,9 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
 
         Route::get('/cetak-cv', [ProfileController::class, 'cetakCV'])->name('cetak.cv');
 
+        Route::get('/lihat-cv/{id}', [ProfileController::class, 'lihatCV'])->name('lihat.cv');
+        // Route::get('/lowongan/pelamar/{id}', [LowonganController::class, 'pelamar'])->name('lowongan.pelamar');
+
         Route::get('/pendidikan', [PencariPendidikanController::class, 'index'])->name('pendidikan.index');
         Route::get('/pendidikan/{id?}', [PencariPendidikanController::class, 'index'])->name('pendidikan.index');
 

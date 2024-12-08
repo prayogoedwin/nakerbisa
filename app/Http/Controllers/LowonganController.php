@@ -65,7 +65,7 @@ class LowonganController extends Controller
                     ->addIndexColumn()
                     ->addColumn('options', function ($loker) {
                         return '
-                        <a href="' . route('lowongan.pelamar', encode_url($loker->id)) . '" class="btn btn-success btn-sm">Lihat Pelamar</a>
+                        <a href="' . route('lowongan.pelamar', $loker->id) . '" class="btn btn-success btn-sm">Lihat Pelamar</a>
                         <button class="btn btn-primary btn-sm" onclick="showEditModal(' . $loker->id . ')">Edit</button>
                         <button class="btn btn-danger btn-sm" onclick="confirmDelete(' . $loker->id . ')">Hapus</button>
                     ';
@@ -93,7 +93,7 @@ class LowonganController extends Controller
                     ->addIndexColumn()
                     ->addColumn('options', function ($loker) {
                         return '
-                        <a href="' . route('lowongan.pelamar', encode_url($loker->id)) . '" class="btn btn-success btn-sm">Lihat Pelamar</a>
+                        <a href="' . route('lowongan.pelamar', $loker->id) . '" class="btn btn-success btn-sm">Lihat Pelamar</a>
                         <button class="btn btn-primary btn-sm" onclick="showEditModal(' . $loker->id . ')">Edit</button>
                         <button class="btn btn-danger btn-sm" onclick="confirmDelete(' . $loker->id . ')">Hapus</button>
                     ';
@@ -287,13 +287,18 @@ class LowonganController extends Controller
         }
     }
 
-    public function pelamar(Request $request, $ids)
+    public function pelamar(Request $request, $id)
     {
-        $id = decode_url($ids);
+
+        // $id = decode_url($ids);
+        // // Menghapus semua spasi dari $id
+        // $id = str_replace(' ', '', $id);
+
         if ($request->ajax()) {
             
             $pelamars = Lamaran::select(
                 'naker_lamarans.id',
+                'naker_lamarans.pencari_id',
                 'users.email',
                 'users.whatsapp',
                 'users_pencari.name', // Select name from users_pencari
@@ -302,13 +307,14 @@ class LowonganController extends Controller
             )
                 ->join('users', 'naker_lamarans.pencari_id', '=', 'users.id') // Join with users table
                 ->join('users_pencari', 'users.id', '=', 'users_pencari.user_id') // Join with users_pencari table
-                ->where('naker_lamarans.lowongan_id', $id)
+                ->where('naker_lamarans.lowongan_id',$id)
                 ->whereNull('naker_lamarans.deleted_at'); // Ensure data is not deleted
 
             return DataTables::of($pelamars)
                 ->addIndexColumn()
                 ->addColumn('options', function ($pelamar) {
                     return '
+                         <a href="' . route('lihat.cv', $pelamar->pencari_id) . '" class="btn btn-success btn-sm">Lihat CV</a>
                         <button class="btn btn-primary btn-sm" onclick="showDetailModal(' . $pelamar->id . ')">Detail</button>
                     ';
                 })
