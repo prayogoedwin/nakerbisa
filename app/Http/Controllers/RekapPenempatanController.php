@@ -16,8 +16,6 @@ class RekapPenempatanController extends Controller
             ->where('modul', 'lamaran')
             ->value('id');
 
-        $user = auth()->user();
-
         if ($request->ajax()) {
             $query = DB::table('naker_lamarans')
                 ->join('naker_progres', 'naker_lamarans.progres_id', '=', 'naker_progres.id')
@@ -31,11 +29,7 @@ class RekapPenempatanController extends Controller
                 )
                 ->where('naker_lamarans.progres_id', $progressId);
 
-            if ($user->hasRole('penyedia-kerja')) {
-                $query->where('naker_lowongan.posted_by', $user->id);
-            }
-
-            // Ambil data penempatan
+            // Ambil data penempatan tanpa filter tambahan
             $penempatanData = $query->get();
 
             return DataTables::of($penempatanData)
