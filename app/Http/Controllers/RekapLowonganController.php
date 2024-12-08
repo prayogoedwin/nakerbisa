@@ -15,29 +15,54 @@ class RekapLowonganController extends Controller
         if ($request->ajax()) {
             $today = now();
 
-            // Query untuk menghitung jumlah data berdasarkan kabupaten/kota dan bulan
-            $queryRembang = Lowongan::where('kabkota_id', 3317)
+            // Query untuk menghitung jumlah data berdasarkan status dan tanggal
+            $queryAktifRembang = Lowongan::where('kabkota_id', 3317)
                 ->where('status_id', 1)
-                ->where('tanggal_end', '<', $today);
+                ->where('tanggal_end', '>=', $today);
 
-            $queryLuarRembang = Lowongan::where('kabkota_id', '!=', 3317)
+            $queryNonAktifRembang = Lowongan::where('kabkota_id', 3317)
+                ->where(function ($query) use ($today) {
+                    $query->where('status_id', '!=', 1)
+                        ->orWhere('tanggal_end', '<', $today);
+                });
+
+            $queryAktifLuarRembang = Lowongan::where('kabkota_id', '!=', 3317)
                 ->where('status_id', 1)
-                ->where('tanggal_end', '<', $today);
+                ->where('tanggal_end', '>=', $today);
+
+            $queryNonAktifLuarRembang = Lowongan::where('kabkota_id', '!=', 3317)
+                ->where(function ($query) use ($today) {
+                    $query->where('status_id', '!=', 1)
+                        ->orWhere('tanggal_end', '<', $today);
+                });
 
             // Filter berdasarkan bulan jika parameter `month` ada
             if ($request->has('month') && $request->month) {
-                $queryRembang->whereMonth('created_at', $request->month);
-                $queryLuarRembang->whereMonth('created_at', $request->month);
+                $queryAktifRembang->whereMonth('created_at', $request->month);
+                $queryNonAktifRembang->whereMonth('created_at', $request->month);
+                $queryAktifLuarRembang->whereMonth('created_at', $request->month);
+                $queryNonAktifLuarRembang->whereMonth('created_at', $request->month);
             }
 
             // Hitung jumlah data
-            $jumlahRembang = $queryRembang->count();
-            $jumlahLuarRembang = $queryLuarRembang->count();
+            $jumlahAktifRembang = $queryAktifRembang->count();
+            $jumlahNonAktifRembang = $queryNonAktifRembang->count();
+
+            $jumlahAktifLuarRembang = $queryAktifLuarRembang->count();
+            $jumlahNonAktifLuarRembang = $queryNonAktifLuarRembang->count();
 
             // Data untuk ditampilkan di tabel
             $data = [
-                ['judul_lowongan' => 'Rembang', 'jumlahAktif' => $jumlahRembang],
-                ['judul_lowongan' => 'Luar Rembang', 'jumlahAktif' => $jumlahLuarRembang]
+                [
+                    'judul_lowongan' => 'Rembang',
+                    'jumlahAktif' => $jumlahAktifRembang,
+                    'jumlahNonAktif' => $jumlahNonAktifRembang
+                ],
+                [
+                    'judul_lowongan' => 'Luar Rembang',
+                    'jumlahAktif' => $jumlahAktifLuarRembang,
+                    'jumlahNonAktif' => $jumlahNonAktifLuarRembang
+                ]
             ];
 
             return DataTables::of($data)
@@ -47,6 +72,7 @@ class RekapLowonganController extends Controller
 
         return view('backend.rekap.rekap-lowongan.index');
     }
+
 
     public function getData($id)
     {

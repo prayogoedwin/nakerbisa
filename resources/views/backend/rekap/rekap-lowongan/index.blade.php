@@ -42,6 +42,7 @@
                                                         <th>No</th>
                                                         <th>Jumlah Kebutuhan Tenaga Kerja</th>
                                                         <th>Lowongan Kerja Aktif</th>
+                                                        <th>Lowongan Kerja Expired/Non Aktif</th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -71,8 +72,7 @@
                 ajax: {
                     url: '{{ route('rekap.lowongan.index') }}',
                     data: function(d) {
-                        // Kirim parameter bulan jika diperlukan (tidak digunakan di sini)
-                        d.month = $('#monthFilter').val();
+                        d.month = $('#monthFilter').val(); // Kirim parameter bulan jika diperlukan
                     }
                 },
                 autoWidth: false,
@@ -86,11 +86,14 @@
                     },
                     {
                         data: 'jumlahAktif'
+                    },
+                    {
+                        data: 'jumlahNonAktif' // Kolom baru untuk jumlah expired/non aktif
                     }
                 ]
             });
 
-            // Reload tabel saat bulan dipilih (meskipun data tetap sama)
+            // Reload tabel saat bulan dipilih
             $('#monthFilter').on('change', function() {
                 table.ajax.reload();
             });
