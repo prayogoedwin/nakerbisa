@@ -15,8 +15,12 @@ class BackController extends Controller
     public function index()
     {
         if (Auth::user()->roles[0]['name'] == 'super-admin') {
-            $pencariKerjaCount = DB::table('users_pencari')->count();
-            $penyediaKerjaCount = DB::table('users_penyedia')->count();
+            $pencariKerjaCount = DB::table('users_pencari')
+            ->whereNull('deleted_at')
+            ->count();
+            $penyediaKerjaCount = DB::table('users_penyedia')
+            ->whereNull('deleted_at')
+            ->count();
             $lowonganAktifCount = DB::table('naker_lowongan')
                 ->where('tanggal_start', '<=', now())
                 ->where('tanggal_end', '>=', now())
@@ -65,6 +69,7 @@ class BackController extends Controller
     public function statistik()
     {
         $genderData = UserPencari::select('gender', DB::raw('count(*) as total'))
+            ->whereNull('deleted_at')
             ->groupBy('gender')
             ->get();
 
@@ -77,6 +82,7 @@ class BackController extends Controller
 
         $educationData = UserPencari::join('naker_pendidikan', 'users_pencari.id_pendidikan', '=', 'naker_pendidikan.id')
             ->select('naker_pendidikan.name as education', DB::raw('count(users_pencari.id_pendidikan) as total'))
+            ->whereNull('deleted_at')
             ->groupBy('naker_pendidikan.name')
             ->get();
 
@@ -95,6 +101,7 @@ class BackController extends Controller
         ];
 
         $generationCounts = UserPencari::select(DB::raw('YEAR(tanggal_lahir) as birth_year'), DB::raw('count(*) as total'))
+            ->whereNull('deleted_at')
             ->groupBy('birth_year')
             ->get()
             ->groupBy(function ($item) use ($generations) {
@@ -118,6 +125,7 @@ class BackController extends Controller
         })->values();
 
         $sectorCounts = UserPenyedia::select('id_sektor', DB::raw('count(*) as total'))
+            ->whereNull('deleted_at')
             ->groupBy('id_sektor')
             ->get()
             ->map(function ($item) {
@@ -134,6 +142,7 @@ class BackController extends Controller
                 ELSE "Luar Rembang"
             END as city_category
         '), DB::raw('count(*) as total'))
+            ->whereNull('deleted_at')
             ->groupBy('city_category')
             ->get()
             ->map(function ($item) {
@@ -144,6 +153,7 @@ class BackController extends Controller
             });
 
         $educationCounts = Lowongan::select('pendidikan_id', DB::raw('count(*) as total'))
+            ->whereNull('deleted_at')
             ->groupBy('pendidikan_id')
             ->get()
             ->map(function ($item) {
@@ -162,6 +172,7 @@ class BackController extends Controller
             });
 
         $lowonganGenderData = Lowongan::select(DB::raw('sum(jumlah_pria) as total_pria'), DB::raw('sum(jumlah_wanita) as total_wanita'))
+            ->whereNull('deleted_at')
             ->first();
 
         $lowonganGenderChartData = [
@@ -175,10 +186,12 @@ class BackController extends Controller
         // Menghitung jumlah lowongan aktif
         $activeLowonganCount = Lowongan::where('tanggal_start', '<=', $currentDate)
             ->where('tanggal_end', '>=', $currentDate)
+            ->whereNull('deleted_at')
             ->count();
 
         // Menghitung jumlah lowongan expired
         $expiredLowonganCount = Lowongan::where('tanggal_end', '<', $currentDate)
+            ->whereNull('deleted_at')
             ->count();
 
         $lowonganAktifChartData = [

@@ -39,11 +39,11 @@
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item {{ request()->routeIs('roles.index') ? 'active' : '' }}">
+                {{-- <li class="menu-item {{ request()->routeIs('roles.index') ? 'active' : '' }}">
                     <a href="{{ route('roles.index') }}" class="menu-link">
                         <div data-i18n="Without menu">Roles</div>
                     </a>
-                </li>
+                </li> --}}
                 {{-- <li class="menu-item">
                     <a href="#" class="menu-link">
                         <div data-i18n="Without menu">Banner</div>
