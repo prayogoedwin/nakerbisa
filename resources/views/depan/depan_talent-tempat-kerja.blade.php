@@ -69,6 +69,7 @@
                                 </div>
                             </div>
                         </div>
+                        <h4 class="widget-title mt-5">Rekap Tempat Kerja Berdasarkan Status Bekerja Tenaga Kerja di Nakerbisa</h4>
                     </div>
                 </div>
             </div>
