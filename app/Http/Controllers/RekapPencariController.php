@@ -15,25 +15,47 @@ class RekapPencariController extends Controller
     {
         if ($request->ajax()) {
             // Mengambil jumlah pengguna berdasarkan id_kecamatan dan status_saat_ini
-            $query = UserPencari::select(
-                'id_kecamatan',
-                DB::raw('count(case when status_saat_ini = 1 and gender = "L" then 1 end) as sudah_bekerja_laki'),
-                DB::raw('count(case when status_saat_ini = 1 and gender = "P" then 1 end) as sudah_bekerja_perempuan'),
-                DB::raw('count(case when status_saat_ini = 2 and gender = "L" then 1 end) as belum_bekerja_laki'),
-                DB::raw('count(case when status_saat_ini = 2 and gender = "P" then 1 end) as belum_bekerja_perempuan'),
-                DB::raw('count(case when status_saat_ini = 3 and gender = "L" then 1 end) as tidak_bekerja_laki'),
-                DB::raw('count(case when status_saat_ini = 3 and gender = "P" then 1 end) as tidak_bekerja_perempuan'),
-                DB::raw('count(case when gender = "L" then 1 end) as total_laki'),
-                DB::raw('count(case when gender = "P" then 1 end) as total_perempuan'),
-            )
-                ->groupBy('id_kecamatan');
+            // $query = UserPencari::select(
+            //     'id_kecamatan',
+            //     DB::raw('count(case when status_saat_ini = 1 and gender = "L" then 1 end) as sudah_bekerja_laki'),
+            //     DB::raw('count(case when status_saat_ini = 1 and gender = "P" then 1 end) as sudah_bekerja_perempuan'),
+            //     DB::raw('count(case when status_saat_ini = 2 and gender = "L" then 1 end) as belum_bekerja_laki'),
+            //     DB::raw('count(case when status_saat_ini = 2 and gender = "P" then 1 end) as belum_bekerja_perempuan'),
+            //     DB::raw('count(case when status_saat_ini = 3 and gender = "L" then 1 end) as tidak_bekerja_laki'),
+            //     DB::raw('count(case when status_saat_ini = 3 and gender = "P" then 1 end) as tidak_bekerja_perempuan'),
+            //     DB::raw('count(case when gender = "L" then 1 end) as total_laki'),
+            //     DB::raw('count(case when gender = "P" then 1 end) as total_perempuan'),
+            // )
+            //     ->groupBy('id_kecamatan');
+            $query = DB::table('naker_kecamatan') // Tabel kecamatan
+                    ->leftJoin('users_pencari', 'naker_kecamatan.id', '=', 'users_pencari.id_kecamatan') // Join kecamatan dengan users_pencari
+                    ->select(
+                        'naker_kecamatan.id as id_kecamatan',
+                        DB::raw('count(case when users_pencari.status_saat_ini = 1 and users_pencari.gender = "L" then 1 end) as sudah_bekerja_laki'),
+                        DB::raw('count(case when users_pencari.status_saat_ini = 1 and users_pencari.gender = "P" then 1 end) as sudah_bekerja_perempuan'),
+                        DB::raw('count(case when users_pencari.status_saat_ini = 2 and users_pencari.gender = "L" then 1 end) as belum_bekerja_laki'),
+                        DB::raw('count(case when users_pencari.status_saat_ini = 2 and users_pencari.gender = "P" then 1 end) as belum_bekerja_perempuan'),
+                        DB::raw('count(case when users_pencari.status_saat_ini = 3 and users_pencari.gender = "L" then 1 end) as tidak_bekerja_laki'),
+                        DB::raw('count(case when users_pencari.status_saat_ini = 3 and users_pencari.gender = "P" then 1 end) as tidak_bekerja_perempuan'),
+                        DB::raw('count(case when users_pencari.gender = "L" then 1 end) as total_laki'),
+                        DB::raw('count(case when users_pencari.gender = "P" then 1 end) as total_perempuan')
+                    )
+                    ->where('naker_kecamatan.regency_id', '=', 3317) // Tambahkan kondisi regency_id
+                    ->where('users_pencari.deleted_at', null) // Tambahkan kondisi regency_id
+                    ->groupBy('naker_kecamatan.id'); // Group berdasarkan id kecamatan
 
-
+            // Filter berdasarkan bulan jika parameter `month` ada
+            if ($request->has('year') && $request->year) {
+                $query->whereYear('users_pencari.created_at', $request->year);
+            }
 
             // Filter berdasarkan bulan jika parameter `month` ada
             if ($request->has('month') && $request->month) {
-                $query->whereMonth('created_at', $request->month);
+                $query->whereMonth('users_pencari.created_at', $request->month);
             }
+
+            // Ambil data setelah semua filter diterapkan
+            $data = $query->get();
 
             return DataTables::of($query)
                 ->addIndexColumn()

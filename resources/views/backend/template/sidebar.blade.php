@@ -127,7 +127,7 @@
             <ul class="menu-sub">
                 <li class="menu-item {{ request()->routeIs('data.pencari') ? 'active' : '' }}">
                     <a href="{{ route('data.pencari') }}" class="menu-link">
-                        <div data-i18n="Without menu">Pencari</div>
+                        <div data-i18n="Without menu">Tenaga Kerja</div>
                     </a>
                 </li>
                 <li class="menu-item {{ request()->routeIs('data.penyedia') ? 'active' : '' }}">
@@ -228,11 +228,11 @@
                         <div data-i18n="Without navbar">Lowongan Kerja</div>
                     </a>
                 </li>
-                <li class="menu-item {{ request()->routeIs('rekap.penempatan.index') ? 'active' : '' }}">
+                {{-- <li class="menu-item {{ request()->routeIs('rekap.penempatan.index') ? 'active' : '' }}">
                     <a href="{{ route('rekap.penempatan.index') }}" class="menu-link">
                         <div data-i18n="Without navbar">Penempatan</div>
                     </a>
-                </li>
+                </li> --}}
                 
             </ul>
         </li>

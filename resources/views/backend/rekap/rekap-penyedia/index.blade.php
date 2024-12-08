@@ -14,10 +14,34 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row align-items-center m-l-0">
+                                            <div class="col-sm-4">
+                                                <div class="mb-3">
+                                                    <label for="monthFilter" class="form-label">Filter Tahun</label>
+
+                                                    <?php
+
+                                                        $currentYear = date('Y'); // Tahun saat ini
+                                                        $startYear = $currentYear - 2; // 5 tahun ke belakang
+                                                        $endYear = $currentYear + 1; // Tahun ini + 1
+
+                                                    ?>
+
+                                                    <select id="yearFilter" class="form-select" name="year">
+                                                        <option value="">Semua Tahun</option>
+                                                        <?php for ($year = $startYear; $year <= $endYear; $year++): ?>
+                                                           
+                                                            <option value="<?= $year ?>" >
+                                                                <?= $year ?>
+                                                            </option>
+                                                        <?php endfor; ?>
+                                                    </select>
+                                                    
+                                                </div>
+                                            </div>
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label for="monthFilter" class="form-label">Filter Bulan</label>
-                                                    <select id="monthFilter" class="form-select">
+                                                    <select id="monthFilter" class="form-select" name="month">
                                                         <option value="">Semua Bulan</option>
                                                         <option value="1">Januari</option>
                                                         <option value="2">Februari</option>
@@ -40,7 +64,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
-                                                        <th>Jumlah Tenaga Kerja / Kecamatan
+                                                        <th>Penyedia Kerja / Kecamatan
                                                         </th>
                                                         <th class="table-secondary">Jumlah</th>
                                                     </tr>
@@ -71,12 +95,15 @@
     <script>
         $(document).ready(function() {
             let table = $('#simpletable').DataTable({
+                paging: false,
+                searching: false, 
                 processing: true,
                 serverSide: true,
                 ajax: {
                     url: '{{ route('rekap.penyedia-kerja.index') }}',
                     data: function(d) {
                         d.month = $('#monthFilter').val(); // Kirim parameter bulan
+                        d.year = $('#yearFilter').val(); // Kirim parameter bulan
                     }
                 },
                 autoWidth: false,
@@ -96,6 +123,10 @@
 
             // Reload tabel saat bulan dipilih
             $('#monthFilter').on('change', function() {
+                table.ajax.reload();
+            });
+
+            $('#yearFilter').on('change', function() {
                 table.ajax.reload();
             });
         });

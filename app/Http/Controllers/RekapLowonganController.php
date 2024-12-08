@@ -37,6 +37,14 @@ class RekapLowonganController extends Controller
                         ->orWhere('tanggal_end', '<', $today);
                 });
 
+             // Filter berdasarkan bulan jika ada
+             if ($request->has('year') && $request->year) {
+                $queryAktifRembang->whereYear('created_at', $request->year);
+                $queryNonAktifRembang->whereYear('created_at', $request->year);
+                $queryAktifLuarRembang->whereYear('created_at', $request->year);
+                $queryNonAktifLuarRembang->whereYear('created_at', $request->year);
+            }
+
             // Filter berdasarkan bulan jika ada
             if ($request->has('month') && $request->month) {
                 $queryAktifRembang->whereMonth('created_at', $request->month);

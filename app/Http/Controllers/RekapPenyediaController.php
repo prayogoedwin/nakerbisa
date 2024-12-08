@@ -15,16 +15,36 @@ class RekapPenyediaController extends Controller
     {
         if ($request->ajax()) {
             // Query untuk DataTables
-            $query = UserPenyedia::select(
-                'id_kecamatan',
-                DB::raw('count(*) as total') // Total count of all users
-            )
-                ->groupBy('id_kecamatan');
+            // $query = UserPenyedia::select(
+            //     'id_kecamatan',
+            //     DB::raw('count(*) as total') // Total count of all users
+            // )
+            //     ->groupBy('id_kecamatan');
+
+            $query = DB::table('naker_kecamatan')
+                ->leftJoin('users_penyedia', 'naker_kecamatan.id', '=', 'users_penyedia.id_kecamatan')
+                ->select(
+                    'naker_kecamatan.id as id_kecamatan',
+                    'naker_kecamatan.name as kecamatan_name',
+                    DB::raw('count(users_penyedia.id) as total')
+                )
+                ->where('naker_kecamatan.regency_id', '=', 3317)
+                ->whereNull('users_penyedia.deleted_at') // Jika kolom deleted_at ada
+                ->groupBy('naker_kecamatan.id', 'naker_kecamatan.name'); // Semua kolom non-agregat ditambahkan di sini
+            
+                 // Filter berdasarkan bulan jika parameter `month` ada
+            if ($request->has('year') && $request->year) {
+                $query->whereYear('users_penyedia.created_at', $request->year);
+            }
 
             // Filter berdasarkan bulan jika parameter `month` ada
             if ($request->has('month') && $request->month) {
-                $query->whereMonth('created_at', $request->month);
+                $query->whereMonth('users_penyedia.created_at', $request->month);
             }
+
+            // Ambil data setelah semua filter diterapkan
+            $data = $query->get();
+
 
             // Mengembalikan data untuk DataTables
             return DataTables::of($query)
