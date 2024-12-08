@@ -53,6 +53,9 @@
                                                 </thead>
                                             </table>
                                         </div>
+                                        <div class="mt-3">
+                                            <h5><strong>Keseluruhan Rembang:</strong> <span id="totalKeseluruhan">{{ $totalKeseluruhan }}</span></h5>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

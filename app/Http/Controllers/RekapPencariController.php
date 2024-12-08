@@ -44,8 +44,10 @@ class RekapPencariController extends Controller
                 })
                 ->make(true);
         }
+        // Hitung keseluruhan jumlah pengguna di semua kecamatan
+        $totalKeseluruhan = UserPencari::count();
 
-        return view('backend.rekap.rekap-pencari.index');
+        return view('backend.rekap.rekap-pencari.index', compact('totalKeseluruhan'));
     }
 
     public function getData($id)
