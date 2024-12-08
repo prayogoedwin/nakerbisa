@@ -17,12 +17,16 @@ class RekapPencariController extends Controller
             // Mengambil jumlah pengguna berdasarkan id_kecamatan dan status_saat_ini
             $query = UserPencari::select(
                 'id_kecamatan',
-                DB::raw('count(case when status_saat_ini = 1 then 1 end) as sudah_bekerja'),
-                DB::raw('count(case when status_saat_ini = 2 then 1 end) as belum_bekerja'),
-                DB::raw('count(case when status_saat_ini = 3 then 1 end) as tidak_bekerja'),
-                DB::raw('count(*) as total') // Perhitungan total
+                DB::raw('count(case when status_saat_ini = 1 and gender = "L" then 1 end) as sudah_bekerja_laki'),
+                DB::raw('count(case when status_saat_ini = 1 and gender = "P" then 1 end) as sudah_bekerja_perempuan'),
+                DB::raw('count(case when status_saat_ini = 2 and gender = "L" then 1 end) as belum_bekerja_laki'),
+                DB::raw('count(case when status_saat_ini = 2 and gender = "P" then 1 end) as belum_bekerja_perempuan'),
+                DB::raw('count(case when status_saat_ini = 3 and gender = "L" then 1 end) as tidak_bekerja_laki'),
+                DB::raw('count(case when status_saat_ini = 3 and gender = "P" then 1 end) as tidak_bekerja_perempuan'),
+                DB::raw('count(*) as total')
             )
                 ->groupBy('id_kecamatan');
+
 
             // Filter berdasarkan bulan jika parameter `month` ada
             if ($request->has('month') && $request->month) {

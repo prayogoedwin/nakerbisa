@@ -39,13 +39,14 @@
                                             <table id="simpletable" class="table table-bordered table-striped mb-0">
                                                 <thead>
                                                     <tr>
-                                                        <th>No</th>
-                                                        <th>Kecamatan</th> <!-- Menampilkan kecamatan -->
-                                                        <th>Sudah Bekerja</th>
-                                                        <th>Belum Bekerja</th>
-                                                        <th>Tidak Bekerja</th>
+                                                        <th>Kecamatan</th>
+                                                        <th>Sudah Bekerja (L)</th>
+                                                        <th>Sudah Bekerja (P)</th>
+                                                        <th>Belum Bekerja (L)</th>
+                                                        <th>Belum Bekerja (P)</th>
+                                                        <th>Tidak Bekerja (L)</th>
+                                                        <th>Tidak Bekerja (P)</th>
                                                         <th>Total</th>
-                                                        <!-- Menampilkan jumlah pengguna per kecamatan -->
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -80,24 +81,28 @@
                 },
                 autoWidth: false,
                 columns: [{
-                        data: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
+                        data: 'kecamatan'
                     },
                     {
-                        data: 'kecamatan' // Menampilkan nama kecamatan
+                        data: 'sudah_bekerja_laki'
                     },
                     {
-                        data: 'sudah_bekerja' // Menampilkan jumlah pengguna yang sudah bekerja
+                        data: 'sudah_bekerja_perempuan'
                     },
                     {
-                        data: 'belum_bekerja' // Menampilkan jumlah pengguna yang belum bekerja
+                        data: 'belum_bekerja_laki'
                     },
                     {
-                        data: 'tidak_bekerja' // Menampilkan jumlah pengguna yang tidak bekerja
+                        data: 'belum_bekerja_perempuan'
                     },
                     {
-                        data: 'total' // Menampilkan total pengguna
+                        data: 'tidak_bekerja_laki'
+                    },
+                    {
+                        data: 'tidak_bekerja_perempuan'
+                    },
+                    {
+                        data: 'total'
                     }
                 ]
             });
