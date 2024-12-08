@@ -15,6 +15,24 @@
                                     <div class="card-body">
                                         <div class="row align-items-center m-l-0">
                                             <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label for="monthFilter" class="form-label">Filter Bulan</label>
+                                                    <select id="monthFilter" class="form-select">
+                                                        <option value="">Semua Bulan</option>
+                                                        <option value="1">Januari</option>
+                                                        <option value="2">Februari</option>
+                                                        <option value="3">Maret</option>
+                                                        <option value="4">April</option>
+                                                        <option value="5">Mei</option>
+                                                        <option value="6">Juni</option>
+                                                        <option value="7">Juli</option>
+                                                        <option value="8">Agustus</option>
+                                                        <option value="9">September</option>
+                                                        <option value="10">Oktober</option>
+                                                        <option value="11">November</option>
+                                                        <option value="12">Desember</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -49,10 +67,15 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            $('#penempatanTable').DataTable({
+            let table = $('#penempatanTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('rekap.penempatan.index') }}', // Sesuaikan dengan rute penempatan
+                ajax: {
+                    url: '{{ route('rekap.penempatan.index') }}',
+                    data: function(d) {
+                        d.month = $('#monthFilter').val(); // Kirim parameter bulan
+                    }
+                },
                 columns: [{
                         data: 'DT_RowIndex',
                         orderable: false,
@@ -69,8 +92,13 @@
                     },
                     {
                         data: 'status_name'
-                    }, // Menampilkan status_name dari query
+                    }
                 ]
+            });
+
+            // Reload tabel saat bulan dipilih
+            $('#monthFilter').on('change', function() {
+                table.ajax.reload();
             });
         });
     </script>

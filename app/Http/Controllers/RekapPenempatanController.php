@@ -25,11 +25,16 @@ class RekapPenempatanController extends Controller
                     'naker_progres.name as status_name',
                     'users.name as pencari_name',
                     'naker_lowongan.judul_lowongan as lowongan_title',
-                    'naker_lowongan.lokasi_penempatan_text as lokasi_penempatan'
+                    'naker_lowongan.lokasi_penempatan_text as lokasi_penempatan',
+                    'naker_lamarans.created_at'
                 )
                 ->where('naker_lamarans.progres_id', $progressId);
 
-            // Ambil data penempatan tanpa filter tambahan
+            // Filter berdasarkan bulan jika parameter `month` ada
+            if ($request->has('month') && $request->month) {
+                $query->whereMonth('naker_lamarans.created_at', $request->month);
+            }
+
             $penempatanData = $query->get();
 
             return DataTables::of($penempatanData)
