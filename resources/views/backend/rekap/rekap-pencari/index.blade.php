@@ -40,8 +40,9 @@
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
-                                                        <th>Nama</th>
-                                                        <th>Kecamatan</th>
+                                                        <th>Kecamatan</th> <!-- Menampilkan kecamatan -->
+                                                        <th>Jumlah Pengguna</th>
+                                                        <!-- Menampilkan jumlah pengguna per kecamatan -->
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -81,10 +82,10 @@
                         searchable: false
                     },
                     {
-                        data: 'name'
+                        data: 'kecamatan' // Menampilkan nama kecamatan
                     },
                     {
-                        data: 'kecamatan' // Menampilkan kolom 'kecamatan'
+                        data: 'user_count' // Menampilkan jumlah pengguna
                     }
                 ]
             });
