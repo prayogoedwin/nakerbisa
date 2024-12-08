@@ -37,7 +37,7 @@
                                             <ul>
                                                 <li>
                                                     <div class="icon">
-                                                        <i class="flaticon-stats"></i>
+                                                        <i class="flaticon-group"></i>
                                                     </div>
                                                     <div class="fun-fact">
                                                         <div class="counter">
