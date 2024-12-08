@@ -40,7 +40,8 @@
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
-                                                        <th>Nama</th>
+                                                        <th>Kecamatan</th>
+                                                        <th class="table-secondary">Jumlah</th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -80,8 +81,11 @@
                         searchable: false
                     },
                     {
-                        data: 'name'
+                        data: 'kecamatan'
                     },
+                    {
+                        data: 'total'
+                    }
                 ]
             });
 
