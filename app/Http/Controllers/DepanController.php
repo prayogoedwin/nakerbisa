@@ -47,7 +47,7 @@ class DepanController extends Controller
             ->whereNull('deleted_at')
             ->count();
 
-        $lowonganTerbaru = Lowongan::select('naker_lowongan.*', 'users_penyedia.name as perusahaan_name')
+        $lowonganTerbaru = Lowongan::select('naker_lowongan.*', 'users_penyedia.name as perusahaan_name', 'users_penyedia.foto as perusahaan_foto')
             ->join('users_penyedia', 'naker_lowongan.posted_by', '=', 'users_penyedia.user_id')
             ->where('naker_lowongan.created_at', '>=', now()->subDays(30))
             ->whereNull('naker_lowongan.deleted_at')
@@ -55,6 +55,7 @@ class DepanController extends Controller
             ->orderBy('naker_lowongan.created_at', 'desc')
             ->limit(8)
             ->get();
+
 
         // Mengirim data ke view
         return view('depan.depan_index', compact('faq', 'beritaTerbaru', 'lowonganTerbaruCount', 'lowonganAktifCount', 'lowonganTerbaru'));

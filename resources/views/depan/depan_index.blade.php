@@ -67,8 +67,13 @@
                 <div class="col-xl-3 col-md-6 mb-30">
                     <div class="pricing-style-one"
                         style="background-image: url({{ asset('assets/nakerbisa_fe/img/shape/15.webp') }});">
-                        <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px">
-                        <br />
+                        @if ($lowongan->perusahaan_foto)
+                            <img src="{{ asset('storage/' . $lowongan->perusahaan_foto) }}" width="100px"
+                                alt="Logo Perusahaan">
+                        @else
+                            <img src="{{ asset('assets/nakerbisa_fe/img/logo-perusahaan.png') }}" width="100px"
+                                alt="Logo Perusahaan">
+                        @endif <br />
                         <br />
                         <div class="pricing-header">
                             <h4>{{ $lowongan->judul_lowongan }}</h4>
