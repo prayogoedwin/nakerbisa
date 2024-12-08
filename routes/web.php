@@ -23,6 +23,7 @@ use App\Http\Controllers\PencariPendidikanController;
 use App\Http\Controllers\PencariPengalamanController;
 use App\Http\Controllers\PencariProfilController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RekapLowonganController;
 use App\Http\Controllers\RekapPencariController;
 use App\Http\Controllers\RekapPenyediaController;
 use App\Http\Controllers\UserBkkController;
@@ -234,6 +235,7 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
     Route::prefix('rekap')->group(function () {
         Route::get('/tenaga-kerja', [RekapPencariController::class, 'index'])->name('rekap.tenaga-kerja.index');
         Route::get('/penyedia-kerja', [RekapPenyediaController::class, 'index'])->name('rekap.penyedia-kerja.index');
+        Route::get('/lowongan-kerja', [RekapLowonganController::class, 'index'])->name('rekap.lowongan.index');
     });
 
     Route::get('/lowongan', [LowonganController::class, 'index'])->name('lowongan.index');
