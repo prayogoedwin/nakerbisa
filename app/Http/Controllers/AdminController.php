@@ -52,7 +52,8 @@ class AdminController extends Controller
         }
 
         // Ambil data roles untuk dikirim ke view
-        $roles = Role::select('id', 'name')->whereIn('name', ['super-admin', 'admin-bkk', 'admin-provinsi', 'pimpinan'])->get();
+        // $roles = Role::select('id', 'name')->whereIn('name', ['super-admin', 'admin-bkk', 'admin-provinsi', 'pimpinan'])->get();
+        $roles = Role::select('id', 'name')->whereIn('name', ['super-admin'])->get();
         return view('backend.users.admin.index',  compact('roles'));
     }
 

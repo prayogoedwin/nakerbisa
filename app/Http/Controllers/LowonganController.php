@@ -180,10 +180,10 @@ class LowonganController extends Controller
         // return response()->json($lowongan, 201); // Kode 201 untuk Created
     }
 
-    public function show($ids)
+    public function show($id)
     {
         try {
-            $id = decode_url($ids);
+            // $id = decode_url($ids);
             $data = Lowongan::select('*')->findOrFail($id);
             return response()->json(['success' => true, 'data' => $data]);
         } catch (\Exception $e) {
@@ -287,9 +287,11 @@ class LowonganController extends Controller
         }
     }
 
-    public function pelamar(Request $request, $id)
+    public function pelamar(Request $request, $ids)
     {
+        $id = decode_url($ids);
         if ($request->ajax()) {
+            
             $pelamars = Lamaran::select(
                 'naker_lamarans.id',
                 'users.email',

@@ -90,13 +90,13 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12">
+                                <div class="col-sm-12" hidden>
                                     <div class="form-group">
                                         <label for="userRole" class="form-label">Role</label>
                                         <select class="form-control" id="userRole" name="role_id" required>
-                                            <option value="">Select Role</option>
+                                            {{-- <option value="">Select Role</option> --}}
                                             @foreach ($roles as $role)
-                                                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                                <option value="{{ $role->id }}" selected>{{ $role->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
