@@ -91,8 +91,10 @@ class RekapLowonganController extends Controller
                 ->addIndexColumn()
                 ->make(true);
         }
+        // Hitung keseluruhan jumlah pengguna di semua kecamatan
+        $totalKeseluruhan = Lowongan::count();
 
-        return view('backend.rekap.rekap-lowongan.index');
+        return view('backend.rekap.rekap-lowongan.index', compact('totalKeseluruhan'));
     }
 
 
