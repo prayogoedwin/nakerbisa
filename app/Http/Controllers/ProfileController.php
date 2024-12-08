@@ -161,6 +161,10 @@ class ProfileController extends Controller
             $userPencari->foto = $filePath;
         }
 
+        // Menyimpan lokasi_kerja_saat_ini_kec berdasarkan kondisi
+        // Jika status_kerja_id adalah 1, kita pertahankan lokasi kerja saat ini dan kecamatan yang dipilih
+        $lokasiKerjaKecamatan = ($request->status_kerja_id == '1') ? $request->lokasi_kerja_saat_ini == '0' ? $request->lokasi_kerja_saat_ini_kec : null : null;
+
         $userPencari->update([
             'name' => $request->name,
             'ktp' => $request->ktp,
@@ -188,12 +192,12 @@ class ProfileController extends Controller
 
             // Update lokasi kerja dan kecamatan
             'lokasi_kerja_saat_ini' => $request->lokasi_kerja_saat_ini,
-            'lokasi_kerja_saat_ini_kec' => $request->lokasi_kerja_saat_ini == '0' ? $request->lokasi_kerja_saat_ini_kec : null, // Set to null if not Rembang
-
+            'lokasi_kerja_saat_ini_kec' => $lokasiKerjaKecamatan, // Set to null if not Rembang or not working
         ]);
 
         return redirect()->route('profil.index')->with('success', 'Profil berhasil diperbarui.');
     }
+
 
     public function cetakCV()
     {
