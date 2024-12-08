@@ -43,6 +43,7 @@
                                                         <th>Jumlah Kebutuhan Tenaga Kerja</th>
                                                         <th>Lowongan Kerja Aktif</th>
                                                         <th>Lowongan Kerja Expired/Non Aktif</th>
+                                                        <th>Semua Lowongan</th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -88,7 +89,10 @@
                         data: 'jumlahAktif'
                     },
                     {
-                        data: 'jumlahNonAktif' // Kolom baru untuk jumlah expired/non aktif
+                        data: 'jumlahNonAktif' // Kolom untuk jumlah expired/non aktif
+                    },
+                    {
+                        data: 'jumlahSemua' // Kolom baru untuk jumlah semua lowongan
                     }
                 ]
             });

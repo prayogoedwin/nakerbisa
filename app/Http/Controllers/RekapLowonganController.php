@@ -51,17 +51,23 @@ class RekapLowonganController extends Controller
             $jumlahAktifLuarRembang = $queryAktifLuarRembang->count();
             $jumlahNonAktifLuarRembang = $queryNonAktifLuarRembang->count();
 
+            // Hitung jumlah semua lowongan
+            $jumlahSemuaRembang = $jumlahAktifRembang + $jumlahNonAktifRembang;
+            $jumlahSemuaLuarRembang = $jumlahAktifLuarRembang + $jumlahNonAktifLuarRembang;
+
             // Data untuk ditampilkan di tabel
             $data = [
                 [
                     'judul_lowongan' => 'Rembang',
                     'jumlahAktif' => $jumlahAktifRembang,
-                    'jumlahNonAktif' => $jumlahNonAktifRembang
+                    'jumlahNonAktif' => $jumlahNonAktifRembang,
+                    'jumlahSemua' => $jumlahSemuaRembang // Kolom baru untuk jumlah semua lowongan
                 ],
                 [
                     'judul_lowongan' => 'Luar Rembang',
                     'jumlahAktif' => $jumlahAktifLuarRembang,
-                    'jumlahNonAktif' => $jumlahNonAktifLuarRembang
+                    'jumlahNonAktif' => $jumlahNonAktifLuarRembang,
+                    'jumlahSemua' => $jumlahSemuaLuarRembang // Kolom baru untuk jumlah semua lowongan
                 ]
             ];
 
@@ -72,7 +78,6 @@ class RekapLowonganController extends Controller
 
         return view('backend.rekap.rekap-lowongan.index');
     }
-
 
     public function getData($id)
     {
