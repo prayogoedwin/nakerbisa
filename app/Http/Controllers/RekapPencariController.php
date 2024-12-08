@@ -13,15 +13,21 @@ class RekapPencariController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $datas = UserPencari::select('id', 'name');
+            $query = UserPencari::select('id', 'name', 'created_at');
 
-            return DataTables::of($datas)
+            // Filter berdasarkan bulan jika parameter `month` ada
+            if ($request->has('month') && $request->month) {
+                $query->whereMonth('created_at', $request->month);
+            }
+
+            return DataTables::of($query)
                 ->addIndexColumn()
                 ->make(true);
         }
 
         return view('backend.rekap.rekap-pencari.index');
     }
+
 
     public function getData($id)
     {
