@@ -32,7 +32,7 @@
                                                         <th>Nama</th>
                                                         <th>Email</th>
                                                         <th>Whatsapp</th>
-                                                        <th>Role</th>
+                                                        {{-- <th>Role</th> --}}
                                                         <th>Options</th>
                                                     </tr>
                                                 </thead>
@@ -182,9 +182,9 @@
                     {
                         data: 'whatsapp'
                     },
-                    {
-                        data: 'roles'
-                    },
+                    // {
+                    //     data: 'roles'
+                    // },
                     {
                         data: 'options',
                         orderable: false,

@@ -34,11 +34,12 @@
                                                     <tr>
                                                         <th>ID</th>
                                                         <th>Nama</th>
-                                                        <th>Penyedia Loker Luar Negeri</th>
-                                                        <th>Deskripsi</th>
-                                                        <th>Jenis BKk</th>
-                                                        <th>Nomor Induk Berusaha</th>
-                                                        <th>Sektor</th>
+                                                        {{-- <th>Penyedia Loker Luar Negeri</th>
+                                                        <th>Deskripsi</th> --}}
+                                                        <th>Nama Sekolah</th> 
+                                                        {{-- <th>Jenis BKk</th> --}}
+                                                        <th>Nomor Daftar BKK</th>
+                                                        {{-- <th>Sektor</th> --}}
                                                         <th>Provinsi</th>
                                                         <th>Kota</th>
                                                         <th>Kecamatan</th>
@@ -46,7 +47,7 @@
                                                         <th>Alamat</th>
                                                         <th>Kodepos</th>
                                                         <th>Telpon</th>
-                                                        <th>Jabatan</th>
+                                                        <th>PJ (Jabatan)</th>
                                                         <th>Website</th>
                                                         <th>Aksi</th>
                                                     </tr>
@@ -86,26 +87,26 @@
                         data: 'name',
                         name: 'name'
                     },
-                    {
-                        data: 'luar_negri',
-                        name: 'luar_negri'
-                    },
+                    // {
+                    //     data: 'luar_negri',
+                    //     name: 'luar_negri'
+                    // },
                     {
                         data: 'deskripsi',
                         name: 'deskripsi'
                     },
-                    {
-                        data: 'jenis_bkk',
-                        name: 'jenis_bkk'
-                    },
+                    // {
+                    //     data: 'jenis_bkk',
+                    //     name: 'jenis_bkk'
+                    // },
                     {
                         data: 'nib',
                         name: 'nib'
                     },
-                    {
-                        data: 'sektor',
-                        name: 'sektor'
-                    },
+                    // {
+                    //     data: 'sektor',
+                    //     name: 'sektor'
+                    // },
                     {
                         data: 'provinsi',
                         name: 'provinsi'

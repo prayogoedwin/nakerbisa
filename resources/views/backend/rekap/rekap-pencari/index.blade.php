@@ -64,7 +64,7 @@
                                             <table id="simpletable" class="table table-bordered table-striped mb-0">
                                                 <thead>
                                                     <tr>
-                                                        <th>Tenaga Kerja / Kecamatan
+                                                        <th>Kecamatan / Tenaga Kerja
                                                         </th>
                                                         <th>Sudah Bekerja (L)</th>
                                                         <th>Sudah Bekerja (P)</th>

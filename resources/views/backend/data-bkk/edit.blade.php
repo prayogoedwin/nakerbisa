@@ -61,7 +61,7 @@
                                                                         value="{{ $bkk->name }}">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-6">
+                                                            <div class="col-6" hidden>
                                                                 <div class="form-group">
                                                                     <label for="loker">Penyedia Kerja Luar Negeri</label>
                                                                     <select id="loker" class="form-control"
@@ -75,7 +75,7 @@
                                                                     </select>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-6">
+                                                            <div class="col-6" hidden>
                                                                 <div class="form-group">
                                                                     <label for="jenis_bkk" class="form-label">Jenis
                                                                         Perusahaan</label>
@@ -118,19 +118,22 @@
                                                             <div class="col-6">
                                                                 <div class="form-group">
                                                                     <label for="deskripsi"
-                                                                        class="form-label">Deskripsi</label>
-                                                                    <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3">{{ $bkk->deskripsi }}</textarea>
+                                                                        class="form-label">Nama Sekolah</label>
+                                                                    {{-- <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3">{{ $bkk->deskripsi }}</textarea> --}}
+                                                                    <input type="text" id="deskripsi"
+                                                                        class="form-control" name="deskripsi"
+                                                                        value="{{ $bkk->deskripsi }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="form-group">
-                                                                    <label for="nib">Nomor Induk Berusaha (NIB)</label>
+                                                                    <label for="nib">Nomor Daftar BKK</label>
                                                                     <input type="text" id="nib"
                                                                         class="form-control" name="nib"
                                                                         value="{{ $bkk->nib }}">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-6">
+                                                            <div class="col-6" hidden>
                                                                 <div class="form-group">
                                                                     <label for="id_sektor" class="form-label">Sektor</label>
                                                                     <select class="form-select" id="id_sektor"

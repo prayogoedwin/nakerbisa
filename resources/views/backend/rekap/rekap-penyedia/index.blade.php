@@ -64,7 +64,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
-                                                        <th>Penyedia Kerja / Kecamatan
+                                                        <th>Kecamatan / Penyedia Kerja
                                                         </th>
                                                         <th class="table-secondary">Jumlah</th>
                                                     </tr>

@@ -6,25 +6,25 @@
     <form action="{{ route('akhir-daftar-akun-bkk') }}" method="post">
         @csrf
         <div class="mb-3">
-            <label for="bkkName" class="form-label">Nama Bkk</label>
+            <label for="bkkName" class="form-label">Nama BKK</label>
             <input type="text" class="form-control" id="nama_bkk" name="nama_bkk" required>
         </div>
-        <div class="mb-3">
+        <div class="mb-3" hidden>
             <label for="" class="form-label">Penyedia lowongan kerja luar negeri</label>
             <select class="form-select" id="luar_negri" name="luar_negri" required>
-                <option selected disabled>Pilih</option>
-                <option value="0">Tidak</option>
+                <option value="0" selected>Tidak</option>
                 <option value="1">Ya</option>
             </select>
         </div>
         <div class="mb-3">
-            <label for="deskripsi" class="form-label">Deskripsi</label>
-            <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3" required></textarea>
+            <label for="deskripsi" class="form-label">Nama Sekolah</label>
+            {{-- <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3" required></textarea> --}}
+            <input type="text" class="form-control" id="deskripsi" name="deskripsi" required>
         </div>
-        <div class="mb-3">
-            <label for="" class="form-label">Jenis Bkk</label>
+        <div class="mb-3" hidden>
+            <label for="" class="form-label">Jenis BKK</label>
             <select class="form-select" id="jenis_bkk" name="jenis_bkk" required>
-                <option selected disabled>Pilih Jenis</option>
+                {{-- <option selected disabled>Pilih Jenis</option> --}}
                 <option value="bumd">Badan Usaha Milik Daerah</option>
                 <option value="bumn">Badan Usaha Milik Negara</option>
                 <option value="cv">Comanditer Venotschaap</option>
@@ -34,17 +34,17 @@
                 <option value="pt">Perseroan Terbatas</option>
                 <option value="pp">Perusahaan Perorangan</option>
                 <option value="po">PO*</option>
-                <option value="yayasan">Yayasan</option>
+                <option value="yayasan" selected>Yayasan</option>
             </select>
         </div>
         <div class="mb-3">
-            <label for="nik" class="form-label">Nomor Induk Berusaha (NIB)</label>
+            <label for="nik" class="form-label">Nomor Daftar BKK</label>
             <input type="text" class="form-control" id="nib" name="nib" required>
         </div>
-        <div class="mb-3">
+        <div class="mb-3" hidden>
             <label for="stsperkawinan" class="form-label">Sektor</label>
             <select class="form-select" id="sektor_id" name="sektor_id" required>
-                <option selected disabled>Pilih Sektor</option>
+                <option selected value="2">Pilih Sektor</option>
                 @foreach ($sektors as $sekt)
                     <option value="{{ $sekt->id }}">{{ $sekt->name }}</option>
                 @endforeach
@@ -90,7 +90,7 @@
             <input type="number" class="form-control" id="telpon" name="telpon" required>
         </div>
         <div class="mb-3">
-            <label for="jabatan" class="form-label">Jabatan</label>
+            <label for="jabatan" class="form-label">PJ (Jabatan)</label>
             <input type="text" class="form-control" id="jabatan" name="jabatan" required>
         </div>
         <div class="mb-3">

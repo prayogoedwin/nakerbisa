@@ -24,44 +24,24 @@
         </li>
 
         <!-- Layouts -->
-        <li class="menu-item open">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
-                <div data-i18n="Layouts">Users</div>
-            </a>
-
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">Pencari Kerja (Alumni)</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">Perusahaan</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
+        
         <!-- Layouts -->
-        <li class="menu-item open">
+        <li class="menu-item {{ request()->routeIs('lowongan.*') || request()->routeIs('penempatan') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-table"></i>
                 <div data-i18n="Layouts">Lowongan Kerja</div>
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="layouts-without-menu.html" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('depan.lowongan-kerja') ? 'active' : '' }}">
+                    <a href="{{ route('depan.lowongan-kerja') }}" class="menu-link">
                         <div data-i18n="Without menu">Lowongan Kerja</div>
                     </a>
                 </li>
 
-                <li class="menu-item">
-                    <a href="layouts-without-menu.html" class="menu-link">
-                        <div data-i18n="Without menu">Penempatan Alumni</div>
-                    </a>
-                </li>
+              
+
+
             </ul>
         </li>
     </ul>

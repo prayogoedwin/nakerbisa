@@ -89,25 +89,28 @@
                         <div data-i18n="Without navbar">Officers</div>
                     </a>
                 </li> --}}
-                <li class="menu-item {{ request()->routeIs('userpenyedia.index') ? 'active' : '' }}">
-                    <a href="{{ route('userpenyedia.index') }}" class="menu-link" class="menu-link">
-                        <div data-i18n="Without navbar">Perusahaan</div>
-                    </a>
-                </li>
 
                 <li class="menu-item {{ request()->routeIs('userpencari.index') ? 'active' : '' }}">
                     <a href="{{ route('userpencari.index') }}" class="menu-link">
-                        <div data-i18n="Without menu">Pencari Kerja</div>
+                        <div data-i18n="Without menu">Tenaga Kerja</div>
                     </a>
                 </li>
+                
+                <li class="menu-item {{ request()->routeIs('userpenyedia.index') ? 'active' : '' }}">
+                    <a href="{{ route('userpenyedia.index') }}" class="menu-link" class="menu-link">
+                        <div data-i18n="Without navbar">Penyedia Kerja</div>
+                    </a>
+                </li>
+
+             
                 <li class="menu-item {{ request()->routeIs('userbkk.index') ? 'active' : '' }}">
                     <a href="{{ route('userbkk.index') }}" class="menu-link" class="menu-link">
-                        <div data-i18n="Without navbar">Bkk</div>
+                        <div data-i18n="Without navbar">BKK</div>
                     </a>
                 </li>
                 <li class="menu-item {{ request()->routeIs('userblk.index') ? 'active' : '' }}">
                     <a href="{{ route('userblk.index') }}" class="menu-link" class="menu-link">
-                        <div data-i18n="Without navbar">Blk</div>
+                        <div data-i18n="Without navbar">BLK/BLKK/LPK/LPKS</div>
                     </a>
                 </li>
                 <!-- <li class="menu-item">
@@ -132,7 +135,7 @@
                 </li>
                 <li class="menu-item {{ request()->routeIs('data.penyedia') ? 'active' : '' }}">
                     <a href="{{ route('data.penyedia') }}" class="menu-link">
-                        <div data-i18n="Without menu">Penyedia</div>
+                        <div data-i18n="Without menu">Penyedia Kerja</div>
                     </a>
                 </li>
                 <li class="menu-item {{ request()->routeIs('data.bkk') ? 'active' : '' }}">
