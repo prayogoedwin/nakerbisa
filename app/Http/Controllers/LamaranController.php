@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lamaran;
+use App\Models\UserPencari;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
@@ -58,13 +59,27 @@ class LamaranController extends Controller
         $pelamar = Lamaran::find($request->id); // Find the lamaran by ID
 
         if ($pelamar) {
+
+            // Ambil pencari_id dari lamaran
+            $pencariId = $pelamar->pencari_id;
+
+
             $pelamar->progres_id = $request->status_id; // Update the status
             $pelamar->save();
+
+
+        // Update kolom status_saat_ini di tabel users_pencari
+        $usersPencari = UserPencari::where('user_id', $pencariId)->first(); // Cari berdasarkan user_id (pencari_id)
+        
+        if ($usersPencari) {
+            $usersPencari->status_saat_ini = '1'; // 1 berarti Bekerja
+            $usersPencari->save();
+        }
 
             return response()->json(['success' => true]);
         }
 
         return response()->json(['success' => false], 400);
-}
+    }
 
 }
