@@ -46,8 +46,8 @@
                                                         <th>Belum Bekerja (P)</th>
                                                         <th>Tidak Bekerja (L)</th>
                                                         <th>Tidak Bekerja (P)</th>
-                                                        <th>Total Laki-laki</th>
-                                                        <th>Total Perempuan</th>
+                                                        <th class="table-secondary">Total Laki-laki</th>
+                                                        <th class="table-secondary">Total Perempuan</th>
                                                     </tr>
                                                 </thead>
                                             </table>
