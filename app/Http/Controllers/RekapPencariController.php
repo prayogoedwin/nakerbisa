@@ -59,38 +59,29 @@ class RekapPencariController extends Controller
         }
     }
 
-    public function exportCsv(Request $request)
+    public function exportCSV(Request $request)
     {
-        // Menyiapkan query untuk mengambil data yang diperlukan
-        $query = UserPencari::select(
-            'id_kecamatan',
-            DB::raw('count(case when status_saat_ini = 1 and gender = "L" then 1 end) as sudah_bekerja_laki'),
-            DB::raw('count(case when status_saat_ini = 1 and gender = "P" then 1 end) as sudah_bekerja_perempuan'),
-            DB::raw('count(case when status_saat_ini = 2 and gender = "L" then 1 end) as belum_bekerja_laki'),
-            DB::raw('count(case when status_saat_ini = 2 and gender = "P" then 1 end) as belum_bekerja_perempuan'),
-            DB::raw('count(case when status_saat_ini = 3 and gender = "L" then 1 end) as tidak_bekerja_laki'),
-            DB::raw('count(case when status_saat_ini = 3 and gender = "P" then 1 end) as tidak_bekerja_perempuan'),
-            DB::raw('count(case when gender = "L" then 1 end) as total_laki'),
-            DB::raw('count(case when gender = "P" then 1 end) as total_perempuan'),
-        )
-            ->groupBy('id_kecamatan');
+        $fileName = 'rekap_tenaga_kerja.csv';
+        $headers = [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0",
+        ];
 
-        if ($request->has('month') && $request->month) {
-            $query->whereMonth('created_at', $request->month);
-        }
+        $callback = function () use ($request) {
+            $handle = fopen('php://output', 'w');
 
-        $data = $query->get();
+            // Menambahkan keterangan pada bagian atas CSV
+            $monthName = now()->month($request->month)->format('F');
+            fputcsv($handle, ['Rekap Tenaga Kerja Kabupaten Rembang Periode ' . $monthName]);
 
-        // Menambahkan Tanggal Cetak dan Dicetak Oleh di CSV
-        $tanggalCetak = now()->toDateString();
-        $dicetakOleh = auth()->user()->name;
+            // Menambahkan baris kosong setelah keterangan
+            fputcsv($handle, []);
 
-        // Membuat callback untuk menulis data CSV
-        $callback = function () use ($data, $tanggalCetak, $dicetakOleh) {
-            $file = fopen('php://output', 'w');
-
-            // Menulis header CSV
-            fputcsv($file, [
+            // Menambahkan header tabel CSV
+            fputcsv($handle, [
                 'Kecamatan',
                 'Sudah Bekerja (L)',
                 'Sudah Bekerja (P)',
@@ -102,11 +93,31 @@ class RekapPencariController extends Controller
                 'Total Perempuan'
             ]);
 
-            // Menulis data setiap baris
+            // Ambil data dan outputkan ke CSV
+            $query = UserPencari::select(
+                'id_kecamatan',
+                DB::raw('count(case when status_saat_ini = 1 and gender = "L" then 1 end) as sudah_bekerja_laki'),
+                DB::raw('count(case when status_saat_ini = 1 and gender = "P" then 1 end) as sudah_bekerja_perempuan'),
+                DB::raw('count(case when status_saat_ini = 2 and gender = "L" then 1 end) as belum_bekerja_laki'),
+                DB::raw('count(case when status_saat_ini = 2 and gender = "P" then 1 end) as belum_bekerja_perempuan'),
+                DB::raw('count(case when status_saat_ini = 3 and gender = "L" then 1 end) as tidak_bekerja_laki'),
+                DB::raw('count(case when status_saat_ini = 3 and gender = "P" then 1 end) as tidak_bekerja_perempuan'),
+                DB::raw('count(case when gender = "L" then 1 end) as total_laki'),
+                DB::raw('count(case when gender = "P" then 1 end) as total_perempuan'),
+            )
+                ->groupBy('id_kecamatan');
+
+            if ($request->has('month') && $request->month) {
+                $query->whereMonth('created_at', $request->month);
+            }
+
+            $data = $query->get();
+
+            // Menuliskan data baris demi baris
             foreach ($data as $row) {
                 $kecamatan = DB::table('naker_kecamatan')->where('id', $row->id_kecamatan)->value('name');
-                fputcsv($file, [
-                    $kecamatan ?? 'Tidak Ditemukan',
+                fputcsv($handle, [
+                    $kecamatan,
                     $row->sudah_bekerja_laki,
                     $row->sudah_bekerja_perempuan,
                     $row->belum_bekerja_laki,
@@ -118,18 +129,14 @@ class RekapPencariController extends Controller
                 ]);
             }
 
-            // Menambahkan baris baru untuk Tanggal Cetak dan Dicetak Oleh
-            fputcsv($file, ['']); // Baris kosong untuk memisahkan data
-            fputcsv($file, ['Tanggal Cetak', $tanggalCetak]);
-            fputcsv($file, ['Dicetak Oleh', $dicetakOleh]);
+            // Menambahkan informasi tanggal cetak dan dicetak oleh di bawah data
+            fputcsv($handle, []);
+            fputcsv($handle, ['Tanggal Cetak', now()->toDateString()]);
+            fputcsv($handle, ['Dicetak Oleh', auth()->user()->name]);
 
-            fclose($file);
+            fclose($handle);
         };
 
-        // Mengirimkan file CSV ke browser
-        return response()->stream($callback, 200, [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="rekap_pencari.csv"',
-        ]);
+        return response()->stream($callback, 200, $headers);
     }
 }
