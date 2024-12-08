@@ -41,9 +41,12 @@
                                                     <tr>
                                                         <th>No</th>
                                                         <th>Jumlah Kebutuhan Tenaga Kerja</th>
-                                                        <th>Lowongan Kerja Aktif</th>
-                                                        <th>Lowongan Kerja Expired/Non Aktif</th>
-                                                        <th>Semua Lowongan</th>
+                                                        <th>Lowongan Kerja Aktif L</th>
+                                                        <th>Lowongan Kerja Aktif P</th>
+                                                        <th>Lowongan Kerja Expired/Non Aktif L</th>
+                                                        <th>Lowongan Kerja Expired/Non Aktif P</th>
+                                                        <th>Semua Lowongan L</th>
+                                                        <th>Semua Lowongan P</th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -86,13 +89,22 @@
                         data: 'judul_lowongan'
                     },
                     {
-                        data: 'jumlahAktif'
+                        data: 'jumlahAktifL'
                     },
                     {
-                        data: 'jumlahNonAktif' // Kolom untuk jumlah expired/non aktif
+                        data: 'jumlahAktifP'
                     },
                     {
-                        data: 'jumlahSemua' // Kolom baru untuk jumlah semua lowongan
+                        data: 'jumlahNonAktifL'
+                    },
+                    {
+                        data: 'jumlahNonAktifP'
+                    },
+                    {
+                        data: 'jumlahSemuaL'
+                    },
+                    {
+                        data: 'jumlahSemuaP'
                     }
                 ]
             });

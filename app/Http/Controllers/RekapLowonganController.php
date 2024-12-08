@@ -15,7 +15,7 @@ class RekapLowonganController extends Controller
         if ($request->ajax()) {
             $today = now();
 
-            // Query untuk menghitung jumlah data berdasarkan status dan tanggal
+            // Query data untuk kategori "Rembang"
             $queryAktifRembang = Lowongan::where('kabkota_id', 3317)
                 ->where('status_id', 1)
                 ->where('tanggal_end', '>=', $today);
@@ -26,6 +26,7 @@ class RekapLowonganController extends Controller
                         ->orWhere('tanggal_end', '<', $today);
                 });
 
+            // Query data untuk kategori "Luar Rembang"
             $queryAktifLuarRembang = Lowongan::where('kabkota_id', '!=', 3317)
                 ->where('status_id', 1)
                 ->where('tanggal_end', '>=', $today);
@@ -36,7 +37,7 @@ class RekapLowonganController extends Controller
                         ->orWhere('tanggal_end', '<', $today);
                 });
 
-            // Filter berdasarkan bulan jika parameter `month` ada
+            // Filter berdasarkan bulan jika ada
             if ($request->has('month') && $request->month) {
                 $queryAktifRembang->whereMonth('created_at', $request->month);
                 $queryNonAktifRembang->whereMonth('created_at', $request->month);
@@ -44,30 +45,45 @@ class RekapLowonganController extends Controller
                 $queryNonAktifLuarRembang->whereMonth('created_at', $request->month);
             }
 
-            // Hitung jumlah data
-            $jumlahAktifRembang = $queryAktifRembang->count();
-            $jumlahNonAktifRembang = $queryNonAktifRembang->count();
+            // Hitung jumlah data untuk tiap kategori dan gender
+            $jumlahAktifRembangL = $queryAktifRembang->sum('jumlah_pria');
+            $jumlahAktifRembangP = $queryAktifRembang->sum('jumlah_wanita');
 
-            $jumlahAktifLuarRembang = $queryAktifLuarRembang->count();
-            $jumlahNonAktifLuarRembang = $queryNonAktifLuarRembang->count();
+            $jumlahNonAktifRembangL = $queryNonAktifRembang->sum('jumlah_pria');
+            $jumlahNonAktifRembangP = $queryNonAktifRembang->sum('jumlah_wanita');
 
-            // Hitung jumlah semua lowongan
-            $jumlahSemuaRembang = $jumlahAktifRembang + $jumlahNonAktifRembang;
-            $jumlahSemuaLuarRembang = $jumlahAktifLuarRembang + $jumlahNonAktifLuarRembang;
+            $jumlahAktifLuarRembangL = $queryAktifLuarRembang->sum('jumlah_pria');
+            $jumlahAktifLuarRembangP = $queryAktifLuarRembang->sum('jumlah_wanita');
+
+            $jumlahNonAktifLuarRembangL = $queryNonAktifLuarRembang->sum('jumlah_pria');
+            $jumlahNonAktifLuarRembangP = $queryNonAktifLuarRembang->sum('jumlah_wanita');
+
+            // Total semua lowongan
+            $jumlahSemuaRembangL = $jumlahAktifRembangL + $jumlahNonAktifRembangL;
+            $jumlahSemuaRembangP = $jumlahAktifRembangP + $jumlahNonAktifRembangP;
+
+            $jumlahSemuaLuarRembangL = $jumlahAktifLuarRembangL + $jumlahNonAktifLuarRembangL;
+            $jumlahSemuaLuarRembangP = $jumlahAktifLuarRembangP + $jumlahNonAktifLuarRembangP;
 
             // Data untuk ditampilkan di tabel
             $data = [
                 [
                     'judul_lowongan' => 'Rembang',
-                    'jumlahAktif' => $jumlahAktifRembang,
-                    'jumlahNonAktif' => $jumlahNonAktifRembang,
-                    'jumlahSemua' => $jumlahSemuaRembang // Kolom baru untuk jumlah semua lowongan
+                    'jumlahAktifL' => $jumlahAktifRembangL,
+                    'jumlahAktifP' => $jumlahAktifRembangP,
+                    'jumlahNonAktifL' => $jumlahNonAktifRembangL,
+                    'jumlahNonAktifP' => $jumlahNonAktifRembangP,
+                    'jumlahSemuaL' => $jumlahSemuaRembangL,
+                    'jumlahSemuaP' => $jumlahSemuaRembangP
                 ],
                 [
                     'judul_lowongan' => 'Luar Rembang',
-                    'jumlahAktif' => $jumlahAktifLuarRembang,
-                    'jumlahNonAktif' => $jumlahNonAktifLuarRembang,
-                    'jumlahSemua' => $jumlahSemuaLuarRembang // Kolom baru untuk jumlah semua lowongan
+                    'jumlahAktifL' => $jumlahAktifLuarRembangL,
+                    'jumlahAktifP' => $jumlahAktifLuarRembangP,
+                    'jumlahNonAktifL' => $jumlahNonAktifLuarRembangL,
+                    'jumlahNonAktifP' => $jumlahNonAktifLuarRembangP,
+                    'jumlahSemuaL' => $jumlahSemuaLuarRembangL,
+                    'jumlahSemuaP' => $jumlahSemuaLuarRembangP
                 ]
             ];
 
@@ -78,6 +94,7 @@ class RekapLowonganController extends Controller
 
         return view('backend.rekap.rekap-lowongan.index');
     }
+
 
     public function getData($id)
     {
