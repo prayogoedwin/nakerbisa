@@ -40,7 +40,8 @@
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
-                                                        <th>Judul Lowongan</th>
+                                                        <th>Jumlah Kebutuhan Tenaga Kerja</th>
+                                                        <th>Lowongan Kerja Aktif</th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -70,7 +71,8 @@
                 ajax: {
                     url: '{{ route('rekap.lowongan.index') }}',
                     data: function(d) {
-                        d.month = $('#monthFilter').val(); // Kirim parameter bulan
+                        // Kirim parameter bulan jika diperlukan (tidak digunakan di sini)
+                        d.month = $('#monthFilter').val();
                     }
                 },
                 autoWidth: false,
@@ -82,10 +84,13 @@
                     {
                         data: 'judul_lowongan'
                     },
+                    {
+                        data: 'jumlahAktif'
+                    }
                 ]
             });
 
-            // Reload tabel saat bulan dipilih
+            // Reload tabel saat bulan dipilih (meskipun data tetap sama)
             $('#monthFilter').on('change', function() {
                 table.ajax.reload();
             });

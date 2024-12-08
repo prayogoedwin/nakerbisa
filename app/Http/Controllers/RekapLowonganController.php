@@ -13,14 +13,34 @@ class RekapLowonganController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Lowongan::select('id', 'judul_lowongan', 'created_at');
+            $today = now();
+
+            // Query untuk menghitung jumlah data berdasarkan kabupaten/kota dan bulan
+            $queryRembang = Lowongan::where('kabkota_id', 3317)
+                ->where('status_id', 1)
+                ->where('tanggal_end', '<', $today);
+
+            $queryLuarRembang = Lowongan::where('kabkota_id', '!=', 3317)
+                ->where('status_id', 1)
+                ->where('tanggal_end', '<', $today);
 
             // Filter berdasarkan bulan jika parameter `month` ada
             if ($request->has('month') && $request->month) {
-                $query->whereMonth('created_at', $request->month);
+                $queryRembang->whereMonth('created_at', $request->month);
+                $queryLuarRembang->whereMonth('created_at', $request->month);
             }
 
-            return DataTables::of($query)
+            // Hitung jumlah data
+            $jumlahRembang = $queryRembang->count();
+            $jumlahLuarRembang = $queryLuarRembang->count();
+
+            // Data untuk ditampilkan di tabel
+            $data = [
+                ['judul_lowongan' => 'Rembang', 'jumlahAktif' => $jumlahRembang],
+                ['judul_lowongan' => 'Luar Rembang', 'jumlahAktif' => $jumlahLuarRembang]
+            ];
+
+            return DataTables::of($data)
                 ->addIndexColumn()
                 ->make(true);
         }
