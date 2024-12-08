@@ -23,9 +23,11 @@ class RekapPencariController extends Controller
                 DB::raw('count(case when status_saat_ini = 2 and gender = "P" then 1 end) as belum_bekerja_perempuan'),
                 DB::raw('count(case when status_saat_ini = 3 and gender = "L" then 1 end) as tidak_bekerja_laki'),
                 DB::raw('count(case when status_saat_ini = 3 and gender = "P" then 1 end) as tidak_bekerja_perempuan'),
-                DB::raw('count(*) as total')
+                DB::raw('count(case when gender = "L" then 1 end) as total_laki'),
+                DB::raw('count(case when gender = "P" then 1 end) as total_perempuan'),
             )
                 ->groupBy('id_kecamatan');
+
 
 
             // Filter berdasarkan bulan jika parameter `month` ada

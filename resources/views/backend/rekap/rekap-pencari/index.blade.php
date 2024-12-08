@@ -46,7 +46,8 @@
                                                         <th>Belum Bekerja (P)</th>
                                                         <th>Tidak Bekerja (L)</th>
                                                         <th>Tidak Bekerja (P)</th>
-                                                        <th>Total</th>
+                                                        <th>Total Laki-laki</th>
+                                                        <th>Total Perempuan</th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -102,7 +103,10 @@
                         data: 'tidak_bekerja_perempuan'
                     },
                     {
-                        data: 'total'
+                        data: 'total_laki'
+                    },
+                    {
+                        data: 'total_perempuan'
                     }
                 ]
             });
