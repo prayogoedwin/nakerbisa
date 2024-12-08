@@ -16,7 +16,7 @@
                         <img class="logo" src="{{ asset('assets/nakerbisa_fe/img/self/nakerbisa_white.png') }}"
                             alt="Logo">
                         <p>
-                            NAKERBISA adalah Sistem Informasi Penempatan Tenaga Kerja yang di kelola oleh Dinas
+                            NAKERBISA adalah Sistem Informasi Ketenagakerjaan yang di kelola oleh Dinas
                             Perindustrian dan Tenaga Kerja Kabupaten Rembang. <br />
                             <!-- Sistem ini dibuat sebagai bentuk pelayanan dari pemerintah untuk menunjang proses mempertemukan pencari kerja dengan perusahaan yang membutuhkan tenaga kerja.  -->
                         </p>
@@ -95,11 +95,6 @@
                                 <td>Hari ini</td>
                                 <td>&nbsp;:&nbsp;</td>
                                 <td>30</td>
-                            </tr>
-                            <tr>
-                                <td>Kemarin</td>
-                                <td>&nbsp;:&nbsp;</td>
-                                <td>105</td>
                             </tr>
                             <tr>
                                 <td>Bulan Ini</td>

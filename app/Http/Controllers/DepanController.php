@@ -650,6 +650,18 @@ class DepanController extends Controller
                 'foto' => null,
                 'posted_by' => $user->id,
                 'created_at' => date('Y-m-d H:i:s'),
+                'no_izin_pendirian' => $request->no_izin_pendirian, // No. Izin Pendirian
+                'waktu_pendirian' => $request->waktu_pendirian, // Waktu Pendirian
+                'nomor_vin' => $request->nomor_vin, // Nomor VIN
+                'nomor_induk_berusaha' => $request->nomor_induk_berusaha, // Nomor Induk Berusaha (NIB)
+                'nomor_akreditasi_lembaga' => $request->nomor_akreditasi_lembaga, // Nomor Akreditasi Lembaga
+                'berlaku_sampai' => $request->berlaku_sampai, // Berlaku Sampai
+                'jenis_pelatihan' => $request->jenis_pelatihan, // Jenis Pelatihan
+                'kapasitas_peserta_per_pelatihan' => $request->kapasitas_peserta_per_pelatihan, // Kapasitas Peserta Per Pelatihan
+                'jumlah_lulusan_sampai_sekarang' => $request->jumlah_lulusan_sampai_sekarang, // Jumlah Lulusan Sampai Sekarang
+                'jumlah_peserta_lulus_uji_kompetensi' => $request->jumlah_peserta_lulus_uji_kompetensi, // Jumlah Peserta Lulus Uji Kompetensi
+                'jumlah_instruktur' => $request->jumlah_instruktur, // Jumlah Instruktur
+                'jumlah_instruktur_bersertifikat_kompetensi' => $request->jumlah_instruktur_bersertifikat_kompetensi, // Jumlah Instruktur Bersertifikat Kompetensi
                 // 'updated_at',
                 // 'deleted_at',
             ]);

@@ -134,7 +134,13 @@
                             <div class="dropdown-divider"></div>
                         </li>
                         @if (Auth::check() &&
-                                (Auth::user()->roles[0]['name'] == 'tenaga-kerja' || Auth::user()->roles[0]['name'] == 'super-admin' || Auth::user()->roles[0]['name'] == 'penyedia-kerja'))
+                                (Auth::user()->roles[0]['name'] == 'tenaga-kerja' 
+                                || Auth::user()->roles[0]['name'] == 'super-admin' 
+                                || Auth::user()->roles[0]['name'] == 'penyedia-kerja'
+                                // || Auth::user()->roles[0]['name'] == 'admin-bkk'
+                                // || Auth::user()->roles[0]['name'] == 'admin-blk'
+                                
+                                ))
                             <li>
                                 <a class="dropdown-item" href="{{ route('profil.index') }}">
                                     <i class="bx bx-user me-2"></i>

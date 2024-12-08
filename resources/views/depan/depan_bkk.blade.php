@@ -51,10 +51,8 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Nama BKK</th>
-                                            <th>Penyedia Loker Luar Negeri</th>
-                                            <th>Deskripsi</th>
-                                            <th>Jenis BKK</th>
-                                            <th>NIB</th>
+                                            <th>Nama Sekolah</th>
+                                            <th>No Daftar BKK</th>
                                             <th>Alamat</th>
                                             <th>Kodepos</th>
                                             <th>Sektor</th>
@@ -70,9 +68,7 @@
                                             <tr>
                                                 <td>{{ $bkkList->firstItem() + $index }}</td>
                                                 <td>{{ $bkk->name }}</td>
-                                                <td>{{ $bkk->luar_negri == 1 ? 'Ya' : 'Tidak' }}</td>
                                                 <td>{{ $bkk->deskripsi }}</td>
-                                                <td>{{ $jenisBkkMapping[$bkk->jenis_bkk] ?? 'Tidak Diketahui' }}</td>
                                                 <td>{{ $bkk->nib }}</td>
                                                 <td>{{ $bkk->alamat }}</td>
                                                 <td>{{ $bkk->kodepos }}</td>

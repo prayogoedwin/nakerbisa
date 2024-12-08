@@ -64,6 +64,10 @@ class BackController extends Controller
         if (Auth::user()->roles[0]['name'] == 'admin-bkk') {
             return view('backend.dashboard.index_bkk');
         }
+
+        if (Auth::user()->roles[0]['name'] == 'admin-blk') {
+            return view('backend.dashboard.index_bkk');
+        }
     }
 
     public function statistik()
