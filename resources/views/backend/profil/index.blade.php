@@ -55,7 +55,7 @@
 
                                                     <form class="form form-vertical"
                                                         action="{{ route('admin.update-user', auth()->user()->id) }}"
-                                                        method="POST">
+                                                        method="POST" enctype="multipart/form-data">
                                                         @csrf
                                                         @method('PUT')
                                                         <div class="form-body">
@@ -102,7 +102,24 @@
                                                                             Kata Sandi</small>
                                                                     </div>
                                                                 </div>
-
+                                                                @if (Auth::user()->roles[0]['name'] === 'penyedia-kerja')
+                                                                    <div class="col-6">
+                                                                        <div class="form-group">
+                                                                            <label for="foto">Upload Logo Perusahaan</label>
+                                                                            <input type="file" id="foto"
+                                                                                class="form-control" name="foto">
+                                                                            @if ($profilPenyedia->foto)
+                                                                                <img src="{{ asset('storage/' . $profilPenyedia->foto) }}"
+                                                                                    alt="Foto Profil" class="img-thumbnail mt-2"
+                                                                                    width="150">
+                                                                            @else
+                                                                                <!-- Tampilkan keterangan hanya jika foto belum ada -->
+                                                                                <small class="text-danger">Image Logo Wajib
+                                                                                    Diupload!</small>
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
                                                                 <div class="col-12 d-flex justify-content-end">
                                                                     <button type="submit"
                                                                         class="btn btn-primary me-1 mb-1 mt-3">

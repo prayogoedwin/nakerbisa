@@ -8,9 +8,11 @@ use App\Models\NakerPencariPendidikan;
 use App\Models\NakerPencariPengalaman;
 use App\Models\User;
 use App\Models\UserPencari;
+use App\Models\UserPenyedia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
@@ -22,6 +24,7 @@ class ProfileController extends Controller
         // dd($user->id);
         // die();
         $profil = UserPencari::where('user_id', $user->id)->first();  // Sesuaikan relasi dengan tabel User jika ada
+        $profilPenyedia = UserPenyedia::where('user_id', $user->id)->first();  // Sesuaikan relasi dengan tabel User jika ada
         $pendidikan = NakerPencariPendidikan::select(
             'naker_pencari_pendidikan.*',
             'naker_pendidikan.name as pendidikan_name', // Nama Pendidikan
@@ -42,34 +45,66 @@ class ProfileController extends Controller
         $pengalaman = NakerPencariPengalaman::where('user_id', auth()->id())->get();
 
         // Mengirim data ke view
-        return view('backend.profil.index', compact('profil', 'pendidikan', 'keterampilan', 'pengalaman', 'keahlian'));
+        return view('backend.profil.index', compact('profil', 'profilPenyedia', 'pendidikan', 'keterampilan', 'pengalaman', 'keahlian'));
     }
 
     public function updateUser(Request $request, $id)
     {
-        // Validasi data input
+        // Validasi input
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $id,
+            'whatsapp' => 'required|string|max:255',
             'password' => 'nullable|string|min:8',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi foto
         ]);
 
-        // Ambil user berdasarkan ID
+        // Ambil data user
         $user = User::findOrFail($id);
 
-        // Perbarui data user
+        // Update data user (name, email, whatsapp, password)
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->whatsapp = $request->whatsapp;
 
         if ($request->filled('password')) {
             $user->password = bcrypt($request->password);
         }
 
+        // Simpan data user
         $user->save();
 
+        // Check if user has the role 'penyedia-kerja'
+        if (Auth::user()->roles->contains('name', 'penyedia-kerja')) {
+            // Cek apakah UserPenyedia ada
+            $userPenyedia = UserPenyedia::where('user_id', $user->id)->first();
+
+            // Jika UserPenyedia tidak ada, kita bisa membuat record baru
+            if (!$userPenyedia) {
+                $userPenyedia = new UserPenyedia();
+                $userPenyedia->user_id = $user->id;
+            }
+
+            // Cek apakah foto baru diupload
+            if ($request->hasFile('foto')) {
+                // Hapus foto lama jika ada
+                if (!empty($userPenyedia->foto) && Storage::disk('public')->exists($userPenyedia->foto)) {
+                    Storage::disk('public')->delete($userPenyedia->foto);
+                }
+
+                // Simpan foto baru
+                $filePath = $request->file('foto')->store('profile_photos', 'public');
+                $userPenyedia->foto = $filePath; // Simpan path file foto di model UserPenyedia
+            }
+
+            // Simpan perubahan pada UserPenyedia
+            $userPenyedia->save();
+        }
+
         // Redirect dengan pesan sukses
-        return redirect()->route('profil.index')->with('success', 'Update data User berhasil diperbarui.');
+        return redirect()->route('profil.index')->with('success', 'Data user berhasil diperbarui.');
     }
+
 
     public function editProfil($id)
     {
