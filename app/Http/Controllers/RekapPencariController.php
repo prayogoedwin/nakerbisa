@@ -14,8 +14,12 @@ class RekapPencariController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            // Mengambil jumlah pengguna berdasarkan id_kecamatan
-            $query = UserPencari::select('id_kecamatan', DB::raw('count(*) as user_count'))
+            // Mengambil jumlah pengguna berdasarkan id_kecamatan dan status_saat_ini
+            $query = UserPencari::select(
+                'id_kecamatan',
+                DB::raw('count(case when status_saat_ini = 1 then 1 end) as sudah_bekerja'),
+                DB::raw('count(case when status_saat_ini = 2 then 1 end) as belum_bekerja')
+            )
                 ->groupBy('id_kecamatan');
 
             // Filter berdasarkan bulan jika parameter `month` ada
@@ -30,15 +34,12 @@ class RekapPencariController extends Controller
                     $kecamatan = DB::table('naker_kecamatan')->where('id', $data->id_kecamatan)->value('name');
                     return $kecamatan ?? 'Tidak Ditemukan';
                 })
-                ->addColumn('user_count', function ($data) {
-                    // Menampilkan jumlah user per kecamatan
-                    return $data->user_count;
-                })
                 ->make(true);
         }
 
         return view('backend.rekap.rekap-pencari.index');
     }
+
 
     public function getData($id)
     {

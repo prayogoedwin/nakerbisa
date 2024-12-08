@@ -41,7 +41,8 @@
                                                     <tr>
                                                         <th>No</th>
                                                         <th>Kecamatan</th> <!-- Menampilkan kecamatan -->
-                                                        <th>Jumlah Pengguna</th>
+                                                        <th>Sudah Bekerja</th>
+                                                        <th>Belum Bekerja</th>
                                                         <!-- Menampilkan jumlah pengguna per kecamatan -->
                                                     </tr>
                                                 </thead>
@@ -85,7 +86,10 @@
                         data: 'kecamatan' // Menampilkan nama kecamatan
                     },
                     {
-                        data: 'user_count' // Menampilkan jumlah pengguna
+                        data: 'sudah_bekerja' // Menampilkan jumlah pengguna yang sudah bekerja
+                    },
+                    {
+                        data: 'belum_bekerja' // Menampilkan jumlah pengguna yang belum bekerja
                     }
                 ]
             });
