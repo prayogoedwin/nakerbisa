@@ -23,6 +23,7 @@ use App\Http\Controllers\PencariPendidikanController;
 use App\Http\Controllers\PencariPengalamanController;
 use App\Http\Controllers\PencariProfilController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RekapPencariController;
 use App\Http\Controllers\UserBkkController;
 use App\Http\Controllers\UserBlkController;
 use App\Http\Controllers\UserPencariController;
@@ -227,6 +228,10 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('blk/export', [DataController::class, 'exportBlk'])->name('data.blk.export');
         Route::get('/blk/edit/{id}', [DataController::class, 'editBlk'])->name('data.blk.edit');
         Route::put('/blk/edit/{id}', [DataController::class, 'updateDataBlk'])->name('data.blk.update');
+    });
+
+    Route::prefix('rekap')->group(function () {
+        Route::get('/tenaga-kerja', [RekapPencariController::class, 'index'])->name('rekap.tenaga-kerja.index');
     });
 
     Route::get('/lowongan', [LowonganController::class, 'index'])->name('lowongan.index');

@@ -206,15 +206,15 @@
         </li>
 
         <!-- Layouts -->
-        <li class="menu-item">
+        <li  class="menu-item {{ request()->routeIs('rekap.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-copy"></i>
                 <div data-i18n="Layouts">Rekap</div>
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('rekap.tenaga-kerja.index') ? 'active' : '' }}">
+                    <a href="{{ route('rekap.tenaga-kerja.index') }}" class="menu-link">
                         <div data-i18n="Without menu">Tenaga Kerja</div>
                     </a>
                 </li>
