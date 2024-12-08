@@ -218,8 +218,8 @@
                         <div data-i18n="Without menu">Tenaga Kerja</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('rekap.penyedia-kerja.index') ? 'active' : '' }}">
+                    <a href="{{ route('rekap.penyedia-kerja.index') }}" class="menu-link">
                         <div data-i18n="Without navbar">Penyedia</div>
                     </a>
                 </li>
