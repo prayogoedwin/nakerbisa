@@ -200,8 +200,9 @@ class DepanController extends Controller
     {
         $id = decode_url($ids);
         // Ambil detail lowongan berdasarkan ID
-        $lowongan = Lowongan::findOrFail($id);
-
+        $lowongan = Lowongan::select('naker_lowongan.*', 'users_penyedia.name as perusahaan_name', 'users_penyedia.foto as perusahaan_foto')
+            ->join('users_penyedia', 'naker_lowongan.posted_by', '=', 'users_penyedia.user_id')
+            ->findOrFail($id);
         $kabkota = DB::table('naker_kabkota')
             ->where('id', $lowongan->kabkota_id)
             ->first();
