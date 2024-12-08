@@ -29,6 +29,46 @@
                 <div class="col-xl-12 col-lg-12 mt-md-120 mt-xs-50 services-sidebar">
                     <div class="single-widget services-list-widget">
                         <h4 class="widget-title">Rekap Data Tempat Kerja</h4>
+                        <div class="request-call-back-area secondary text-light default-padding">
+                            <div class="container">
+                                <div class="row align-center">
+                                    <div class="col-lg-6 text-end">
+                                        <div class="achivement-counter">
+                                            <ul>
+                                                <li>
+                                                    <div class="icon">
+                                                        <i class="flaticon-stats"></i>
+                                                    </div>
+                                                    <div class="fun-fact">
+                                                        <div class="counter">
+                                                            <div class="timer" data-to="{{ $luarRembangCount ?? 0 }}"
+                                                                data-speed="2000">
+                                                                {{ $luarRembangCount ?? 0 }}
+                                                            </div>
+                                                        </div>
+                                                        <span class="medium">Kerja di Luar Rembang</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="icon">
+                                                        <i class="flaticon-group"></i>
+                                                    </div>
+                                                    <div class="fun-fact">
+                                                        <div class="counter">
+                                                            <div class="timer" data-to="{{ $dalamRembangCount ?? 0 }}"
+                                                                data-speed="2000">
+                                                                {{ $dalamRembangCount ?? 0 }}
+                                                            </div>
+                                                        </div>
+                                                        <span class="medium">Kerja di Rembang</span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

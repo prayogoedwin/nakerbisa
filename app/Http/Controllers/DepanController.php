@@ -158,8 +158,14 @@ class DepanController extends Controller
 
     public function talent_tempat_kerja()
     {
+        // Hitung data rekap berdasarkan kondisi lokasi kerja kecamatan
+        $luarRembangCount = UserPencari::whereNull('lokasi_kerja_saat_ini_kec') // lokasi_kerja_saat_ini_kec nullable
+            ->count();
 
-        return view('depan.depan_talent-tempat-kerja');
+        $dalamRembangCount = UserPencari::whereNotNull('lokasi_kerja_saat_ini_kec') // lokasi_kerja_saat_ini_kec tidak null
+            ->count();
+
+        return view('depan.depan_talent-tempat-kerja', compact('luarRembangCount', 'dalamRembangCount'));
     }
 
     public function login()
