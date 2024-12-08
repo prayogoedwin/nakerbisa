@@ -41,6 +41,7 @@
                                                     <tr>
                                                         <th>No</th>
                                                         <th>Nama</th>
+                                                        <th>Kecamatan</th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -82,6 +83,9 @@
                     {
                         data: 'name'
                     },
+                    {
+                        data: 'kecamatan' // Menampilkan kolom 'kecamatan'
+                    }
                 ]
             });
 

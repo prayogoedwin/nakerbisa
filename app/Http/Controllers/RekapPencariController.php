@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\UserPencari;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;  // Mengimpor DataTables
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class RekapPencariController extends Controller
@@ -13,7 +14,7 @@ class RekapPencariController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = UserPencari::select('id', 'name', 'created_at');
+            $query = UserPencari::select('id', 'name', 'id_kecamatan', 'created_at');
 
             // Filter berdasarkan bulan jika parameter `month` ada
             if ($request->has('month') && $request->month) {
@@ -22,6 +23,11 @@ class RekapPencariController extends Controller
 
             return DataTables::of($query)
                 ->addIndexColumn()
+                ->addColumn('kecamatan', function ($data) {
+                    // Ambil nama kecamatan berdasarkan id_kecamatan
+                    $kecamatan = DB::table('naker_kecamatan')->where('id', $data->id_kecamatan)->value('name');
+                    return $kecamatan ?? 'Tidak Ditemukan';
+                })
                 ->make(true);
         }
 
