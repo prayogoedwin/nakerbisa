@@ -41,4 +41,30 @@ class LamaranController extends Controller
 
         return view('backend.lowongan.history-lamaran');
     }
+
+    public function show($id)
+    {
+        try {
+            // $id = decode_url($ids);
+            $data = Lamaran::select('*')->findOrFail($id);
+            return response()->json(['success' => true, 'data' => $data]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+        }
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $pelamar = Lamaran::find($request->id); // Find the lamaran by ID
+
+        if ($pelamar) {
+            $pelamar->progres_id = $request->status_id; // Update the status
+            $pelamar->save();
+
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false], 400);
+}
+
 }

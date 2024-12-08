@@ -81,6 +81,13 @@ function getProgresLoker()
         ->get();
 }
 
+function getProgresLamaran()
+{
+    return DB::table('naker_progres')
+        ->where('modul', 'lamaran') // Menambahkan kondisi where untuk modul = 'lamaran'
+        ->get();
+}
+
 
 function encode_url($url)
 {

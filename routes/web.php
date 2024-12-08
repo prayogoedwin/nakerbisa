@@ -256,6 +256,11 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
     Route::get('history-loker', [LowonganController::class, 'historyLoker'])->name('lowongan.history');
 
     Route::get('history-lamaran', [LamaranController::class, 'index'])->name('history-lamaran');
+
+    Route::get('lamaran-detail/{id}', [LamaranController::class, 'show'])->name('lamaran.detail');
+    Route::post('/lamaran/update-status', [LamaranController::class, 'updateStatus'])->name('lamaran.updateStatus');
+
+
 });
 
 

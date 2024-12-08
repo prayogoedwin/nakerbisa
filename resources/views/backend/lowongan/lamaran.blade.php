@@ -29,6 +29,7 @@
                                                         <th>No Telepon</th>
                                                         {{-- <th>Keterangan</th> --}}
                                                         <th>Tanggal Lamar</th>
+                                                        <th>Status</th>
                                                         <th>Options</th>
                                                     </tr>
                                                 </thead>
@@ -50,6 +51,35 @@
         </div>
     </div>
 
+    <!-- Modal for showing details -->
+    <div class="modal fade" id="detailModal" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalLabel">Detail Pelamar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-control" id="status" name="status">
+                            @foreach($progress_lamaran as $status)
+                                <option value="{{ $status->id }}">{{ $status->name }}</option>  <!-- Assuming 'id' and 'name' are fields in progressLamaran -->
+                            @endforeach
+                        </select>
+                    </div>
+                    <input type="hidden" id="pelamarId"> <!-- Hidden input to store the pelamar ID -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="updateStatusBtn">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
 
 @endsection
 
@@ -69,6 +99,7 @@
                     { data: 'whatsapp', name: 'whatsapp' },
                     // { data: 'keterangan', name: 'keterangan' },
                     { data: 'created_at', name: 'created_at' },
+                    { data: 'status', name: 'status' },
                     { data: 'options', orderable: false, searchable: false }
                 ]
             });
@@ -76,96 +107,54 @@
     </script>
 
     <script>
-        function confirmDelete(id) {
-            // Konfirmasi penghapusan
-            var deleteUrl = "{{ route('lowongan.softdelete', ':id') }}".replace(':id', id);
-            if (confirm("Yakin hapus data?")) {
-                // Kirim request ke server untuk menghapus data
-                $.ajax({
-                    url: deleteUrl,
-                    type: 'DELETE',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'), // Menyertakan CSRF token
-                    },
-                    success: function(response) {
-                        // Jika berhasil, reload DataTable
-                        alert(response.message); // Menampilkan pesan
-                        $('#simpletable').DataTable().ajax.reload(); // Reload data tabel
-                    },
-                    error: function(xhr, status, error) {
-                        // Tampilkan error jika ada masalah
-                        alert('Error: ' + xhr.responseText);
-                    }
-                });
-            }
+        function showDetailModal(id) {
+            // Send AJAX request to get the pelamar's details
+            $.ajax({
+                url: '{{ url('dapur/lamaran-detail') }}/' + id,  // Correct URL syntax with id parameter
+                method: 'GET',
+                success: function(response) {
+                    // Show the modal
+                    $('#detailModal').modal('show');
+
+                    // Set the modal fields with data
+                    $('#status').val(response.data.progres_id).trigger('change'); // Assuming 'status' is part of the response
+                    $('#pelamarId').val(response.data.id);
+                }
+            });
         }
-    </script>
+        // Update status button click
+        $('#updateStatusBtn').on('click', function() {
+                var pelamarId = $('#pelamarId').val();  // Get the pelamar ID
+                var statusId = $('#status').val();      // Get the selected status ID
 
-    <script>
-        $(document).ready(function() {
-            $('#pendidikan_id').on('change', function() {
-                // console.log(this.value);
-                var kd = this.value
-
-                // Panggil API untuk mendapatkan kecamatan berdasarkan kabkota_id
+                // Send the update request
                 $.ajax({
-                    url: "{{ route('get-jurusan-bypendidikan', ':id') }}".replace(':id',
-                        kd), // Panggil API
-                    type: 'GET',
-                    success: function(response) {
-                        // Kosongkan dropdown kecamatan sebelumnya
-                        $('#jurusan_id').empty();
-
-                        // Tambahkan opsi default
-                        $('#jurusan_id').append(
-                            '<option selected disabled>Pilih Jurusan</option>');
-
-                        // Loop data kecamatan dan tambahkan ke dropdown
-                        $.each(response, function(index, jurusan) {
-                            $('#jurusan_id').append('<option value="' + jurusan.id +
-                                '">' +
-                                jurusan.nama + '</option>');
-                        });
+                    url: '{{ route('lamaran.updateStatus') }}', // Create this route in your controller
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}', // Include CSRF token
+                        id: pelamarId,
+                        status_id: statusId
                     },
-                    error: function(xhr) {
-                        console.error(xhr);
+                    success: function(response) {
+                        if (response.success) {
+                            // Show success alert
+                            alert('Status updated successfully!');
+                            
+                            // Close the modal
+                            $('#detailModal').modal('hide');
+                            $('#simpletable').DataTable().ajax.reload();  // This reloads the DataTable data
+                            
+                            // Optionally, reload the DataTable or perform other actions
+                        } else {
+                            alert('Failed to update status');
+                        }
+                    },
+                    error: function() {
+                        alert('An error occurred while updating the status');
                     }
                 });
             });
-        });
     </script>
 
-    <script>
-        $(document).ready(function() {
-            $('#pendidikan_id').on('load', function() {
-                // console.log(this.value);
-                var kd = this.value
-
-                // Panggil API untuk mendapatkan kecamatan berdasarkan kabkota_id
-                $.ajax({
-                    url: "{{ route('get-jurusan-bypendidikan', ':id') }}".replace(':id',
-                        kd), // Panggil API
-                    type: 'GET',
-                    success: function(response) {
-                        // Kosongkan dropdown kecamatan sebelumnya
-                        $('#e_jurusan_id').empty();
-
-                        // Tambahkan opsi default
-                        $('#e_jurusan_id').append(
-                            '<option selected disabled>Pilih Jurusan</option>');
-
-                        // Loop data kecamatan dan tambahkan ke dropdown
-                        $.each(response, function(index, jurusan) {
-                            $('#e_jurusan_id').append('<option value="' + jurusan.id +
-                                '">' +
-                                jurusan.nama + '</option>');
-                        });
-                    },
-                    error: function(xhr) {
-                        console.error(xhr);
-                    }
-                });
-            });
-        });
-    </script>
 @endpush

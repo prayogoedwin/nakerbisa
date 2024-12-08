@@ -294,6 +294,8 @@ class LowonganController extends Controller
         // // Menghapus semua spasi dari $id
         // $id = str_replace(' ', '', $id);
 
+        $progressLamaran =  getProgresLamaran();
+
         if ($request->ajax()) {
             
             $pelamars = Lamaran::select(
@@ -303,10 +305,17 @@ class LowonganController extends Controller
                 'users.whatsapp',
                 'users_pencari.name', // Select name from users_pencari
                 'naker_lamarans.keterangan',
-                'naker_lamarans.created_at'
+                'naker_lamarans.created_at',
+                'naker_progres.name as status'
             )
                 ->join('users', 'naker_lamarans.pencari_id', '=', 'users.id') // Join with users table
                 ->join('users_pencari', 'users.id', '=', 'users_pencari.user_id') // Join with users_pencari table
+
+                ->join('naker_progres', function($join) {
+                    $join->on('naker_lamarans.progres_id', '=', 'naker_progres.kode')
+                         ->where('naker_progres.modul', '=', 'lamaran');
+                })
+
                 ->where('naker_lamarans.lowongan_id',$id)
                 ->whereNull('naker_lamarans.deleted_at'); // Ensure data is not deleted
 
@@ -315,15 +324,17 @@ class LowonganController extends Controller
                 ->addColumn('options', function ($pelamar) {
                     return '
                          <a href="' . route('lihat.cv', $pelamar->pencari_id) . '" class="btn btn-success btn-sm">Lihat CV</a>
-                        <button class="btn btn-primary btn-sm" onclick="showDetailModal(' . $pelamar->id . ')">Detail</button>
+                         <button class="btn btn-primary btn-sm" onclick="showDetailModal(' . $pelamar->id . ')">Detail</button>
                     ';
                 })
                 ->rawColumns(['options'])
                 ->make(true);
         }
 
-        return view('backend.lowongan.lamaran', ['lowongan_id' => $id]);
+        return view('backend.lowongan.lamaran', ['lowongan_id' => $id, 'progress_lamaran' => $progressLamaran]);
     }
+
+   
 
     public function softdelete($id)
     {
