@@ -140,6 +140,8 @@ class ProfileController extends Controller
             'agama_id' => 'required|integer',
             'medsos' => 'required|string|max:200',
             'status_kerja_id' => 'required|string|max:200',
+            'lokasi_kerja_saat_ini' => 'required|in:0,1',
+            'lokasi_kerja_saat_ini_kec' => 'nullable|exists:naker_kecamatan,id',
             'sektor_pekerjaan_saat_ini' => 'nullable',
             'jam_kerja' => 'nullable',
             'gaji' => 'nullable',
@@ -178,9 +180,16 @@ class ProfileController extends Controller
             'id_agama' => $request->agama_id,
             'medsos' => $request->medsos,
             'status_saat_ini' => $request->status_kerja_id,
+
+            // Set sektor, jam kerja, dan gaji berdasarkan status kerja
             'sektor_pekerjaan_saat_ini' => $request->status_kerja_id === '1' ? $request->sektor_pekerjaan_saat_ini : null,
             'jam_kerja' => $request->status_kerja_id === '1' ? $request->jam_kerja : null,
             'gaji' => $request->status_kerja_id === '1' ? $request->gaji : null,
+
+            // Update lokasi kerja dan kecamatan
+            'lokasi_kerja_saat_ini' => $request->lokasi_kerja_saat_ini,
+            'lokasi_kerja_saat_ini_kec' => $request->lokasi_kerja_saat_ini == '0' ? $request->lokasi_kerja_saat_ini_kec : null, // Set to null if not Rembang
+
         ]);
 
         return redirect()->route('profil.index')->with('success', 'Profil berhasil diperbarui.');

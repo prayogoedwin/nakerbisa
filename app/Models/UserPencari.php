@@ -49,6 +49,8 @@ class UserPencari extends Model
         'sektor_pekerjaan_saat_ini',
         'jam_kerja',
         'gaji',
+        'lokasi_kerja_saat_ini_kec',
+        'lokasi_kerja_saat_ini',
     ];
 
     protected $dates = ['deleted_at'];

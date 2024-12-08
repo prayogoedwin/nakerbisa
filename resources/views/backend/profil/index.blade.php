@@ -160,6 +160,7 @@
                                                     $maritals = getMarital();
                                                     $agamas = getAgama();
                                                     $sektors = getSektor();
+                                                    $kecamatans = getKecamatanRembang();
                                                     $statusKerjas = getStatusKerja();
                                                     ?>
                                                     <form class="form form-vertical"
@@ -366,6 +367,39 @@
                                                                 <!-- Bidang pekerjaan yang tersembunyi saat status kerja bukan '1' -->
                                                                 <div id="pekerjaan-fields"
                                                                     style="display: {{ $profil->status_saat_ini == 1 ? 'block' : 'none' }};">
+                                                                    <div class="mb-3">
+                                                                        <label for="lokasi_kerja_saat_ini"
+                                                                            class="form-label">Lokasi Kerja Saat
+                                                                            Ini</label>
+                                                                        <select class="form-select"
+                                                                            id="lokasi_kerja_saat_ini"
+                                                                            name="lokasi_kerja_saat_ini"
+                                                                            onchange="toggleKecamatanField(this.value)">
+                                                                            <option value="0"
+                                                                                {{ $profil->lokasi_kerja_saat_ini == '0' ? 'selected' : '' }}>
+                                                                                Rembang</option>
+                                                                            <option value="1"
+                                                                                {{ $profil->lokasi_kerja_saat_ini == '1' ? 'selected' : '' }}>
+                                                                                Luar Rembang</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="mb-3" id="kecamatan-field"
+                                                                        style="display: {{ $profil->lokasi_kerja_saat_ini == '0' ? 'block' : 'none' }};">
+                                                                        <label for="lokasi_kerja_saat_ini_kec"
+                                                                            class="form-label">Kecamatan</label>
+                                                                        <select class="form-select"
+                                                                            id="lokasi_kerja_saat_ini_kec"
+                                                                            name="lokasi_kerja_saat_ini_kec">
+                                                                            <option selected disabled>Pilih Kecamatan
+                                                                            </option>
+                                                                            @foreach ($kecamatans as $kecamatan)
+                                                                                <option value="{{ $kecamatan->id }}"
+                                                                                    {{ $profil->lokasi_kerja_saat_ini_kec == $kecamatan->id ? 'selected' : '' }}>
+                                                                                    {{ $kecamatan->name }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
                                                                     <div class="mb-3">
                                                                         <label for="sektor_pekerjaan_saat_ini"
                                                                             class="form-label">Sektor Pekerjaan Saat
@@ -667,6 +701,28 @@
                     "password");
             });
         });
+    </script>
+
+    <script>
+        function toggleKecamatanField(status) {
+            const kecamatanField = document.getElementById('kecamatan-field');
+            const kecamatanSelect = document.getElementById('lokasi_kerja_saat_ini_kec');
+
+            if (status === '0') {
+                // Jika lokasi kerja adalah Rembang, tampilkan dropdown kecamatan
+                kecamatanField.style.display = 'block';
+            } else {
+                // Jika lokasi kerja adalah Luar Rembang, sembunyikan dropdown dan reset nilai
+                kecamatanField.style.display = 'none';
+                kecamatanSelect.value = null; // Reset value
+            }
+        }
+
+        // Inisialisasi saat halaman dimuat
+        window.onload = function() {
+            const lokasiKerjaSelect = document.getElementById('lokasi_kerja_saat_ini');
+            toggleKecamatanField(lokasiKerjaSelect.value); // Periksa nilai awal
+        };
     </script>
 
     <script>

@@ -23,52 +23,70 @@ function getKabkota()
         ->get();
 }
 
-function getAgama(){
+function getAgama()
+{
     return DB::table('naker_agama')
         ->get();
 }
 
-function getStatusKerja(){
+function getStatusKerja()
+{
     return DB::table('status_kerja')
         ->get();
 }
 
-function getPendidikan(){
+function getPendidikan()
+{
     return DB::table('naker_pendidikan')
-    ->get();
+        ->get();
 }
 
-function getMarital(){
+function getMarital()
+{
     return DB::table('naker_marital')
-    ->get();
+        ->get();
 }
 
-function getSektor(){
+function getSektor()
+{
     return DB::table('naker_sektor')
-    ->get();
+        ->get();
 }
 
-function getJabatan(){
+function getKecamatanRembang()
+{
+    return DB::table('naker_kecamatan')
+        ->select('id', 'name')
+        ->where('id', 'LIKE', '3317%') // 3317 untuk kecamatan di Rembang
+        ->get();
+}
+
+
+function getJabatan()
+{
     return DB::table('naker_jabatan')
-    ->get();
+        ->get();
 }
 
-function getProvinsi(){
+function getProvinsi()
+{
     return DB::table('naker_provinsi')
-    ->get();
+        ->get();
 }
 
-function getProgresLoker(){
+function getProgresLoker()
+{
     return DB::table('naker_progres')
         ->where('modul', 'lowongan') // Menambahkan kondisi where untuk modul = 'lamaran'
         ->get();
 }
 
 
-function encode_url($url){
+function encode_url($url)
+{
     $random1 = substr(sha1(rand()), 0, 40);
     $random2 = substr(md5(rand()), 0, 20);
-    $ret = base64_encode($random1.$url.$random2);
+    $ret = base64_encode($random1 . $url . $random2);
 
     return strtr(
         $ret,
@@ -78,15 +96,15 @@ function encode_url($url){
             '/' => '~'
         )
     );
-
 }
 
-function decode_url($url){
+function decode_url($url)
+{
     $a = base64_decode($url);
     $hitung = strlen($a);
     $x = $hitung - 60;
     $y = $x + 20;
-    $c = substr($a,-$y);
+    $c = substr($a, -$y);
     return substr($c, 0, $x);
 }
 
