@@ -228,8 +228,8 @@
                         <div data-i18n="Without navbar">Lowongan Kerja</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('rekap.penempatan.index') ? 'active' : '' }}">
+                    <a href="{{ route('rekap.penempatan.index') }}" class="menu-link">
                         <div data-i18n="Without navbar">Penempatan</div>
                     </a>
                 </li>
