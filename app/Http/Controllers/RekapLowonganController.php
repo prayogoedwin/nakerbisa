@@ -13,9 +13,14 @@ class RekapLowonganController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $datas = Lowongan::select('id', 'judul_lowongan');
+            $query = Lowongan::select('id', 'judul_lowongan', 'created_at');
 
-            return DataTables::of($datas)
+            // Filter berdasarkan bulan jika parameter `month` ada
+            if ($request->has('month') && $request->month) {
+                $query->whereMonth('created_at', $request->month);
+            }
+
+            return DataTables::of($query)
                 ->addIndexColumn()
                 ->make(true);
         }
