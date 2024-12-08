@@ -46,6 +46,9 @@
                                                 </thead>
                                             </table>
                                         </div>
+                                        <div class="mt-3">
+                                            <h5><strong>Total Keseluruhan:</strong> <span id="totalKeseluruhan">{{ $totalKeseluruhan }}</span></h5>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -14,7 +14,7 @@ class RekapPenyediaController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            // Mengambil jumlah pengguna berdasarkan id_kecamatan dan status_saat_ini
+            // Query untuk DataTables
             $query = UserPenyedia::select(
                 'id_kecamatan',
                 DB::raw('count(*) as total') // Total count of all users
@@ -26,6 +26,7 @@ class RekapPenyediaController extends Controller
                 $query->whereMonth('created_at', $request->month);
             }
 
+            // Mengembalikan data untuk DataTables
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('kecamatan', function ($data) {
@@ -36,8 +37,13 @@ class RekapPenyediaController extends Controller
                 ->make(true);
         }
 
-        return view('backend.rekap.rekap-penyedia.index');
+        // Hitung keseluruhan jumlah pengguna di semua kecamatan
+        $totalKeseluruhan = UserPenyedia::count();
+
+        // Kirim totalKeseluruhan ke view
+        return view('backend.rekap.rekap-penyedia.index', compact('totalKeseluruhan'));
     }
+
 
 
     public function getData($id)
