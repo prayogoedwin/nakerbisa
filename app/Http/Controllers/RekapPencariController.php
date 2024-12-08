@@ -18,7 +18,9 @@ class RekapPencariController extends Controller
             $query = UserPencari::select(
                 'id_kecamatan',
                 DB::raw('count(case when status_saat_ini = 1 then 1 end) as sudah_bekerja'),
-                DB::raw('count(case when status_saat_ini = 2 then 1 end) as belum_bekerja')
+                DB::raw('count(case when status_saat_ini = 2 then 1 end) as belum_bekerja'),
+                DB::raw('count(case when status_saat_ini = 3 then 1 end) as tidak_bekerja'),
+                DB::raw('count(*) as total') // Perhitungan total
             )
                 ->groupBy('id_kecamatan');
 
@@ -39,7 +41,6 @@ class RekapPencariController extends Controller
 
         return view('backend.rekap.rekap-pencari.index');
     }
-
 
     public function getData($id)
     {
