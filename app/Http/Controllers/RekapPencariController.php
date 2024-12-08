@@ -81,9 +81,14 @@ class RekapPencariController extends Controller
 
         $data = $query->get();
 
+        // Menambahkan Tanggal Cetak dan Dicetak Oleh di CSV
+        $tanggalCetak = now()->toDateString();
+        $dicetakOleh = auth()->user()->name;
+
         // Membuat callback untuk menulis data CSV
-        $callback = function () use ($data) {
+        $callback = function () use ($data, $tanggalCetak, $dicetakOleh) {
             $file = fopen('php://output', 'w');
+
             // Menulis header CSV
             fputcsv($file, [
                 'Kecamatan',
@@ -112,6 +117,11 @@ class RekapPencariController extends Controller
                     $row->total_perempuan
                 ]);
             }
+
+            // Menambahkan baris baru untuk Tanggal Cetak dan Dicetak Oleh
+            fputcsv($file, ['']); // Baris kosong untuk memisahkan data
+            fputcsv($file, ['Tanggal Cetak', $tanggalCetak]);
+            fputcsv($file, ['Dicetak Oleh', $dicetakOleh]);
 
             fclose($file);
         };
