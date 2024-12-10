@@ -54,7 +54,7 @@
                                         <button id="printButton" class="btn btn-primary">
                                             <i class="fa fa-print"></i> Cetak PDF
                                         </button>
-                                        <div class="table-responsive">
+                                        <div class="table-responsive mt-3">
                                             <table id="penempatanTable" class="table table-bordered table-striped mb-0">
                                                 <thead>
                                                     <tr>
