@@ -128,8 +128,13 @@
 
             // Print button functionality
             $('#printButton').on('click', function() {
-                window.open('{{ route('rekap.penempatan.print') }}', '_blank');
+                var month = $('#monthFilter').val();
+                var year = $('#yearFilter').val();
+
+                var url = '{{ route('rekap.penempatan.print') }}' + '?month=' + month + '&year=' + year;
+                window.open(url, '_blank');
             });
+
         });
     </script>
 @endpush
