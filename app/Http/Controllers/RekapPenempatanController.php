@@ -63,4 +63,49 @@ class RekapPenempatanController extends Controller
 
         return view('backend.rekap.rekap-penempatan.index');
     }
+
+    public function printPenempatan()
+    {
+        // Query untuk data yang sama dengan yang ditampilkan di tabel
+        $penempatanMelaluiNakerbisaLaki = DB::table('naker_lamarans')
+            ->join('users_pencari', 'naker_lamarans.pencari_id', '=', 'users_pencari.user_id')
+            ->where('users_pencari.gender', 'L')
+            ->distinct('naker_lamarans.pencari_id')
+            ->count();
+
+        $penempatanMelaluiNakerbisaPerempuan = DB::table('naker_lamarans')
+            ->join('users_pencari', 'naker_lamarans.pencari_id', '=', 'users_pencari.user_id')
+            ->where('users_pencari.gender', 'P')
+            ->distinct('naker_lamarans.pencari_id')
+            ->count();
+
+        $penempatanDiluarNakerbisaLaki = DB::table('users_pencari')
+            ->whereNotIn('user_id', function ($query) {
+                $query->select('pencari_id')->from('naker_lamarans');
+            })
+            ->where('gender', 'L')
+            ->count();
+
+        $penempatanDiluarNakerbisaPerempuan = DB::table('users_pencari')
+            ->whereNotIn('user_id', function ($query) {
+                $query->select('pencari_id')->from('naker_lamarans');
+            })
+            ->where('gender', 'P')
+            ->count();
+
+        $data = [
+            [
+                'jenis_penempatan' => 'Jumlah tenaga kerja penempatan melalui NAKERBISA',
+                'gender_l' => $penempatanMelaluiNakerbisaLaki,
+                'gender_p' => $penempatanMelaluiNakerbisaPerempuan,
+            ],
+            [
+                'jenis_penempatan' => 'Jumlah tenaga kerja penempatan diluar aplikasi NAKERBISA',
+                'gender_l' => $penempatanDiluarNakerbisaLaki,
+                'gender_p' => $penempatanDiluarNakerbisaPerempuan,
+            ]
+        ];
+
+        return view('backend.rekap.rekap-penempatan.print', compact('data'));
+    }
 }

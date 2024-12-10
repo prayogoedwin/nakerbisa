@@ -35,6 +35,9 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <button id="printButton" class="btn btn-primary">
+                                            <i class="fa fa-print"></i> Cetak PDF
+                                        </button>
                                         <div class="table-responsive">
                                             <table id="penempatanTable" class="table table-bordered table-striped mb-0">
                                                 <thead>
@@ -90,6 +93,9 @@
                         name: 'gender_p'
                     }
                 ]
+            });
+            $('#printButton').on('click', function() {
+                window.open('{{ route('rekap.penempatan.print') }}', '_blank');
             });
         });
     </script>

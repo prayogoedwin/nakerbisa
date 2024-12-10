@@ -243,6 +243,7 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('/penyedia-kerja', [RekapPenyediaController::class, 'index'])->name('rekap.penyedia-kerja.index');
         Route::get('/lowongan-kerja', [RekapLowonganController::class, 'index'])->name('rekap.lowongan.index');
         Route::get('/penempatan', [RekapPenempatanController::class, 'index'])->name('rekap.penempatan.index');
+        Route::get('rekap/penempatan/print', [RekapPenempatanController::class, 'printPenempatan'])->name('rekap.penempatan.print');
     });
 
     Route::get('/lowongan', [LowonganController::class, 'index'])->name('lowongan.index');
