@@ -11,38 +11,65 @@ class RekapPenempatanController extends Controller
     //
     public function index(Request $request)
     {
+        $month = $request->input('month'); // Get the selected month
+        $year = $request->input('year'); // Get the selected year
+
         if ($request->ajax()) {
-            // Query untuk menghitung tenaga kerja penempatan melalui NAKERBISA berdasarkan gender
+            // Query for NAKERBISA placement by gender
             $penempatanMelaluiNakerbisaLaki = DB::table('naker_lamarans')
                 ->join('users_pencari', 'naker_lamarans.pencari_id', '=', 'users_pencari.user_id')
-                ->where('users_pencari.gender', 'L') // Gender Laki-laki
-                ->distinct('naker_lamarans.pencari_id') // Pastikan pencari_id unik
+                ->where('users_pencari.gender', 'L')
+                ->when($month, function ($query, $month) {
+                    return $query->whereMonth('naker_lamarans.created_at', $month); // Apply month filter
+                })
+                ->when($year, function ($query, $year) {
+                    return $query->whereYear('naker_lamarans.created_at', $year); // Apply year filter
+                })
+                ->distinct('naker_lamarans.pencari_id')
                 ->count();
 
             $penempatanMelaluiNakerbisaPerempuan = DB::table('naker_lamarans')
                 ->join('users_pencari', 'naker_lamarans.pencari_id', '=', 'users_pencari.user_id')
-                ->where('users_pencari.gender', 'P') // Gender Perempuan
-                ->distinct('naker_lamarans.pencari_id') // Pastikan pencari_id unik
+                ->where('users_pencari.gender', 'P')
+                ->when($month, function ($query, $month) {
+                    return $query->whereMonth('naker_lamarans.created_at', $month);
+                })
+                ->when($year, function ($query, $year) {
+                    return $query->whereYear('naker_lamarans.created_at', $year);
+                })
+                ->distinct('naker_lamarans.pencari_id')
                 ->count();
 
-            // Query untuk menghitung tenaga kerja penempatan diluar aplikasi NAKERBISA berdasarkan gender
+            // Query for non-NAKERBISA placements by gender
             $penempatanDiluarNakerbisaLaki = DB::table('users_pencari')
                 ->whereNotIn('user_id', function ($query) {
                     $query->select('pencari_id')
-                        ->from('naker_lamarans'); // Semua pencari_id di naker_lamarans
+                        ->from('naker_lamarans');
                 })
-                ->where('gender', 'L') // Gender Laki-laki
+                ->where('gender', 'L')
+                ->when($month, function ($query, $month) {
+                    return $query->whereMonth('users_pencari.created_at', $month);
+                })
+                ->when($year, function ($query, $year) {
+                    return $query->whereYear('users_pencari.created_at', $year);
+                })
                 ->count();
 
             $penempatanDiluarNakerbisaPerempuan = DB::table('users_pencari')
                 ->whereNotIn('user_id', function ($query) {
                     $query->select('pencari_id')
-                        ->from('naker_lamarans'); // Semua pencari_id di naker_lamarans
+                        ->from('naker_lamarans');
                 })
-                ->where('gender', 'P') // Gender Perempuan
+                ->where('gender', 'P')
+                ->when($month, function ($query, $month) {
+                    return $query->whereMonth('users_pencari.created_at', $month);
+                })
+                ->when($year, function ($query, $year) {
+                    return $query->whereYear('users_pencari.created_at', $year);
+                })
                 ->count();
 
-            // Tambahkan data ke dalam tabel
+            // Add data to the table
             $data = [
                 [
                     'jenis_penempatan' => 'Jumlah tenaga kerja penempatan melalui NAKERBISA',

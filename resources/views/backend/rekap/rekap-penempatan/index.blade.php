@@ -14,6 +14,22 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row align-items-center m-l-0">
+                                            <div class="col-sm-4">
+                                                <div class="mb-3">
+                                                    <label for="yearFilter" class="form-label">Filter Tahun</label>
+                                                    <?php
+                                                    $currentYear = date('Y'); // Current year
+                                                    $startYear = $currentYear - 2; // 2 years back
+                                                    $endYear = $currentYear + 1; // This year + 1
+                                                    ?>
+                                                    <select id="yearFilter" class="form-select" name="year">
+                                                        <option value="">Semua Tahun</option>
+                                                        <?php for ($year = $startYear; $year <= $endYear; $year++): ?>
+                                                        <option value="<?= $year ?>"><?= $year ?></option>
+                                                        <?php endfor; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label for="monthFilter" class="form-label">Filter Bulan</label>
@@ -74,6 +90,11 @@
                 serverSide: true,
                 ajax: {
                     url: '{{ route('rekap.penempatan.index') }}',
+                    data: function(d) {
+                        // Add selected month and year to the request data
+                        d.month = $('#monthFilter').val();
+                        d.year = $('#yearFilter').val();
+                    }
                 },
                 columns: [{
                         data: 'DT_RowIndex',
@@ -85,15 +106,27 @@
                         name: 'jenis_penempatan'
                     },
                     {
-                        data: 'gender_l', // Kolom untuk Gender L
+                        data: 'gender_l', // Column for Gender L
                         name: 'gender_l'
                     },
                     {
-                        data: 'gender_p', // Kolom untuk Gender P
+                        data: 'gender_p', // Column for Gender P
                         name: 'gender_p'
                     }
                 ]
             });
+
+            // Reload the table when the month filter is changed
+            $('#monthFilter').on('change', function() {
+                table.ajax.reload();
+            });
+
+            // Reload the table when the year filter is changed
+            $('#yearFilter').on('change', function() {
+                table.ajax.reload();
+            });
+
+            // Print button functionality
             $('#printButton').on('click', function() {
                 window.open('{{ route('rekap.penempatan.print') }}', '_blank');
             });
