@@ -40,10 +40,8 @@
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
-                                                        <th>Nama Tenaga Kerja</th>
-                                                        <th>Judul Lowongan</th>
-                                                        <th>Lokasi Penempatan</th>
-                                                        <th>Status</th>
+                                                        <th>Jenis Penempatan</th>
+                                                        <th>Gender</th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -72,9 +70,6 @@
                 serverSide: true,
                 ajax: {
                     url: '{{ route('rekap.penempatan.index') }}',
-                    data: function(d) {
-                        d.month = $('#monthFilter').val(); // Kirim parameter bulan
-                    }
                 },
                 columns: [{
                         data: 'DT_RowIndex',
@@ -82,23 +77,14 @@
                         searchable: false
                     },
                     {
-                        data: 'pencari_name'
+                        data: 'jenis_penempatan',
+                        name: 'jenis_penempatan'
                     },
                     {
-                        data: 'lowongan_title'
-                    },
-                    {
-                        data: 'lokasi_penempatan'
-                    },
-                    {
-                        data: 'status_name'
+                        data: 'gender',
+                        name: 'gender'
                     }
                 ]
-            });
-
-            // Reload tabel saat bulan dipilih
-            $('#monthFilter').on('change', function() {
-                table.ajax.reload();
             });
         });
     </script>

@@ -11,33 +11,14 @@ class RekapPenempatanController extends Controller
     //
     public function index(Request $request)
     {
-        $progressId = DB::table('naker_progres')
-            ->where('kode', 3)
-            ->where('modul', 'lamaran')
-            ->value('id');
-
         if ($request->ajax()) {
-            $query = DB::table('naker_lamarans')
-                ->join('naker_progres', 'naker_lamarans.progres_id', '=', 'naker_progres.id')
-                ->join('users', 'naker_lamarans.pencari_id', '=', 'users.id')
-                ->join('naker_lowongan', 'naker_lamarans.lowongan_id', '=', 'naker_lowongan.id')
-                ->select(
-                    'naker_progres.name as status_name',
-                    'users.name as pencari_name',
-                    'naker_lowongan.judul_lowongan as lowongan_title',
-                    'naker_lowongan.lokasi_penempatan_text as lokasi_penempatan',
-                    'naker_lamarans.created_at'
-                )
-                ->where('naker_lamarans.progres_id', $progressId);
+            // Data untuk ditampilkan di tabel dengan gender kosong
+            $data = [
+                ['jenis_penempatan' => 'Jumlah tenaga kerja penempatan melalui NAKERBISA', 'gender' => ''],
+                ['jenis_penempatan' => 'Jumlah tenaga kerja penempatan diluar aplikasi NAKERBISA', 'gender' => '']
+            ];
 
-            // Filter berdasarkan bulan jika parameter `month` ada
-            if ($request->has('month') && $request->month) {
-                $query->whereMonth('naker_lamarans.created_at', $request->month);
-            }
-
-            $penempatanData = $query->get();
-
-            return DataTables::of($penempatanData)
+            return DataTables::of($data)
                 ->addIndexColumn()
                 ->make(true);
         }
