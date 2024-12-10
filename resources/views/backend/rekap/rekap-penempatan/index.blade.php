@@ -41,7 +41,8 @@
                                                     <tr>
                                                         <th>No</th>
                                                         <th>Jenis Penempatan</th>
-                                                        <th>Gender</th>
+                                                        <th>Gender L</th>
+                                                        <th>Gender P</th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -81,8 +82,12 @@
                         name: 'jenis_penempatan'
                     },
                     {
-                        data: 'gender',
-                        name: 'gender'
+                        data: 'gender_l', // Kolom untuk Gender L
+                        name: 'gender_l'
+                    },
+                    {
+                        data: 'gender_p', // Kolom untuk Gender P
+                        name: 'gender_p'
                     }
                 ]
             });
