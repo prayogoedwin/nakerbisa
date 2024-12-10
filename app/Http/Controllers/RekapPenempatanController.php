@@ -12,7 +12,7 @@ class RekapPenempatanController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            // Query untuk menghitung jumlah tenaga kerja penempatan melalui NAKERBISA berdasarkan gender
+            // Query untuk menghitung tenaga kerja penempatan melalui NAKERBISA berdasarkan gender
             $penempatanMelaluiNakerbisaLaki = DB::table('naker_lamarans')
                 ->join('users_pencari', 'naker_lamarans.pencari_id', '=', 'users_pencari.user_id')
                 ->where('users_pencari.gender', 'L') // Gender Laki-laki
@@ -25,6 +25,23 @@ class RekapPenempatanController extends Controller
                 ->distinct('naker_lamarans.pencari_id') // Pastikan pencari_id unik
                 ->count();
 
+            // Query untuk menghitung tenaga kerja penempatan diluar aplikasi NAKERBISA berdasarkan gender
+            $penempatanDiluarNakerbisaLaki = DB::table('users_pencari')
+                ->whereNotIn('user_id', function ($query) {
+                    $query->select('pencari_id')
+                        ->from('naker_lamarans'); // Semua pencari_id di naker_lamarans
+                })
+                ->where('gender', 'L') // Gender Laki-laki
+                ->count();
+
+            $penempatanDiluarNakerbisaPerempuan = DB::table('users_pencari')
+                ->whereNotIn('user_id', function ($query) {
+                    $query->select('pencari_id')
+                        ->from('naker_lamarans'); // Semua pencari_id di naker_lamarans
+                })
+                ->where('gender', 'P') // Gender Perempuan
+                ->count();
+
             // Tambahkan data ke dalam tabel
             $data = [
                 [
@@ -34,8 +51,8 @@ class RekapPenempatanController extends Controller
                 ],
                 [
                     'jenis_penempatan' => 'Jumlah tenaga kerja penempatan diluar aplikasi NAKERBISA',
-                    'gender_l' => 0, // Untuk saat ini, isi dengan default 0
-                    'gender_p' => 0  // Untuk saat ini, isi dengan default 0
+                    'gender_l' => $penempatanDiluarNakerbisaLaki,
+                    'gender_p' => $penempatanDiluarNakerbisaPerempuan,
                 ]
             ];
 
