@@ -86,6 +86,8 @@
     <script>
         $(document).ready(function() {
             let table = $('#penempatanTable').DataTable({
+                paging: false,
+                searching: false,
                 processing: true,
                 serverSide: true,
                 ajax: {
