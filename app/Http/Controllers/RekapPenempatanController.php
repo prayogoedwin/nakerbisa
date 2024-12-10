@@ -163,7 +163,7 @@ class RekapPenempatanController extends Controller
             ]
         ];
 
-        // Return view with data to be printed
-        return view('backend.rekap.rekap-penempatan.print', compact('data'));
+        // Return view with data and selected month and year
+        return view('backend.rekap.rekap-penempatan.print', compact('data', 'month', 'year'));
     }
 }

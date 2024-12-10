@@ -42,6 +42,7 @@
 <body onload="window.print()">
     <div class="title">
         <h1>Rekap Data Penempatan</h1>
+        <h2>Bulan: {{ $month ? date('F', mktime(0, 0, 0, $month, 10)) : 'Semua Bulan' }} Tahun: {{ $year ?? 'Semua Tahun' }}</h2>
     </div>
     <table>
         <thead>
