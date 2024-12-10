@@ -337,20 +337,21 @@
                         <h6 class="text-center">PETUGAS ANTAR KERJA</h6>
                         <p><br /><br /><br /></p>
                         <p class="text-center" style="margin-bottom: 0px;">
-                            <span class="text-underline">_____________________________</span> 
-                            <br />NIP. ________________________</p>
+                            <span class="text-underline">_____________________________</span>
+                            <br />NIP. ________________________
+                        </p>
                     </div>
                 </div>
             </div>
             <div class="__right">
                 <header>
-                    <img src="https://bursakerja.jatengprov.go.id/assets/images/kontingen/Kabupaten_Semarang.png"
-                        width="60" height="60" alt="KABUPATEN SEMARANG" />
-                    <p>PEMERINTAHAN KABUPATEN SEMARANG<br />
+                    <img src="{{ asset('assets/nakerbisa_be/img/pemkab-rembang-naker.png') }}" width="50px"
+                        alt="KABUPATEN REMBANG" />
+                    <p>PEMERINTAHAN KABUPATEN REMBANG<br />
                         DINAS TENAGA KERJA <br />
-                        <small>JL. PEMUDA NO. 7 UNGARAN 50511<br />
-                            Telp:(024) 6921160 | Email:penta.kab.semarang@gmail.com<br />
-                            https://disnaker.semarangkab.go.id </small>
+                        <small>Jl. Diponegoro No. 90, Rembang, Jawa Tengah<br />
+                            Telp:0295-691472 | Email:dinkominfo@rembangkab.go.id<br />
+                            https://rembangkab.go.id/ </small>
                     </p>
                 </header>
                 <div class="job-seeker">

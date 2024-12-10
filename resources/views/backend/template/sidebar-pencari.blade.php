@@ -45,7 +45,7 @@
         </li>
 
         <!-- Layouts -->
-        <li class="menu-item {{ request()->routeIs('ak1.*') ? 'active open' : '' }}">
+        {{-- <li class="menu-item {{ request()->routeIs('ak1.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-file"></i>
                 <div data-i18n="Layouts">AK1</div>
@@ -63,6 +63,6 @@
                     </a>
                 </li>
             </ul>
-        </li>
+        </li> --}}
     </ul>
 </aside>
