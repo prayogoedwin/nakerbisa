@@ -41,8 +41,7 @@
                                                     <tr>
                                                         <th>No</th>
                                                         <th>Jenis Penempatan</th>
-                                                        <th>L</th>
-                                                        <th>P</th>
+                                                        <th>Gender</th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -82,12 +81,8 @@
                         name: 'jenis_penempatan'
                     },
                     {
-                        data: 'gender_l',
-                        name: 'gender_l'
-                    },
-                    {
-                        data: 'gender_p',
-                        name: 'gender_p'
+                        data: 'gender',
+                        name: 'gender'
                     }
                 ]
             });
