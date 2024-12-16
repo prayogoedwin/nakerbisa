@@ -119,7 +119,7 @@
                 <div class="collapse navbar-collapse" id="navbar-menu">
 
                     <div class="collapse-header">
-                        <img src="{{ asset('assets/nakerbisa_fe/img/logo.png') }}" alt="Logo">
+                        <img src="{{ asset('assets/nakerbisa_fe/img/self/nakerbisa-rembang.png') }}" alt="Logo">
                         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
                             <i class="fa fa-times"></i>
                         </button>
@@ -182,6 +182,14 @@
                         </li>
 
                         <li><a href="{{ url('/login') }}">Login</a></li>
+                        <style>
+                            @media (min-width: 1024px) {
+                                #mobile {
+                                    display: none;
+                                }
+                            }
+                        </style>
+                        <li id="mobile"><a href="#" onclick="askRoleRegister()">Daftar</a></li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
 
