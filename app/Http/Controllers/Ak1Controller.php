@@ -322,6 +322,18 @@ class Ak1Controller extends Controller
             ->leftJoin('naker_pendidikan', 'naker_pencari_pendidikan.pendidikan_id', '=', 'naker_pendidikan.id')
             ->where('user_id', $user->id)
             ->get();
+        // dd($pendidikan);
+        if ($pendidikan->isEmpty()) {
+            $pendidikanTunggal = UserPencari::select(
+                'users_pencari.*',
+                'naker_pendidikan.name as pendidikan_name',
+                'naker_jurusan.nama as jurusan_name'
+            )
+                ->leftJoin('naker_pendidikan', 'users_pencari.id_pendidikan', '=', 'naker_pendidikan.id')
+                ->leftJoin('naker_jurusan', 'users_pencari.id_jurusan', '=', 'naker_jurusan.id')
+                ->first();
+            $pendidikan = $pendidikanTunggal ? collect([$pendidikanTunggal]) : collect([]);
+        }
 
         $keterampilan = NakerPencariKeterampilan::where('user_id', $user->id)->get();
         $pengalaman = NakerPencariPengalaman::where('user_id', $user->id)->get();

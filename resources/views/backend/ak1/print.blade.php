@@ -310,10 +310,11 @@
 
                     <ul>
                         @forelse ($pendidikan as $edu)
-                            <li>{{ $edu->pendidikan_name ?? '-' }} - {{ $edu->jurusan_name ?? '-' }}</li>
+                            <li>{{ $edu->pendidikan_name }} - {{ $edu->jurusan_name }}</li>
                         @empty
                             <li>-</li>
                         @endforelse
+
                     </ul>
                 </ul>
 
