@@ -418,7 +418,7 @@ class DepanController extends Controller
             // 'otp_created_at' => now()
         ]);
         // dd($userWa);
-        // sendWa($user->whatsapp, 'Lanjutkan pendaftaran dengan memasukkan Kode OTP berikut : *' . $otp . '*');
+        sendWa($user->whatsapp, 'Lanjutkan pendaftaran dengan memasukkan Kode OTP berikut : *' . $otp . '*');
 
         session(['email_registered' => $request->email]);
         // dd(session('email_registered'));
@@ -433,17 +433,17 @@ class DepanController extends Controller
     public function cek_awal_otp(Request $request)
     {
 
-        // $cek = User::where([
-        //     ['email', '=', $request->email_registered],
-        //     ['otp', '=', $request->otp]
-        // ])->first();
+        $cek = User::where([
+            ['email', '=', $request->email_registered],
+            ['otp', '=', $request->otp]
+        ])->first();
 
-        // if (!$cek) {
-        //     return response()->json([
-        //         'status' => 0,
-        //         'message' => 'Kode OTP salah'
-        //     ]);
-        // }
+        if (!$cek) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Kode OTP salah'
+            ]);
+        }
 
         return response()->json([
             'status' => 1,

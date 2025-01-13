@@ -57,39 +57,6 @@ class UserPencariController extends Controller
         return view('backend.users.pencari.index');
     }
 
-    public function gagal_daftar(Request $request)
-    {
-        if ($request->ajax()) {
-            // Membuat query sesuai SQL yang diberikan
-            $pencaris = User::select('users.id', 'users.email', 'users.whatsapp', 'mhr.role_id')
-                ->leftJoin('users_pencari as up', 'users.id', '=', 'up.user_id')
-                ->join('model_has_roles as mhr', 'users.id', '=', 'mhr.model_id')
-                ->whereNull('up.user_id')
-                ->where('mhr.role_id', 4);
-
-            return DataTables::of($pencaris)
-                ->addIndexColumn()
-                ->addColumn('whatsapp', function ($pencari) {
-                    return $pencari->whatsapp ?? 'N/A'; // Asumsi 'name' ada di tabel 'users'
-                })
-                ->addColumn('email', function ($pencari) {
-                    return $pencari->email ?? 'N/A';
-                })
-                ->addColumn('role_id', function ($pencari) {
-                    return $pencari->role_id ?? 'N/A';
-                })
-                ->addColumn('options', function ($pencari) {
-                    return '
-                        <button class="btn btn-danger btn-sm" onclick="confirmDelete(' . $pencari->id . ')">Delete</button>
-                    ';
-                })
-                ->rawColumns(['options'])  // Pastikan menambahkan ini untuk kolom options
-                ->make(true);
-        }
-
-        return view('backend.users.pencari.gagal');
-    }
-
 
     public function softdelete($id)
     {
@@ -108,27 +75,6 @@ class UserPencariController extends Controller
             }
 
             return response()->json(['success' => true, 'message' => 'Hapus data berhasil']);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
-        }
-    }
-
-    public function forcedelete($id)
-    {
-        try {
-            // Cari UserPencari berdasarkan ID
-            $admin = User::findOrFail($id);
-
-            // Hapus user terkait secara permanen
-            $user = User::find($admin->user_id); // Sesuaikan relasi jika ada
-            if ($user) {
-                $user->forceDelete(); // Hapus user secara permanen
-            }
-
-            // Hapus admin terkait secara permanen
-            $admin->forceDelete();
-
-            return response()->json(['success' => true, 'message' => 'Data berhasil dihapus']);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
         }

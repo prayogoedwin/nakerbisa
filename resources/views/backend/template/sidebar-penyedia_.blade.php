@@ -47,36 +47,5 @@
                 </li>
             </ul>
         </li>
-
-        <li
-        class="menu-item ">
-        <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <i class="menu-icon tf-icons bx bx-layout"></i>
-            <div data-i18n="Layouts">Talent</div>
-        </a>
-
-        <ul class="menu-sub">
-            <li class="menu-item">
-                <a href="{{ url('/depan/talent-tempat-kerja') }}" class="menu-link">
-                    <div data-i18n="Infografis">Tempat Kerja</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{{ url('/depan/talent-wilayah') }}" class="menu-link">
-                    <div data-i18n="galeri">Wilayah</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{{ url('/depan/talent-pendidikan') }}" class="menu-link">
-                    <div data-i18n="berita">Pendidikan</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{{ url('/depan/talent-ketrampilan') }}" class="menu-link">
-                    <div data-i18n="FAQ">Ketrampilan</div>
-                </a>
-            </li>
-        </ul>
-    </li>
     </ul>
 </aside>

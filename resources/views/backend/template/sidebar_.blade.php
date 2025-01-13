@@ -95,12 +95,6 @@
                         <div data-i18n="Without menu">Tenaga Kerja</div>
                     </a>
                 </li>
-
-                <li class="menu-item {{ request()->routeIs('userpencari.gagal_daftar') ? 'active' : '' }}">
-                    <a href="{{ route('userpencari.gagal_daftar') }}" class="menu-link">
-                        <div data-i18n="Without menu">Tenaga Kerja Gagal Daftar</div>
-                    </a>
-                </li>
                 
                 <li class="menu-item {{ request()->routeIs('userpenyedia.index') ? 'active' : '' }}">
                     <a href="{{ route('userpenyedia.index') }}" class="menu-link" class="menu-link">
@@ -237,11 +231,11 @@
                         <div data-i18n="Without navbar">Lowongan Kerja</div>
                     </a>
                 </li>
-                {{-- <li class="menu-item {{ request()->routeIs('rekap.penempatan.index') ? 'active' : '' }}">
+                <li class="menu-item {{ request()->routeIs('rekap.penempatan.index') ? 'active' : '' }}">
                     <a href="{{ route('rekap.penempatan.index') }}" class="menu-link">
                         <div data-i18n="Without navbar">Penempatan</div>
                     </a>
-                </li> --}}
+                </li>
                 
             </ul>
         </li>

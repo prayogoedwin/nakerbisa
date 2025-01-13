@@ -17,18 +17,12 @@
                                             <div class="col-sm-6">
 
                                             </div>
-
-                                            @if (Auth::user()->roles[0]['name'] == 'penyedia-kerja')
-                                                
                                             <div class="col-sm-6 text-end">
                                                 <button class="btn btn-success btn-sm btn-round has-ripple"
                                                     data-bs-toggle="modal" data-bs-target="#modal-report"><i
                                                         class="feather icon-plus"></i> Add
                                                     Data</button>
                                             </div>
-
-                                            @endif
-                                            
                                         </div>
                                         <div class="table-responsive">
                                             <table id="simpletable" class="table table-bordered table-striped mb-0">

@@ -183,9 +183,7 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::delete('/admin/delete/{id}', [AdminController::class, 'softdelete'])->name('admin.softdelete');
 
         Route::get('/pencari', [UserPencariController::class, 'index'])->name('userpencari.index');
-        Route::get('/pencari_gagal_daftar', [UserPencariController::class, 'gagal_daftar'])->name('userpencari.gagal_daftar');
         Route::delete('/pencari/delete/{id}', [UserPencariController::class, 'softdelete'])->name('userpencari.softdelete');
-        Route::delete('/pencari/force_delete/{id}', [UserPencariController::class, 'forcedelete'])->name('userpencari.forcedelete');
         Route::put('/pencari/reset/{id}', [UserPencariController::class, 'reset'])->name('userpencari.reset');
 
         Route::get('/penyedia', [UserPenyediaController::class, 'index'])->name('userpenyedia.index');
@@ -245,6 +243,7 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('/penyedia-kerja', [RekapPenyediaController::class, 'index'])->name('rekap.penyedia-kerja.index');
         Route::get('/lowongan-kerja', [RekapLowonganController::class, 'index'])->name('rekap.lowongan.index');
         Route::get('/penempatan', [RekapPenempatanController::class, 'index'])->name('rekap.penempatan.index');
+        Route::get('rekap/penempatan/print', [RekapPenempatanController::class, 'printPenempatan'])->name('rekap.penempatan.print');
     });
 
     Route::get('/lowongan', [LowonganController::class, 'index'])->name('lowongan.index');

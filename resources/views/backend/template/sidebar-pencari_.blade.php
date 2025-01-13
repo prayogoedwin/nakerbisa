@@ -45,57 +45,24 @@
         </li>
 
         <!-- Layouts -->
-        <li class="menu-item {{ request()->routeIs('ak1.*') ? 'active open' : '' }}">
+        {{-- <li class="menu-item {{ request()->routeIs('ak1.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-file"></i>
                 <div data-i18n="Layouts">AK1</div>
             </a>
 
             <ul class="menu-sub">
-                {{-- <li class="menu-item {{ request()->routeIs('ak1.printTk') ? 'active' : '' }}">
+                <li class="menu-item {{ request()->routeIs('ak1.printTk') ? 'active' : '' }}">
                     <a href="{{ route('ak1.printTk', encode_url(auth()->user()->id)) }}" class="menu-link">
                         <div data-i18n="Without menu">Cetak AK1</div>
                     </a>
-                </li> --}}
+                </li>
                 <li  class="menu-item {{ request()->routeIs('ak1.dataTk') ? 'active' : '' }}">
                     <a href="{{ route('ak1.dataTk') }}" class="menu-link">
                         <div data-i18n="Without navbar">Data AK1</div>
                     </a>
                 </li>
             </ul>
-
-            
-        </li>
-
-        <li
-            class="menu-item ">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div data-i18n="Layouts">Talent</div>
-            </a>
-
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{ url('/depan/talent-tempat-kerja') }}" class="menu-link">
-                        <div data-i18n="Infografis">Tempat Kerja</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{ url('/depan/talent-wilayah') }}" class="menu-link">
-                        <div data-i18n="galeri">Wilayah</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{ url('/depan/talent-pendidikan') }}" class="menu-link">
-                        <div data-i18n="berita">Pendidikan</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="{{ url('/depan/talent-ketrampilan') }}" class="menu-link">
-                        <div data-i18n="FAQ">Ketrampilan</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
+        </li> --}}
     </ul>
 </aside>
