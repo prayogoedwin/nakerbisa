@@ -63,7 +63,7 @@
                                                         <div class="form-group">
                                                             <label for="name" class="form-label">Nama Lengkap</label>
                                                             <input type="text" id="name" name="name"
-                                                                class="form-control" value="{{ $user->name }}">
+                                                                class="form-control" value="{{ $user->pencari->name }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-6">

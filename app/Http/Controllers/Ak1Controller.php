@@ -228,7 +228,6 @@ class Ak1Controller extends Controller
     public function updateUser(Request $request, $id)
     {
         $user = User::findOrFail($id);
-
         $request->validate([
             'name' => 'required|string|max:100',
             'tempat_lahir' => 'required|string|max:20',
@@ -254,8 +253,8 @@ class Ak1Controller extends Controller
         ]);
 
         // Update data user
-        $user->name = $request->name;
-        $user->save();
+        // $user->name = $request->name;
+        // $user->save();
 
         // Update data pencari kerja
         $pencari = $user->pencari;
