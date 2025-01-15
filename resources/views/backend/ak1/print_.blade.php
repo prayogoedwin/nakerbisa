@@ -310,10 +310,11 @@
 
                     <ul>
                         @forelse ($pendidikan as $edu)
-                            <li>{{ $edu->pendidikan_name ?? '-' }} - {{ $edu->jurusan_name ?? '-' }}</li>
+                            <li>{{ $edu->pendidikan_name }} - {{ $edu->jurusan_name }}</li>
                         @empty
                             <li>-</li>
                         @endforelse
+
                     </ul>
                 </ul>
 
@@ -334,23 +335,24 @@
                         </ul>
                     </div>
                     <div class="__right">
-                        <h6 class="text-center">PETUGAS ANTAR KERJA</h6>
+                        <h6 class="text-center">_____________________________</h6>
                         <p><br /><br /><br /></p>
                         <p class="text-center" style="margin-bottom: 0px;">
-                            <span class="text-underline">_____________________________</span> 
-                            <br />NIP. ________________________</p>
+                            <span class="text-underline">_____________________________</span>
+                            <br />NIP. ________________________
+                        </p>
                     </div>
                 </div>
             </div>
             <div class="__right">
                 <header>
-                    <img src="https://bursakerja.jatengprov.go.id/assets/images/kontingen/Kabupaten_Rembang.png"
-                        width="60" height="60" alt="KABUPATEN REMBANG" />
+                    <img src="{{ asset('assets/nakerbisa_be/img/pemkab-rembang-naker.png') }}" width="50px"
+                        alt="KABUPATEN REMBANG" />
                     <p>PEMERINTAHAN KABUPATEN REMBANG<br />
-                        DINAS PERINDUSTRIAN DAN TENAGA KERJA <br />
-                        <small>Jl. Raya Rembang - Blora, Ngotet Kidul, Ngotet, Kec. Rembang, Kabupaten Rembang, Jawa Tengah 59219<br />
-                            Telp:(0295) 691349 | Email:dinperinnaker@rembangkab.go.id<br />
-                            https://dinperinnaker.rembangkab.go.id/ </small>
+                        DINAS TENAGA KERJA <br />
+                        <small>Jl. Diponegoro No. 90, Rembang, Jawa Tengah<br />
+                            Telp:0295-691472 | Email:dinkominfo@rembangkab.go.id<br />
+                            https://rembangkab.go.id/ </small>
                     </p>
                 </header>
                 <div class="job-seeker">
@@ -365,26 +367,13 @@
                             <em class="empty"></em>
 
                             {{-- <em>1</em><em>9</em><em>7</em><em>0</em><em>0</em><em>1</em><em>0</em><em>1</em> --}}
-                           
                             @if (!empty($user->pencari->ktp))
                                 @foreach (str_split($user->pencari->id) as $digit)
                                     <em>{{ $digit }}</em>
                                 @endforeach
-                                &nbsp;-&nbsp;
-                                <em>3</em><em>3</em><em>1</em><em>7</em>
-                                &nbsp;-&nbsp;
-                                @php
-                                    $splitReg = str_split(date('Ymd', strtotime($nakerAk1->created_at)));
-                                    $hitReg = count($splitReg); // Menghitung jumlah elemen dalam array
-                                @endphp
-                                @for ($loopReg = 0; $loopReg < $hitReg; $loopReg++)
-                                    <em>{{ $splitReg[$loopReg] }}</em>
-                                @endfor
                             @else
                                 <em>-</em>
                             @endif
-
-
                         </span></p>
 
 
