@@ -203,6 +203,8 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
 
     Route::prefix('ak1')->group(function () {
         Route::get('/existing', [Ak1Controller::class, 'cetakExisting'])->name('ak1.existing');
+        Route::get('/checkMakaryo', [Ak1Controller::class, 'checkMakaryo'])->name('ak1.checkMakaryo');
+        Route::post('/integrasi-emakaryo',[Ak1Controller::class, 'integrasi'])->name('ak1.integrasiEmakaryo');
 
         Route::put('ak1/update/{id}', [Ak1Controller::class, 'updateUser'])->name('ak1.update');
         Route::get('ak1/print/{id}', [Ak1Controller::class, 'printAk1'])->name('ak1.print');

@@ -35,6 +35,8 @@
                                                 value="{{ request('ktp') }}" required>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Cari KTP</button>
+                                        <button type="button" id="cekEmakaryo" class="btn btn-warning">Cek
+                                            Emakaryo</button>
                                     </form>
                                 </div>
                             </div>
@@ -53,7 +55,7 @@
                                         $sektors = getSektor();
                                         $statusKerjas = getStatusKerja();
                                         ?>
-                                        <form method="POST" enctype="multipart/form-data"
+                                        <form id="formId" method="POST" enctype="multipart/form-data"
                                             action="{{ route('ak1.update', $user->id) }}">
                                             @csrf
                                             @method('PUT')
@@ -297,6 +299,9 @@
                                             <button type="submit" class="btn btn-success mt-3">Update</button>
                                             <a href="{{ route('ak1.print', $user->id) }}"
                                                 class="btn btn-primary mt-3">Cetak AK1</a>
+                                            <button type="button" class="btn btn-warning mt-3" style="display: none"
+                                                id="integrasi">Integrasikan
+                                                E-Makaryo</button>
                                         </form>
                                     </div>
                                 </div>
@@ -553,6 +558,53 @@
                         }
                     });
                 }
+            });
+        </script>
+
+        {{-- integrasi e-makaryo --}}
+        <script>
+            $('#cekEmakaryo').on('click', function() {
+                var ktp = $('#ktp').val();
+                // disable button
+                $('#cekEmakaryo').prop('disabled', true);
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('ak1.checkMakaryo') }}",
+                    dataType: "json",
+                    data: {
+                        ktp: ktp
+                    },
+                    success: function(response) {
+                        $('#cekEmakaryo').prop('disabled', false);
+                        if (response.status === false) {
+                            alert(response.message);
+                            $('#integrasi').show();
+                        } else {
+                            $('#integrasi').hide();
+                        }
+                    }
+                });
+            });
+
+            $('#integrasi').on('click', function() {
+                var form = $('#formId')[0];
+                var formData = new FormData(form);
+                formData.delete('_method');
+
+                $.ajax({
+                    type: "post",
+                    url: "{{ route('ak1.integrasiEmakaryo') }}",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: "json",
+                    success: function(response) {
+                        console.log(response); // Tampilkan respons untuk debugging
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error:", error); // Tangani error jika ada
+                    }
+                });
             });
         </script>
     @endif

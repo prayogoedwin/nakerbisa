@@ -225,6 +225,43 @@ class Ak1Controller extends Controller
         return view('backend.ak1.existing', compact('user'));
     }
 
+    public function checkMakaryo(Request $request)
+    {
+        $response = Http::post('https://bursakerja.jatengprov.go.id/api/ak1/cek_nik?nik=' . $request->ktp);
+
+        $data = $response->json();
+        return response()->json($data);
+    }
+
+    public function integrasi(Request $request)
+    {
+        // $integrasi = Http::post('https://bursakerja.jatengprov.go.id/api_v2/auth/register_pencari',[
+        //     ''
+        // ]);
+        $integrasi = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $request->token
+        ])->post('https://bursakerja.jatengprov.go.id/api_v2/auth/register_pencari', [
+            'nik' => $request->nik,
+            'nama' => $request->nama,
+            'tempat_lahir' => $request->tempat_lahir,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'id_status_perkawinan' => $request->id_status_perkawinan,
+            'pendidikan_id' => $request->pendidikan_id,
+            'jurusan_id' => $request->jurusan_id,
+            'alamat' => $request->alamat,
+            'kodepos' => $request->kodepos,
+            'kecamatan_id' => $request->kecamatan_id,
+            'kabkota_id' => $request->kabkota_id,
+            'hp' => $request->hp,
+            'email' => $request->email,
+            'password' => $request->password
+        ]);
+    }
+
+
     public function updateUser(Request $request, $id)
     {
         $user = User::findOrFail($id);
