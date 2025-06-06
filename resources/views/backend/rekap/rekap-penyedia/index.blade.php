@@ -38,7 +38,7 @@
                                                     
                                                 </div>
                                             </div>
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-5">
                                                 <div class="mb-3">
                                                     <label for="monthFilter" class="form-label">Filter Bulan</label>
                                                     <select id="monthFilter" class="form-select" name="month">
@@ -57,6 +57,12 @@
                                                         <option value="12">Desember</option>
                                                     </select>
                                                 </div>
+                                            </div>
+                                             <div class="col-sm-3">
+                                            <div class="mb-3">
+                                                <label for="dateFilter" class="form-label">Filter Tanggal</label>
+                                                <input type="date" id="dateFilter" class="form-control" name="tanggal">
+                                            </div>
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -104,6 +110,7 @@
                     data: function(d) {
                         d.month = $('#monthFilter').val(); // Kirim parameter bulan
                         d.year = $('#yearFilter').val(); // Kirim parameter bulan
+                        d.tanggal = $('#dateFilter').val(); // Kirim parameter bulan
                     }
                 },
                 autoWidth: false,
@@ -127,6 +134,10 @@
             });
 
             $('#yearFilter').on('change', function() {
+                table.ajax.reload();
+            });
+
+             $('#dateFilter').on('change', function() {
                 table.ajax.reload();
             });
         });

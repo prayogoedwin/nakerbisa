@@ -53,6 +53,15 @@ class RekapLowonganController extends Controller
                 $queryNonAktifLuarRembang->whereMonth('created_at', $request->month);
             }
 
+            // Filter berdasarkan tanggal spesifik jika parameter `tanggal` ada
+            if ($request->has('tanggal') && $request->tanggal) {
+                // $query->whereDate('created_at', $request->tanggal);
+                $queryAktifRembang->whereDate('created_at', $request->tanggal);
+                $queryNonAktifRembang->whereDate('created_at', $request->tanggal);
+                $queryAktifLuarRembang->whereDate('created_at', $request->tanggal);
+                $queryNonAktifLuarRembang->whereDate('created_at', $request->tanggal);
+            }
+
             // Hitung jumlah data untuk tiap kategori dan gender
             $jumlahAktifRembangL = $queryAktifRembang->sum('jumlah_pria');
             $jumlahAktifRembangP = $queryAktifRembang->sum('jumlah_wanita');

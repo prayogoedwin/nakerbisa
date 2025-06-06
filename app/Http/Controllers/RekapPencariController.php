@@ -14,19 +14,6 @@ class RekapPencariController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            // Mengambil jumlah pengguna berdasarkan id_kecamatan dan status_saat_ini
-            // $query = UserPencari::select(
-            //     'id_kecamatan',
-            //     DB::raw('count(case when status_saat_ini = 1 and gender = "L" then 1 end) as sudah_bekerja_laki'),
-            //     DB::raw('count(case when status_saat_ini = 1 and gender = "P" then 1 end) as sudah_bekerja_perempuan'),
-            //     DB::raw('count(case when status_saat_ini = 2 and gender = "L" then 1 end) as belum_bekerja_laki'),
-            //     DB::raw('count(case when status_saat_ini = 2 and gender = "P" then 1 end) as belum_bekerja_perempuan'),
-            //     DB::raw('count(case when status_saat_ini = 3 and gender = "L" then 1 end) as tidak_bekerja_laki'),
-            //     DB::raw('count(case when status_saat_ini = 3 and gender = "P" then 1 end) as tidak_bekerja_perempuan'),
-            //     DB::raw('count(case when gender = "L" then 1 end) as total_laki'),
-            //     DB::raw('count(case when gender = "P" then 1 end) as total_perempuan'),
-            // )
-            //     ->groupBy('id_kecamatan');
             $query = DB::table('naker_kecamatan') // Tabel kecamatan
                     ->leftJoin('users_pencari', 'naker_kecamatan.id', '=', 'users_pencari.id_kecamatan') // Join kecamatan dengan users_pencari
                     ->select(
@@ -52,6 +39,11 @@ class RekapPencariController extends Controller
             // Filter berdasarkan bulan jika parameter `month` ada
             if ($request->has('month') && $request->month) {
                 $query->whereMonth('users_pencari.created_at', $request->month);
+            }
+
+            // Filter berdasarkan tanggal spesifik jika parameter `tanggal` ada
+            if ($request->has('tanggal') && $request->tanggal) {
+                $query->whereDate('users_pencari.created_at', $request->tanggal);
             }
 
             // Ambil data setelah semua filter diterapkan

@@ -42,6 +42,11 @@ class RekapPenyediaController extends Controller
                 $query->whereMonth('users_penyedia.created_at', $request->month);
             }
 
+            // Filter berdasarkan tanggal spesifik jika parameter `tanggal` ada
+            if ($request->has('tanggal') && $request->tanggal) {
+                $query->whereDate('created_at', $request->tanggal);
+            }
+
             // Ambil data setelah semua filter diterapkan
             $data = $query->get();
 
