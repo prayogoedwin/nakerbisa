@@ -53,6 +53,7 @@
                                                         <th>Sektor Pekerjaan Saat Ini</th>
                                                         <th>Jam Kerja</th>
                                                         <th>Gaji</th>
+                                                        <th>Tanggal Input</th>
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
@@ -166,6 +167,10 @@
                     {
                         data: 'gaji',
                         name: 'gaji'
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at'
                     },
                     {
                         data: 'options',

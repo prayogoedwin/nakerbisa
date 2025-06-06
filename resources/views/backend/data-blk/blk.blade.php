@@ -44,6 +44,7 @@
                                                         <th>Pic</th>
                                                         <th>Jabatan</th>
                                                         <th>Website</th>
+                                                          <th>Tanggal Input</th>
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
@@ -122,6 +123,10 @@
                     {
                         data: 'website',
                         name: 'website'
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at'
                     },
                     {
                         data: 'options',

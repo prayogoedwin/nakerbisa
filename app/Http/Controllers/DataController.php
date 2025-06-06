@@ -314,7 +314,7 @@ class DataController extends Controller
             'Sektor Pekerjaan Saat Ini',
             'Jam Kerja',
             'Gaji',
-            'Tanggal Daftar',
+            'Tanggal Input',
         ];
 
         // Callback untuk menulis data ke CSV
@@ -389,7 +389,8 @@ class DataController extends Controller
                 'users_penyedia.kodepos',
                 'users_penyedia.telpon',
                 'users_penyedia.jabatan',
-                'users_penyedia.website'
+                'users_penyedia.website',
+                'users_penyedia.created_at',
             ]);
 
             return DataTables::eloquent($query)
@@ -430,6 +431,12 @@ class DataController extends Controller
                     // Ambil nama sektor berdasarkan id_sektor
                     $sektor = DB::table('naker_sektor')->where('id', $data->id_sektor)->value('name');
                     return $sektor ?? '-';
+                })
+                 ->addColumn('created_at', function ($data) {
+                    if ($data->created_at) {
+                        return date('d-m-Y', strtotime($data->created_at));
+                    }
+                    return '-';
                 })
                 ->addIndexColumn()
                 ->addColumn('options', function ($data) {
@@ -513,6 +520,7 @@ class DataController extends Controller
             'id_desa',
             'luar_negri',
             'deskripsi',
+            'created_at'
         ]);
 
         // Terapkan filter pencarian dari DataTables
@@ -557,6 +565,7 @@ class DataController extends Controller
             'Desa',
             'Penyedia Luar Negeri',
             'Deskripsi',
+             'Tanggal Input',
         ];
 
         // Callback untuk menulis data ke CSV
@@ -584,6 +593,7 @@ class DataController extends Controller
                 ];
                 $jenisPerusahaan = $jenisPerusahaanMapping[$data->jenis_perusahaan] ?? 'Tidak Diketahui';
                 $luarNegri = $data->luar_negri == '1' ? 'Ya' : 'Tidak';
+                 $created_at = date('d-m-Y', strtotime($data->created_at));
 
                 // Tulis data ke CSV dengan nama wilayah dan sektor
                 fputcsv($file, [
@@ -602,6 +612,7 @@ class DataController extends Controller
                     $desa,
                     $luarNegri,
                     $data->deskripsi,
+                    $created_at
                 ]);
             }
 
@@ -633,7 +644,8 @@ class DataController extends Controller
                 'users_bkk.kodepos',
                 'users_bkk.telpon',
                 'users_bkk.jabatan',
-                'users_bkk.website'
+                'users_bkk.website',
+                'users_bkk.created_at'
             ]);
 
             return DataTables::eloquent($query)
@@ -679,6 +691,12 @@ class DataController extends Controller
                     // Ambil nama sektor berdasarkan id_sektor
                     $sektor = DB::table('naker_sektor')->where('id', $data->id_sektor)->value('name');
                     return $sektor ?? '-';
+                })
+                 ->addColumn('created_at', function ($data) {
+                    if ($data->created_at) {
+                        return date('d-m-Y', strtotime($data->created_at));
+                    }
+                    return '-';
                 })
                 ->addIndexColumn()
                 ->addColumn('options', function ($data) {
@@ -763,6 +781,7 @@ class DataController extends Controller
             'id_desa',
             'luar_negri',
             'deskripsi',
+            'created_at'
         ]);
 
         // Terapkan filter pencarian dari DataTables
@@ -808,6 +827,7 @@ class DataController extends Controller
             'Desa',
             'Penyedia Luar Negeri',
             'Deskripsi',
+            'Tanggal Input',
         ];
 
         // Callback untuk menulis data ke CSV
@@ -836,6 +856,7 @@ class DataController extends Controller
                 ];
                 $jenisPerusahaan = $jenisPerusahaanMapping[$data->jenis_bkk] ?? 'Tidak Diketahui';
                 $luarNegri = $data->luar_negri == '1' ? 'Ya' : 'Tidak';
+                  $created_at = date('d-m-Y', strtotime($data->created_at));
 
                 // Tulis data ke CSV dengan nama wilayah dan sektor
                 fputcsv($file, [
@@ -855,6 +876,7 @@ class DataController extends Controller
                     $desa,
                     $luarNegri,
                     $data->deskripsi,
+                     $created_at
                 ]);
             }
 
@@ -881,7 +903,8 @@ class DataController extends Controller
                 'users_blk.telpon',
                 'users_blk.pic',
                 'users_blk.jabatan',
-                'users_blk.website'
+                'users_blk.website',
+                'users_blk.created_at',
             ]);
 
             return DataTables::eloquent($query)
@@ -904,6 +927,12 @@ class DataController extends Controller
                     // Ambil nama desa berdasarkan id_desa
                     $desa = DB::table('naker_desa')->where('id', $data->id_desa)->value('name');
                     return $desa ?? 'Tidak Ditemukan';
+                })
+                 ->addColumn('created_at', function ($data) {
+                    if ($data->created_at) {
+                        return date('d-m-Y', strtotime($data->created_at));
+                    }
+                    return '-';
                 })
                 ->addIndexColumn()
                 ->addColumn('options', function ($data) {
@@ -976,6 +1005,7 @@ class DataController extends Controller
             'id_kota',
             'id_kecamatan',
             'id_desa',
+            'created_at'
         ]);
 
         // Terapkan filter pencarian dari DataTables
@@ -1014,6 +1044,7 @@ class DataController extends Controller
             'Kota',
             'Kecamatan',
             'Desa',
+            'Tanggal Input',
         ];
 
         // Callback untuk menulis data ke CSV
@@ -1027,6 +1058,7 @@ class DataController extends Controller
                 $kota = DB::table('naker_kabkota')->where('id', $data->id_kota)->value('name');
                 $kecamatan = DB::table('naker_kecamatan')->where('id', $data->id_kecamatan)->value('name');
                 $desa = DB::table('naker_desa')->where('id', $data->id_desa)->value('name');
+                 $created_at = date('d-m-Y', strtotime($data->created_at));
 
                 // Tulis data ke CSV dengan nama wilayah dan sektor
                 fputcsv($file, [
@@ -1042,6 +1074,7 @@ class DataController extends Controller
                     $kota,
                     $kecamatan,
                     $desa,
+                     $created_at
                 ]);
             }
 
