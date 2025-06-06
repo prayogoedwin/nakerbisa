@@ -43,7 +43,8 @@ class DataController extends Controller
                 'users_pencari.id_pendidikan',
                 'users_pencari.id_jurusan',
                 'users_pencari.id_agama',
-                'users_pencari.id_status_perkawinan'
+                'users_pencari.id_status_perkawinan',
+                'users_pencari.created_at'
             ]);
 
             return DataTables::eloquent($query)
@@ -91,6 +92,12 @@ class DataController extends Controller
                     // Ambil nama agama berdasarkan id_agama
                     $agama = DB::table('naker_agama')->where('id', $data->id_agama)->value('name');
                     return $agama ?? '-';
+                })
+                ->addColumn('created_at', function ($data) {
+                    if ($data->created_at) {
+                        return date('d-m-Y', strtotime($data->created_at));
+                    }
+                    return '-';
                 })
                 ->addIndexColumn()
                 ->addColumn('options', function ($data) {
@@ -246,7 +253,8 @@ class DataController extends Controller
             'status_saat_ini',
             'sektor_pekerjaan_saat_ini',
             'jam_kerja',
-            'gaji'
+            'gaji',
+            'created_at'
         ]);
 
         // Terapkan filter pencarian dari DataTables
@@ -306,6 +314,7 @@ class DataController extends Controller
             'Sektor Pekerjaan Saat Ini',
             'Jam Kerja',
             'Gaji',
+            'Tanggal Daftar',
         ];
 
         // Callback untuk menulis data ke CSV
@@ -324,6 +333,7 @@ class DataController extends Controller
                 $jurusan = DB::table('naker_jurusan')->where('id', $data->id_jurusan)->value('nama');
                 $marital = DB::table('naker_marital')->where('id', $data->id_status_perkawinan)->value('name');
                 $agama = DB::table('naker_agama')->where('id', $data->id_agama)->value('name');
+                $created_at = date('d-m-Y', strtotime($data->created_at));
 
                 // Tulis data ke CSV dengan nama wilayah
                 fputcsv($file, [
@@ -347,7 +357,8 @@ class DataController extends Controller
                     $status,
                     $sektor,
                     $data->jam_kerja,
-                    $data->gaji
+                    $data->gaji,
+                    $created_at
                 ]);
             }
 
