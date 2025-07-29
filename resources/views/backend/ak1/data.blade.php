@@ -66,8 +66,8 @@
                         name: 'user.name'
                     },
                     {
-                        data: 'no_hp',
-                        name: 'user.no_hp'
+                        data: 'whatsapp',
+                        name: 'user.whatsapp'
                     },
                     {
                         data: 'tanggal_cetak',

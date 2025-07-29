@@ -448,7 +448,7 @@ class Ak1Controller extends Controller
     {
         if ($request->ajax()) {
             // Ambil data AK1 beserta relasi user
-            $datas = NakerAk1::with('user:id,name')
+            $datas = NakerAk1::with('user:id,name,whatsapp')
                 ->select(
                     'id',
                     'id_user',
@@ -463,7 +463,7 @@ class Ak1Controller extends Controller
                 ->addColumn('nama_tenaga_kerja', function ($data) {
                     return $data->user->name ?? '-';
                 })
-                ->addColumn('no_hp', function ($data) {
+                ->addColumn('whatsapp', function ($data) {
                     return $data->user->whatsapp ?? '-';
                 })
                 ->addColumn('tanggal_cetak', function ($data) {
@@ -489,7 +489,7 @@ class Ak1Controller extends Controller
     {
         if ($request->ajax()) {
             // Ambil data AK1 milik pengguna yang sedang login
-            $datas = NakerAk1::with('user:id,name')
+            $datas = NakerAk1::with('user:id,name,whatsapp')
                 ->where('id_user', auth()->user()->id) // Filter berdasarkan pengguna yang login
                 ->select(
                     'id',
@@ -504,6 +504,9 @@ class Ak1Controller extends Controller
                 ->addIndexColumn()
                 ->addColumn('nama_tenaga_kerja', function ($data) {
                     return $data->user->name ?? '-';
+                })
+                 ->addColumn('whatsapp', function ($data) {
+                    return $data->user->whatsapp ?? '-';
                 })
                 ->addColumn('tanggal_cetak', function ($data) {
                     return \Carbon\Carbon::parse($data->tanggal_cetak)->format('d-m-Y');
