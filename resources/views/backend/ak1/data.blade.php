@@ -21,6 +21,7 @@
                                                     <tr>
                                                         <th>No</th>
                                                         <th>Nama Tenaga Kerja</th>
+                                                        <th>No HP</th>
                                                         <th>Tanggal Cetak</th>
                                                         <th>Status Cetak</th>
                                                         <th>Berhenti Berlaku</th>
@@ -63,6 +64,10 @@
                     {
                         data: 'nama_tenaga_kerja',
                         name: 'user.name'
+                    },
+                    {
+                        data: 'no_hp',
+                        name: 'user.no_hp'
                     },
                     {
                         data: 'tanggal_cetak',

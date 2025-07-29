@@ -26,7 +26,7 @@
                             <div class="col-xl-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h1>Data Pencari Kerja</h1>
+                                        <h1>Data Tenaga Kerja</h1>
                                         <a href="#" id="export-csv" class="btn btn-success">Export CSV</a>
                                         <div class="table-responsive">
                                             <table id="pencari-table" class="table table-bordered">

@@ -346,7 +346,7 @@ class Ak1Controller extends Controller
         if (!$nakerAk1) {
             // Jika tidak ada, buat entri baru
             $uniqueCode = md5($id . Carbon::now()->toDateTimeString());
-            $expiredDate = Carbon::now()->addMonths(6);
+            $expiredDate = Carbon::now()->addMonths(24);
 
             $nakerAk1 = new NakerAk1();
             $nakerAk1->id_user = $user->id;
@@ -407,7 +407,7 @@ class Ak1Controller extends Controller
         if (!$nakerAk1) {
             // Jika tidak ada, buat entri baru
             $uniqueCode = md5($id . Carbon::now()->toDateTimeString());
-            $expiredDate = Carbon::now()->addMonths(6);
+            $expiredDate = Carbon::now()->addMonths(24);
 
             $nakerAk1 = new NakerAk1();
             $nakerAk1->id_user = $user->id;
@@ -462,6 +462,9 @@ class Ak1Controller extends Controller
                 ->addIndexColumn()
                 ->addColumn('nama_tenaga_kerja', function ($data) {
                     return $data->user->name ?? '-';
+                })
+                ->addColumn('no_hp', function ($data) {
+                    return $data->user->whatsapp ?? '-';
                 })
                 ->addColumn('tanggal_cetak', function ($data) {
                     return \Carbon\Carbon::parse($data->tanggal_cetak)->format('d-m-Y');

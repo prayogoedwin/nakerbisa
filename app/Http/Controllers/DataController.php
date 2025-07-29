@@ -45,9 +45,25 @@ class DataController extends Controller
                 'users_pencari.id_agama',
                 'users_pencari.id_status_perkawinan',
                 'users_pencari.created_at'
-            ]);
+            ])
+            ->leftJoin('naker_pendidikan', 'users_pencari.id_pendidikan', '=', 'naker_pendidikan.id')
+            ->leftJoin('naker_jurusan', 'users_pencari.id_jurusan', '=', 'naker_jurusan.id')
+            ;
 
             return DataTables::eloquent($query)
+                ->filter(function ($query) use ($request) {
+                    if ($request->has('search') && !empty($request->search['value'])) {
+                        $search = $request->search['value'];
+                        $query->where(function ($q) use ($search) {
+                            $q->where('users_pencari.name', 'like', "%{$search}%")
+                                ->orWhere('users_pencari.ktp', 'like', "%{$search}%")
+                                ->orWhere('naker_pendidikan.name', 'like', "%{$search}%") // bisa dicari via pendidikan
+                                ->orWhere('naker_jurusan.nama', 'like', "%{$search}%")    // bisa dicari via jurusan
+                                // ... tambahkan kolom lain yang ingin dicari ...
+                                ;
+                        });
+                    }
+                })
                 ->addColumn('kota', function ($data) {
                     // Ambil nama kota berdasarkan id_kota
                     $kota = DB::table('naker_kabkota')->where('id', $data->id_kota)->value('name');
@@ -230,7 +246,7 @@ class DataController extends Controller
         return redirect()->route('data.pencari')->with('success', 'Data Pencari Kerja berhasil diperbarui.');
     }
 
-    public function export(Request $request)
+    public function export_bak(Request $request)
     {
         $query = UserPencari::select([
             'id',
@@ -368,6 +384,107 @@ class DataController extends Controller
         // Mengirimkan file CSV ke browser
         return response()->stream($callback, 200, $headers);
     }
+
+    public function export(Request $request)
+{
+    $query = UserPencari::query()
+        ->leftJoin('naker_pendidikan', 'users_pencari.id_pendidikan', '=', 'naker_pendidikan.id')
+        ->leftJoin('naker_jurusan', 'users_pencari.id_jurusan', '=', 'naker_jurusan.id')
+        // Join tabel lainnya yang diperlukan untuk pencarian
+        ->select([
+            'users_pencari.*',
+            'naker_pendidikan.name as pendidikan_name',
+            'naker_jurusan.nama as jurusan_name',
+            // Kolom join lainnya
+        ]);
+
+    // Terapkan filter pencarian jika ada
+    if ($request->has('search.value') && !empty($request->search['value'])) {
+        $search = $request->search['value'];
+        $query->where(function($q) use ($search) {
+            $q->where('users_pencari.name', 'like', "%{$search}%")
+                ->orWhere('users_pencari.ktp', 'like', "%{$search}%")
+                ->orWhere('users_pencari.alamat', 'like', "%{$search}%")
+                ->orWhere('naker_pendidikan.name', 'like', "%{$search}%")
+                ->orWhere('naker_jurusan.nama', 'like', "%{$search}%")
+                ->orWhere('name', 'like', "%{$search}%")
+                ->orWhere('alamat', 'like', "%{$search}%")
+                ->orWhere('tempat_lahir', 'like', "%{$search}%")
+                ->orWhere('tanggal_lahir', 'like', "%{$search}%")
+                ->orWhere('gender', 'like', "%{$search}%")
+                ->orWhere('kodepos', 'like', "%{$search}%")
+                ->orWhere('tahun_lulus', 'like', "%{$search}%")
+                ->orWhere('medsos', 'like', "%{$search}%")
+                ->orWhere('id_status_perkawinan', 'like', "%{$search}%")
+                ->orWhere('id_agama', 'like', "%{$search}%")
+                ->orWhere('id_pendidikan', 'like', "%{$search}%")
+                ->orWhere('id_jurusan', 'like', "%{$search}%")
+                ->orWhere('id_kota', 'like', "%{$search}%")
+                ->orWhere('id_kecamatan', 'like', "%{$search}%")
+                ->orWhere('id_desa', 'like', "%{$search}%")
+                ->orWhere('status_saat_ini', 'like', "%{$search}%")
+                ->orWhere('sektor_pekerjaan_saat_ini', 'like', "%{$search}%")
+                ->orWhere('jam_kerja', 'like', "%{$search}%")
+                ->orWhere('gaji', 'like', "%{$search}%");
+                // Tambahkan kondisi pencarian lainnya
+        });
+    }
+
+    $pencariData = $query->get();
+
+    $fileName = 'data_pencari_'.date('YmdHis').'.csv';
+    $headers = [
+        'Content-Type' => 'text/csv',
+        'Content-Disposition' => "attachment; filename=\"$fileName\"",
+    ];
+
+    $columns = [
+        'ID', 'KTP', 'Nama', 'Tempat Lahir', 'Tanggal Lahir', 'Gender',
+        'Alamat', 'Kodepos', 'Tahun Lulus', 'Medsos', 'Status Perkawinan',
+        'Agama', 'Pendidikan', 'Jurusan', 'Kota', 'Kecamatan', 'Desa',
+        'Status Saat Ini', 'Sektor Pekerjaan', 'Jam Kerja', 'Gaji', 'Tanggal Input'
+    ];
+
+    $callback = function() use ($pencariData, $columns) {
+        $file = fopen('php://output', 'w');
+        fputcsv($file, $columns);
+
+        foreach ($pencariData as $data) {
+            // Gunakan data dari join untuk menghindari query tambahan
+            $kota = DB::table('naker_kabkota')->where('id', $data->id_kota)->value('name');
+            $kecamatan = DB::table('naker_kecamatan')->where('id', $data->id_kecamatan)->value('name');
+            $desa = DB::table('naker_desa')->where('id', $data->id_desa)->value('name');
+            
+            fputcsv($file, [
+                $data->id,
+                '"'.$data->ktp,
+                $data->name,
+                $data->tempat_lahir,
+                $data->tanggal_lahir,
+                $data->gender,
+                $data->alamat,
+                $data->kodepos,
+                $data->tahun_lulus,
+                $data->medsos,
+                $data->marital_name ?? DB::table('naker_marital')->where('id', $data->id_status_perkawinan)->value('name'),
+                $data->agama_name ?? DB::table('naker_agama')->where('id', $data->id_agama)->value('name'),
+                $data->pendidikan_name,
+                $data->jurusan_name,
+                $kota,
+                $kecamatan,
+                $desa,
+                $data->status_name ?? DB::table('status_kerja')->where('id', $data->status_saat_ini)->value('status'),
+                $data->sektor_name ?? DB::table('naker_sektor')->where('id', $data->sektor_pekerjaan_saat_ini)->value('name'),
+                $data->jam_kerja,
+                $data->gaji,
+                date('d-m-Y', strtotime($data->created_at))
+            ]);
+        }
+        fclose($file);
+    };
+
+    return response()->stream($callback, 200, $headers);
+}
 
 
     public function penyedia(Request $request)
