@@ -90,9 +90,9 @@
                             <div class="thumb">
                                 <a href="#">
                                     @if ($lowongan->perusahaan_foto)
-                                        <img src="{{ asset('storage/' . $lowongan->perusahaan_foto) }}" alt="Thumb">
+                                        <img src="{{ asset('storage/' . $lowongan->perusahaan_foto) }}" alt="Thumb" class="img-fluid logo-circle" width="100px" height="80px" onerror="this.onerror=null;this.src='{{ asset('assets/nakerbisa_fe/img/800x600.png') }}';">
                                     @else
-                                        <img src="{{ asset('assets/nakerbisa_fe/img/800x600.png') }}" alt="Thumb">
+                                        <img src="{{ asset('assets/nakerbisa_fe/img/800x600.png') }}" alt="Thumb" class="img-fluid logo-circle" width="100px" height="80px">
                                     @endif
                                 </a>
                             </div>

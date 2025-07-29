@@ -98,7 +98,7 @@
                                 {{-- <a href="#"><img src="{{ asset('assets/nakerbisa_fe/img/800x600.png') }}" alt="Thumb"></a> --}}
                                 {{-- <a href="#"><img src="{{ $vacancy['logo_perusahaan'] }}" alt="Thumb"></a>  --}}
                                 <a href="#">
-                                    <img src="{{ $vacancy['logo_perusahaan'] }}" alt="Logo" class="img-fluid logo-circle" width="100px" height="80px">
+                                    <img src="{{ $vacancy['logo_perusahaan'] }}" alt="Logo" class="img-fluid logo-circle" width="100px" height="80px" onerror="this.onerror=null;this.src='{{ asset('assets/nakerbisa_fe/img/800x600.png') }}';">
                                 </a>
                             </div>
                             <div class="info">

@@ -91,7 +91,7 @@
                 <div class="col-xl-4 col-md-6 single-item">
                     <div class="blog-style-one">
                         <div class="thumb">
-                            <a href="#"><img src="{{ asset('assets/nakerbisa_fe/img/800x600.png') }}" alt="Thumb"></a>
+                            <a href="#"><img src="{{ asset('assets/nakerbisa_fe/img/800x600.png') }}" alt="Thumb" onerror="this.onerror=null;this.src='{{ asset('assets/nakerbisa_fe/img/800x600.png') }}';"></a>
                         </div>
                         <div class="info">
                             <div class="blog-meta">
