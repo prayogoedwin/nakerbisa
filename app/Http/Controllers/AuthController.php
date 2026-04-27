@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserBkk;
+use App\Models\UserBlk;
+use App\Models\UserPencari;
+use App\Models\UserPenyedia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,11 +26,22 @@ class AuthController extends Controller
 
         // Jika validasi captcha dan kredensial login berhasil
         if (Auth::attempt(['email' => $request->username, 'password' => $request->password])) {
+            $user = Auth::user();
+            $roleName = $user->roles[0]['name'] ?? null;
 
-            // Check if the user has 'tenaga-kerja' role
-            if (Auth::user()->roles[0]['name'] == 'tenaga-kerja') {
-                // Redirect to the profile page with a notification to update the profile
-                return redirect()->route('profil.index')->with('info', 'Silahkan update profil diri anda');
+            // Jika pendaftaran role belum lengkap, jangan izinkan login ke dashboard.
+            if ($roleName && !$this->hasCompletedProfileByRole($user->id, $roleName)) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return redirect()->route('depan.daftar.role', ['role' => $roleName])
+                    ->with('resume_registration', [
+                        'role' => $roleName,
+                        'email' => $user->email,
+                        'whatsapp' => $user->whatsapp,
+                    ])
+                    ->with('info', 'Data akun ditemukan. Silakan selesaikan proses pendaftaran terlebih dahulu.');
             }
 
             // Default redirection for other roles
@@ -43,5 +58,16 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/login');
+    }
+
+    private function hasCompletedProfileByRole(int $userId, string $role): bool
+    {
+        return match ($role) {
+            'tenaga-kerja' => UserPencari::where('user_id', $userId)->whereNull('deleted_at')->exists(),
+            'penyedia-kerja' => UserPenyedia::where('user_id', $userId)->whereNull('deleted_at')->exists(),
+            'admin-bkk' => UserBkk::where('user_id', $userId)->whereNull('deleted_at')->exists(),
+            'admin-blk' => UserBlk::where('user_id', $userId)->whereNull('deleted_at')->exists(),
+            default => true,
+        };
     }
 }

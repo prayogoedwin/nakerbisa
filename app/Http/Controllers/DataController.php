@@ -10,6 +10,7 @@ use App\Models\UserBkk;
 use App\Models\UserBlk;
 use App\Models\UserPencari;
 use App\Models\UserPenyedia;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;  // Mengimpor DataTables
 use Illuminate\Support\Facades\Storage;
@@ -62,6 +63,14 @@ class DataController extends Controller
                                 // ... tambahkan kolom lain yang ingin dicari ...
                                 ;
                         });
+                    }
+
+                    if ($request->filled('start_date')) {
+                        $query->whereDate('users_pencari.created_at', '>=', $request->start_date);
+                    }
+
+                    if ($request->filled('end_date')) {
+                        $query->whereDate('users_pencari.created_at', '<=', $request->end_date);
                     }
                 })
                 ->addColumn('kota', function ($data) {
@@ -386,105 +395,297 @@ class DataController extends Controller
     }
 
     public function export(Request $request)
-{
-    $query = UserPencari::query()
-        ->leftJoin('naker_pendidikan', 'users_pencari.id_pendidikan', '=', 'naker_pendidikan.id')
-        ->leftJoin('naker_jurusan', 'users_pencari.id_jurusan', '=', 'naker_jurusan.id')
-        // Join tabel lainnya yang diperlukan untuk pencarian
-        ->select([
-            'users_pencari.*',
-            'naker_pendidikan.name as pendidikan_name',
-            'naker_jurusan.nama as jurusan_name',
-            // Kolom join lainnya
-        ]);
+    {
+        $pencariData = $this->buildPencariExportQuery($request)->get();
+        $rows = $this->mapPencariExportRows($pencariData);
+        $timestampWib = Carbon::now('Asia/Jakarta')->format('Ymd_His');
 
-    // Terapkan filter pencarian jika ada
-    if ($request->has('search.value') && !empty($request->search['value'])) {
-        $search = $request->search['value'];
-        $query->where(function($q) use ($search) {
-            $q->where('users_pencari.name', 'like', "%{$search}%")
-                ->orWhere('users_pencari.ktp', 'like', "%{$search}%")
-                ->orWhere('users_pencari.alamat', 'like', "%{$search}%")
-                ->orWhere('naker_pendidikan.name', 'like', "%{$search}%")
-                ->orWhere('naker_jurusan.nama', 'like', "%{$search}%")
-                ->orWhere('name', 'like', "%{$search}%")
-                ->orWhere('alamat', 'like', "%{$search}%")
-                ->orWhere('tempat_lahir', 'like', "%{$search}%")
-                ->orWhere('tanggal_lahir', 'like', "%{$search}%")
-                ->orWhere('gender', 'like', "%{$search}%")
-                ->orWhere('kodepos', 'like', "%{$search}%")
-                ->orWhere('tahun_lulus', 'like', "%{$search}%")
-                ->orWhere('medsos', 'like', "%{$search}%")
-                ->orWhere('id_status_perkawinan', 'like', "%{$search}%")
-                ->orWhere('id_agama', 'like', "%{$search}%")
-                ->orWhere('id_pendidikan', 'like', "%{$search}%")
-                ->orWhere('id_jurusan', 'like', "%{$search}%")
-                ->orWhere('id_kota', 'like', "%{$search}%")
-                ->orWhere('id_kecamatan', 'like', "%{$search}%")
-                ->orWhere('id_desa', 'like', "%{$search}%")
-                ->orWhere('status_saat_ini', 'like', "%{$search}%")
-                ->orWhere('sektor_pekerjaan_saat_ini', 'like', "%{$search}%")
-                ->orWhere('jam_kerja', 'like', "%{$search}%")
-                ->orWhere('gaji', 'like', "%{$search}%");
-                // Tambahkan kondisi pencarian lainnya
-        });
+        $fileName = 'data_pencari_wib_' . $timestampWib . '.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"$fileName\"",
+        ];
+
+        $callback = function () use ($rows) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $this->pencariExportColumns());
+
+            foreach ($rows as $row) {
+                fputcsv($file, $row);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
-    $pencariData = $query->get();
+    public function exportExcel(Request $request)
+    {
+        $pencariData = $this->buildPencariExportQuery($request)->get();
+        $rows = $this->mapPencariExportRows($pencariData);
+        $timestampWib = Carbon::now('Asia/Jakarta')->format('Ymd_His');
 
-    $fileName = 'data_pencari_'.date('YmdHis').'.csv';
-    $headers = [
-        'Content-Type' => 'text/csv',
-        'Content-Disposition' => "attachment; filename=\"$fileName\"",
-    ];
+        $fileName = 'data_pencari_wib_' . $timestampWib . '.xls';
+        $headers = [
+            'Content-Type' => 'application/vnd.ms-excel; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"$fileName\"",
+        ];
 
-    $columns = [
-        'ID', 'KTP', 'Nama', 'Tempat Lahir', 'Tanggal Lahir', 'Gender',
-        'Alamat', 'Kodepos', 'Tahun Lulus', 'Medsos', 'Status Perkawinan',
-        'Agama', 'Pendidikan', 'Jurusan', 'Kota', 'Kecamatan', 'Desa',
-        'Status Saat Ini', 'Sektor Pekerjaan', 'Jam Kerja', 'Gaji', 'Tanggal Input'
-    ];
+        $columns = $this->pencariExportColumns();
+        $html = '<table border="1"><thead><tr>';
+        foreach ($columns as $column) {
+            $html .= '<th>' . e($column) . '</th>';
+        }
+        $html .= '</tr></thead><tbody>';
+        foreach ($rows as $row) {
+            $html .= '<tr>';
+            foreach ($row as $index => $cell) {
+                if ($index === 1) {
+                    $html .= '<td style="mso-number-format:\'\\@\';">' . e((string) $cell) . '</td>';
+                    continue;
+                }
+                $html .= '<td>' . e((string) $cell) . '</td>';
+            }
+            $html .= '</tr>';
+        }
+        $html .= '</tbody></table>';
 
-    $callback = function() use ($pencariData, $columns) {
-        $file = fopen('php://output', 'w');
-        fputcsv($file, $columns);
+        return response($html, 200, $headers);
+    }
 
+    public function exportExcelAyokerjo(Request $request)
+    {
+        $pencariData = $this->buildPencariExportQuery($request)->get();
+        $rows = $this->mapPencariAyokerjoRows($pencariData);
+        $timestampWib = Carbon::now('Asia/Jakarta')->format('Ymd_His');
+
+        $fileName = 'data_pencari_ayokerjo_wib_' . $timestampWib . '.xls';
+        $headers = [
+            'Content-Type' => 'application/vnd.ms-excel; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"$fileName\"",
+        ];
+
+        $columns = $this->pencariAyokerjoColumns();
+        $html = '<table border="1"><thead><tr>';
+        foreach ($columns as $column) {
+            $html .= '<th>' . e($column) . '</th>';
+        }
+        $html .= '</tr></thead><tbody>';
+        foreach ($rows as $row) {
+            $html .= '<tr>';
+            foreach ($row as $index => $cell) {
+                if ($index === 2) {
+                    $html .= '<td style="mso-number-format:\'\\@\';">' . e((string) $cell) . '</td>';
+                    continue;
+                }
+                $html .= '<td>' . e((string) $cell) . '</td>';
+            }
+            $html .= '</tr>';
+        }
+        $html .= '</tbody></table>';
+
+        return response($html, 200, $headers);
+    }
+
+    private function pencariExportColumns(): array
+    {
+        return [
+            'ID',
+            'KTP',
+            'Nama',
+            'Tempat Lahir',
+            'Tanggal Lahir',
+            'Usia',
+            'Gender',
+            'Alamat',
+            'Kodepos',
+            'Tahun Lulus',
+            'Medsos',
+            'Status Perkawinan',
+            'Agama',
+            'Pendidikan',
+            'Jurusan',
+            'Kota',
+            'Kecamatan',
+            'Desa',
+            'Status Saat Ini',
+            'Sektor Pekerjaan',
+            'Jam Kerja',
+            'Gaji',
+            'Tanggal Input',
+        ];
+    }
+
+    private function buildPencariExportQuery(Request $request)
+    {
+        $query = UserPencari::query()
+            ->leftJoin('users', 'users_pencari.user_id', '=', 'users.id')
+            ->leftJoin('naker_pendidikan', 'users_pencari.id_pendidikan', '=', 'naker_pendidikan.id')
+            ->leftJoin('naker_jurusan', 'users_pencari.id_jurusan', '=', 'naker_jurusan.id')
+            ->leftJoin('naker_marital', 'users_pencari.id_status_perkawinan', '=', 'naker_marital.id')
+            ->leftJoin('naker_agama', 'users_pencari.id_agama', '=', 'naker_agama.id')
+            ->leftJoin('status_kerja', 'users_pencari.status_saat_ini', '=', 'status_kerja.id')
+            ->leftJoin('naker_sektor', 'users_pencari.sektor_pekerjaan_saat_ini', '=', 'naker_sektor.id')
+            ->leftJoin('naker_kabkota', 'users_pencari.id_kota', '=', 'naker_kabkota.id')
+            ->leftJoin('naker_kecamatan', 'users_pencari.id_kecamatan', '=', 'naker_kecamatan.id')
+            ->leftJoin('naker_desa', 'users_pencari.id_desa', '=', 'naker_desa.id')
+            ->select([
+                'users_pencari.*',
+                'users.email as user_email',
+                'users.whatsapp as user_whatsapp',
+                'naker_pendidikan.name as pendidikan_name',
+                'naker_jurusan.nama as jurusan_name',
+                'naker_marital.name as marital_name',
+                'naker_agama.name as agama_name',
+                'status_kerja.status as status_name',
+                'naker_sektor.name as sektor_name',
+                'naker_kabkota.name as kota_name',
+                'naker_kecamatan.name as kecamatan_name',
+                'naker_desa.name as desa_name',
+            ]);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('users_pencari.name', 'like', "%{$search}%")
+                    ->orWhere('users_pencari.ktp', 'like', "%{$search}%")
+                    ->orWhere('users_pencari.alamat', 'like', "%{$search}%")
+                    ->orWhere('users_pencari.tempat_lahir', 'like', "%{$search}%")
+                    ->orWhere('naker_pendidikan.name', 'like', "%{$search}%")
+                    ->orWhere('naker_jurusan.nama', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('start_date')) {
+            $query->whereDate('users_pencari.created_at', '>=', $request->start_date);
+        }
+
+        if ($request->filled('end_date')) {
+            $query->whereDate('users_pencari.created_at', '<=', $request->end_date);
+        }
+
+        return $query->orderBy('users_pencari.created_at', 'desc');
+    }
+
+    private function mapPencariExportRows($pencariData): array
+    {
+        $rows = [];
         foreach ($pencariData as $data) {
-            // Gunakan data dari join untuk menghindari query tambahan
-            $kota = DB::table('naker_kabkota')->where('id', $data->id_kota)->value('name');
-            $kecamatan = DB::table('naker_kecamatan')->where('id', $data->id_kecamatan)->value('name');
-            $desa = DB::table('naker_desa')->where('id', $data->id_desa)->value('name');
-            
-            fputcsv($file, [
+            $usia = '-';
+            if (!empty($data->tanggal_lahir)) {
+                try {
+                    $usia = Carbon::parse($data->tanggal_lahir)->age . ' Tahun';
+                } catch (\Exception $e) {
+                    $usia = '-';
+                }
+            }
+
+            $rows[] = [
                 $data->id,
-                '"'.$data->ktp,
+                $data->ktp,
                 $data->name,
                 $data->tempat_lahir,
                 $data->tanggal_lahir,
+                $usia,
                 $data->gender,
                 $data->alamat,
                 $data->kodepos,
                 $data->tahun_lulus,
                 $data->medsos,
-                $data->marital_name ?? DB::table('naker_marital')->where('id', $data->id_status_perkawinan)->value('name'),
-                $data->agama_name ?? DB::table('naker_agama')->where('id', $data->id_agama)->value('name'),
-                $data->pendidikan_name,
-                $data->jurusan_name,
-                $kota,
-                $kecamatan,
-                $desa,
-                $data->status_name ?? DB::table('status_kerja')->where('id', $data->status_saat_ini)->value('status'),
-                $data->sektor_name ?? DB::table('naker_sektor')->where('id', $data->sektor_pekerjaan_saat_ini)->value('name'),
-                $data->jam_kerja,
-                $data->gaji,
-                date('d-m-Y', strtotime($data->created_at))
-            ]);
+                $data->marital_name ?? '-',
+                $data->agama_name ?? '-',
+                $data->pendidikan_name ?? '-',
+                $data->jurusan_name ?? '-',
+                $data->kota_name ?? '-',
+                $data->kecamatan_name ?? '-',
+                $data->desa_name ?? '-',
+                $data->status_name ?? '-',
+                $data->sektor_name ?? '-',
+                $data->jam_kerja ?? '-',
+                $data->gaji ?? '-',
+                $data->created_at ? date('d-m-Y', strtotime($data->created_at)) : '-',
+            ];
         }
-        fclose($file);
-    };
 
-    return response()->stream($callback, 200, $headers);
-}
+        return $rows;
+    }
+
+    private function pencariAyokerjoColumns(): array
+    {
+        return [
+            'No',
+            'Nama',
+            'KTP',
+            'Email',
+            'Tempat Lahir',
+            'Tanggal Lahir',
+            'Usia (Tahun)',
+            'Alamat',
+            'Kab/Kota',
+            'Kecamatan',
+            'Gender',
+            'Hp',
+            'Status',
+            'Agama',
+            'Warga',
+            'Pendidikan Terakhir',
+            'Jurusan',
+            'Tahun Lulus',
+            'IPK  /  Nilai Rata2',
+            'Minat Kerja LN',
+            'Minat Wirausaha',
+            'Penyandang Disabilitas',
+            'Jenis Disabilitas',
+            'Created at',
+        ];
+    }
+
+    private function mapPencariAyokerjoRows($pencariData): array
+    {
+        $rows = [];
+        $no = 1;
+
+        foreach ($pencariData as $data) {
+            $usiaTahun = '-';
+            if (!empty($data->tanggal_lahir)) {
+                try {
+                    $usiaTahun = Carbon::parse($data->tanggal_lahir)->age;
+                } catch (\Exception $e) {
+                    $usiaTahun = '-';
+                }
+            }
+
+            $rows[] = [
+                $no++,
+                $data->name ?? '-',
+                $data->ktp ?? '-',
+                $data->user_email ?? '-',
+                $data->tempat_lahir ?? '-',
+                $data->tanggal_lahir ? Carbon::parse($data->tanggal_lahir)->locale('id')->translatedFormat('d F Y') : '-',
+                $usiaTahun,
+                $data->alamat ?? '-',
+                $data->kota_name ?? '-',
+                $data->kecamatan_name ?? '-',
+                $data->gender ?? '-',
+                $data->user_whatsapp ?? '-',
+                $data->marital_name ?? '-',
+                $data->agama_name ?? '-',
+                'WNI',
+                $data->pendidikan_name ?? '-',
+                $data->jurusan_name ?? '-',
+                $data->tahun_lulus ?? '-',
+                '',
+                '',
+                '',
+                !empty($data->disabilitas) && $data->disabilitas !== '0' ? 'Ya' : 'Tidak',
+                $data->jenis_disabilitas ?? '-',
+                $data->created_at ? Carbon::parse($data->created_at)->format('d-m-Y H:i:s') : '-',
+            ];
+        }
+
+        return $rows;
+    }
 
 
     public function penyedia(Request $request)
@@ -1200,5 +1401,116 @@ class DataController extends Controller
 
         // Mengirimkan file CSV ke browser
         return response()->stream($callback, 200, $headers);
+    }
+
+    public function sipet(Request $request)
+    {
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+
+        $baseQuery = DB::table('klik_sipet');
+        if (!empty($startDate)) {
+            $baseQuery->whereDate('created_at', '>=', $startDate);
+        }
+        if (!empty($endDate)) {
+            $baseQuery->whereDate('created_at', '<=', $endDate);
+        }
+
+        if ($request->ajax()) {
+            $query = (clone $baseQuery)->select([
+                'id',
+                'nama',
+                'wa',
+                'judu',
+                'isi',
+                'created_at',
+                'created_by',
+                'created_by_ip',
+            ]);
+
+            return DataTables::of($query)
+                ->filter(function ($query) use ($request) {
+                    if ($request->has('search') && !empty($request->search['value'])) {
+                        $search = $request->search['value'];
+                        $query->where(function ($q) use ($search) {
+                            $q->where('nama', 'like', "%{$search}%")
+                                ->orWhere('wa', 'like', "%{$search}%")
+                                ->orWhere('judu', 'like', "%{$search}%")
+                                ->orWhere('isi', 'like', "%{$search}%")
+                                ->orWhere('created_by_ip', 'like', "%{$search}%");
+                        });
+                    }
+                })
+                ->addColumn('created_at_format', function ($data) {
+                    if ($data->created_at) {
+                        return date('d-m-Y H:i', strtotime($data->created_at));
+                    }
+                    return '-';
+                })
+                ->addIndexColumn()
+                ->make(true);
+        }
+
+        $countSipet = (clone $baseQuery)->count();
+        $isFiltered = !empty($startDate) || !empty($endDate);
+
+        return view('backend.data-sipet.index', compact('countSipet', 'isFiltered', 'startDate', 'endDate'));
+    }
+
+    public function exportSipetExcel(Request $request)
+    {
+        $query = DB::table('klik_sipet');
+
+        if ($request->filled('start_date')) {
+            $query->whereDate('created_at', '>=', $request->start_date);
+        }
+
+        if ($request->filled('end_date')) {
+            $query->whereDate('created_at', '<=', $request->end_date);
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                    ->orWhere('wa', 'like', "%{$search}%")
+                    ->orWhere('judu', 'like', "%{$search}%")
+                    ->orWhere('isi', 'like', "%{$search}%")
+                    ->orWhere('created_by_ip', 'like', "%{$search}%");
+            });
+        }
+
+        $sipetData = $query->orderBy('created_at', 'desc')->get();
+        $timestampWib = Carbon::now('Asia/Jakarta')->format('Ymd_His');
+        $fileName = 'data_form_sipet_' . $timestampWib . '.xls';
+        $headers = [
+            'Content-Type' => 'application/vnd.ms-excel; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"$fileName\"",
+        ];
+
+        $html = '<table border="1"><thead><tr>';
+        $columns = ['No', 'Nama', 'No Whatsapp', 'Judul', 'Isi', 'Tanggal Input', 'Created By', 'IP'];
+        foreach ($columns as $column) {
+            $html .= '<th>' . e($column) . '</th>';
+        }
+        $html .= '</tr></thead><tbody>';
+
+        $no = 1;
+        foreach ($sipetData as $data) {
+            $html .= '<tr>';
+            $html .= '<td>' . $no++ . '</td>';
+            $html .= '<td>' . e((string) ($data->nama ?? '-')) . '</td>';
+            $html .= '<td style="mso-number-format:\'\\@\';">' . e((string) ($data->wa ?? '-')) . '</td>';
+            $html .= '<td>' . e((string) ($data->judu ?? '-')) . '</td>';
+            $html .= '<td>' . e((string) ($data->isi ?? '-')) . '</td>';
+            $html .= '<td>' . e($data->created_at ? date('d-m-Y H:i', strtotime($data->created_at)) : '-') . '</td>';
+            $html .= '<td>' . e((string) ($data->created_by ?? '-')) . '</td>';
+            $html .= '<td>' . e((string) ($data->created_by_ip ?? '-')) . '</td>';
+            $html .= '</tr>';
+        }
+
+        $html .= '</tbody></table>';
+
+        return response($html, 200, $headers);
     }
 }

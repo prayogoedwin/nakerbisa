@@ -16,6 +16,7 @@ use App\Models\UserPencari;
 use App\Models\UserPenyedia;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
@@ -220,8 +221,17 @@ class DepanController extends Controller
         $lokasiId = $request->input('kabkota_id');
 
         // Query pencarian berdasarkan parameter
-        $lowonganDisetujui = Lowongan::select('naker_lowongan.*', 'users_penyedia.name as perusahaan_name', 'users_penyedia.foto as perusahaan_foto')
+        $lowonganDisetujui = Lowongan::select(
+            'naker_lowongan.*',
+            'users_penyedia.name as perusahaan_name',
+            'users_penyedia.foto as perusahaan_foto',
+            'users_penyedia.alamat as perusahaan_alamat',
+            'naker_kecamatan.name as perusahaan_kecamatan',
+            'naker_kabkota.name as perusahaan_kabupaten'
+        )
             ->join('users_penyedia', 'naker_lowongan.posted_by', '=', 'users_penyedia.user_id')
+            ->leftJoin('naker_kecamatan', 'users_penyedia.id_kecamatan', '=', 'naker_kecamatan.id')
+            ->leftJoin('naker_kabkota', 'users_penyedia.id_kota', '=', 'naker_kabkota.id')
             ->where('naker_lowongan.status_id', 1) // Lowongan yang disetujui
             ->when($judulLowongan, function ($query, $judulLowongan) {
                 return $query->where('judul_lowongan', 'like', '%' . $judulLowongan . '%');
@@ -233,7 +243,8 @@ class DepanController extends Controller
                 return $query->where('kabkota_id', $lokasiId);
             })
             ->orderBy('tanggal_start', 'desc')
-            ->paginate(9);
+            ->paginate(9)
+            ->withQueryString();
 
         // Kirim data hasil pencarian ke view
         return view('depan.depan_lowongan_kerja', compact('lowonganDisetujui'));
@@ -335,47 +346,26 @@ class DepanController extends Controller
             'role_dipilih' => 'required',
         ]);
 
-        $url_role = encode_url($request->role_dipilih);
-
-        return redirect()->to('depan/daftar?rl=' . $url_role);
+        return redirect()->route('depan.daftar.role', ['role' => $request->role_dipilih]);
     }
 
     public function daftar(Request $request)
     {
-        $rl = $request->input('rl'); // atau bisa juga menggunakan $request->query('rl')
-        $decode_rl = decode_url($rl);
-
-        if (!in_array($decode_rl, ['tenaga-kerja', 'penyedia-kerja', 'admin-bkk', 'admin-blk'])) {
+        $role = $request->input('rl'); // backward compatibility
+        if (!in_array($role, ['tenaga-kerja', 'penyedia-kerja', 'admin-bkk', 'admin-blk'])) {
             return abort(404);
         }
 
-        $nm_role = '';
-        if ($decode_rl == 'tenaga-kerja') {
-            $nm_role = 'Tenaga Kerja';
-        } else if ($decode_rl == 'penyedia-kerja') {
-            $nm_role = 'Penyedia Kerja';
-        } else if ($decode_rl == 'admin-bkk') {
-            $nm_role = 'BKK';
-        } else if ($decode_rl == 'admin-blk') {
-            $nm_role = 'BLK';
+        return $this->renderDaftarByRole($role);
+    }
+
+    public function daftarByRole(string $role)
+    {
+        if (!in_array($role, ['tenaga-kerja', 'penyedia-kerja', 'admin-bkk', 'admin-blk'])) {
+            return abort(404);
         }
 
-
-        $depanModel = new Depan();
-        $data['agama'] = $depanModel->getAllAgama(); // Mendapatkan semua data agama
-        $data['kabkota'] = $depanModel->getKabkotaByProvince();
-
-        $data['dt'] = array(
-            'role' => $decode_rl,
-            'role_name' => $nm_role
-        );
-
-        session()->forget('email_registered');
-        // dd(session('email_registered'));
-
-        // dd($data);
-        return view('depan.depan_registerbaru', $data);
-        // echo json_encode($data);
+        return $this->renderDaftarByRole($role);
     }
 
     public function cek_awal_akun(Request $request)
@@ -386,48 +376,67 @@ class DepanController extends Controller
         // ]);
 
         $userEmail = User::where('email', $request->email)->first();
-        if ($userEmail) {
-            return response()->json([
-                'status' => 0,
-                'message' => 'Email sudah pernah terdaftar'
-            ]);
-        }
-
         $userWa = User::where('whatsapp', $request->wa)->first();
-        if ($userWa) {
+
+        if ($userEmail && $userWa && $userEmail->id !== $userWa->id) {
             return response()->json([
                 'status' => 0,
-                'message' => 'Nomor whatsapp sudah pernah terdaftar'
+                'message' => 'Email dan nomor WhatsApp sudah digunakan oleh akun berbeda'
             ]);
         }
 
         $role = Role::where('name', $request->role)->first();
+        $existingUser = $userEmail ?: $userWa;
 
-        //create users
-        $user = User::create([
-            'name' => $request->email,
-            'email' => $request->email,
-            'whatsapp' => $request->wa,
-            'password' => $request->password
-        ]);
-        $user->syncRoles($role->name);
+        if ($existingUser) {
+            if ($this->hasCompletedProfileByRole($existingUser->id, $request->role)) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Akun dengan Email/WhatsApp ini sudah terdaftar lengkap. Silakan login.'
+                ]);
+            }
 
-        $otp = generateOtp();
-        $user->update([
-            'otp' => $otp,
-            // 'otp_created_at' => now()
-        ]);
-        // dd($userWa);
-        // sendWa($user->whatsapp, 'Lanjutkan pendaftaran dengan memasukkan Kode OTP berikut : *' . $otp . '*');
+            // Akun lama belum punya profil sesuai role: lanjutkan pendaftaran dari step berikutnya.
+            $existingUser->update([
+                'name' => $request->email,
+                'email' => $request->email,
+                'whatsapp' => $request->wa,
+                'password' => $request->password,
+                'otp' => null,
+            ]);
+            $existingUser->syncRoles($role->name);
+            $user = $existingUser;
+        } else {
+            // create users baru jika memang belum ada
+            $user = User::create([
+                'name' => $request->email,
+                'email' => $request->email,
+                'whatsapp' => $request->wa,
+                'password' => $request->password
+            ]);
+            $user->syncRoles($role->name);
+            $user->update(['otp' => null]);
+        }
 
         session(['email_registered' => $request->email]);
         // dd(session('email_registered'));
 
         return response()->json([
             'status' => 1,
-            'message' => 'Email dan nomor Whatsapp dapat digunakan',
+            'message' => 'Email dan nomor Whatsapp dapat digunakan, lanjutkan pendaftaran',
             'data' => $user
         ]);
+    }
+
+    private function hasCompletedProfileByRole(int $userId, string $role): bool
+    {
+        return match ($role) {
+            'tenaga-kerja' => UserPencari::where('user_id', $userId)->whereNull('deleted_at')->exists(),
+            'penyedia-kerja' => UserPenyedia::where('user_id', $userId)->whereNull('deleted_at')->exists(),
+            'admin-bkk' => UserBkk::where('user_id', $userId)->whereNull('deleted_at')->exists(),
+            'admin-blk' => UserBlk::where('user_id', $userId)->whereNull('deleted_at')->exists(),
+            default => true,
+        };
     }
 
     public function cek_awal_otp(Request $request)
@@ -452,11 +461,56 @@ class DepanController extends Controller
         ]);
     }
 
+    public function storeKlikSipet(Request $request)
+    {
+        $validated = $request->validate([
+            'nama' => 'required|string|max:255',
+            'wa' => 'required|string|max:30',
+            'judul' => 'required|string|max:255',
+            'isi' => 'required|string|max:2000',
+        ]);
+
+        DB::table('klik_sipet')->insert([
+            'nama' => $validated['nama'],
+            'wa' => $validated['wa'],
+            'judu' => $validated['judul'],
+            'isi' => $validated['isi'],
+            'created_at' => now(),
+            'created_by' => Auth::id(),
+            'created_by_ip' => $request->ip(),
+        ]);
+
+        $waNumber = preg_replace('/\D+/', '', $validated['wa']);
+        if (str_starts_with($waNumber, '0')) {
+            $waNumber = '62' . substr($waNumber, 1);
+        }
+
+        $message = "Judul: {$validated['judul']}\nIsi: {$validated['isi']}";
+        $encodedMessage = urlencode($message);
+
+        $isMobile = preg_match('/android|iphone|ipad|ipod/i', strtolower($request->userAgent() ?? '')) === 1;
+        $whatsappUrl = $isMobile
+            ? "https://wa.me/{$waNumber}?text={$encodedMessage}"
+            : "https://web.whatsapp.com/send?phone={$waNumber}&text={$encodedMessage}";
+
+        return redirect()->away($whatsappUrl);
+    }
+
     public function akhir_daftar_akun(Request $request)
     {
 
         $imel = session('email_registered');
         $user = User::where('email', $imel)->first();
+
+        $nikSudahTerpakai = UserPencari::where('ktp', $request->nik)
+            ->whereNull('deleted_at')
+            ->exists();
+
+        if ($nikSudahTerpakai) {
+            return back()
+                ->withInput()
+                ->withErrors(['nik' => 'NIK sudah terdaftar dan masih aktif. Silakan gunakan NIK lain.']);
+        }
 
         // dd($user->id);
 
@@ -709,5 +763,42 @@ class DepanController extends Controller
         $pendidikan = DB::table('naker_jurusan')->where('id_pendidikans', $pendidikan_id)->get();
 
         return response()->json($pendidikan);
+    }
+
+    private function renderDaftarByRole(string $role)
+    {
+        $resumeRegistration = session('resume_registration');
+
+        $depanModel = new Depan();
+        $data['agama'] = $depanModel->getAllAgama();
+        $data['kabkota'] = $depanModel->getKabkotaByProvince();
+        $data['dt'] = [
+            'role' => $role,
+            'role_name' => $this->resolveRoleName($role),
+        ];
+        $data['prefill'] = [
+            'email' => '',
+            'whatsapp' => '',
+        ];
+
+        if (is_array($resumeRegistration) && ($resumeRegistration['role'] ?? null) === $role) {
+            $data['prefill']['email'] = $resumeRegistration['email'] ?? '';
+            $data['prefill']['whatsapp'] = $resumeRegistration['whatsapp'] ?? '';
+        }
+
+        session()->forget('email_registered');
+
+        return view('depan.depan_registerbaru', $data);
+    }
+
+    private function resolveRoleName(string $role): string
+    {
+        return match ($role) {
+            'tenaga-kerja' => 'Tenaga Kerja',
+            'penyedia-kerja' => 'Penyedia Kerja',
+            'admin-bkk' => 'BKK',
+            'admin-blk' => 'BLK',
+            default => '-',
+        };
     }
 }

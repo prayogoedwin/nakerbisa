@@ -1,6 +1,35 @@
 @extends('backend.template.backend')
 
 @section('content')
+    <style>
+        .pencari-toolbar .form-label {
+            font-size: 12px;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .pencari-toolbar .form-control {
+            height: 38px;
+            font-size: 14px;
+        }
+
+        .pencari-toolbar .btn {
+            height: 38px;
+            padding: 0 14px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pencari-toolbar .btn-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+    </style>
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
@@ -27,7 +56,23 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <h1>Data Tenaga Kerja</h1>
-                                        <a href="#" id="export-csv" class="btn btn-success">Export CSV</a>
+                                        <div class="row g-2 align-items-end mb-3 pencari-toolbar">
+                                            <div class="col-md-3">
+                                                <label for="start-date" class="form-label">Start Date</label>
+                                                <input type="date" id="start-date" class="form-control">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="end-date" class="form-label">End Date</label>
+                                                <input type="date" id="end-date" class="form-control">
+                                            </div>
+                                            <div class="col-md-6 btn-wrap">
+                                                <a href="#" id="apply-filter" class="btn btn-primary">Filter</a>
+                                                <a href="#" id="reset-filter" class="btn btn-outline-secondary">Reset</a>
+                                                <a href="#" id="export-csv" class="btn btn-success">Export CSV</a>
+                                                <a href="#" id="export-excel" class="btn btn-success">Export Excel</a>
+                                                <a href="#" id="export-excel-ayokerjo" class="btn btn-success">Export Excel (Ayokerjo)</a>
+                                            </div>
+                                        </div>
                                         <div class="table-responsive">
                                             <table id="pencari-table" class="table table-bordered">
                                                 <thead>
@@ -83,7 +128,13 @@
             let table = $('#pencari-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('data.pencari') }}',
+                ajax: {
+                    url: '{{ route('data.pencari') }}',
+                    data: function(d) {
+                        d.start_date = $('#start-date').val();
+                        d.end_date = $('#end-date').val();
+                    }
+                },
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'id'
@@ -185,14 +236,45 @@
                 }
             });
 
+            function buildExportUrl(baseUrl) {
+                const searchValue = table.search();
+                const startDate = $('#start-date').val();
+                const endDate = $('#end-date').val();
+                let url = baseUrl + '?search=' + encodeURIComponent(searchValue);
+                if (startDate) {
+                    url += '&start_date=' + encodeURIComponent(startDate);
+                }
+                if (endDate) {
+                    url += '&end_date=' + encodeURIComponent(endDate);
+                }
+                return url;
+            }
+
+            $('#apply-filter').on('click', function(e) {
+                e.preventDefault();
+                table.ajax.reload();
+            });
+
+            $('#reset-filter').on('click', function(e) {
+                e.preventDefault();
+                $('#start-date').val('');
+                $('#end-date').val('');
+                table.search('').draw();
+            });
+
             $('#export-csv').on('click', function(e) {
                 e.preventDefault();
-                let searchValue = table.search();
+                window.location.href = buildExportUrl('{{ route('data.pencari.export') }}');
+            });
 
-                let url = '{{ route('data.pencari.export') }}';
-                url += '?search=' + encodeURIComponent(searchValue);
+            $('#export-excel').on('click', function(e) {
+                e.preventDefault();
+                window.location.href = buildExportUrl('{{ route('data.pencari.export.excel') }}');
+            });
 
-                window.location.href = url;
+            $('#export-excel-ayokerjo').on('click', function(e) {
+                e.preventDefault();
+                window.location.href = buildExportUrl('{{ route('data.pencari.export.excel.ayokerjo') }}');
             });
         });
     </script>

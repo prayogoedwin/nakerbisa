@@ -49,8 +49,8 @@
     <h2 class="text-center mb-4">Login</h2>
     <form id="loginForm">
       <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input type="text" class="form-control" id="username" required>
+        <label for="username" class="form-label">Email</label>
+        <input type="text" class="form-control" id="username" placeholder="Masukkan email" required>
       </div>
       <div class="mb-3">
         <label for="password" class="form-label">Password</label>

@@ -100,8 +100,8 @@
                           aria-label="Star themeselection/sneat-html-admin-template-free on GitHub"
                           >Star</a
                         > -->
-                    {{ Auth::user()->name }} |
-                    {{ Auth::user()->roles->isNotEmpty() ? Auth::user()->roles[0]->name : 'No role' }}
+                    {{ Auth::check() ? Auth::user()->name : 'Guest' }} |
+                    {{ Auth::check() && Auth::user()->roles->isNotEmpty() ? Auth::user()->roles[0]->name : '-' }}
 
                 </li>
 
@@ -126,8 +126,8 @@
                                         </div>
                                     </div>
                                     <div class="flex-grow-1">
-                                        <span class="fw-semibold d-block"> {{ Auth::user()->name }}</span>
-                                        <small class="text-muted"> {{ Auth::user()->roles->isNotEmpty() ? Auth::user()->roles[0]->name : 'No role' }}</small>
+                                        <span class="fw-semibold d-block"> {{ Auth::check() ? Auth::user()->name : 'Guest' }}</span>
+                                        <small class="text-muted"> {{ Auth::check() && Auth::user()->roles->isNotEmpty() ? Auth::user()->roles[0]->name : '-' }}</small>
                                     </div>
                                 </div>
                             </a>
@@ -152,12 +152,21 @@
                         @endif
 
 
-                        <li>
-                            <a href="{{ route('logout') }}" class="dropdown-item" href="#">
-                                <i class="bx bx-cog me-2"></i>
-                                <span class="align-middle">Log Out</span>
-                            </a>
-                        </li>
+                        @if (Auth::check())
+                            <li>
+                                <a href="{{ route('logout') }}" class="dropdown-item" href="#">
+                                    <i class="bx bx-cog me-2"></i>
+                                    <span class="align-middle">Log Out</span>
+                                </a>
+                            </li>
+                        @else
+                            <li>
+                                <a href="{{ route('login') }}" class="dropdown-item">
+                                    <i class="bx bx-log-in me-2"></i>
+                                    <span class="align-middle">Login</span>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </li>
                 <!--/ User -->

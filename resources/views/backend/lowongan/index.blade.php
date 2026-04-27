@@ -36,6 +36,7 @@
                                                     <tr>
                                                         <th>No</th>
                                                         <th>Judul Lowongan</th>
+                                                        <th>Perusahaan</th>
                                                         <th>Tgl Mulai</th>
                                                         <th>Tgl Selesai</th>
                                                         <th>Deskripsi</th>
@@ -251,6 +252,18 @@
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group">
+                                    <label class="form-label mb-1">Perusahaan</label>
+                                    <div class="form-control-plaintext border rounded px-2 py-1" id="e_perusahaan_name">-</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label mb-1">Alamat Perusahaan</label>
+                                    <div class="form-control-plaintext border rounded px-2 py-1" id="e_perusahaan_alamat">-</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
                                     {{-- <label class="floating-label" for="jdllow">Judul Lowongan</label> --}}
                                     <label for="jab">Judul Lowongan</label>
                                     <textarea class="form-control" id="e_judul_lowongan" name="judul_lowongan" rows="3" placeholder="Judul Lowongan"></textarea>
@@ -413,6 +426,18 @@
                                 </div>
                             </div>
                             <div class="col-sm-12">
+                                <div class="mb-2">
+                                    <label class="form-label mb-1">Perusahaan</label>
+                                    <div class="form-control-plaintext border rounded px-2 py-1" id="d_perusahaan_name">-</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="mb-2">
+                                    <label class="form-label mb-1">Alamat Perusahaan</label>
+                                    <div class="form-control-plaintext border rounded px-2 py-1" id="d_perusahaan_alamat">-</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
                                 <div class="form-group">
                                     {{-- <label class="floating-label" for="jdllow">Judul Lowongan</label> --}}
                                     <label for="jab">Judul Lowongan</label>
@@ -549,6 +574,10 @@
                         data: 'judul_lowongan'
                     },
                     {
+                        data: 'perusahaan_name',
+                        defaultContent: '-'
+                    },
+                    {
                         data: 'tanggal_start'
                     },
                     {
@@ -644,6 +673,8 @@
                     $('#e_sektor_id').val(dt.sektor_id);
                     $('#e_tanggal_start').val(dt.tanggal_start);
                     $('#e_tanggal_end').val(dt.tanggal_end);
+                    $('#e_perusahaan_name').text(dt.perusahaan_name ?? '-');
+                    $('#e_perusahaan_alamat').text(dt.perusahaan_alamat ?? '-');
                     $('#e_judul_lowongan').val(dt.judul_lowongan);
                     $('#e_kabkota_id').val(dt.kabkota_id);
                     $('#e_lokasi_penempatan_text').val(dt.lokasi_penempatan_text);
@@ -717,6 +748,8 @@
                     $('#d_sektor_id').val(dt.sektor_id);
                     $('#d_tanggal_start').val(dt.tanggal_start);
                     $('#d_tanggal_end').val(dt.tanggal_end);
+                    $('#d_perusahaan_name').text(dt.perusahaan_name ?? '-');
+                    $('#d_perusahaan_alamat').text(dt.perusahaan_alamat ?? '-');
                     $('#d_judul_lowongan').val(dt.judul_lowongan);
                     $('#d_kabkota_id').val(dt.kabkota_id);
                     $('#d_lokasi_penempatan_text').val(dt.lokasi_penempatan_text);

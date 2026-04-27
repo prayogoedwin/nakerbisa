@@ -14,7 +14,9 @@ class BackController extends Controller
     //
     public function index()
     {
-        if (Auth::user()->roles[0]['name'] == 'super-admin') {
+        $roleName = Auth::user()->roles[0]['name'];
+
+        if ($roleName == 'super-admin') {
             $pencariKerjaCount = DB::table('users_pencari')
             ->whereNull('deleted_at')
             ->count();
@@ -40,7 +42,17 @@ class BackController extends Controller
             return view('backend.dashboard.index', compact('pencariKerjaCount', 'penyediaKerjaCount', 'lowonganAktifCount', 'lamaranDalamProsesCount', 'lowonganBelumVerifikasiCount'));
         }
 
-        if (Auth::user()->roles[0]['name'] == 'tenaga-kerja') {
+        $tipeGrup = $this->mapRoleToTipeGrup($roleName);
+        $lastGrupWhatsapp = null;
+
+        if ($tipeGrup) {
+            $lastGrupWhatsapp = DB::table('naker_grup_whatsapp')
+                ->where('tipe_grup', $tipeGrup)
+                ->orderByDesc('id')
+                ->first();
+        }
+
+        if ($roleName == 'tenaga-kerja') {
             $userId = Auth::id();
             $lamaranAndaCount = DB::table('naker_lamarans')
                 ->where('pencari_id', $userId)
@@ -54,20 +66,31 @@ class BackController extends Controller
                 ->where('tanggal_start', '<=', now())
                 ->where('tanggal_end', '>=', now())
                 ->count();
-            return view('backend.dashboard.index_pencari', compact('lamaranAndaCount', 'lamaranDalamProsesCount', 'lowonganAktifCount'));
+            return view('backend.dashboard.index_pencari', compact('lamaranAndaCount', 'lamaranDalamProsesCount', 'lowonganAktifCount', 'lastGrupWhatsapp'));
         }
 
-        if (Auth::user()->roles[0]['name'] == 'penyedia-kerja') {
-            return view('backend.dashboard.index_penyedia');
+        if ($roleName == 'penyedia-kerja') {
+            return view('backend.dashboard.index_penyedia', compact('lastGrupWhatsapp'));
         }
 
-        if (Auth::user()->roles[0]['name'] == 'admin-bkk') {
-            return view('backend.dashboard.index_bkk');
+        if ($roleName == 'admin-bkk') {
+            return view('backend.dashboard.index_bkk', compact('lastGrupWhatsapp'));
         }
 
-        if (Auth::user()->roles[0]['name'] == 'admin-blk') {
-            return view('backend.dashboard.index_bkk');
+        if ($roleName == 'admin-blk') {
+            return view('backend.dashboard.index_blk', compact('lastGrupWhatsapp'));
         }
+    }
+
+    private function mapRoleToTipeGrup(string $roleName): ?string
+    {
+        return match ($roleName) {
+            'tenaga-kerja' => 'tenaga_kerja',
+            'penyedia-kerja' => 'perusahaan',
+            'admin-bkk' => 'bkk',
+            'admin-blk' => 'blk',
+            default => null,
+        };
     }
 
     public function statistik()

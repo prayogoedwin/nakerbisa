@@ -24,6 +24,70 @@
         ============================================= -->
 <div class="blog-area blog-grid default-padding-bottom">
     <div class="container">
+        <style>
+            .job-card {
+                border: 1px solid #eef2f7;
+                border-radius: 14px;
+                transition: all 0.2s ease;
+                min-height: 100%;
+                background: #fff;
+            }
+
+            .job-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 24px rgba(34, 72, 140, 0.08);
+            }
+
+            .job-logo {
+                width: 92px;
+                height: 72px;
+                object-fit: contain;
+            }
+
+            .job-address {
+                color: #6a7688;
+                font-size: 13px;
+                line-height: 1.45;
+                margin: 2px 0 2px;
+            }
+
+            .job-region {
+                color: #6a7688;
+                font-size: 13px;
+                line-height: 1.45;
+                margin: 0 0 4px;
+            }
+
+            .job-expire {
+                color: #3b455a;
+                font-size: 12px;
+                margin-bottom: 0;
+            }
+
+            .job-title a {
+                color: #111;
+                font-size: 20px;
+                line-height: 1.25;
+                font-weight: 700;
+            }
+
+            .job-card .thumb {
+                margin-bottom: 8px;
+            }
+
+            .job-card .info {
+                padding-top: 0;
+            }
+
+            .job-card .blog-meta ul {
+                margin-bottom: 2px;
+            }
+
+            .job-title {
+                margin-top: 6px;
+                margin-bottom: 4px;
+            }
+        </style>
         <div class="esitmate-form2 mt-40">
             <form action="{{ route('depan.lowongan-kerja') }}" method="GET">
                 <div class="row">
@@ -31,6 +95,7 @@
                         <div class="form-group">
                             <label for="name">Judul Lowongan</label>
                             <input class="form-control" id="name" name="judul_lowongan"
+                                value="{{ request('judul_lowongan') }}"
                                 placeholder="Cari Judul Lowongan Kerja" type="text">
                         </div>
                     </div>
@@ -40,16 +105,26 @@
                             <label for="pendidikan_id">Pendidikan</label>
                             <select id="pendidikan_id" name="pendidikan_id" class="form-control">
                                 <option value="">Pilih Pendidikan</option>
-                                <option value="1">SD</option>
-                                <option value="2">SMP</option>
-                                <option value="3">SMA / SMK</option>
-                                <option value="4">D1</option>
-                                <option value="5">D2</option>
-                                <option value="6">D3</option>
-                                <option value="7">D4</option>
-                                <option value="8">S1</option>
-                                <option value="9">S2</option>
-                                <option value="10">S3</option>
+                                <option value="1" {{ request('pendidikan_id') == '1' ? 'selected' : '' }}>SD
+                                </option>
+                                <option value="2" {{ request('pendidikan_id') == '2' ? 'selected' : '' }}>SMP
+                                </option>
+                                <option value="3" {{ request('pendidikan_id') == '3' ? 'selected' : '' }}>SMA / SMK
+                                </option>
+                                <option value="4" {{ request('pendidikan_id') == '4' ? 'selected' : '' }}>D1
+                                </option>
+                                <option value="5" {{ request('pendidikan_id') == '5' ? 'selected' : '' }}>D2
+                                </option>
+                                <option value="6" {{ request('pendidikan_id') == '6' ? 'selected' : '' }}>D3
+                                </option>
+                                <option value="7" {{ request('pendidikan_id') == '7' ? 'selected' : '' }}>D4
+                                </option>
+                                <option value="8" {{ request('pendidikan_id') == '8' ? 'selected' : '' }}>S1
+                                </option>
+                                <option value="9" {{ request('pendidikan_id') == '9' ? 'selected' : '' }}>S2
+                                </option>
+                                <option value="10" {{ request('pendidikan_id') == '10' ? 'selected' : '' }}>S3
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -59,16 +134,12 @@
                             <label for="kabkota_id">Lokasi Perusahaan</label>
                             <select id="kabkota_id" name="kabkota_id" class="form-control">
                                 <option value="">Pilih Lokasi</option>
-                                <option value="1">Kabupaten Berau</option>
-                                <option value="2">Kabupaten Kutai Barat</option>
-                                <option value="3">Kabupaten Kutai Kartanegara</option>
-                                <option value="4">Kabupaten Kutai Timur</option>
-                                <option value="5">Kabupaten Mahakam Ulu</option>
-                                <option value="6">Kabupaten Paser</option>
-                                <option value="7">Kabupaten Penajam Paser Utara</option>
-                                <option value="8">Kota Balikpapan</option>
-                                <option value="9">Kota Bontang</option>
-                                <option value="10">Kota Samarinda</option>
+                                @foreach (getKabkota() as $kabkota)
+                                    <option value="{{ $kabkota->id }}"
+                                        {{ request('kabkota_id') == (string) $kabkota->id ? 'selected' : '' }}>
+                                        {{ $kabkota->name }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -86,30 +157,39 @@
             <div class="row">
                 @forelse ($lowonganDisetujui as $lowongan)
                     <div class="col-xl-4 col-md-6 single-item">
-                        <div class="blog-style-one">
+                        <div class="blog-style-one job-card">
                             <div class="thumb">
                                 <a href="#">
                                     @if ($lowongan->perusahaan_foto)
-                                        <img src="{{ asset('storage/' . $lowongan->perusahaan_foto) }}" alt="Thumb" class="img-fluid logo-circle" width="100px" height="80px" onerror="this.onerror=null;this.src='{{ asset('assets/nakerbisa_fe/img/800x600.png') }}';">
+                                        <img src="{{ asset('storage/' . $lowongan->perusahaan_foto) }}"
+                                            alt="Thumb" class="img-fluid logo-circle job-logo"
+                                            onerror="this.onerror=null;this.src='{{ asset('assets/nakerbisa_fe/img/800x600.png') }}';">
                                     @else
-                                        <img src="{{ asset('assets/nakerbisa_fe/img/800x600.png') }}" alt="Thumb" class="img-fluid logo-circle" width="100px" height="80px">
+                                        <img src="{{ asset('assets/nakerbisa_fe/img/800x600.png') }}"
+                                            alt="Thumb" class="img-fluid logo-circle job-logo">
                                     @endif
                                 </a>
                             </div>
                             <div class="info">
                                 <div class="blog-meta">
                                     <ul>
-                                        <li class="sub-title">Perusahaan</li>
+                                        <li class="sub-title">{{ $lowongan->perusahaan_name ?: '-' }}</li>
                                     </ul>
-                                    <ul>
-                                        <li>Expire in:
-                                            {{ \Carbon\Carbon::parse($lowongan->tanggal_end)->format('d F, Y') }}</li>
-                                    </ul>
+                                    <div class="job-address">
+                                        <i class="fas fa-map-marker-alt me-1"></i>
+                                        {{ trim($lowongan->perusahaan_alamat ?? '-') }}
+                                    </div>
+                                    <div class="job-region">
+                                        Kec. {{ $lowongan->perusahaan_kecamatan ?: '-' }},
+                                        Kab. {{ $lowongan->perusahaan_kabupaten ?: '-' }}
+                                    </div>
                                 </div>
-                                <h3>
+                                <h3 class="job-title">
                                     <a
                                         href="{{ route('lowongan.show', encode_url($lowongan->id)) }}">{{ $lowongan->judul_lowongan }}</a>
                                 </h3>
+                                <div class="job-expire">Info expired:
+                                    {{ \Carbon\Carbon::parse($lowongan->tanggal_end)->format('d F, Y') }}</div>
                                 {{-- <a href="{{ route('lowongan.show', $lowongan->id) }}" class="btn-simple"><i class="fas fa-angle-right"></i> Read more</a> --}}
                             </div>
                         </div>

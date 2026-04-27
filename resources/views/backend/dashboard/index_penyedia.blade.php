@@ -25,6 +25,10 @@
 
                                                 <a href="{{ route('lowongan.index') }}" class="btn btn-sm btn-outline-primary">Update Lamaran Kerja
                                                     Sekarang</a>
+                                                @if (!empty($lastGrupWhatsapp?->link_grup))
+                                                    <a href="{{ $lastGrupWhatsapp->link_grup }}" target="_blank"
+                                                        class="btn btn-sm btn-success">Gabung Grup WhatsApp</a>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="col-sm-5 text-center text-sm-left">

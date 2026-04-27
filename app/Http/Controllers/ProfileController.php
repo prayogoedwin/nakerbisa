@@ -24,6 +24,12 @@ class ProfileController extends Controller
         // dd($user->id);
         // die();
         $profil = UserPencari::where('user_id', $user->id)->first();  // Sesuaikan relasi dengan tabel User jika ada
+        if (!$profil) {
+            $profil = new UserPencari([
+                'user_id' => $user->id,
+                'name' => $user->name,
+            ]);
+        }
         $profilPenyedia = UserPenyedia::where('user_id', $user->id)->first();  // Sesuaikan relasi dengan tabel User jika ada
         $pendidikan = NakerPencariPendidikan::select(
             'naker_pencari_pendidikan.*',
@@ -148,7 +154,7 @@ class ProfileController extends Controller
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validasi untuk foto
         ]);
 
-        $userPencari = UserPencari::where('user_id', $id)->firstOrFail();
+        $userPencari = UserPencari::firstOrNew(['user_id' => $id]);
 
         if ($request->hasFile('foto')) {
             // Cek dan hapus foto lama jika ada

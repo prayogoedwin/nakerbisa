@@ -10,7 +10,10 @@ use App\Models\NakerPencariKeahlianKeterampilan;
 use App\Models\NakerPencariKeterampilan;
 use App\Models\NakerPencariPendidikan;
 use App\Models\NakerPencariPengalaman;
+use App\Models\UserBkk;
+use App\Models\UserBlk;
 use App\Models\UserPencari;
+use App\Models\UserPenyedia;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
@@ -40,6 +43,7 @@ class Ak1Controller extends Controller
     {
         $rl = $request->input('rl'); // atau bisa juga menggunakan $request->query('rl')
         $decode_rl = decode_url($rl);
+        $encodedEmail = $request->input('eml');
 
         if (!in_array($decode_rl, ['tenaga-kerja', 'penyedia-kerja', 'admin-bkk', 'admin-blk'])) {
             return abort(404);
@@ -60,6 +64,25 @@ class Ak1Controller extends Controller
         $depanModel = new Back();
         $data['agama'] = $depanModel->getAllAgama(); // Mendapatkan semua data agama
         $data['kabkota'] = $depanModel->getKabkotaByProvince();
+        $data['prefill'] = [
+            'email' => '',
+            'whatsapp' => '',
+        ];
+
+        if (!empty($encodedEmail)) {
+            // Redirect login mengirim email dengan rawurlencode.
+            // Tetap fallback ke decode_url untuk kompatibilitas link lama.
+            $decodedEmail = rawurldecode($encodedEmail);
+            if (!filter_var($decodedEmail, FILTER_VALIDATE_EMAIL)) {
+                $decodedEmail = decode_url($encodedEmail);
+            }
+            $existingUser = User::where('email', $decodedEmail)->first();
+
+            if ($existingUser) {
+                $data['prefill']['email'] = $existingUser->email ?? '';
+                $data['prefill']['whatsapp'] = $existingUser->whatsapp ?? '';
+            }
+        }
 
         $data['dt'] = array(
             'role' => $decode_rl,
@@ -83,48 +106,67 @@ class Ak1Controller extends Controller
         // ]);
 
         $userEmail = User::where('email', $request->email)->first();
-        if ($userEmail) {
-            return response()->json([
-                'status' => 0,
-                'message' => 'Email sudah pernah terdaftar'
-            ]);
-        }
-
         $userWa = User::where('whatsapp', $request->wa)->first();
-        if ($userWa) {
+
+        if ($userEmail && $userWa && $userEmail->id !== $userWa->id) {
             return response()->json([
                 'status' => 0,
-                'message' => 'Nomor whatsapp sudah pernah terdaftar'
+                'message' => 'Email dan nomor WhatsApp sudah digunakan oleh akun berbeda'
             ]);
         }
 
         $role = Role::where('name', $request->role)->first();
+        $existingUser = $userEmail ?: $userWa;
 
-        //create users
-        $user = User::create([
-            'name' => $request->email,
-            'email' => $request->email,
-            'whatsapp' => $request->wa,
-            'password' => $request->password
-        ]);
-        $user->syncRoles($role->name);
+        if ($existingUser) {
+            if ($this->hasCompletedProfileByRole($existingUser->id, $request->role)) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Akun dengan Email/WhatsApp ini sudah terdaftar lengkap. Silakan login.'
+                ]);
+            }
 
-        $otp = generateOtp();
-        $user->update([
-            'otp' => $otp,
-            // 'otp_created_at' => now()
-        ]);
-        // dd($userWa);
-        sendWa($user->whatsapp, 'Lanjutkan pendaftaran dengan memasukkan Kode OTP berikut : *' . $otp . '*');
+            // Akun lama belum punya profil sesuai role: lanjutkan pendaftaran dari step berikutnya.
+            $existingUser->update([
+                'name' => $request->email,
+                'email' => $request->email,
+                'whatsapp' => $request->wa,
+                'password' => $request->password,
+                'otp' => null,
+            ]);
+            $existingUser->syncRoles($role->name);
+            $user = $existingUser;
+        } else {
+            //create users
+            $user = User::create([
+                'name' => $request->email,
+                'email' => $request->email,
+                'whatsapp' => $request->wa,
+                'password' => $request->password
+            ]);
+            $user->syncRoles($role->name);
+            $user->update(['otp' => null]);
+        }
 
         session(['email_registered' => $request->email]);
         // dd(session('email_registered'));
 
         return response()->json([
             'status' => 1,
-            'message' => 'Email dan nomor Whatsapp dapat digunakan',
+            'message' => 'Email dan nomor Whatsapp dapat digunakan, lanjutkan pendaftaran',
             'data' => $user
         ]);
+    }
+
+    private function hasCompletedProfileByRole(int $userId, string $role): bool
+    {
+        return match ($role) {
+            'tenaga-kerja' => UserPencari::where('user_id', $userId)->whereNull('deleted_at')->exists(),
+            'penyedia-kerja' => UserPenyedia::where('user_id', $userId)->whereNull('deleted_at')->exists(),
+            'admin-bkk' => UserBkk::where('user_id', $userId)->whereNull('deleted_at')->exists(),
+            'admin-blk' => UserBlk::where('user_id', $userId)->whereNull('deleted_at')->exists(),
+            default => true,
+        };
     }
 
     public function cek_awal_otp(Request $request)
@@ -153,6 +195,16 @@ class Ak1Controller extends Controller
     {
         $imel = session('email_registered');
         $user = User::where('email', $imel)->first();
+
+        $nikSudahTerpakai = UserPencari::where('ktp', $request->nik)
+            ->whereNull('deleted_at')
+            ->exists();
+
+        if ($nikSudahTerpakai) {
+            return back()
+                ->withInput()
+                ->withErrors(['nik' => 'NIK sudah terdaftar dan masih aktif. Silakan gunakan NIK lain.']);
+        }
 
         DB::beginTransaction();
         try {
@@ -331,6 +383,7 @@ class Ak1Controller extends Controller
             )
                 ->leftJoin('naker_pendidikan', 'users_pencari.id_pendidikan', '=', 'naker_pendidikan.id')
                 ->leftJoin('naker_jurusan', 'users_pencari.id_jurusan', '=', 'naker_jurusan.id')
+                ->where('users_pencari.user_id', $user->id)
                 ->first();
             $pendidikan = $pendidikanTunggal ? collect([$pendidikanTunggal]) : collect([]);
         }

@@ -17,6 +17,8 @@ use App\Http\Controllers\NakerBeritaNewController;
 use App\Http\Controllers\NakerFaqController;
 use App\Http\Controllers\NakerGaleriController;
 use App\Http\Controllers\NakerInfografisController;
+use App\Http\Controllers\NakerGrupWhatsappController;
+use App\Http\Controllers\NakerJurusanController;
 use App\Http\Controllers\PencariKeahlianKeterampilanController;
 use App\Http\Controllers\PencariKeterampilanController;
 use App\Http\Controllers\PencariPendidikanController;
@@ -54,8 +56,10 @@ Route::get('/depan/berita', [DepanController::class, 'berita'])->name('berita');
 Route::get('/depan/berita/{id}', [DepanController::class, 'show'])->name('berita.show');
 Route::post('/depan/daftar-akun', [DepanController::class, 'daftar_akun'])->name('daftar-akun');
 Route::get('/depan/daftar', [DepanController::class, 'daftar']); //with role
+Route::get('/depan/daftar/{role}', [DepanController::class, 'daftarByRole'])->name('depan.daftar.role');
 Route::post('/depan/cek-awal-akun', [DepanController::class, 'cek_awal_akun'])->name('cek-awal-akun');
 Route::post('/depan/cek-awal-otp', [DepanController::class, 'cek_awal_otp'])->name('cek-awal-otp');
+Route::post('/depan/klik-sipet', [DepanController::class, 'storeKlikSipet'])->name('klik-sipet.store');
 
 Route::get('/depan/getkecamatanbyid/{kabkota_id}', [DepanController::class, 'getKecamatanByKabkota'])->name('get-kecamatan-bykabkota');
 Route::get('/depan/getdesabyid/{kec_id}', [DepanController::class, 'getDesaByKec'])->name('get-desa-bykecamatan');
@@ -110,6 +114,18 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('/faq/get/{id}', [NakerFaqController::class, 'getData'])->name('faq.detail');
         Route::delete('/faq/delete/{id}', [NakerFaqController::class, 'softdelete'])->name('faq.softdelete');
         Route::put('/faq/update/{id}', [NakerFaqController::class, 'update'])->name('faq.update');
+
+        Route::get('/jurusan', [NakerJurusanController::class, 'index'])->name('jurusan.index');
+        Route::post('/jurusan/add', [NakerJurusanController::class, 'store'])->name('jurusan.add');
+        Route::get('/jurusan/get/{id}', [NakerJurusanController::class, 'getData'])->name('jurusan.detail');
+        Route::put('/jurusan/update/{id}', [NakerJurusanController::class, 'update'])->name('jurusan.update');
+        Route::delete('/jurusan/delete/{id}', [NakerJurusanController::class, 'destroy'])->name('jurusan.delete');
+
+        Route::get('/grup-whatsapp', [NakerGrupWhatsappController::class, 'index'])->name('grup-whatsapp.index');
+        Route::post('/grup-whatsapp/add', [NakerGrupWhatsappController::class, 'store'])->name('grup-whatsapp.add');
+        Route::get('/grup-whatsapp/get/{id}', [NakerGrupWhatsappController::class, 'getData'])->name('grup-whatsapp.detail');
+        Route::put('/grup-whatsapp/update/{id}', [NakerGrupWhatsappController::class, 'update'])->name('grup-whatsapp.update');
+        Route::delete('/grup-whatsapp/delete/{id}', [NakerGrupWhatsappController::class, 'destroy'])->name('grup-whatsapp.delete');
 
         Route::get('/infografis', [NakerInfografisController::class, 'index'])->name('infografis.index');
         Route::post('/infografis/add', [NakerInfografisController::class, 'store'])->name('infografis.add');
@@ -184,6 +200,8 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
 
         Route::get('/pencari', [UserPencariController::class, 'index'])->name('userpencari.index');
         Route::get('/pencari_gagal_daftar', [UserPencariController::class, 'gagal_daftar'])->name('userpencari.gagal_daftar');
+        Route::get('/pencari/get/{id}', [UserPencariController::class, 'getData'])->name('userpencari.detail');
+        Route::put('/pencari/update-akun/{id}', [UserPencariController::class, 'updateAkun'])->name('userpencari.update-akun');
         Route::delete('/pencari/delete/{id}', [UserPencariController::class, 'softdelete'])->name('userpencari.softdelete');
         Route::delete('/pencari/force_delete/{id}', [UserPencariController::class, 'forcedelete'])->name('userpencari.forcedelete');
         Route::put('/pencari/reset/{id}', [UserPencariController::class, 'reset'])->name('userpencari.reset');
@@ -215,6 +233,8 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
     Route::prefix('data')->group(function () {
         Route::get('pencari', [DataController::class, 'pencari'])->name('data.pencari');
         Route::get('pencari/export', [DataController::class, 'export'])->name('data.pencari.export');
+        Route::get('pencari/export-excel', [DataController::class, 'exportExcel'])->name('data.pencari.export.excel');
+        Route::get('pencari/export-excel-ayokerjo', [DataController::class, 'exportExcelAyokerjo'])->name('data.pencari.export.excel.ayokerjo');
         Route::get('/pencari/edit/{id}', [DataController::class, 'edit'])->name('data.pencari.edit');
         Route::put('/pencari/edit/{id}', [DataController::class, 'updateDataPencari'])->name('data.pencari.update');
         Route::delete('/pendidikan/{id}/soft-delete', [DataController::class, 'softDeletePendidikan'])->name('data.pendidikan.softDelete');
@@ -236,6 +256,9 @@ Route::prefix('dapur')->middleware('auth')->group(function () {
         Route::get('blk/export', [DataController::class, 'exportBlk'])->name('data.blk.export');
         Route::get('/blk/edit/{id}', [DataController::class, 'editBlk'])->name('data.blk.edit');
         Route::put('/blk/edit/{id}', [DataController::class, 'updateDataBlk'])->name('data.blk.update');
+
+        Route::get('sipet', [DataController::class, 'sipet'])->name('data.sipet');
+        Route::get('sipet/export-excel', [DataController::class, 'exportSipetExcel'])->name('data.sipet.export.excel');
     });
 
     Route::prefix('rekap')->group(function () {

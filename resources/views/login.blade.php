@@ -65,8 +65,9 @@
         <form id="loginForm" action="{{ route('login.action') }}" method="POST">
             @csrf
             <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
+                <label for="username" class="form-label">Email</label>
                 <input type="text" class="form-control" id="username" name="username" required
+                    placeholder="Masukkan email"
                     value="{{ old('username') }}">
                 @error('username')
                     <span class="text-danger">{{ $message }}</span>

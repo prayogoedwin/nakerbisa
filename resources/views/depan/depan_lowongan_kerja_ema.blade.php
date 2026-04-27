@@ -24,6 +24,63 @@
         ============================================= -->
 <div class="blog-area blog-grid default-padding-bottom">
     <div class="container">
+        <style>
+            .job-card {
+                border: 1px solid #eef2f7;
+                border-radius: 14px;
+                transition: all 0.2s ease;
+                min-height: 100%;
+                background: #fff;
+            }
+
+            .job-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 24px rgba(34, 72, 140, 0.08);
+            }
+
+            .job-logo {
+                width: 92px;
+                height: 72px;
+                object-fit: contain;
+            }
+
+            .job-address {
+                color: #6a7688;
+                font-size: 13px;
+                line-height: 1.45;
+                margin: 2px 0 2px;
+            }
+
+            .job-expire {
+                color: #3b455a;
+                font-size: 12px;
+                margin-bottom: 0;
+            }
+
+            .job-title a {
+                color: #111;
+                font-size: 20px;
+                line-height: 1.25;
+                font-weight: 700;
+            }
+
+            .job-card .thumb {
+                margin-bottom: 8px;
+            }
+
+            .job-card .info {
+                padding-top: 0;
+            }
+
+            .job-card .blog-meta ul {
+                margin-bottom: 2px;
+            }
+
+            .job-title {
+                margin-top: 6px;
+                margin-bottom: 4px;
+            }
+        </style>
         <div class="esitmate-form2 mt-40" hidden>
             <form action="#">
 
@@ -88,41 +145,45 @@
         <div class="blog-item-box">
             <div class="row">
 
-                @if(count($vacancies) > 0)
-                @foreach($vacancies as $vacancy)
-                    <!-- Single Item -->
+                @forelse($vacancies as $vacancy)
+                    @php
+                        $logo = $vacancy['logo_perusahaan'] ?? null;
+                        $company = $vacancy['perusahaan'] ?? '-';
+                        $title = $vacancy['judul'] ?? '-';
+                        $link = $vacancy['link'] ?? '#';
+                        $location = $vacancy['lokasi'] ?? ($vacancy['kabupaten'] ?? ($vacancy['kota'] ?? '-'));
+                        $expired = !empty($vacancy['expired']) ? \Carbon\Carbon::parse($vacancy['expired'])->format('d F, Y') : '-';
+                    @endphp
                     <div class="col-xl-4 col-md-6 single-item">
-                        <div class="blog-style-one">
+                        <div class="blog-style-one job-card">
                             <div class="thumb">
-                                <!-- Placeholder image, replace with actual image URL if available -->
-                                {{-- <a href="#"><img src="{{ asset('assets/nakerbisa_fe/img/800x600.png') }}" alt="Thumb"></a> --}}
-                                {{-- <a href="#"><img src="{{ $vacancy['logo_perusahaan'] }}" alt="Thumb"></a>  --}}
-                                <a href="#">
-                                    <img src="{{ $vacancy['logo_perusahaan'] }}" alt="Logo" class="img-fluid logo-circle" width="100px" height="80px" onerror="this.onerror=null;this.src='{{ asset('assets/nakerbisa_fe/img/800x600.png') }}';">
+                                <a href="{{ $link }}" target="_blank">
+                                    <img src="{{ $logo }}" alt="Logo Perusahaan" class="img-fluid logo-circle job-logo"
+                                        onerror="this.onerror=null;this.src='{{ asset('assets/nakerbisa_fe/img/800x600.png') }}';">
                                 </a>
                             </div>
                             <div class="info">
                                 <div class="blog-meta">
                                     <ul>
-                                        <li class="sub-title">
-                                            {{ $vacancy['perusahaan'] }}
-                                        </li>
+                                        <li class="sub-title">{{ $company }}</li>
                                     </ul>
-                                    <ul>
-                                        <li>
-                                            Expire in: {{ \Carbon\Carbon::parse($vacancy['expired'])->format('d F, Y') }}
-                                        </li>
-                                    </ul>
+                                    <div class="job-address">
+                                        <i class="fas fa-map-marker-alt me-1"></i>
+                                        {{ $location }}
+                                    </div>
                                 </div>
-                                <h3>
-                                    <a href="{{ $vacancy['link'] }}" target="_blank">{{ $vacancy['judul'] }}</a>
+                                <h3 class="job-title">
+                                    <a href="{{ $link }}" target="_blank">{{ $title }}</a>
                                 </h3>
-                                {{-- <a href="{{ $vacancy['link'] }}" class="btn-simple"><i class="fas fa-angle-right"></i> Read more</a> --}}
+                                <div class="job-expire">Info expired: {{ $expired }}</div>
                             </div>
                         </div>
                     </div>
-                @endforeach
-                @endif
+                @empty
+                    <div class="col-12">
+                        <p class="text-center">Tidak ada lowongan Emakaryo saat ini.</p>
+                    </div>
+                @endforelse
 
             </div>
         </div>

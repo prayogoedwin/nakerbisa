@@ -21,7 +21,10 @@
                                                     Terima kasih sudah menggunakan layanan NAKERBISA Kabupaten Rembang
                                                 </p>
 
-                                                <!-- <a href="javascript:;" class="btn btn-sm btn-outline-primary">Verifikasi Sekarang</a> -->
+                                                @if (!empty($lastGrupWhatsapp?->link_grup))
+                                                    <a href="{{ $lastGrupWhatsapp->link_grup }}" target="_blank"
+                                                        class="btn btn-sm btn-success">Gabung Grup WhatsApp</a>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="col-sm-5 text-center text-sm-left">

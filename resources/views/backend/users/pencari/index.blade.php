@@ -113,7 +113,7 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalEditLabel">Edit Admin</h5>
+                            <h5 class="modal-title" id="modalEditLabel">Edit Akun Tenaga Kerja</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -132,7 +132,7 @@
                                     <input type="text" class="form-control" id="editWhatsapp" name="whatsapp" required>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary" onclick="updateFaq()">Save Changes</button>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
                             </form>
                         </div>
                     </div>
@@ -170,6 +170,72 @@
                     searchable: false
                 },
             ]
+        });
+    });
+</script>
+
+<script>
+    function showEditModal(id) {
+        var detailUrl = "{{ route('userpencari.detail', ':id') }}".replace(':id', id);
+        $.ajax({
+            url: detailUrl,
+            type: 'GET',
+            success: function(response) {
+                if (!response.success) {
+                    alert(response.message || 'Gagal memuat data akun');
+                    return;
+                }
+
+                let dt = response.data;
+                $('#editAdminId').val(dt.id);
+                $('#editName').val(dt.name);
+                $('#editEmail').val(dt.email);
+                $('#editWhatsapp').val(dt.whatsapp);
+                $('#modal-edit').modal('show');
+            },
+            error: function(xhr) {
+                alert('Error: ' + xhr.responseText);
+            }
+        });
+    }
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#editAdminForm').submit(function(e) {
+            e.preventDefault();
+
+            var id = $('#editAdminId').val();
+            $.ajax({
+                url: "{{ route('userpencari.update-akun', ':id') }}".replace(':id', id),
+                type: 'PUT',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    name: $('#editName').val(),
+                    email: $('#editEmail').val(),
+                    whatsapp: $('#editWhatsapp').val()
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message || 'Update akun berhasil');
+                        $('#modal-edit').modal('hide');
+                        $('#simpletable').DataTable().ajax.reload();
+                    } else {
+                        alert(response.message || 'Tidak bisa update akun');
+                    }
+                },
+                error: function(xhr) {
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        let msg = '';
+                        $.each(xhr.responseJSON.errors, function(_, val) {
+                            msg += val[0] + '\n';
+                        });
+                        alert(msg);
+                    } else {
+                        alert('Error: ' + xhr.responseText);
+                    }
+                }
+            });
         });
     });
 </script>

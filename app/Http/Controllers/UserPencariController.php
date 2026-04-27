@@ -40,12 +40,9 @@ class UserPencariController extends Controller
                 //     return 'N/A'; // Jika tidak ada role
                 // })
                 ->addColumn('options', function ($pencari) {
-                    // return '
-                    //     <button class="btn btn-warning btn-sm" onclick="resetPassword(' . $pencari->id . ')">Reset Password</button>
-                    //     <button class="btn btn-primary btn-sm" onclick="showEditModal(' . $pencari->id . ')">Edit</button>
-                    //     <button class="btn btn-danger btn-sm" onclick="confirmDelete(' . $pencari->id . ')">Delete</button>
-                    // ';
                     return '
+                    <button class="btn btn-info btn-sm" onclick="showEditModal(' . $pencari->id . ')">Edit Akun</button>
+                    <a class="btn btn-primary btn-sm" href="' . route('data.pencari.edit', $pencari->id) . '">Edit Profil</a>
                     <button class="btn btn-warning btn-sm" onclick="confirmReset(' . $pencari->id . ')">Reset Password</button>
                     <button class="btn btn-danger btn-sm" onclick="confirmDelete(' . $pencari->id . ')">Delete</button>
                 ';
@@ -88,6 +85,72 @@ class UserPencariController extends Controller
         }
 
         return view('backend.users.pencari.gagal');
+    }
+
+    public function getData($id)
+    {
+        try {
+            $pencari = UserPencari::with('user:id,name,email,whatsapp')
+                ->select('id', 'user_id')
+                ->findOrFail($id);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'id' => $pencari->id,
+                    'user_id' => $pencari->user_id,
+                    'name' => $pencari->user->name ?? '',
+                    'email' => $pencari->user->email ?? '',
+                    'whatsapp' => $pencari->user->whatsapp ?? '',
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+        }
+    }
+
+    public function updateAkun(Request $request, $id)
+    {
+        try {
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'whatsapp' => 'required|string|max:255',
+            ]);
+
+            $pencari = UserPencari::select('id', 'user_id')->findOrFail($id);
+            $user = User::findOrFail($pencari->user_id);
+
+            $emailDipakaiUserLain = User::where('email', $validatedData['email'])
+                ->where('id', '!=', $user->id)
+                ->exists();
+            if ($emailDipakaiUserLain) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Email sudah dipakai akun lain, tidak bisa update.',
+                ]);
+            }
+
+            $waDipakaiUserLain = User::where('whatsapp', $validatedData['whatsapp'])
+                ->where('id', '!=', $user->id)
+                ->exists();
+            if ($waDipakaiUserLain) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Nomor WhatsApp sudah dipakai akun lain, tidak bisa update.',
+                ]);
+            }
+
+            $user->update([
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'whatsapp' => $validatedData['whatsapp'],
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Update akun berhasil']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+        }
     }
 
 

@@ -32,7 +32,7 @@
 
         <!-- Layouts -->
         <li
-            class="menu-item {{ request()->routeIs('roles.*') || request()->routeIs('faq.*') || request()->routeIs('infografis.*') || request()->routeIs('galeri.*') || request()->routeIs('berita.*') ? 'active open' : '' }}">
+            class="menu-item {{ request()->routeIs('roles.*') || request()->routeIs('faq.*') || request()->routeIs('jurusan.*') || request()->routeIs('grup-whatsapp.*') || request()->routeIs('infografis.*') || request()->routeIs('galeri.*') || request()->routeIs('berita.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">Setting</div>
@@ -67,6 +67,16 @@
                 <li class="menu-item {{ request()->routeIs('faq.index') ? 'active' : '' }}">
                     <a href="{{ route('faq.index') }}" class="menu-link">
                         <div data-i18n="FAQ">FAQ</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('jurusan.index') ? 'active' : '' }}">
+                    <a href="{{ route('jurusan.index') }}" class="menu-link">
+                        <div data-i18n="Jurusan">Jurusan</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('grup-whatsapp.index') ? 'active' : '' }}">
+                    <a href="{{ route('grup-whatsapp.index') }}" class="menu-link">
+                        <div data-i18n="Grup Whatsapp">Grup WhatsApp</div>
                     </a>
                 </li>
             </ul>
@@ -152,6 +162,11 @@
                 <li class="menu-item {{ request()->routeIs('data.blk') ? 'active' : '' }}">
                     <a href="{{ route('data.blk') }}" class="menu-link">
                         <div data-i18n="Without menu">BLK/BLKK/LPK/LPKS</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('data.sipet') ? 'active' : '' }}">
+                    <a href="{{ route('data.sipet') }}" class="menu-link">
+                        <div data-i18n="Without menu">Data Form Sipet</div>
                     </a>
                 </li>
             </ul>

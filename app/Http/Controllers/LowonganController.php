@@ -27,11 +27,13 @@ class LowonganController extends Controller
                 $lokers = Lowongan::select(
                     'naker_lowongan.id',
                     'naker_lowongan.judul_lowongan',
+                    'users_penyedia.name as perusahaan_name',
                     'naker_lowongan.tanggal_start',
                     'naker_lowongan.tanggal_end',
                     'naker_lowongan.deskripsi',
                     'naker_progres.name as progres_name' // Menambahkan kolom 'name' dari tabel naker_progres
                 )
+                    ->leftJoin('users_penyedia', 'naker_lowongan.posted_by', '=', 'users_penyedia.user_id')
                     ->join('naker_progres', 'naker_lowongan.status_id', '=', 'naker_progres.kode') // Join tabel
                     ->where('naker_progres.modul', 'lowongan') // Kondisi where
                     ->where('naker_lowongan.status_id', 1) // Kondisi where
@@ -51,11 +53,13 @@ class LowonganController extends Controller
                 $lokers = Lowongan::select(
                     'naker_lowongan.id',
                     'naker_lowongan.judul_lowongan',
+                    'users_penyedia.name as perusahaan_name',
                     'naker_lowongan.tanggal_start',
                     'naker_lowongan.tanggal_end',
                     'naker_lowongan.deskripsi',
                     'naker_progres.name as progres_name' // Menambahkan kolom 'name' dari tabel naker_progres
                 )
+                    ->leftJoin('users_penyedia', 'naker_lowongan.posted_by', '=', 'users_penyedia.user_id')
                     ->join('naker_progres', 'naker_lowongan.status_id', '=', 'naker_progres.kode') // Join tabel
                     ->where('naker_progres.modul', 'lowongan') // Kondisi where
                     ->where('naker_lowongan.posted_by', $userId) // Kondisi where
@@ -78,11 +82,13 @@ class LowonganController extends Controller
                 $lokers = Lowongan::select(
                     'naker_lowongan.id',
                     'naker_lowongan.judul_lowongan',
+                    'users_penyedia.name as perusahaan_name',
                     'naker_lowongan.tanggal_start',
                     'naker_lowongan.tanggal_end',
                     'naker_lowongan.deskripsi',
                     'naker_progres.name as progres_name' // Menambahkan kolom 'name' dari tabel naker_progres
                 )
+                    ->leftJoin('users_penyedia', 'naker_lowongan.posted_by', '=', 'users_penyedia.user_id')
                     ->join('naker_progres', 'naker_lowongan.status_id', '=', 'naker_progres.kode') // Join tabel
                     ->where('naker_progres.modul', 'lowongan') // Kondisi where
                     ->whereNull('naker_lowongan.deleted_at') // Memastikan data tidak terhapus
@@ -183,8 +189,20 @@ class LowonganController extends Controller
     public function show($id)
     {
         try {
-            // $id = decode_url($ids);
-            $data = Lowongan::select('*')->findOrFail($id);
+            $data = DB::table('naker_lowongan')
+                ->leftJoin('users_penyedia', 'naker_lowongan.posted_by', '=', 'users_penyedia.user_id')
+                ->select(
+                    'naker_lowongan.*',
+                    'users_penyedia.name as perusahaan_name',
+                    'users_penyedia.alamat as perusahaan_alamat'
+                )
+                ->where('naker_lowongan.id', $id)
+                ->first();
+
+            if (!$data) {
+                return response()->json(['success' => false, 'message' => 'Data tidak ditemukan']);
+            }
+
             return response()->json(['success' => true, 'data' => $data]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);

@@ -66,7 +66,6 @@
         <div class="step-indicator">
             <div class="circle active" data-step="1">1</div>
             <div class="circle" data-step="2">2</div>
-            <div class="circle" data-step="3">3</div>
         </div>
         {{-- <form id="registrationForm"> --}}
         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}" />
@@ -75,11 +74,13 @@
         <div class="step" id="step1">
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" required>
+                <input type="email" class="form-control" id="email"
+                    value="{{ old('email', $prefill['email'] ?? '') }}" required>
             </div>
             <div class="mb-3">
                 <label for="whatsapp" class="form-label">WhatsApp</label>
-                <input type="text" class="form-control" id="whatsapp" required>
+                <input type="text" class="form-control" id="whatsapp"
+                    value="{{ old('whatsapp', $prefill['whatsapp'] ?? '') }}" required>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
@@ -88,19 +89,6 @@
             </div>
             <button type="button" id="btnStep1" class="btn btn-primary w-100 mt-3"
                 onclick="nextStepBaru1()">Next</button>
-        </div>
-
-        <!-- Step 2 -->
-        <div class="step d-none" id="step2">
-            <div class="mb-3">
-                <label for="pin" class="form-label">OTP</label>
-                <input type="text" class="form-control" id="otpwa" name="otpwa" maxlength="6" required>
-                <input type="hidden" id="email_registered" name="email_registered">
-                <input type="hidden" id="_token2" name="_token2" value="{{ csrf_token() }}">
-            </div>
-            {{-- <button type="button" class="btn btn-secondary w-100 mt-3" onclick="previousStep()">Back</button> --}}
-            <button type="button" id="btnStep2" class="btn btn-primary w-100 mt-3"
-                onclick="nextStepBaru2()">Next</button>
         </div>
 
         <!-- Step 3 -->
@@ -158,7 +146,7 @@
         }
 
         function nextStep() {
-            if (currentStep < 3) {
+            if (currentStep < 2) {
                 currentStep++;
                 showStep(currentStep);
             }
@@ -235,13 +223,9 @@
                             text: msg,
                             icon: 'success'
                         });
-
-                        if (currentStep < 3) {
-                            currentStep++;
-                            showStep(currentStep);
-                        }
-
-                        $('#email_registered').val(dt.email)
+                        // Step OTP sudah dihapus, lanjut langsung ke form detail.
+                        currentStep = 2;
+                        showStep(currentStep);
                     }
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
@@ -253,75 +237,6 @@
                 }
             });
         }
-
-        function nextStepBaru2() {
-            var otpwa = $('#otpwa').val();
-            var email_registered = $('#email_registered').val();
-            var _token2 = $('#_token2').val()
-            var kd_role = $('#kode_role').val();
-
-            if (!otpwa) {
-                Swal.fire({
-                    // title: 'Pastikan semua kolom terisi',
-                    text: 'Pastikan kolom terisi',
-                    icon: 'info'
-                });
-                return;
-            }
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                url: "{{ route('cek-awal-otp') }}",
-                type: "POST",
-                data: {
-                    _token: _token2,
-                    email_registered: email_registered,
-                    otp: otpwa,
-                },
-                // dataType: "html",
-                success: function(response) {
-                    console.log(`STEP 2 RES : ${response}`)
-
-                    var sts = response.status
-                    var msg = response.message
-                    // var dt = response.data
-
-                    if (sts == 0) {
-                        Swal.fire({
-                            title: 'Ooppss',
-                            text: msg,
-                            icon: 'warning'
-                        });
-                    } else {
-                        // Swal.fire({
-                        //     title: 'Oke',
-                        //     text: 'Lanjuttt ISI BANYAK',
-                        //     icon: 'success'
-                        // });
-
-
-
-                        if (currentStep < 3) {
-                            currentStep++;
-                            showStep(currentStep);
-                        }
-                    }
-                },
-                error: function(xhr, ajaxOptions, thrownError) {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: thrownError,
-                        icon: 'error',
-                    });
-                }
-            });
-        }
-
 
         $('#kabkota_id').on('change', function() {
             // console.log(this.value);
