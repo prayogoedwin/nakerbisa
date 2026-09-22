@@ -231,9 +231,9 @@ class Ak1Controller extends Controller
                 'is_alumni_bkk' => 0,
                 'bkk_id' => null,
                 'toket' => null,
-                'disabilitas' => null,
-                'jenis_disabilitas' => null,
-                'keterangan_disabilitas' => null,
+                'disabilitas' => $request->disabilitas === '1' ? '1' : '0',
+                'jenis_disabilitas' => $request->disabilitas === '1' ? $request->jenis_disabilitas : null,
+                'keterangan_disabilitas' => $request->disabilitas === '1' ? $request->keterangan_disabilitas : null,
                 'posted_by' => $user->id,
                 'created_at' => date('Y-m-d H:i:s'),
                 'is_diterima' => 0,
@@ -300,6 +300,9 @@ class Ak1Controller extends Controller
             'sektor_pekerjaan_saat_ini' => 'nullable|integer',
             'jam_kerja' => 'nullable|integer',
             'gaji' => 'nullable|numeric',
+            'disabilitas' => 'required|in:0,1',
+            'jenis_disabilitas' => 'nullable|required_if:disabilitas,1|string|max:100',
+            'keterangan_disabilitas' => 'nullable|string|max:255',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -349,6 +352,11 @@ class Ak1Controller extends Controller
             $pencari->jam_kerja = null;
             $pencari->gaji = null;
         }
+
+        $isDisabilitas = $request->disabilitas === '1';
+        $pencari->disabilitas = $isDisabilitas ? '1' : '0';
+        $pencari->jenis_disabilitas = $isDisabilitas ? $request->jenis_disabilitas : null;
+        $pencari->keterangan_disabilitas = $isDisabilitas ? $request->keterangan_disabilitas : null;
 
         $pencari->save();
 

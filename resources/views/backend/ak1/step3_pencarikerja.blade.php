@@ -135,6 +135,30 @@
                 </div>
             </div>
             <div class="mb-3">
+                <label for="disabilitas" class="form-label">Penyandang Disabilitas</label>
+                <select class="form-select" id="disabilitas" name="disabilitas" required
+                    onchange="toggleDisabilitasFields(this.value)">
+                    <option value="0" selected>Tidak</option>
+                    <option value="1">Ya</option>
+                </select>
+            </div>
+            <div id="disabilitas-fields" style="display: none;">
+                <div class="mb-3">
+                    <label for="jenis_disabilitas" class="form-label">Jenis Disabilitas</label>
+                    <select class="form-select" id="jenis_disabilitas" name="jenis_disabilitas">
+                        <option value="">Pilih Jenis Disabilitas</option>
+                        @foreach (getJenisDisabilitas() as $jenis)
+                            <option value="{{ $jenis }}">{{ $jenis }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="keterangan_disabilitas" class="form-label">Keterangan Disabilitas</label>
+                    <input type="text" class="form-control" id="keterangan_disabilitas"
+                        name="keterangan_disabilitas" maxlength="255">
+                </div>
+            </div>
+            <div class="mb-3">
                 <label for="mediaSosial" class="form-label">Media Sosial</label>
                 <input type="text" class="form-control" id="medsos" name="medsos" required>
             </div>

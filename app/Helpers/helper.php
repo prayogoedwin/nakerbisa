@@ -184,3 +184,28 @@ function sendWa($phone, $message)
     curl_close($curl);
     // echo $response;
 }
+
+function getJenisDisabilitas(): array
+{
+    return [
+        'Tuna Netra',
+        'Tuna Rungu',
+        'Tuna Wicara',
+        'Tuna Daksa',
+        'Tuna Grahita',
+        'Disabilitas Mental',
+        'Disabilitas Ganda',
+        'Lainnya',
+    ];
+}
+
+function isPenyandangDisabilitas($value): bool
+{
+    if ($value === null || $value === '') {
+        return false;
+    }
+
+    $normalized = strtolower(trim((string) $value));
+
+    return !in_array($normalized, ['0', 'tidak', 'tidak ada', 'n', 'no', 'false'], true);
+}

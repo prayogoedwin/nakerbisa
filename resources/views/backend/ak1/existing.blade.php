@@ -278,6 +278,55 @@
                                                                 value="{{ $user->pencari->gaji }}">
                                                         </div>
                                                     </div>
+                                                    @php
+                                                        $isDisabilitas = isPenyandangDisabilitas($user->pencari->disabilitas);
+                                                        $jenisDisabilitasList = getJenisDisabilitas();
+                                                        $jenisDisabilitasSaatIni = $user->pencari->jenis_disabilitas;
+                                                    @endphp
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label for="disabilitas" class="form-label">Penyandang Disabilitas</label>
+                                                            <select class="form-select" id="disabilitas" name="disabilitas"
+                                                                required onchange="toggleDisabilitasFields(this.value)">
+                                                                <option value="0" {{ !$isDisabilitas ? 'selected' : '' }}>Tidak</option>
+                                                                <option value="1" {{ $isDisabilitas ? 'selected' : '' }}>Ya</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div id="disabilitas-fields" class="col-12"
+                                                        style="display: {{ $isDisabilitas ? 'block' : 'none' }};">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="jenis_disabilitas" class="form-label">Jenis Disabilitas</label>
+                                                                    <select class="form-select" id="jenis_disabilitas"
+                                                                        name="jenis_disabilitas">
+                                                                        <option value="">Pilih Jenis Disabilitas</option>
+                                                                        @foreach ($jenisDisabilitasList as $jenis)
+                                                                            <option value="{{ $jenis }}"
+                                                                                {{ $jenisDisabilitasSaatIni == $jenis ? 'selected' : '' }}>
+                                                                                {{ $jenis }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                        @if ($jenisDisabilitasSaatIni && !in_array($jenisDisabilitasSaatIni, $jenisDisabilitasList))
+                                                                            <option value="{{ $jenisDisabilitasSaatIni }}" selected>
+                                                                                {{ $jenisDisabilitasSaatIni }}
+                                                                            </option>
+                                                                        @endif
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="form-group">
+                                                                    <label for="keterangan_disabilitas" class="form-label">Keterangan Disabilitas</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="keterangan_disabilitas" name="keterangan_disabilitas"
+                                                                        value="{{ $user->pencari->keterangan_disabilitas }}"
+                                                                        maxlength="255">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="col-6">
                                                         <div class="form-group">
                                                             <label for="foto" class="form-label">Upload Foto</label>
@@ -329,10 +378,28 @@
             pekerjaanFields.style.display = (status === '1') ? 'block' : 'none';
         }
 
+        function toggleDisabilitasFields(status) {
+            const disabilitasFields = document.getElementById('disabilitas-fields');
+            const jenisDisabilitas = document.getElementById('jenis_disabilitas');
+            const isYa = status === '1';
+            disabilitasFields.style.display = isYa ? 'block' : 'none';
+            if (jenisDisabilitas) {
+                jenisDisabilitas.required = isYa;
+                if (!isYa) {
+                    jenisDisabilitas.value = '';
+                    document.getElementById('keterangan_disabilitas').value = '';
+                }
+            }
+        }
+
         // Periksa status saat ini setelah halaman dimuat
         window.onload = function() {
             const statusKerjaSelect = document.getElementById('status_kerja_id');
             togglePekerjaanFields(statusKerjaSelect.value); // Periksa nilai awal pada halaman load
+            const disabilitasSelect = document.getElementById('disabilitas');
+            if (disabilitasSelect) {
+                toggleDisabilitasFields(disabilitasSelect.value);
+            }
         };
     </script>
 

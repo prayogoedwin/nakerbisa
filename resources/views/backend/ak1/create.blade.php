@@ -313,5 +313,24 @@
             const pekerjaanFields = document.getElementById('pekerjaan-fields');
             pekerjaanFields.style.display = (status === '1') ? 'block' : 'none';
         }
+
+        function toggleDisabilitasFields(status) {
+            const disabilitasFields = document.getElementById('disabilitas-fields');
+            const jenisDisabilitas = document.getElementById('jenis_disabilitas');
+            const isYa = status === '1';
+            if (disabilitasFields) {
+                disabilitasFields.style.display = isYa ? 'block' : 'none';
+            }
+            if (jenisDisabilitas) {
+                jenisDisabilitas.required = isYa;
+                if (!isYa) {
+                    jenisDisabilitas.value = '';
+                    const keterangan = document.getElementById('keterangan_disabilitas');
+                    if (keterangan) {
+                        keterangan.value = '';
+                    }
+                }
+            }
+        }
     </script>
 @endpush
