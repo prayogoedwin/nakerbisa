@@ -310,11 +310,10 @@
 
                     <ul>
                         @forelse ($pendidikan as $edu)
-                            <li>{{ $edu->pendidikan_name }} - {{ $edu->jurusan_name }}</li>
+                            <li>{{ $edu->pendidikan_name ?? '-' }} - {{ $edu->jurusan_name ?? '-' }}</li>
                         @empty
                             <li>-</li>
                         @endforelse
-
                     </ul>
                 </ul>
 
@@ -335,24 +334,23 @@
                         </ul>
                     </div>
                     <div class="__right">
-                        <h6 class="text-center">_____________________________</h6>
+                        <h6 class="text-center">PETUGAS ANTAR KERJA</h6>
                         <p><br /><br /><br /></p>
                         <p class="text-center" style="margin-bottom: 0px;">
-                            <span class="text-underline">_____________________________</span>
-                            <br />NIP. ________________________
-                        </p>
+                            <span class="text-underline">_____________________________</span> 
+                            <br />NIP. ________________________</p>
                     </div>
                 </div>
             </div>
             <div class="__right">
                 <header>
-                    <img src="{{ asset('assets/nakerbisa_be/img/pemkab-rembang-naker.png') }}" width="50px"
-                        alt="KABUPATEN REMBANG" />
+                    <img src="https://bursakerja.jatengprov.go.id/assets/images/kontingen/Kabupaten_Rembang.png"
+                        width="60" height="60" alt="KABUPATEN REMBANG" />
                     <p>PEMERINTAHAN KABUPATEN REMBANG<br />
-                        DINAS TENAGA KERJA <br />
-                        <small>Jl. Diponegoro No. 90, Rembang, Jawa Tengah<br />
-                            Telp:0295-691472 | Email:dinkominfo@rembangkab.go.id<br />
-                            https://rembangkab.go.id/ </small>
+                        DINAS PERINDUSTRIAN DAN TENAGA KERJA <br />
+                        <small>Jl. Raya Rembang - Blora, Ngotet Kidul, Ngotet, Kec. Rembang, Kabupaten Rembang, Jawa Tengah 59219<br />
+                            Telp:(0295) 691349 | Email:dinperinnaker@rembangkab.go.id<br />
+                            https://dinperinnaker.rembangkab.go.id/ </small>
                     </p>
                 </header>
                 <div class="job-seeker">

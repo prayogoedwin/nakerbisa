@@ -32,7 +32,7 @@
             <div class="mb-3">
                 <label for="district" class="form-label">Jenis Kelamin</label>
                 <select class="form-select" id="gender_id" name="gender_id" required>
-                    <option selected disabled>Pilih Jenis Kelamin</option>
+                    <option selected value="0">Pilih Jenis Kelamin</option>
                     <option value="L">Laki - laki</option>
                     <option value="P">Perempuan</option>
                 </select>
@@ -40,7 +40,7 @@
             <div class="mb-3">
                 <label for="agama" class="form-label">Agama</label>
                 <select class="form-select" id="agama_id" name="agama_id" required>
-                    <option selected disabled>Pilih Agama</option>
+                    <option selected value="0">Pilih Agama</option>
                     @foreach ($agamas as $ag)
                         <option value="{{ $ag->id }}">{{ $ag->name }}</option>
                     @endforeach
@@ -49,7 +49,7 @@
             <div class="mb-3">
                 <label for="kabkota" class="form-label">Kabupaten / Kota</label>
                 <select class="form-select" id="kabkota_id" name="kabkota_id" required>
-                    <option selected disabled>Pilih Kabupaten/Kota</option>
+                    <option selected value="0">Pilih Kabupaten/Kota</option>
                     @foreach ($kabkotas as $kabkot)
                         <option value="{{ $kabkot->id }}">{{ $kabkot->name }}</option>
                     @endforeach
@@ -58,13 +58,13 @@
             <div class="mb-3">
                 <label for="kecamatan" class="form-label">Kecamatan</label>
                 <select class="form-select" id="kecamatan_id" name="kecamatan_id" required>
-                    <option selected disabled>Pilih Kecamatan</option>
+                    <option selected value="0">Pilih Kecamatan</option>
                 </select>
             </div>
             <div class="mb-3">
                 <label for="kelurahan" class="form-label">Desa / Kelurahan</label>
                 <select class="form-select" id="desa_id" name="desa_id" required>
-                    <option selected disabled>Pilih Desa/Kelurahan</option>
+                    <option selected value="0">Pilih Desa/Kelurahan</option>
                 </select>
             </div>
             <div class="mb-3">
@@ -78,7 +78,7 @@
             <div class="mb-3">
                 <label for="pendidikan" class="form-label">Pendidikan</label>
                 <select class="form-select" id="pendidikan_id" name="pendidikan_id" required>
-                    <option selected disabled>Pilih Pendidikan</option>
+                    <option selected value="0">Pilih Pendidikan</option>
                     @foreach ($pendidikans as $pend)
                         <option value="{{ $pend->id }}">{{ $pend->name }}</option>
                     @endforeach
@@ -88,7 +88,7 @@
             <div class="mb-3">
                 <label for="jurusan" class="form-label">Jurusan</label>
                 <select class="form-select" id="jurusan_id" name="jurusan_id" required>
-                    <option selected disabled>Pilih Jurusan</option>
+                    <option selected value="0">Pilih Jurusan</option>
 
                 </select>
             </div>
@@ -99,7 +99,7 @@
             <div class="mb-3">
                 <label for="stsperkawinan" class="form-label">Status Perkawinan</label>
                 <select class="form-select" id="status_perkawinan_id" name="status_perkawinan_id" required>
-                    <option selected disabled>Pilih Status</option>
+                    <option selected value="0">Pilih Status</option>
                     @foreach ($maritals as $marit)
                         <option value="{{ $marit->id }}">{{ $marit->name }}</option>
                     @endforeach
@@ -108,7 +108,7 @@
             <div class="mb-3">
                 <label for="agama" class="form-label">Status Saat Ini</label>
                 <select class="form-select" id="status_saat_ini" name="status_saat_ini" required onchange="togglePekerjaanFields(this.value)">
-                    <option selected disabled>Pilih Status Saat Ini</option>
+                    <option selected value="0">Pilih Status Saat Ini</option>
                     @foreach ($statusKerjas as $kerja)
                         <option value="{{ $kerja->id }}">{{ $kerja->status }}</option>
                     @endforeach
@@ -118,7 +118,7 @@
                 <div class="mb-3">
                     <label for="sektor_pekerjaan_saat_ini" class="form-label">Sektor Pekerjaan Saat Ini</label>
                     <select class="form-select" id="sektor_pekerjaan_saat_ini" name="sektor_pekerjaan_saat_ini">
-                        <option selected disabled>Pilih Sektor Pekerjaan</option>
+                        <option selected value="">Pilih Sektor Pekerjaan</option>
                         @foreach ($sektors as $sektor)
                             <option value="{{ $sektor->id }}">{{ $sektor->name }}</option>
                         @endforeach

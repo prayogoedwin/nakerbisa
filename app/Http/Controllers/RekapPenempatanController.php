@@ -11,170 +11,37 @@ class RekapPenempatanController extends Controller
     //
     public function index(Request $request)
     {
+        $progressId = DB::table('naker_progres')
+            ->where('kode', 3)
+            ->where('modul', 'lamaran')
+            ->value('id');
+
         if ($request->ajax()) {
-            // Get selected month and year from the request
-            $month = $request->input('month');
-            $year = $request->input('year');
+            $query = DB::table('naker_lamarans')
+                ->join('naker_progres', 'naker_lamarans.progres_id', '=', 'naker_progres.id')
+                ->join('users', 'naker_lamarans.pencari_id', '=', 'users.id')
+                ->join('naker_lowongan', 'naker_lamarans.lowongan_id', '=', 'naker_lowongan.id')
+                ->select(
+                    'naker_progres.name as status_name',
+                    'users.name as pencari_name',
+                    'naker_lowongan.judul_lowongan as lowongan_title',
+                    'naker_lowongan.lokasi_penempatan_text as lokasi_penempatan',
+                    'naker_lamarans.created_at'
+                )
+                ->where('naker_lamarans.progres_id', $progressId);
 
-            // Query to count placement through NAKERBISA for male gender with month and year filters
-            $penempatanMelaluiNakerbisaLaki = DB::table('naker_lamarans')
-                ->join('users_pencari', 'naker_lamarans.pencari_id', '=', 'users_pencari.user_id')
-                ->where('users_pencari.gender', 'L') // Gender Male
-                ->where('naker_lamarans.progres_id', 1) // Filter for progres_id = 1
-                ->when($month, function ($query, $month) {
-                    return $query->whereMonth('naker_lamarans.created_at', $month); // Apply month filter
-                })
-                ->when($year, function ($query, $year) {
-                    return $query->whereYear('naker_lamarans.created_at', $year); // Apply year filter
-                })
-                ->distinct('naker_lamarans.pencari_id') // Ensure unique pencari_id
-                ->count();
+            // Filter berdasarkan bulan jika parameter `month` ada
+            if ($request->has('month') && $request->month) {
+                $query->whereMonth('naker_lamarans.created_at', $request->month);
+            }
 
-            // Query to count placement through NAKERBISA for female gender with month and year filters
-            $penempatanMelaluiNakerbisaPerempuan = DB::table('naker_lamarans')
-                ->join('users_pencari', 'naker_lamarans.pencari_id', '=', 'users_pencari.user_id')
-                ->where('users_pencari.gender', 'P') // Gender Female
-                ->where('naker_lamarans.progres_id', 1) // Filter for progres_id = 1
-                ->when($month, function ($query, $month) {
-                    return $query->whereMonth('naker_lamarans.created_at', $month); // Apply month filter
-                })
-                ->when($year, function ($query, $year) {
-                    return $query->whereYear('naker_lamarans.created_at', $year); // Apply year filter
-                })
-                ->distinct('naker_lamarans.pencari_id') // Ensure unique pencari_id
-                ->count();
+            $penempatanData = $query->get();
 
-            // Query for placement outside NAKERBISA for male gender with month and year filters
-            $penempatanDiluarNakerbisaLaki = DB::table('naker_lamarans')
-                ->join('users_pencari', 'naker_lamarans.pencari_id', '=', 'users_pencari.user_id')
-                ->where('users_pencari.gender', 'L') // Gender Male
-                ->where('users_pencari.status_saat_ini', 1) // Active status
-                ->where('naker_lamarans.progres_id', '!=', 1) // Filter for progres_id not equal to 1
-                ->when($month, function ($query, $month) {
-                    return $query->whereMonth('naker_lamarans.created_at', $month); // Apply month filter
-                })
-                ->when($year, function ($query, $year) {
-                    return $query->whereYear('naker_lamarans.created_at', $year); // Apply year filter
-                })
-                ->distinct('naker_lamarans.pencari_id') // Ensure unique pencari_id
-                ->count();
-
-            // Query for placement outside NAKERBISA for female gender with month and year filters
-            $penempatanDiluarNakerbisaPerempuan = DB::table('naker_lamarans')
-                ->join('users_pencari', 'naker_lamarans.pencari_id', '=', 'users_pencari.user_id')
-                ->where('users_pencari.gender', 'P') // Gender Female
-                ->where('users_pencari.status_saat_ini', 1) // Active status
-                ->where('naker_lamarans.progres_id', '!=', 1) // Filter for progres_id not equal to 1
-                ->when($month, function ($query, $month) {
-                    return $query->whereMonth('naker_lamarans.created_at', $month); // Apply month filter
-                })
-                ->when($year, function ($query, $year) {
-                    return $query->whereYear('naker_lamarans.created_at', $year); // Apply year filter
-                })
-                ->distinct('naker_lamarans.pencari_id') // Ensure unique pencari_id
-                ->count();
-
-            // Add data into the table
-            $data = [
-                [
-                    'jenis_penempatan' => 'Jumlah tenaga kerja penempatan melalui NAKERBISA',
-                    'gender_l' => $penempatanMelaluiNakerbisaLaki,
-                    'gender_p' => $penempatanMelaluiNakerbisaPerempuan,
-                ],
-                [
-                    'jenis_penempatan' => 'Jumlah tenaga kerja penempatan diluar aplikasi NAKERBISA',
-                    'gender_l' => $penempatanDiluarNakerbisaLaki, // Default value 0 if needed
-                    'gender_p' => $penempatanDiluarNakerbisaPerempuan,
-                ]
-            ];
-
-            return DataTables::of($data)
+            return DataTables::of($penempatanData)
                 ->addIndexColumn()
                 ->make(true);
         }
 
         return view('backend.rekap.rekap-penempatan.index');
-    }
-
-    public function printPenempatan(Request $request)
-    {
-        // Get selected month and year from the request
-        $month = $request->input('month');
-        $year = $request->input('year');
-
-        // Query to count placement through NAKERBISA for male gender with month and year filters
-        $penempatanMelaluiNakerbisaLaki = DB::table('naker_lamarans')
-            ->join('users_pencari', 'naker_lamarans.pencari_id', '=', 'users_pencari.user_id')
-            ->where('users_pencari.gender', 'L') // Gender Male
-            ->where('naker_lamarans.progres_id', 1) // Filter for progres_id = 1
-            ->when($month, function ($query, $month) {
-                return $query->whereMonth('naker_lamarans.created_at', $month); // Apply month filter
-            })
-            ->when($year, function ($query, $year) {
-                return $query->whereYear('naker_lamarans.created_at', $year); // Apply year filter
-            })
-            ->distinct('naker_lamarans.pencari_id') // Ensure unique pencari_id
-            ->count();
-
-        // Query to count placement through NAKERBISA for female gender with month and year filters
-        $penempatanMelaluiNakerbisaPerempuan = DB::table('naker_lamarans')
-            ->join('users_pencari', 'naker_lamarans.pencari_id', '=', 'users_pencari.user_id')
-            ->where('users_pencari.gender', 'P') // Gender Female
-            ->where('naker_lamarans.progres_id', 1) // Filter for progres_id = 1
-            ->when($month, function ($query, $month) {
-                return $query->whereMonth('naker_lamarans.created_at', $month); // Apply month filter
-            })
-            ->when($year, function ($query, $year) {
-                return $query->whereYear('naker_lamarans.created_at', $year); // Apply year filter
-            })
-            ->distinct('naker_lamarans.pencari_id') // Ensure unique pencari_id
-            ->count();
-
-        // Query for placement outside NAKERBISA for male gender with month and year filters
-        $penempatanDiluarNakerbisaLaki = DB::table('naker_lamarans')
-            ->join('users_pencari', 'naker_lamarans.pencari_id', '=', 'users_pencari.user_id')
-            ->where('users_pencari.gender', 'L') // Gender Male
-            ->where('users_pencari.status_saat_ini', 1) // Active status
-            ->where('naker_lamarans.progres_id', '!=', 1) // Filter for progres_id not equal to 1
-            ->when($month, function ($query, $month) {
-                return $query->whereMonth('naker_lamarans.created_at', $month); // Apply month filter
-            })
-            ->when($year, function ($query, $year) {
-                return $query->whereYear('naker_lamarans.created_at', $year); // Apply year filter
-            })
-            ->distinct('naker_lamarans.pencari_id') // Ensure unique pencari_id
-            ->count();
-
-        // Query for placement outside NAKERBISA for female gender with month and year filters
-        $penempatanDiluarNakerbisaPerempuan = DB::table('naker_lamarans')
-            ->join('users_pencari', 'naker_lamarans.pencari_id', '=', 'users_pencari.user_id')
-            ->where('users_pencari.gender', 'P') // Gender Female
-            ->where('users_pencari.status_saat_ini', 1) // Active status
-            ->where('naker_lamarans.progres_id', '!=', 1) // Filter for progres_id not equal to 1
-            ->when($month, function ($query, $month) {
-                return $query->whereMonth('naker_lamarans.created_at', $month); // Apply month filter
-            })
-            ->when($year, function ($query, $year) {
-                return $query->whereYear('naker_lamarans.created_at', $year); // Apply year filter
-            })
-            ->distinct('naker_lamarans.pencari_id') // Ensure unique pencari_id
-            ->count();
-
-        // Prepare data for printing
-        $data = [
-            [
-                'jenis_penempatan' => 'Jumlah tenaga kerja penempatan melalui NAKERBISA',
-                'gender_l' => $penempatanMelaluiNakerbisaLaki,
-                'gender_p' => $penempatanMelaluiNakerbisaPerempuan,
-            ],
-            [
-                'jenis_penempatan' => 'Jumlah tenaga kerja penempatan diluar aplikasi NAKERBISA',
-                'gender_l' => $penempatanDiluarNakerbisaLaki, // Default value 0 if needed
-                'gender_p' => $penempatanDiluarNakerbisaPerempuan,
-            ]
-        ];
-
-        // Return the view for printing
-        return view('backend.rekap.rekap-penempatan.print', compact('data', 'month', 'year'));
     }
 }

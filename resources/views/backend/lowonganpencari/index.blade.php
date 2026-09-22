@@ -17,12 +17,12 @@
                                             <div class="col-sm-6">
 
                                             </div>
-                                            <div class="col-sm-6 text-end">
+                                            <!-- <div class="col-sm-6 text-end">
                                                 <button class="btn btn-success btn-sm btn-round has-ripple"
                                                     data-bs-toggle="modal" data-bs-target="#modal-report"><i
                                                         class="feather icon-plus"></i> Add
                                                     Data</button>
-                                            </div>
+                                            </div> -->
                                         </div>
                                         <div class="table-responsive">
                                             <table id="simpletable" class="table table-bordered table-striped mb-0">

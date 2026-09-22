@@ -14,22 +14,6 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row align-items-center m-l-0">
-                                            <div class="col-sm-4">
-                                                <div class="mb-3">
-                                                    <label for="yearFilter" class="form-label">Filter Tahun</label>
-                                                    <?php
-                                                    $currentYear = date('Y'); // Current year
-                                                    $startYear = $currentYear - 2; // 2 years back
-                                                    $endYear = $currentYear + 1; // This year + 1
-                                                    ?>
-                                                    <select id="yearFilter" class="form-select" name="year">
-                                                        <option value="">Semua Tahun</option>
-                                                        <?php for ($year = $startYear; $year <= $endYear; $year++): ?>
-                                                        <option value="<?= $year ?>"><?= $year ?></option>
-                                                        <?php endfor; ?>
-                                                    </select>
-                                                </div>
-                                            </div>
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label for="monthFilter" class="form-label">Filter Bulan</label>
@@ -51,17 +35,15 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <button id="printButton" class="btn btn-primary">
-                                            <i class="fa fa-print"></i> Cetak PDF
-                                        </button>
-                                        <div class="table-responsive mt-3">
+                                        <div class="table-responsive">
                                             <table id="penempatanTable" class="table table-bordered table-striped mb-0">
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
-                                                        <th>Jenis Penempatan</th>
-                                                        <th>Gender L</th>
-                                                        <th>Gender P</th>
+                                                        <th>Nama Tenaga Kerja</th>
+                                                        <th>Judul Lowongan</th>
+                                                        <th>Lokasi Penempatan</th>
+                                                        <th>Status</th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -86,16 +68,12 @@
     <script>
         $(document).ready(function() {
             let table = $('#penempatanTable').DataTable({
-                paging: false,
-                searching: false,
                 processing: true,
                 serverSide: true,
                 ajax: {
                     url: '{{ route('rekap.penempatan.index') }}',
                     data: function(d) {
-                        // Add selected month and year to the request data
-                        d.month = $('#monthFilter').val();
-                        d.year = $('#yearFilter').val();
+                        d.month = $('#monthFilter').val(); // Kirim parameter bulan
                     }
                 },
                 columns: [{
@@ -104,39 +82,24 @@
                         searchable: false
                     },
                     {
-                        data: 'jenis_penempatan',
-                        name: 'jenis_penempatan'
+                        data: 'pencari_name'
                     },
                     {
-                        data: 'gender_l', // Column for Gender L
-                        name: 'gender_l'
+                        data: 'lowongan_title'
                     },
                     {
-                        data: 'gender_p', // Column for Gender P
-                        name: 'gender_p'
+                        data: 'lokasi_penempatan'
+                    },
+                    {
+                        data: 'status_name'
                     }
                 ]
             });
 
-            // Reload the table when the month filter is changed
+            // Reload tabel saat bulan dipilih
             $('#monthFilter').on('change', function() {
                 table.ajax.reload();
             });
-
-            // Reload the table when the year filter is changed
-            $('#yearFilter').on('change', function() {
-                table.ajax.reload();
-            });
-
-            // Print button functionality
-            $('#printButton').on('click', function() {
-                var month = $('#monthFilter').val();
-                var year = $('#yearFilter').val();
-
-                var url = '{{ route('rekap.penempatan.print') }}' + '?month=' + month + '&year=' + year;
-                window.open(url, '_blank');
-            });
-
         });
     </script>
 @endpush

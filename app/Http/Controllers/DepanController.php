@@ -221,34 +221,89 @@ class DepanController extends Controller
         $pendidikanId = $request->input('pendidikan_id');
         $lokasiId = $request->input('kabkota_id');
 
-        // Query pencarian berdasarkan parameter
-        $lowonganDisetujui = Lowongan::select(
-            'naker_lowongan.*',
-            'users_penyedia.name as perusahaan_name',
-            'users_penyedia.foto as perusahaan_foto',
-            'users_penyedia.alamat as perusahaan_alamat',
-            'naker_kecamatan.name as perusahaan_kecamatan',
-            'naker_kabkota.name as perusahaan_kabupaten'
-        )
-            ->join('users_penyedia', 'naker_lowongan.posted_by', '=', 'users_penyedia.user_id')
-            ->leftJoin('naker_kecamatan', 'users_penyedia.id_kecamatan', '=', 'naker_kecamatan.id')
-            ->leftJoin('naker_kabkota', 'users_penyedia.id_kota', '=', 'naker_kabkota.id')
-            ->where('naker_lowongan.status_id', 1) // Lowongan yang disetujui
-            ->when($judulLowongan, function ($query, $judulLowongan) {
-                return $query->where('judul_lowongan', 'like', '%'.$judulLowongan.'%');
-            })
-            ->when($pendidikanId, function ($query, $pendidikanId) {
-                return $query->where('pendidikan_id', $pendidikanId);
-            })
-            ->when($lokasiId, function ($query, $lokasiId) {
-                return $query->where('kabkota_id', $lokasiId);
-            })
-            ->orderBy('tanggal_start', 'desc')
-            ->paginate(9)
-            ->withQueryString();
+        // Generate cache key yang unik berdasarkan parameter pencarian dan nomor halaman
+        $page = $request->input('page', 1);
+        $cacheKey = 'lowongan_kerja_' . md5("{$judulLowongan}_{$pendidikanId}_{$lokasiId}_{$page}");
+
+        // Query pencarian berdasarkan parameter, dicache selama 2 menit (120 detik)
+        $lowonganDisetujui = cache()->remember($cacheKey, 120, function () use ($judulLowongan, $pendidikanId, $lokasiId) {
+            return Lowongan::select(
+                'naker_lowongan.*',
+                'users_penyedia.name as perusahaan_name',
+                'users_penyedia.foto as perusahaan_foto',
+                'users_penyedia.alamat as perusahaan_alamat',
+                'naker_kecamatan.name as perusahaan_kecamatan',
+                'naker_kabkota.name as perusahaan_kabupaten'
+            )
+                ->join('users_penyedia', 'naker_lowongan.posted_by', '=', 'users_penyedia.user_id')
+                ->leftJoin('naker_kecamatan', 'users_penyedia.id_kecamatan', '=', 'naker_kecamatan.id')
+                ->leftJoin('naker_kabkota', 'users_penyedia.id_kota', '=', 'naker_kabkota.id')
+                ->where('naker_lowongan.status_id', 1) // Lowongan yang disetujui
+                ->when($judulLowongan, function ($query, $judulLowongan) {
+                    return $query->where('judul_lowongan', 'like', '%'.$judulLowongan.'%');
+                })
+                ->when($pendidikanId, function ($query, $pendidikanId) {
+                    return $query->where('pendidikan_id', $pendidikanId);
+                })
+                ->when($lokasiId, function ($query, $lokasiId) {
+                    return $query->where('kabkota_id', $lokasiId);
+                })
+                ->orderBy('tanggal_start', 'desc')
+                ->paginate(9)
+                ->withQueryString();
+        });
 
         // Kirim data hasil pencarian ke view
         return view('depan.depan_lowongan_kerja', compact('lowonganDisetujui'));
+    }
+
+    public function lowongan_kerja_json(Request $request)
+    {
+        $perPage = $request->input('per_page', 10);
+        $page = $request->input('page', 1);
+
+        // Kunci cache dibedakan berdasarkan page dan per_page
+        $cacheKey = 'lowongan_kerja_json_' . md5("{$perPage}_{$page}");
+
+        // Query dan transformasi disalin ke dalam cache dengan durasi 4 menit (240 detik)
+        $lowongan = cache()->remember($cacheKey, 240, function () use ($perPage) {
+            $data = Lowongan::select(
+                'naker_lowongan.*',
+                'users_penyedia.name as perusahaan_name',
+                'users_penyedia.foto as perusahaan_foto',
+                'users_penyedia.alamat as perusahaan_alamat',
+                'naker_kecamatan.name as perusahaan_kecamatan',
+                'naker_kabkota.name as perusahaan_kabupaten'
+            )
+                ->join('users_penyedia', 'naker_lowongan.posted_by', '=', 'users_penyedia.user_id')
+                ->leftJoin('naker_kecamatan', 'users_penyedia.id_kecamatan', '=', 'naker_kecamatan.id')
+                ->leftJoin('naker_kabkota', 'users_penyedia.id_kota', '=', 'naker_kabkota.id')
+                ->where('naker_lowongan.status_id', 1) // Lowongan yang disetujui
+                ->where('naker_lowongan.tanggal_end', '>=', now()->toDateString())
+                ->orderBy('naker_lowongan.tanggal_start', 'desc')
+                ->paginate($perPage);
+
+            // Tambahkan full URL prefix pada field perusahaan_foto
+            $data->getCollection()->transform(function ($item) {
+                if (!empty($item->perusahaan_foto)) {
+                    $fotoPath = ltrim($item->perusahaan_foto, '/');
+                    $item->perusahaan_foto = 'https://nakerbisa.rembangkab.go.id/storage/' . $fotoPath;
+                }
+                return $item;
+            });
+
+            return $data;
+        });
+
+        return response()->json([
+            'status' => true,
+            'message' => 'success, berhasil get data',
+            'page' => $lowongan->currentPage(),
+            'per_page' => $lowongan->perPage(),
+            'total' => $lowongan->total(),
+            'total_pages' => $lowongan->lastPage(),
+            'data' => $lowongan->items()
+        ]);
     }
 
     public function showLowongan($ids)
