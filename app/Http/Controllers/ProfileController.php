@@ -228,8 +228,17 @@ class ProfileController extends Controller
 
     public function lihatCV(Request $request, $id)
     {
+        $user = User::with('pencari')->find($id);
 
-        $user = UserPencari::where('user_id', $id)->first();  // Sesuaikan relasi dengan tabel User jika ada
+        if (!$user) {
+            $pencari = UserPencari::find($id);
+            if ($pencari && $pencari->user_id) {
+                $user = User::with('pencari')->find($pencari->user_id);
+            }
+        }
+
+        abort_if(!$user, 404);
+
         $pendidikan = NakerPencariPendidikan::select(
             'naker_pencari_pendidikan.*',
             'naker_jurusan.nama as jurusan_name',
@@ -237,10 +246,10 @@ class ProfileController extends Controller
         )
             ->leftJoin('naker_jurusan', 'naker_pencari_pendidikan.jurusan_id', '=', 'naker_jurusan.id')
             ->leftJoin('naker_pendidikan', 'naker_pencari_pendidikan.pendidikan_id', '=', 'naker_pendidikan.id')
-            ->where('user_id', $id)
+            ->where('user_id', $user->id)
             ->get();
-        $pengalaman = NakerPencariPengalaman::where('user_id', $id)->get();
-        $keterampilan = NakerPencariKeterampilan::where('user_id', $id)->get();
+        $pengalaman = NakerPencariPengalaman::where('user_id', $user->id)->get();
+        $keterampilan = NakerPencariKeterampilan::where('user_id', $user->id)->get();
 
         return view('backend.profil.cetak-cv-new-penyedia', compact('user', 'pendidikan', 'pengalaman', 'keterampilan'));
     }

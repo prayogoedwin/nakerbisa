@@ -8,7 +8,8 @@
             font-weight: 600;
         }
 
-        .pencari-toolbar .form-control {
+        .pencari-toolbar .form-control,
+        .pencari-toolbar .form-select {
             height: 38px;
             font-size: 14px;
         }
@@ -57,15 +58,41 @@
                                     <div class="card-body">
                                         <h1>Data Tenaga Kerja</h1>
                                         <div class="row g-2 align-items-end mb-3 pencari-toolbar">
-                                            <div class="col-md-3">
-                                                <label for="start-date" class="form-label">Start Date</label>
+                                            <div class="col-md-2">
+                                                <label for="start-date" class="form-label">Tanggal Cetak AK1</label>
                                                 <input type="date" id="start-date" class="form-control">
                                             </div>
-                                            <div class="col-md-3">
-                                                <label for="end-date" class="form-label">End Date</label>
+                                            <div class="col-md-2">
+                                                <label for="end-date" class="form-label">Sampai</label>
                                                 <input type="date" id="end-date" class="form-control">
                                             </div>
-                                            <div class="col-md-6 btn-wrap">
+                                            <div class="col-md-2">
+                                                <label for="pendidikan-id" class="form-label">Pendidikan</label>
+                                                <select id="pendidikan-id" class="form-select">
+                                                    <option value="">Semua</option>
+                                                    @foreach ($pendidikans as $pendidikan)
+                                                        <option value="{{ $pendidikan->id }}">{{ $pendidikan->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="gender" class="form-label">Gender</label>
+                                                <select id="gender" class="form-select">
+                                                    <option value="">Semua</option>
+                                                    <option value="L">Laki-laki</option>
+                                                    <option value="P">Perempuan</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="kecamatan-id" class="form-label">Kecamatan</label>
+                                                <select id="kecamatan-id" class="form-select">
+                                                    <option value="">Semua</option>
+                                                    @foreach ($kecamatans as $kecamatan)
+                                                        <option value="{{ $kecamatan->id }}">{{ $kecamatan->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-12 btn-wrap">
                                                 <a href="#" id="apply-filter" class="btn btn-primary">Filter</a>
                                                 <a href="#" id="reset-filter" class="btn btn-outline-secondary">Reset</a>
                                                 <a href="#" id="export-csv" class="btn btn-success">Export CSV</a>
@@ -133,6 +160,9 @@
                     data: function(d) {
                         d.start_date = $('#start-date').val();
                         d.end_date = $('#end-date').val();
+                        d.pendidikan_id = $('#pendidikan-id').val();
+                        d.gender = $('#gender').val();
+                        d.kecamatan_id = $('#kecamatan-id').val();
                     }
                 },
                 columns: [{
@@ -237,17 +267,16 @@
             });
 
             function buildExportUrl(baseUrl) {
-                const searchValue = table.search();
-                const startDate = $('#start-date').val();
-                const endDate = $('#end-date').val();
-                let url = baseUrl + '?search=' + encodeURIComponent(searchValue);
-                if (startDate) {
-                    url += '&start_date=' + encodeURIComponent(startDate);
-                }
-                if (endDate) {
-                    url += '&end_date=' + encodeURIComponent(endDate);
-                }
-                return url;
+                const params = {
+                    search: table.search(),
+                    start_date: $('#start-date').val(),
+                    end_date: $('#end-date').val(),
+                    pendidikan_id: $('#pendidikan-id').val(),
+                    gender: $('#gender').val(),
+                    kecamatan_id: $('#kecamatan-id').val()
+                };
+                const query = $.param(params);
+                return query ? (baseUrl + '?' + query) : baseUrl;
             }
 
             $('#apply-filter').on('click', function(e) {
@@ -259,6 +288,9 @@
                 e.preventDefault();
                 $('#start-date').val('');
                 $('#end-date').val('');
+                $('#pendidikan-id').val('');
+                $('#gender').val('');
+                $('#kecamatan-id').val('');
                 table.search('').draw();
             });
 

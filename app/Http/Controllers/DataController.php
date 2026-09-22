@@ -25,6 +25,7 @@ class DataController extends Controller
             // Ambil data users_pencari beserta nama wilayah
             $query = UserPencari::select([
                 'users_pencari.id',
+                'users_pencari.user_id',
                 'users_pencari.ktp',
                 'users_pencari.name',
                 'users_pencari.tempat_lahir',
@@ -51,6 +52,8 @@ class DataController extends Controller
             ->leftJoin('naker_jurusan', 'users_pencari.id_jurusan', '=', 'naker_jurusan.id')
             ;
 
+            $this->applyPencariFilters($query, $request);
+
             return DataTables::eloquent($query)
                 ->filter(function ($query) use ($request) {
                     if ($request->has('search') && !empty($request->search['value'])) {
@@ -63,14 +66,6 @@ class DataController extends Controller
                                 // ... tambahkan kolom lain yang ingin dicari ...
                                 ;
                         });
-                    }
-
-                    if ($request->filled('start_date')) {
-                        $query->whereDate('users_pencari.created_at', '>=', $request->start_date);
-                    }
-
-                    if ($request->filled('end_date')) {
-                        $query->whereDate('users_pencari.created_at', '<=', $request->end_date);
                     }
                 })
                 ->addColumn('kota', function ($data) {
@@ -126,13 +121,18 @@ class DataController extends Controller
                 })
                 ->addIndexColumn()
                 ->addColumn('options', function ($data) {
-                    return '<a href="' . route('data.pencari.edit', $data->id) . '" class="btn btn-primary btn-sm">Edit</a>';
+                    $buttons = '<a href="' . route('data.pencari.edit', $data->id) . '" class="btn btn-primary btn-sm">Edit</a>';
+                    if ($data->user_id) {
+                        $buttons .= ' <a href="' . route('lihat.cv', $data->user_id) . '" class="btn btn-success btn-sm" target="_blank">Lihat CV</a>';
+                    }
+
+                    return $buttons;
                 })
                 ->rawColumns(['options'])
                 ->make(true);
         }
 
-        return view('backend.data-pencari.pencari');
+        return view('backend.data-pencari.pencari', $this->pencariFilterOptions());
     }
 
     public function edit($id)
@@ -557,15 +557,58 @@ class DataController extends Controller
             });
         }
 
-        if ($request->filled('start_date')) {
-            $query->whereDate('users_pencari.created_at', '>=', $request->start_date);
-        }
-
-        if ($request->filled('end_date')) {
-            $query->whereDate('users_pencari.created_at', '<=', $request->end_date);
-        }
+        $this->applyPencariFilters($query, $request);
 
         return $query->orderBy('users_pencari.created_at', 'desc');
+    }
+
+    /**
+     * @param  \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder  $query
+     */
+    private function applyPencariFilters($query, Request $request)
+    {
+        if ($request->filled('start_date') || $request->filled('end_date')) {
+            $query->whereExists(function ($q) use ($request) {
+                $q->select(DB::raw(1))
+                    ->from('naker_ak1')
+                    ->whereColumn('naker_ak1.id_user', 'users_pencari.user_id')
+                    ->whereNull('naker_ak1.deleted_at');
+
+                if ($request->filled('start_date')) {
+                    $q->whereDate('naker_ak1.tanggal_cetak', '>=', $request->start_date);
+                }
+
+                if ($request->filled('end_date')) {
+                    $q->whereDate('naker_ak1.tanggal_cetak', '<=', $request->end_date);
+                }
+            });
+        }
+
+        if ($request->filled('pendidikan_id')) {
+            $query->where('users_pencari.id_pendidikan', $request->pendidikan_id);
+        }
+
+        if ($request->filled('gender')) {
+            $query->where('users_pencari.gender', $request->gender);
+        }
+
+        if ($request->filled('kecamatan_id')) {
+            $query->where('users_pencari.id_kecamatan', $request->kecamatan_id);
+        }
+
+        return $query;
+    }
+
+    private function pencariFilterOptions(): array
+    {
+        return [
+            'pendidikans' => DB::table('naker_pendidikan')->select('id', 'name')->orderBy('id')->get(),
+            'kecamatans' => DB::table('naker_kecamatan')
+                ->select('id', 'name')
+                ->where('id', 'LIKE', '3317%')
+                ->orderBy('name')
+                ->get(),
+        ];
     }
 
     private function mapPencariExportRows($pencariData): array
