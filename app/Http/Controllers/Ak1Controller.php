@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\Back; // Import model Depan
 use App\Models\NakerAk1;
 use App\Models\NakerPencariKeahlianKeterampilan;
-use App\Models\NakerPencariKeterampilan;
 use App\Models\NakerPencariPendidikan;
 use App\Models\NakerPencariPengalaman;
 use App\Models\UserBkk;
@@ -388,7 +387,7 @@ class Ak1Controller extends Controller
             $pendidikan = $pendidikanTunggal ? collect([$pendidikanTunggal]) : collect([]);
         }
 
-        $keterampilan = NakerPencariKeterampilan::where('user_id', $user->id)->get();
+        $keterampilan = NakerPencariKeahlianKeterampilan::where('user_id', $user->id)->get();
         $pengalaman = NakerPencariPengalaman::where('user_id', $user->id)->get();
 
         // Periksa apakah ada data AK1 yang masih berlaku

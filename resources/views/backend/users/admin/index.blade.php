@@ -94,9 +94,9 @@
                                     <div class="form-group">
                                         <label for="userRole" class="form-label">Role</label>
                                         <select class="form-control" id="userRole" name="role_id" required>
-                                            {{-- <option value="">Select Role</option> --}}
+                                            <option value="">Select Role</option>
                                             @foreach ($roles as $role)
-                                                <option value="{{ $role->id }}" selected>{{ $role->name }}</option>
+                                                <option value="{{ $role->id }}">{{ $role->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -261,8 +261,8 @@
 
                     //Pilih role di select box
                     if (admin.user.roles.length > 0) {
-                        let roleId = admin.user.roles.id; // Ambil ID peran pertama
-                        $('#editRole').val(roleId).prop('selected', true);
+                        let roleId = admin.user.roles[0].id; // Ambil ID role pertama
+                        $('#editRole').val(String(roleId));
                     } else {
                         $('#editRole').val(''); // Kosongkan jika tidak ada peran
                     }

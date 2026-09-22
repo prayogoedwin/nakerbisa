@@ -51,9 +51,10 @@ class AdminController extends Controller
                 ->make(true);
         }
 
-        // Ambil data roles untuk dikirim ke view
-        // $roles = Role::select('id', 'name')->whereIn('name', ['super-admin', 'admin-bkk', 'admin-provinsi', 'pimpinan'])->get();
-        $roles = Role::select('id', 'name')->whereIn('name', ['super-admin'])->get();
+        // Ambil role yang boleh dipilih untuk akun admin
+        $roles = Role::select('id', 'name')
+            ->whereIn('name', ['super-admin', 'admin-bkk', 'admin-provinsi', 'admin-kabkota', 'admin-blk', 'pimpinan'])
+            ->get();
         return view('backend.users.admin.index',  compact('roles'));
     }
 
@@ -78,7 +79,7 @@ class AdminController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'whatsapp' => $request->whatsapp,
-            'password' => bcrypt($request->name), // Set password default atau sesuai logika Anda
+            'password' => bcrypt($request->email), // Set password default atau sesuai logika Anda
         ]);
 
         // Menambahkan role ke user

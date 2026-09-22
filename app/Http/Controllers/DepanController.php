@@ -15,11 +15,11 @@ use App\Models\UserBlk;
 use App\Models\UserPencari;
 use App\Models\UserPenyedia;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Models\Role;
 
 class DepanController extends Controller
 {
@@ -56,7 +56,6 @@ class DepanController extends Controller
             ->orderBy('naker_lowongan.created_at', 'desc')
             ->limit(8)
             ->get();
-
 
         // Mengirim data ke view
         return view('depan.depan_index', compact('faq', 'beritaTerbaru', 'lowonganTerbaruCount', 'lowonganAktifCount', 'lowonganTerbaru'));
@@ -96,6 +95,7 @@ class DepanController extends Controller
                 'naker_desa.name as desa_name'
             )
             ->paginate(10);
+
         return view('depan.depan_blk', compact('blkList'));
     }
 
@@ -194,6 +194,7 @@ class DepanController extends Controller
         // Gabungkan data kecamatan dengan jumlah tenaga kerja
         $rekapDataTempat = $rekapData->map(function ($item) use ($kecamatanData) {
             $kecamatan = $kecamatanData->firstWhere('id', $item->lokasi_kerja_saat_ini_kec);
+
             return [
                 'name' => $kecamatan ? $kecamatan->name : 'Tidak Diketahui',
                 'total' => $item->total,
@@ -234,7 +235,7 @@ class DepanController extends Controller
             ->leftJoin('naker_kabkota', 'users_penyedia.id_kota', '=', 'naker_kabkota.id')
             ->where('naker_lowongan.status_id', 1) // Lowongan yang disetujui
             ->when($judulLowongan, function ($query, $judulLowongan) {
-                return $query->where('judul_lowongan', 'like', '%' . $judulLowongan . '%');
+                return $query->where('judul_lowongan', 'like', '%'.$judulLowongan.'%');
             })
             ->when($pendidikanId, function ($query, $pendidikanId) {
                 return $query->where('pendidikan_id', $pendidikanId);
@@ -277,20 +278,54 @@ class DepanController extends Controller
 
     public function lowongan_kerja_ema()
     {
+        $vacancies = [];
+
         // Fetch the data from the external API
-        $response = Http::get('https://bursakerja.jatengprov.go.id/api/lowongan/index');
+        $response = Http::acceptJson()
+            ->timeout(20)
+            ->get('https://bursakerja.jatengprov.go.id/api/lowongan/index');
 
         // Check if the response is successful
         if ($response->successful()) {
-            // Get the data from the response
-            $vacancies = $response->json()['data'];
+            $payload = $response->json();
 
-            // Pass the data to the view
-            return view('depan.depan_lowongan_kerja_ema', compact('vacancies'));
+            if (is_array($payload)) {
+                // Handle different response structures safely.
+                $vacancies = data_get($payload, 'data', []);
+
+                if (is_array($vacancies) && isset($vacancies['data']) && is_array($vacancies['data'])) {
+                    $vacancies = $vacancies['data'];
+                } elseif (! is_array($vacancies)) {
+                    $vacancies = data_get($payload, 'lowongan', []);
+                }
+
+                if (! is_array($vacancies)) {
+                    $vacancies = [];
+                }
+
+                // Normalize a single vacancy object into a list for the view loop.
+                if (! empty($vacancies) && isset($vacancies['judul'])) {
+                    $vacancies = [$vacancies];
+                }
+            } else {
+                Log::warning('EMA vacancies API returned non-JSON payload', [
+                    'status' => $response->status(),
+                    'body_preview' => mb_substr($response->body(), 0, 500),
+                ]);
+            }
         } else {
-            // Handle the error if the request fails
-            return view('depan.depan_lowongan_kerja_ema', ['vacancies' => []]);
+            Log::warning('EMA vacancies API request failed', [
+                'status' => $response->status(),
+                'body_preview' => mb_substr($response->body(), 0, 500),
+            ]);
         }
+
+        return view('depan.depan_lowongan_kerja_ema', compact('vacancies'));
+    }
+
+    public function lowongan_kerja_ayokerjo()
+    {
+        return view('depan.depan_lowongan_kerja_ayokerjo');
     }
 
     public function lowongan_kerja_krr()
@@ -302,7 +337,6 @@ class DepanController extends Controller
     {
         return view('depan.depan_statistik');
     }
-
 
     public function infografis()
     {
@@ -339,7 +373,6 @@ class DepanController extends Controller
         return view('depan.depan_berita_detail', compact('berita'));
     }
 
-
     public function daftar_akun(Request $request)
     {
         $request->validate([
@@ -352,7 +385,7 @@ class DepanController extends Controller
     public function daftar(Request $request)
     {
         $role = $request->input('rl'); // backward compatibility
-        if (!in_array($role, ['tenaga-kerja', 'penyedia-kerja', 'admin-bkk', 'admin-blk'])) {
+        if (! in_array($role, ['tenaga-kerja', 'penyedia-kerja', 'admin-bkk', 'admin-blk'])) {
             return abort(404);
         }
 
@@ -361,7 +394,7 @@ class DepanController extends Controller
 
     public function daftarByRole(string $role)
     {
-        if (!in_array($role, ['tenaga-kerja', 'penyedia-kerja', 'admin-bkk', 'admin-blk'])) {
+        if (! in_array($role, ['tenaga-kerja', 'penyedia-kerja', 'admin-bkk', 'admin-blk'])) {
             return abort(404);
         }
 
@@ -381,7 +414,7 @@ class DepanController extends Controller
         if ($userEmail && $userWa && $userEmail->id !== $userWa->id) {
             return response()->json([
                 'status' => 0,
-                'message' => 'Email dan nomor WhatsApp sudah digunakan oleh akun berbeda'
+                'message' => 'Email dan nomor WhatsApp sudah digunakan oleh akun berbeda',
             ]);
         }
 
@@ -392,7 +425,7 @@ class DepanController extends Controller
             if ($this->hasCompletedProfileByRole($existingUser->id, $request->role)) {
                 return response()->json([
                     'status' => 0,
-                    'message' => 'Akun dengan Email/WhatsApp ini sudah terdaftar lengkap. Silakan login.'
+                    'message' => 'Akun dengan Email/WhatsApp ini sudah terdaftar lengkap. Silakan login.',
                 ]);
             }
 
@@ -412,7 +445,7 @@ class DepanController extends Controller
                 'name' => $request->email,
                 'email' => $request->email,
                 'whatsapp' => $request->wa,
-                'password' => $request->password
+                'password' => $request->password,
             ]);
             $user->syncRoles($role->name);
             $user->update(['otp' => null]);
@@ -424,7 +457,7 @@ class DepanController extends Controller
         return response()->json([
             'status' => 1,
             'message' => 'Email dan nomor Whatsapp dapat digunakan, lanjutkan pendaftaran',
-            'data' => $user
+            'data' => $user,
         ]);
     }
 
@@ -457,36 +490,27 @@ class DepanController extends Controller
         return response()->json([
             'status' => 1,
             'message' => 'Verifikasi kode OTP berhasil',
-            'session_email' => session('email_registered')
+            'session_email' => session('email_registered'),
         ]);
     }
 
     public function storeKlikSipet(Request $request)
     {
-        $validated = $request->validate([
-            'nama' => 'required|string|max:255',
-            'wa' => 'required|string|max:30',
-            'judul' => 'required|string|max:255',
-            'isi' => 'required|string|max:2000',
-        ]);
+        $source = Auth::check() ? 'dari_web_admin' : 'dari_web_publik';
 
         DB::table('klik_sipet')->insert([
-            'nama' => $validated['nama'],
-            'wa' => $validated['wa'],
-            'judu' => $validated['judul'],
-            'isi' => $validated['isi'],
+            'nama' => $source,
+            'wa' => $source,
+            'judu' => $source,
+            'isi' => $source,
             'created_at' => now(),
             'created_by' => Auth::id(),
             'created_by_ip' => $request->ip(),
         ]);
 
-        $waNumber = preg_replace('/\D+/', '', $validated['wa']);
-        if (str_starts_with($waNumber, '0')) {
-            $waNumber = '62' . substr($waNumber, 1);
-        }
-
-        $message = "Judul: {$validated['judul']}\nIsi: {$validated['isi']}";
-        $encodedMessage = urlencode($message);
+        $waNumber = '6282225567996';
+        $message = 'Halo admin nakerbisa, saya dari web mau tanya tentang .....';
+        $encodedMessage = rawurlencode($message);
 
         $isMobile = preg_match('/android|iphone|ipad|ipod/i', strtolower($request->userAgent() ?? '')) === 1;
         $whatsappUrl = $isMobile
@@ -563,10 +587,11 @@ class DepanController extends Controller
             // return back()->with('error', $th->getMessage());
             DB::rollBack();
             Log::error($th);
+
             // return back()->with('error', $th->getMessage());
             return response()->json([
                 'status' => 0,
-                'message' => $th->getMessage()
+                'message' => $th->getMessage(),
             ]);
         }
     }
@@ -616,10 +641,11 @@ class DepanController extends Controller
             // return back()->with('error', $th->getMessage());
             DB::rollBack();
             Log::error($th);
+
             // return back()->with('error', $th->getMessage());
             return response()->json([
                 'status' => 0,
-                'message' => $th->getMessage()
+                'message' => $th->getMessage(),
             ]);
         }
     }
@@ -669,10 +695,11 @@ class DepanController extends Controller
             // return back()->with('error', $th->getMessage());
             DB::rollBack();
             Log::error($th);
+
             // return back()->with('error', $th->getMessage());
             return response()->json([
                 'status' => 0,
-                'message' => $th->getMessage()
+                'message' => $th->getMessage(),
             ]);
         }
     }
@@ -728,10 +755,11 @@ class DepanController extends Controller
             // return back()->with('error', $th->getMessage());
             DB::rollBack();
             Log::error($th);
+
             // return back()->with('error', $th->getMessage());
             return response()->json([
                 'status' => 0,
-                'message' => $th->getMessage()
+                'message' => $th->getMessage(),
             ]);
         }
     }
@@ -769,7 +797,7 @@ class DepanController extends Controller
     {
         $resumeRegistration = session('resume_registration');
 
-        $depanModel = new Depan();
+        $depanModel = new Depan;
         $data['agama'] = $depanModel->getAllAgama();
         $data['kabkota'] = $depanModel->getKabkotaByProvince();
         $data['dt'] = [

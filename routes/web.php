@@ -50,6 +50,7 @@ Route::get('depan/lowongan-kerja', [DepanController::class, 'lowongan_kerja'])->
 Route::get('/lowongan-kerja/{id}', [DepanController::class, 'showLowongan'])->name('lowongan.show');
 Route::get('/depan/lowongan-kerja-disabilitas', [DepanController::class, 'lowongan_kerja_disabilitas'])->name('lowongan-kerja-disabilitas');
 Route::get('/depan/lowongan-kerja-ema', [DepanController::class, 'lowongan_kerja_ema']);
+Route::get('/depan/lowongan-kerja-ayokerjo', [DepanController::class, 'lowongan_kerja_ayokerjo'])->name('lowongan-kerja-ayokerjo');
 Route::get('/depan/lowongan-kerja-krr', [DepanController::class, 'lowongan_kerja_krr']);
 Route::get('/depan/infografis', [DepanController::class, 'infografis'])->name('infografis');
 Route::get('/depan/berita', [DepanController::class, 'berita'])->name('berita');

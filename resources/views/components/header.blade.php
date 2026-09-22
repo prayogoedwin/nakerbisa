@@ -148,7 +148,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Lowongan</a>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ url('/depan/lowongan-kerja') }}">Lowongan Kerja</a></li>
-                                    <li><a href="{{ url('/depan/lowongan-kerja-ema') }}">Lowongan Emakaryo</a></li>
+                                    <li><a href="{{ url('/depan/lowongan-kerja-ayokerjo') }}">Lowongan Emakaryo</a></li>
                                     <li><a href="{{ url('/depan/lowongan-kerja-krr') }}">Lowongan Karirhub</a></li>
                                 </ul>
                             </li>

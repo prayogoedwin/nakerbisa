@@ -344,7 +344,7 @@
             </div>
             <div class="__right">
                 <header>
-                    <img src="https://bursakerja.jatengprov.go.id/assets/images/kontingen/Kabupaten_Rembang.png"
+                    <img src="{{ asset('logo-rembang.png') }}"
                         width="60" height="60" alt="KABUPATEN REMBANG" />
                     <p>PEMERINTAHAN KABUPATEN REMBANG<br />
                         DINAS PERINDUSTRIAN DAN TENAGA KERJA <br />

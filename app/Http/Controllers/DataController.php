@@ -1416,45 +1416,21 @@ class DataController extends Controller
             $baseQuery->whereDate('created_at', '<=', $endDate);
         }
 
-        if ($request->ajax()) {
-            $query = (clone $baseQuery)->select([
-                'id',
-                'nama',
-                'wa',
-                'judu',
-                'isi',
-                'created_at',
-                'created_by',
-                'created_by_ip',
-            ]);
-
-            return DataTables::of($query)
-                ->filter(function ($query) use ($request) {
-                    if ($request->has('search') && !empty($request->search['value'])) {
-                        $search = $request->search['value'];
-                        $query->where(function ($q) use ($search) {
-                            $q->where('nama', 'like', "%{$search}%")
-                                ->orWhere('wa', 'like', "%{$search}%")
-                                ->orWhere('judu', 'like', "%{$search}%")
-                                ->orWhere('isi', 'like', "%{$search}%")
-                                ->orWhere('created_by_ip', 'like', "%{$search}%");
-                        });
-                    }
-                })
-                ->addColumn('created_at_format', function ($data) {
-                    if ($data->created_at) {
-                        return date('d-m-Y H:i', strtotime($data->created_at));
-                    }
-                    return '-';
-                })
-                ->addIndexColumn()
-                ->make(true);
-        }
-
-        $countSipet = (clone $baseQuery)->count();
+        $countTotal = (clone $baseQuery)->count();
+        $countAdmin = (clone $baseQuery)->where('nama', 'dari_web_admin')->count();
+        $countPublik = (clone $baseQuery)->where('nama', 'dari_web_publik')->count();
+        $countLainnya = max(0, $countTotal - $countAdmin - $countPublik);
         $isFiltered = !empty($startDate) || !empty($endDate);
 
-        return view('backend.data-sipet.index', compact('countSipet', 'isFiltered', 'startDate', 'endDate'));
+        return view('backend.data-sipet.index', compact(
+            'countTotal',
+            'countAdmin',
+            'countPublik',
+            'countLainnya',
+            'isFiltered',
+            'startDate',
+            'endDate'
+        ));
     }
 
     public function exportSipetExcel(Request $request)

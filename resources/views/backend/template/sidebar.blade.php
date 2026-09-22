@@ -138,7 +138,8 @@
             </ul>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('data.*') ? 'active open' : '' }}">
+        <li
+            class="menu-item {{ request()->routeIs('data.pencari', 'data.penyedia', 'data.bkk', 'data.blk') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-data"></i>
                 <div data-i18n="Data">Data</div>
@@ -162,11 +163,6 @@
                 <li class="menu-item {{ request()->routeIs('data.blk') ? 'active' : '' }}">
                     <a href="{{ route('data.blk') }}" class="menu-link">
                         <div data-i18n="Without menu">BLK/BLKK/LPK/LPKS</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ request()->routeIs('data.sipet') ? 'active' : '' }}">
-                    <a href="{{ route('data.sipet') }}" class="menu-link">
-                        <div data-i18n="Without menu">Data Form Sipet</div>
                     </a>
                 </li>
             </ul>
@@ -230,7 +226,8 @@
         </li>
 
         <!-- Layouts -->
-        <li  class="menu-item {{ request()->routeIs('rekap.*') ? 'active open' : '' }}">
+        <li
+            class="menu-item {{ request()->routeIs('rekap.*') || request()->routeIs('data.sipet') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-copy"></i>
                 <div data-i18n="Layouts">Rekap</div>
@@ -257,7 +254,11 @@
                         <div data-i18n="Without navbar">Penempatan</div>
                     </a>
                 </li> --}}
-                
+                <li class="menu-item {{ request()->routeIs('data.sipet') ? 'active' : '' }}">
+                    <a href="{{ route('data.sipet') }}" class="menu-link">
+                        <div data-i18n="Without menu">Rekap Form Sipet</div>
+                    </a>
+                </li>
             </ul>
         </li>
     </ul>
