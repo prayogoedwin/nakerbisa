@@ -178,7 +178,7 @@
                                                             <label for="jurusan_id">Jurusan</label>
                                                             <select class="form-control" id="jurusan_id"
                                                                 name="jurusan_id" required>
-                                                                <option selected disabled>Pilih Jurusan</option>
+                                                                <option value="">Pilih Jurusan</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -474,7 +474,7 @@
                         $('#jurusan_id').empty();
 
                         // Tambahkan opsi default
-                        $('#jurusan_id').append('<option selected disabled>Pilih Jurusan</option>');
+                        $('#jurusan_id').append('<option value="">Pilih Jurusan</option>');
 
                         // Loop data kecamatan dan tambahkan ke dropdown
                         $.each(response, function(index, jurusan) {
@@ -530,7 +530,7 @@
 
                 $('#pendidikan_id').on('change', function() {
                     var pendidikanId = $(this).val();
-                    $('#jurusan_id').empty().append('<option selected disabled>Pilih Jurusan</option>');
+                    $('#jurusan_id').empty().append('<option value="">Pilih Jurusan</option>');
 
                     if (pendidikanId) {
                         loadJurusan(pendidikanId);

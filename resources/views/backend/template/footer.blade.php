@@ -64,6 +64,62 @@
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script> --}}
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        (function($) {
+            var jurusanSelector =
+                'select[name="jurusan_id"], #jurusan_id, #e_jurusan_id, #d_jurusan_id, #editJurusanId';
+
+            window.initJurusanSelect2 = function(selector) {
+                if (typeof $.fn.select2 !== 'function') {
+                    return;
+                }
+
+                $(selector || jurusanSelector).each(function() {
+                    var $el = $(this);
+                    if ($el.hasClass('select2-hidden-accessible')) {
+                        $el.select2('destroy');
+                    }
+                    $el.select2({
+                        width: '100%',
+                        placeholder: 'Cari / pilih jurusan',
+                        minimumResultsForSearch: 0,
+                        language: {
+                            noResults: function() {
+                                return 'Jurusan tidak ditemukan';
+                            },
+                            searching: function() {
+                                return 'Mencari...';
+                            }
+                        }
+                    });
+                });
+            };
+
+            function watchJurusanSelect(el) {
+                if (!el || el._jurusanSelect2Watch) {
+                    return;
+                }
+                el._jurusanSelect2Watch = true;
+                var timer = null;
+                new MutationObserver(function() {
+                    clearTimeout(timer);
+                    timer = setTimeout(function() {
+                        window.initJurusanSelect2(el);
+                    }, 50);
+                }).observe(el, {
+                    childList: true
+                });
+            }
+
+            $(function() {
+                $(jurusanSelector).each(function() {
+                    watchJurusanSelect(this);
+                    window.initJurusanSelect2(this);
+                });
+            });
+        })(jQuery);
+    </script>
     <!-- custom-chart js -->
     {{-- <script src="{{ asset('assets') }}/etam_be/js/pages/dashboard-main.js"></script> --}}
 

@@ -88,8 +88,7 @@
             <div class="mb-3">
                 <label for="jurusan" class="form-label">Jurusan</label>
                 <select class="form-select" id="jurusan_id" name="jurusan_id" required>
-                    <option selected disabled>Pilih Jurusan</option>
-
+                    <option value="">Pilih Jurusan</option>
                 </select>
             </div>
             <div class="mb-3">

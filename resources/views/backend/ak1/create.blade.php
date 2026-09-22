@@ -87,6 +87,10 @@
                     circle.classList.add('active');
                 }
             });
+
+            if (typeof window.initJurusanSelect2 === 'function') {
+                window.initJurusanSelect2('#jurusan_id');
+            }
         }
 
         function nextStep() {
@@ -260,7 +264,7 @@
                     $('#jurusan_id').empty();
 
                     // Tambahkan opsi default
-                    $('#jurusan_id').append('<option selected disabled>Pilih Jurusan</option>');
+                    $('#jurusan_id').append('<option value="">Pilih Jurusan</option>');
 
                     // Loop data kecamatan dan tambahkan ke dropdown
                     $.each(response, function(index, jurusan) {
